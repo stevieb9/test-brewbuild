@@ -1,0 +1,13 @@
+bin/brew_build.pl
+bin/brewbuild
+Changes
+ignore.txt
+lib/Test/BrewBuild.pm
+Makefile.PL
+MANIFEST			This list of files
+MANIFEST.SKIP
+README
+t/00-load.t
+t/manifest.t
+t/pod-coverage.t
+t/pod.t
