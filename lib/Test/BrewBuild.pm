@@ -6,7 +6,7 @@ use warnings;
 
 use File::Temp;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 sub new {
     my ($class, %args) = @_;
