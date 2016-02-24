@@ -109,6 +109,8 @@ sub instance_install {
 sub results {
     my $self = shift;
 
+    local $SIG{__WARN__} = sub {};
+
     my $test = $self->_test_file;
 
     my $exec_cmd = $self->is_win
