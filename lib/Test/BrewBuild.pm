@@ -9,7 +9,6 @@ use File::Temp;
 our $VERSION = '0.02';
 
 sub new {
-
     my ($class, %args) = @_;
     my $self = bless {}, $class;
     %{ $self->{args} } = %args;
@@ -59,7 +58,8 @@ sub instance_remove {
         `$remove_cmd $_`;
     }
 
-    print "\nremoval of existing perl installs complete...\n" if $self->{args}{debug};
+    print "\nremoval of existing perl installs complete...\n"
+      if $self->{args}{debug};
 }
 sub instance_install {
     my $self = shift;
@@ -72,12 +72,14 @@ sub instance_install {
 
     my @new_installs;
 
-    if ($self->{args}{version}){
-        $self->{args}{version} = $self->is_win
-            ? $self->{args}{version}
-            : "perl-$self->{args}{version}";
+    if ($self->{args}{version}->[0]){
+        for my $version (@{ $self->{args}{version} }){
+            $version = $self->is_win
+                ? $version
+                : "perl-$version";
 
-        push @new_installs, $self->{args}{version};
+            push @new_installs, $version;
+        }
     }
     else {
         if ($count) {
@@ -89,12 +91,13 @@ sub instance_install {
     }
 
     if ($self->{args}{debug}){
+        print "preparing to install...\n";
         print "$_\n" for @new_installs;
     }
 
     if (@new_installs){
         for (@new_installs){
-            print "\ninstalling $_...\n" if $self->{args}{debug};
+            print "installing $_...\n" if $self->{args}{debug};
             `$install_cmd $_`;
         }
     }
@@ -202,23 +205,74 @@ versions.
 
 =head1 SYNOPSIS
 
+You must be in the root directory of the distribution you want to test. Note
+that all arguments passed into the script have single-letter counterparts. Also
+note that each time the command is run, your unit tests will be run on all
+installed *brew instances.
+
+    # run all unit tests against all installed instances with no other action
+
+    brewbuild
+
+    # install three new instances of perl, randomly
+
+    brewbuild --count 3
+
+    # enable debugging, and run against all installed instances (can be used
+    # in conjunction with all other args)
+
+    brewbuild --debug
+
+    # remove all perl instances (less the currently used one), install two
+    # new random versions, and run tests against all installed perls
+
+    brewbuild --reload --count 2
+
+    # install all available perl versions, and run tests against all of them
+
+    brewbuild --count -1
+
+    # print usage information
+
+    brewbuild --help
+
+    # install a specific version and run tests on all instances (include just
+    # the number portion of the version per "perlbrew available" or "berrybrew
+    # available"
+
+    brewbuild --version 5.20.3
+
+    # multiple versions can be passed in at once
+
+    brewbuild -v 5.20.3 -v 5.14.4 -v 5.23.5
+
+=head1 DESCRIPTION
+
+The C<brewbuild> script installed by this module allows you to perform your
+unit tests across all of your Perlbrew (Unix) or Berrybrew (Windows) Perl
+instances.
+
+It allows you to remove and reinstall on each test run, install random versions
+of perl, or install specific versions.
+
+All unit tests are run against all installed instances.
+
+The actual module is just a helper for the installed script, and isn't designed
+for end-user use.
+
 =head1 AUTHOR
 
 Steve Bertrand, C<< <steveb at cpan.org> >>
 
 =head1 BUGS
 
-Please report any bugs or feature requests to C<bug-test-brewbuild at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Test-BrewBuild>.  I will be notified, and then you'll
-automatically be notified of progress on your bug as I make changes.
-
+L<https://github.com/stevieb9/p5-test-brewbuild/issues>
 
 =head1 SUPPORT
 
 You can find documentation for this module with the perldoc command.
 
     perldoc Test::BrewBuild
-
 
 =head1 LICENSE AND COPYRIGHT
 

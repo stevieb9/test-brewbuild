@@ -10,7 +10,7 @@ my (%args, $count, $help);
 GetOptions(
     "debug"     => \$args{debug},
     "reload"    => \$args{reload},
-    "version=s" => \$args{version},
+    "version=s@" => \$args{version},
     "count=i"   => \$count,
     "help"      => \$help,
 );

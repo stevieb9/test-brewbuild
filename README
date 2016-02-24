@@ -1,55 +1,86 @@
-Test-BrewBuild
+NAME
 
-The README is used to introduce the module and provide instructions on
-how to install the module, any machine dependencies it may have (for
-example C compilers and installed libraries) and any other information
-that should be provided before the module is installed.
+    Test::BrewBuild - Cross-platform unit testing automation across
+    numerous perl versions.
 
-A README file is required for CPAN modules since CPAN extracts the README
-file from a module distribution so that people browsing the archive
-can use it to get an idea of the module's uses. It is usually a good idea
-to provide version information here so that people can decide whether
-fixes for the module are worth downloading.
+SYNOPSIS
 
+    You must be in the root directory of the distribution you want to test.
+    Note that all arguments passed into the script have single-letter
+    counterparts. Also note that each time the command is run, your unit
+    tests will be run on all installed *brew instances.
 
-INSTALLATION
+        # run all unit tests against all installed instances with no other action
+    
+        brewbuild
+    
+        # install three new instances of perl, randomly
+    
+        brewbuild --count 3
+    
+        # enable debugging, and run against all installed instances (can be used
+        # in conjunction with all other args)
+    
+        brewbuild --debug
+    
+        # remove all perl instances (less the currently used one), install two
+        # new random versions, and run tests against all installed perls
+    
+        brewbuild --reload --count 2
+    
+        # install all available perl versions, and run tests against all of them
+    
+        brewbuild --count -1
+    
+        # print usage information
+    
+        brewbuild --help
+    
+        # install a specific version and run tests on all instances (include just
+        # the number portion of the version per "perlbrew available" or "berrybrew
+        # available"
+    
+        brewbuild --version 5.20.3
+    
+        # multiple versions can be passed in at once
+    
+        brewbuild -v 5.20.3 -v 5.14.4 -v 5.23.5
 
-To install this module, run the following commands:
+DESCRIPTION
 
-	perl Makefile.PL
-	make
-	make test
-	make install
+    The brewbuild script installed by this module allows you to perform
+    your unit tests across all of your Perlbrew (Unix) or Berrybrew
+    (Windows) Perl instances.
 
-SUPPORT AND DOCUMENTATION
+    It allows you to remove and reinstall on each test run, install random
+    versions of perl, or install specific versions.
 
-After installing, you can find documentation for this module with the
-perldoc command.
+    All unit tests are run against all installed instances.
 
-    perldoc Test::BrewBuild
+    The actual module is just a helper for the installed script, and isn't
+    designed for end-user use.
 
-You can also look for information at:
+AUTHOR
 
-    RT, CPAN's request tracker (report bugs here)
-        http://rt.cpan.org/NoAuth/Bugs.html?Dist=Test-BrewBuild
+    Steve Bertrand, <steveb at cpan.org>
 
-    AnnoCPAN, Annotated CPAN documentation
-        http://annocpan.org/dist/Test-BrewBuild
+BUGS
 
-    CPAN Ratings
-        http://cpanratings.perl.org/d/Test-BrewBuild
+    https://github.com/stevieb9/p5-test-brewbuild/issues
 
-    Search CPAN
-        http://search.cpan.org/dist/Test-BrewBuild/
+SUPPORT
 
+    You can find documentation for this module with the perldoc command.
+
+        perldoc Test::BrewBuild
 
 LICENSE AND COPYRIGHT
 
-Copyright (C) 2016 Steve Bertrand
+    Copyright 2016 Steve Bertrand.
 
-This program is free software; you can redistribute it and/or modify it
-under the terms of either: the GNU General Public License as published
-by the Free Software Foundation; or the Artistic License.
+    This program is free software; you can redistribute it and/or modify it
+    under the terms of either: the GNU General Public License as published
+    by the Free Software Foundation; or the Artistic License.
 
-See L<http://dev.perl.org/licenses/> for more information.
+    See http://dev.perl.org/licenses/ for more information.
 
