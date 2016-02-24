@@ -4,6 +4,7 @@ use 5.006;
 use strict;
 use warnings;
 
+use Data::Dumper;
 use File::Temp;
 
 our $VERSION = '0.03';
@@ -91,7 +92,7 @@ sub instance_install {
     }
 
     if ($self->{args}{debug}){
-        print "preparing to install...\n";
+        print "preparing to install...\n" if @new_installs;
         print "$_\n" for @new_installs;
     }
 
@@ -134,7 +135,9 @@ sub results {
         }
     }
 
-    my @ver_results = split /\n\n\n/, $result;
+#    my @ver_results = split /\n\n\n/, $result;
+
+    my @ver_results = $result =~ /[Pp]erl-\d\.\d+\.\d+.*?Result:\s+\w+\n/gs;
 
     print "\n\n";
 

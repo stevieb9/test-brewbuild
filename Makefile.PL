@@ -34,6 +34,7 @@ WriteMakefile(
     PREREQ_PM => {
         'Getopt::Long' => 0,
         'File::Temp' => 0,
+        'App::cpanminus' => 0,
     },
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean => { FILES => 'Test-BrewBuild-*' },
