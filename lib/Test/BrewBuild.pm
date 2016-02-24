@@ -158,7 +158,9 @@ sub results {
 }
 sub run {
     my $self = shift;
-    my $count = shift // 0;
+    my $count = shift;
+
+    $count = 0 if ! $count;
 
     my $brew_info = $self->is_win
         ? `berrybrew available`
@@ -200,8 +202,8 @@ sub _test_file {
 
 =head1 NAME
 
-Test::BrewBuild - Cross-platform unit testing automation across numerous perl
-versions.
+Test::BrewBuild - Perl/Berry brew unit testing automation across installed perl
+versions (Windows and Unix).
 
 =head1 SYNOPSIS
 
@@ -252,6 +254,9 @@ The C<brewbuild> script installed by this module allows you to perform your
 unit tests across all of your Perlbrew (Unix) or Berrybrew (Windows) Perl
 instances.
 
+For Windows, you'll need to install Berrybrew (see L<SEE ALSO> for details).
+For Unix, you'll need Perlbrew.
+
 It allows you to remove and reinstall on each test run, install random versions
 of perl, or install specific versions.
 
@@ -273,6 +278,16 @@ L<https://github.com/stevieb9/p5-test-brewbuild/issues>
 You can find documentation for this module with the perldoc command.
 
     perldoc Test::BrewBuild
+
+=head1 SEE ALSO
+
+Berrybrew for Windows:
+
+L<https://github.com/dnmfarrell/berrybrew>
+
+Perlbrew for Unixes:
+
+L<http://perlbrew.pl>
 
 =head1 LICENSE AND COPYRIGHT
 

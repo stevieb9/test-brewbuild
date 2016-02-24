@@ -1,7 +1,7 @@
 NAME
 
-    Test::BrewBuild - Cross-platform unit testing automation across
-    numerous perl versions.
+    Test::BrewBuild - Perl/Berry brew unit testing automation across
+    installed perl versions (Windows and Unix).
 
 SYNOPSIS
 
@@ -52,6 +52,9 @@ DESCRIPTION
     your unit tests across all of your Perlbrew (Unix) or Berrybrew
     (Windows) Perl instances.
 
+    For Windows, you'll need to install Berrybrew (see "SEE ALSO" for
+    details). For Unix, you'll need Perlbrew.
+
     It allows you to remove and reinstall on each test run, install random
     versions of perl, or install specific versions.
 
@@ -73,6 +76,16 @@ SUPPORT
     You can find documentation for this module with the perldoc command.
 
         perldoc Test::BrewBuild
+
+SEE ALSO
+
+    Berrybrew for Windows:
+
+    https://github.com/dnmfarrell/berrybrew
+
+    Perlbrew for Unixes:
+
+    http://perlbrew.pl
 
 LICENSE AND COPYRIGHT
 
