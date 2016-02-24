@@ -4,12 +4,16 @@ use 5.006;
 use strict;
 use warnings;
 
-use Cwd;
+use File::Temp;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 sub new {
-    return bless {}, shift;
+
+    my ($class, %args) = @_;
+    my $self = bless {}, $class;
+    %{ $self->{args} } = %args;
+    return $self;
 }
 sub perls_available {
     my ($self, $brew_info) = @_;
@@ -35,7 +39,7 @@ sub perls_installed {
 sub instance_remove {
     my ($self, @perls_installed) = @_;
 
-    if ($debug) {
+    if ($self->{args}{debug}) {
         print "$_\n" for @perls_installed;
         print "\nremoving previous installs...\n";
     }
@@ -49,13 +53,13 @@ sub instance_remove {
         $ver =~ s/v//;
 
         if ($_ =~ /$ver$/){
-            print "skipping version we're using, $_\n" if $debug;
+            print "skipping version we're using, $_\n" if $self->{args}{debug};
             next;
         }
         `$remove_cmd $_`;
     }
 
-    print "\nremoval of existing perl installs complete...\n" if $debug;
+    print "\nremoval of existing perl installs complete...\n" if $self->{args}{debug};
 }
 sub instance_install {
     my $self = shift;
@@ -68,9 +72,12 @@ sub instance_install {
 
     my @new_installs;
 
-    if ($version){
-        $version = $self->is_win ? $version : "perl-$version";
-        push @new_installs, $version;
+    if ($self->{args}{version}){
+        $self->{args}{version} = $self->is_win
+            ? $self->{args}{version}
+            : "perl-$self->{args}{version}";
+
+        push @new_installs, $self->{args}{version};
     }
     else {
         if ($count) {
@@ -81,38 +88,42 @@ sub instance_install {
         }
     }
 
-    print "$_\n" for @new_installs;
+    if ($self->{args}{debug}){
+        print "$_\n" for @new_installs;
+    }
 
     if (@new_installs){
         for (@new_installs){
-            print "\ninstalling $_...\n" if $debug;
+            print "\ninstalling $_...\n" if $self->{args}{debug};
             `$install_cmd $_`;
         }
     }
     else {
-        print "\nusing existing versions only\n" if $debug;
+        print "\nusing existing versions only\n" if $self->{args}{debug};
     }
 }
 sub results {
     my $self = shift;
 
+    my $test = $self->_test_file;
+
     my $exec_cmd = $self->is_win
-        ? "berrybrew exec perl $cwd\\build\\test.pl"
-        : "perlbrew exec perl $cwd/build/test.pl 2>/dev/null";
+        ? "berrybrew exec perl $test"
+        : "perlbrew exec perl $test 2>/dev/null";
 
     my $debug_exec_cmd = $self->is_win
-        ? "berrybrew exec perl $cwd\\build\\test.pl"
-        : "perlbrew exec perl $cwd/build/test.pl";
+        ? "berrybrew exec perl $test"
+        : "perlbrew exec perl $test";
 
     my $result;
 
-    print "\n...executing\n" if $debug;
+    print "\n...executing\n" if $self->{args}{debug};
 
     if ($self->is_win){
         $result = `$exec_cmd`;
     }
     else {
-        if ($debug){
+        if ($self->{args}{debug}){
             $result = `$debug_exec_cmd`;
         }
         else {
@@ -150,27 +161,37 @@ sub run {
         ? `berrybrew available`
         : `perlbrew available`;
 
-    my @perls_available = perls_available($brew_info);
+    my @perls_available = $self->perls_available($brew_info);
 
     $count = scalar @perls_available if $count < 0;
 
-    my @perls_installed = perls_installed($brew_info);
+    my @perls_installed = $self->perls_installed($brew_info);
 
-    print "$_\n" for @perls_installed;
-    if ($debug){
+    if ($self->{args}{debug}){
         print "$_ installed\n" for @perls_installed;
         print "\n";
     }
 
-    my %perl_vers;
+    $self->instance_remove(@perls_installed) if $self->{args}{reload};
+    $self->instance_install($count, @perls_available);
 
-    instance_remove(@perls_installed) if $reload;
-    instance_install($count, @perls_available);
-
-    results();
+    $self->results();
 }
 sub is_win {
     return $^O =~ /Win/ ? 1 : 0;
+}
+sub _test_file {
+    my $self = shift;
+
+    my $test = File::Temp->new(UNLINK => 1, SUFFIX => '.pl');
+
+    my $cmd = $self->is_win
+        ? 'system "cpanm --installdeps . && dmake && dmake test"'
+        : 'system "cpanm --installdeps . && make && make test"';
+
+    print $test $cmd;
+
+    return $test;
 }
 1;
 

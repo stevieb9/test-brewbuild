@@ -2,17 +2,16 @@
 use warnings;
 use strict;
 
-use Cwd;
 use Getopt::Long;
+use Test::BrewBuild;
 
-my %args;
-my $help;
+my (%args, $count, $help);
 
 GetOptions(
-    "debug=i" => \$args{debug},
-#    "count=i" => \$count,
-#    "reload=i" => \$reload,
-#    "version=s" => \$version,
+    "debug"     => \$args{debug},
+    "reload"    => \$args{reload},
+    "version=s" => \$args{version},
+    "count=i"   => \$count,
     "help"      => \$help,
 );
 
@@ -35,8 +34,8 @@ EOF
 exit;
 }
 
-print $args{debug};
+my $brew = Test::BrewBuild->new(%args);
 
-#run($count);
+$brew->run($count);
 
 

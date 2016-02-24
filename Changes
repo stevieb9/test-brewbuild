@@ -1,5 +1,12 @@
 Revision history for Test-BrewBuild
 
+0.02    xxx
+        - implemented Object Oriented approach
+        - added _test_file(), returns the test file brew will run (uses
+          File::Temp)
+        - added t/01-test_file.t
+
+
 0.01    Date/time
         First version, released on an unsuspecting world.
 
