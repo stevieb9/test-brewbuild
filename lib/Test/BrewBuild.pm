@@ -111,34 +111,10 @@ sub results {
 
     local $SIG{__WARN__} = sub {};
 
-    my $test = $self->_test_file;
+    my $result = $self->exec;
 
-    my $exec_cmd = $self->is_win
-        ? "berrybrew exec perl $test"
-        : "perlbrew exec perl $test 2>/dev/null";
-
-    my $debug_exec_cmd = $self->is_win
-        ? "berrybrew exec perl $test"
-        : "perlbrew exec perl $test";
-
-    my $result;
-
-    print "\n...executing\n" if $self->{args}{debug};
-
-    if ($self->is_win){
-        $result = `$exec_cmd`;
-    }
-    else {
-        if ($self->{args}{debug}){
-            $result = `$debug_exec_cmd`;
-        }
-        else {
-            $result = `$exec_cmd`;
-        }
-    }
-
-#    my @ver_results = split /\n\n\n/, $result;
-
+    print $result;
+    exit;
     my @ver_results = $result =~ /[Pp]erl-\d\.\d+\.\d+.*?Result:\s+\w+\n/gs;
 
     print "\n\n";
@@ -167,9 +143,7 @@ sub run {
 
     $count = 0 if ! $count;
 
-    my $brew_info = $self->is_win
-        ? `berrybrew available`
-        : `perlbrew available`;
+    my $brew_info = $self->brew_info;
 
     my @perls_available = $self->perls_available($brew_info);
 
@@ -183,25 +157,38 @@ sub run {
     }
 
     $self->instance_remove(@perls_installed) if $self->{args}{reload};
-    $self->instance_install($count, @perls_available);
+    $self->instance_install($count, @perls_available) if $count;
+
+    $brew_info = $self->brew_info;
+    @perls_installed = $self->perls_installed($brew_info);
+
+    if (! @perls_installed) {
+        print "no perls installed... exiting\n";
+        exit;
+    }
 
     $self->results();
 }
 sub is_win {
     return $^O =~ /Win/ ? 1 : 0;
 }
-sub _test_file {
+sub exec {
     my $self = shift;
 
-    my $test = File::Temp->new(UNLINK => 1, SUFFIX => '.pl');
+    my $brew = $self->is_win ? 'berrybrew' : 'perlbrew';
 
-    my $cmd = $self->is_win
-        ? 'system "cpanm --installdeps . && dmake && dmake test"'
-        : 'system "cpanm --installdeps . && make && make test"';
+    system "$brew exec cpan App::cpanminus";
+    system "$brew exec cpanm --installdeps .";
+    return `$brew exec prove`;
+}
+sub brew_info {
+    my $self = shift;
 
-    print $test $cmd;
+    my $brew_info = $self->is_win
+        ? `berrybrew available`
+        : `perlbrew available`;
 
-    return $test;
+    return $brew_info;
 }
 1;
 
