@@ -328,6 +328,13 @@ we're working on.
 
 Steve Bertrand, C<< <steveb at cpan.org> >>
 
+=head1 CONTRIBUTING
+
+Any and all feedback and help is appreciated. A Pull Request is the preferred
+method of receiving changes (L<https://github.com/stevieb9/p5-test-brewbuild>),
+but regular patches through the bug tracker, or even just email discussions are
+welcomed.
+
 =head1 BUGS
 
 L<https://github.com/stevieb9/p5-test-brewbuild/issues>
