@@ -215,6 +215,29 @@ sub brew_info {
 Test::BrewBuild - Perl/Berry brew unit testing automation across installed perl
 versions (Windows and Unix).
 
+
+
+=head1 DESCRIPTION
+
+This module is the backend for the C<brewbuild> script that is accompanied
+this module. For almost all cases, you should be using that script instead of
+using this module directly (so go read that documentation for real use cases),
+as this module is just a helper for the installed script, and isn't designed
+for end-user use.
+
+It facilitates perform your unit tests across all of your Perlbrew (Unix) or
+Berrybrew (Windows) Perl instances.
+
+For Windows, you'll need to install Berrybrew (see L<SEE ALSO> for details).
+For Unix, you'll need Perlbrew.
+
+It allows you to remove and reinstall on each test run, install random versions
+of perl, or install specific versions.
+
+All unit tests are run against all installed instances.
+
+
+
 =head1 SYNOPSIS
 
     use Test::BrewBuild;
@@ -246,26 +269,6 @@ versions (Windows and Unix).
     # execute across all perl instances, and dump the output
 
     $bb->run;
-
-=head1 DESCRIPTION
-
-This module is the backend for the C<brewbuild> script that is accompanied
-this module. For almost all cases, you should be using that script instead of
-using this module directly.
-
-It facilitates perform your unit tests across all of your Perlbrew (Unix) or
-Berrybrew (Windows) Perl instances.
-
-For Windows, you'll need to install Berrybrew (see L<SEE ALSO> for details).
-For Unix, you'll need Perlbrew.
-
-It allows you to remove and reinstall on each test run, install random versions
-of perl, or install specific versions.
-
-All unit tests are run against all installed instances.
-
-The actual module is just a helper for the installed script, and isn't designed
-for end-user use.
 
 =head1 METHODS
 
