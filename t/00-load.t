@@ -10,4 +10,4 @@ BEGIN {
     use_ok( 'Test::BrewBuild' ) || print "Bail out!\n";
 }
 
-diag( "Testing Test::BrewBuild $Test::BrewBuild::VERSION, Perl $], $^X" );
+print( "Testing Test::BrewBuild $Test::BrewBuild::VERSION, Perl $], $^X" );

@@ -113,8 +113,6 @@ sub results {
 
     my $result = $self->exec;
 
-    print $result;
-    exit;
     my @ver_results = $result =~ /[Pp]erl-\d\.\d+\.\d+.*?Result:\s+\w+\n/gs;
 
     print "\n\n";
@@ -174,11 +172,10 @@ sub is_win {
 }
 sub exec {
     my (@a, @b);
-    print @a ~~ @b;
     my $self = shift;
 
     my $brew = $self->is_win ? 'berrybrew' : 'perlbrew';
-    return system("$brew exec perl exec.pl");
+    return `$brew exec perl exec.pl`;
 }
 sub brew_info {
     my $self = shift;

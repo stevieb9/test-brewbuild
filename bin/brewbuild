@@ -3,6 +3,7 @@ use warnings;
 use strict;
 
 use Getopt::Long;
+Getopt::Long::Configure('pass_through');
 use Test::BrewBuild;
 
 my (%args, $count, $help);
