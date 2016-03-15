@@ -1,13 +1,11 @@
 package Test::BrewBuild;
-
 use 5.006;
 use strict;
 use warnings;
 
-use Data::Dumper;
 use File::Temp;
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 sub new {
     my ($class, %args) = @_;
@@ -169,7 +167,9 @@ sub run {
     }
 
     $self->instance_remove(@perls_installed) if $self->{args}{reload};
-    $self->instance_install($count, \@perls_available, \@perls_installed) if $count;
+    if ($count) {
+        $self->instance_install($count, \@perls_available, \@perls_installed);
+    }
 
     $brew_info = $self->brew_info;
     @perls_installed = $self->perls_installed($brew_info);

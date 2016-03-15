@@ -1,6 +1,8 @@
 Revision history for Test-BrewBuild
 
-0.04    - the exec file is now auto-generated with File::Temp, and unlinked
+0.04
+        - testing now properly works across all installed perls
+        - the exec file is now auto-generated with File::Temp, and unlinked
           after use (closes #9)
         - install now skips and warns (w/ debug) if a version it's trying to
           install is already installed (closes #8)

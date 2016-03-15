@@ -6,6 +6,8 @@ use Getopt::Long;
 Getopt::Long::Configure('pass_through');
 use Test::BrewBuild;
 
+our $VERSION = '0.04';
+
 my (%args, $count, $help);
 
 GetOptions(
@@ -28,8 +30,8 @@ if ($help){
     --reload | -r:  Bool, remove all installed perls (less the current one)
                     before installation of new ones
     --verion | -v:  String, the number portion of an available perl version
-                    according to "perlbrew available" Note that only one is
-                    allowed at this time
+                    according to "*brew available". Multiple versions can be
+                    sent in at once
     --help | -h:    print this help message
 EOF
 exit;
