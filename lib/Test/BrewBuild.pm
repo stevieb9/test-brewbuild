@@ -5,7 +5,7 @@ use warnings;
 
 use File::Temp;
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 sub new {
     my ($class, %args) = @_;
@@ -215,6 +215,9 @@ sub brew_info {
 Test::BrewBuild - Perl/Berry brew unit testing automation across installed perl
 versions (Windows and Unix).
 
+=for html
+<a href="http://travis-ci.org/stevieb9/p5-test-brewbuild"><img src="https://secure.travis-ci.org/stevieb9/p5-test-brewbuild.png"/>
+<a href='https://coveralls.io/github/stevieb9/p5-test-brewbuild?branch=master'><img src='https://coveralls.io/repos/stevieb9/p5-test-brewbuild/badge.svg?branch=master&service=github' alt='Coverage Status' /></a>
 
 
 =head1 DESCRIPTION
