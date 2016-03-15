@@ -174,8 +174,16 @@ sub exec {
     my (@a, @b);
     my $self = shift;
 
+    my $wfh = File::Temp->new(UNLINK => 1);
+    my $fname = $wfh->filename;
+
+    while(<DATA>){
+        print $wfh $_;
+    }
+    close $wfh;
+
     my $brew = $self->is_win ? 'berrybrew' : 'perlbrew';
-    return `$brew exec perl exec.pl`;
+    return `$brew exec perl $fname`;
 }
 sub brew_info {
     my $self = shift;
@@ -291,3 +299,15 @@ See L<http://dev.perl.org/licenses/> for more information.
 =cut
 
 1; # End of Test::BrewBuild
+
+__DATA__
+#!/usr/bin/perl
+use warnings;
+use strict;
+
+if ($^O ne 'MSWin32'){
+    system "cpanm --installdeps . && make && make test";
+}
+else {
+    system "cpanm --installdeps . && dmake && dmake test";
+}

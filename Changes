@@ -1,5 +1,8 @@
 Revision history for Test-BrewBuild
 
+0.04    - the exec file is now auto-generated with File::Temp, and unlinked
+          after use (closes #9)
+
 0.03
         - App::cpanminus now a prereq
         - fixed issue in split in results() (fixes #6)
