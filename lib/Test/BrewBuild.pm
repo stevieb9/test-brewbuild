@@ -217,52 +217,44 @@ versions (Windows and Unix).
 
 =head1 SYNOPSIS
 
-You must be in the root directory of the distribution you want to test. Note
-that all arguments passed into the script have single-letter counterparts. Also
-note that each time the command is run, your unit tests will be run on all
-installed *brew instances.
+    use Test::BrewBuild;
 
-    # run all unit tests against all installed instances with no other action
+    # default settings
 
-    brewbuild
+    my %args = (
+        debug   => 0,
+        reload  => 0,
+        version => '',
+        count   => 0,
+    );
 
-    # install three new instances of perl, randomly
+    my $bb = Test::BrewBuild->new(%args);
 
-    brewbuild --count 3
+    my @perls_available = $bb->perls_available;
+    my @perls_installed = $bb->perls_installed;
 
-    # enable debugging, and run against all installed instances (can be used
-    # in conjunction with all other args)
+    # remove all currently installed instances of perl, less the one you're
+    # using
 
-    brewbuild --debug
+    $bb->instance_remove;
 
-    # remove all perl instances (less the currently used one), install two
-    # new random versions, and run tests against all installed perls
+    # install a specific version (uses 'version' param, or 'count'. If 'count'
+    # is set to a positive integer, we'll randomly install that many instances)
 
-    brewbuild --reload --count 2
+    $bb->instance_install;
 
-    # install all available perl versions, and run tests against all of them
+    # execute across all perl instances, and dump the output
 
-    brewbuild --count -1
-
-    # print usage information
-
-    brewbuild --help
-
-    # install a specific version and run tests on all instances (include just
-    # the number portion of the version per "perlbrew available" or "berrybrew
-    # available"
-
-    brewbuild --version 5.20.3
-
-    # multiple versions can be passed in at once
-
-    brewbuild -v 5.20.3 -v 5.14.4 -v 5.23.5
+    $bb->run;
 
 =head1 DESCRIPTION
 
-The C<brewbuild> script installed by this module allows you to perform your
-unit tests across all of your Perlbrew (Unix) or Berrybrew (Windows) Perl
-instances.
+This module is the backend for the C<brewbuild> script that is accompanied
+this module. For almost all cases, you should be using that script instead of
+using this module directly.
+
+It facilitates perform your unit tests across all of your Perlbrew (Unix) or
+Berrybrew (Windows) Perl instances.
 
 For Windows, you'll need to install Berrybrew (see L<SEE ALSO> for details).
 For Unix, you'll need Perlbrew.
@@ -275,6 +267,57 @@ All unit tests are run against all installed instances.
 The actual module is just a helper for the installed script, and isn't designed
 for end-user use.
 
+=head1 METHODS
+
+=head2 new(%args)
+
+Returns a new C<Test::BrewBuild> object. See the documentation for the
+C<berrybrew> script to understand what the arguments are and do.
+
+=head2 perls_available
+
+Returns an array containing all perls available, whether already installed or
+not.
+
+=head2 perls_installed
+
+Returns an array of the names of all perls currently installed under your *brew
+setup.
+
+=head2 instance_install
+
+If 'version' param is set, will install that specific version. If 'count' param
+is set to a positive integer, will install that many random versions of perl.
+
+=head2 instance_remove
+
+Uninstalls all currently installed perls, less the one you are currently
+'switch'ed or 'use'd to.
+
+=head2 run
+
+Prepares the run and calls C<exec()> to run all tests against all installed
+perls.
+
+=head2 results
+
+Only called by C<run()>. Processes and displayes test results.
+
+=head2 exec
+
+Generates the test executable in a format ready to run against all installed
+perls, and processes it against C<*brew exec>.
+
+=head2 is_win
+
+Helper method, returns true if the current OS is Windows, false if not.
+
+=head2 brew_info
+
+Helper method, returns the appropriate *brew calls relative to the platform
+we're working on.
+
+
 =head1 AUTHOR
 
 Steve Bertrand, C<< <steveb at cpan.org> >>
@@ -285,9 +328,12 @@ L<https://github.com/stevieb9/p5-test-brewbuild/issues>
 
 =head1 SUPPORT
 
-You can find documentation for this module with the perldoc command.
+You can find documentation for this module and its accompanying script with the
+perldoc command:
 
     perldoc Test::BrewBuild
+
+    perldoc brewbuild
 
 =head1 SEE ALSO
 

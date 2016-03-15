@@ -4,11 +4,11 @@ Revision history for Test-BrewBuild
           after use (closes #9)
         - install now skips and warns (w/ debug) if a version it's trying to
           install is already installed (closes #8)
+        - added POD for both the script and module (closes #5)
 
 0.03
         - App::cpanminus now a prereq
         - fixed issue in split in results() (fixes #6)
-
 
 0.02    2016-02-23
         - implemented Object Oriented approach
