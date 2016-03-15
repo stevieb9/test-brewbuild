@@ -65,7 +65,8 @@ sub instance_remove {
 sub instance_install {
     my $self = shift;
     my $count = shift;
-    my @perls_available = @_;
+    my $perls_available = shift;
+    my $perls_installed = shift;
 
     my $install_cmd = $self->is_win
         ? 'berrybrew install'
@@ -79,13 +80,26 @@ sub instance_install {
                 ? $version
                 : "perl-$version";
 
+            if (grep { $version eq $_ } @{ $perls_installed }){
+                if ($self->{args}{debug}){
+                    warn "$version is already installed... skipping\n";
+                }
+                next;
+            }
             push @new_installs, $version;
         }
     }
     else {
-        if ($count) {
+        if ($count){
             while ($count > 0){
-                push @new_installs, $perls_available[rand @perls_available];
+                my $candidate = $perls_available->[rand @{ $perls_available }];
+                if (grep { $_ eq $candidate } @{ $perls_installed }) {
+                    if ($self->{args}{debug}) {
+                        warn "$candidate already installed... skipping\n";
+                    }
+                    next;
+                }
+                push @new_installs, $candidate;
                 $count--;
             }
         }
@@ -97,9 +111,9 @@ sub instance_install {
     }
 
     if (@new_installs){
-        for (@new_installs){
-            print "installing $_...\n" if $self->{args}{debug};
-            `$install_cmd $_`;
+        for my $ver (@new_installs){
+            print "installing $ver...\n" if $self->{args}{debug};
+            `$install_cmd $ver`;
         }
     }
     else {
@@ -155,7 +169,7 @@ sub run {
     }
 
     $self->instance_remove(@perls_installed) if $self->{args}{reload};
-    $self->instance_install($count, @perls_available) if $count;
+    $self->instance_install($count, \@perls_available, \@perls_installed) if $count;
 
     $brew_info = $self->brew_info;
     @perls_installed = $self->perls_installed($brew_info);
