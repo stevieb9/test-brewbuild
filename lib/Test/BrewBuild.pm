@@ -173,13 +173,12 @@ sub is_win {
     return $^O =~ /Win/ ? 1 : 0;
 }
 sub exec {
+    my (@a, @b);
+    print @a ~~ @b;
     my $self = shift;
 
     my $brew = $self->is_win ? 'berrybrew' : 'perlbrew';
-
-    system "$brew exec cpan App::cpanminus";
-    system "$brew exec cpanm --installdeps .";
-    return `$brew exec prove`;
+    return system("$brew exec perl exec.pl");
 }
 sub brew_info {
     my $self = shift;
