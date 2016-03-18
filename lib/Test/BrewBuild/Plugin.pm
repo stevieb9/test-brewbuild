@@ -2,7 +2,6 @@ package Test::BrewBuild::Plugin;
 use strict;
 use warnings;
 
-use Data::Dumper;
 use ExtUtils::Installed;
 use Logging::Simple;
 use Module::Load;

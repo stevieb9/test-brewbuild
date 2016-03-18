@@ -14,7 +14,8 @@ Revision history for Test-BrewBuild
         - added numerous debug statements at varying levels
         - remove all prereqs from Makefile.PL that are already in core
           (closes #15)
-
+        - add prereqs that aren't in core as of v5.8 into Makefile.PL (closes
+          #20)
 
 0.04    2016-03-16
         - testing now properly works across all installed perls
