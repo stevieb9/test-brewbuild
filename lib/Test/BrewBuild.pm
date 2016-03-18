@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use File::Temp;
+use Test::BrewBuild::Plugin;
 
 our $VERSION = '0.05';
 
