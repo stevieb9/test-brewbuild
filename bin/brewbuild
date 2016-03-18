@@ -26,14 +26,15 @@ if ($help){
 
     Options:
 
-    --debug | -d:   Bool, enable verbosity
-    --count | -c:   Integer, how many random versions of perl to install
+    --plugin | -p:  String, the module name of the exec command plugin to use
+    --debug  | -d:  Bool, enable verbosity
+    --count  | -c:  Integer, how many random versions of perl to install
     --reload | -r:  Bool, remove all installed perls (less the current one)
                     before installation of new ones
     --verion | -v:  String, the number portion of an available perl version
                     according to "*brew available". Multiple versions can be
                     sent in at once
-    --help | -h:    print this help message
+    --help   | -h:  print this help message
 EOF
 exit;
 }
@@ -63,6 +64,11 @@ installed *brew instances.
     # run all unit tests against all installed instances with no other action
 
     brewbuild
+
+    # use a custom plugin containing the build/test commands to pass to
+    # perlbrew (can also be set in $ENV{TBB_PLUGIN} for persistence)
+
+    brewbuild --plugin 'Test::BrewBuild::Plugin::DefaultExec' # default
 
     # install three new instances of perl, randomly
 
@@ -100,7 +106,9 @@ installed *brew instances.
 
 This C<brewbuild> script installed by the L<Test::Brewbuild> module allows you
 to perform your unit tests across all of your Perlbrew (Unix) or Berrybrew
-(Windows) Perl instances.
+(Windows) Perl instances, with the ability to very easily create your own
+plugins that contain the code that C<perlbrew/berrybrew exec> will process.
+(See L<Test::BrewBuild::Plugin::DefaultExec> for an example).
 
 For Windows, you'll need to install Berrybrew (see L<SEE ALSO> for details).
 For Unix, you'll need Perlbrew.

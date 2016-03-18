@@ -1,8 +1,11 @@
 Revision history for Test-BrewBuild
 
-0.05    xxx
+0.05    2016-03-18
         - we now recognize when Module::Build is being used, as opposed
           to EUMM, and it works properly (fixes #12)
+        - *brew exec commands are now loaded via a plugin architecture. Set by
+           the '-p|--plugin' or an environment variable, plugin writing is
+           exceptionally simplistic.
 
 0.04    2016-03-16
         - testing now properly works across all installed perls

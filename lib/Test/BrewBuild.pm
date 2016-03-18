@@ -291,6 +291,14 @@ All unit tests are run against all installed instances.
 Returns a new C<Test::BrewBuild> object. See the documentation for the
 C<berrybrew> script to understand what the arguments are and do.
 
+=head2 plugin('Module::Name')
+
+Fetches and installs a custom plugin which contains the code that
+C<perlbrew/berrybrew exec> will execute. If not used or the module specified
+can't be located (or it contains errors), we fall back to the default bundled
+L<Test::BrewBuild::Plugin::DefaultExec> (which is the canonical example for
+writing new plugins).
+
 =head2 perls_available
 
 Returns an array containing all perls available, whether already installed or
