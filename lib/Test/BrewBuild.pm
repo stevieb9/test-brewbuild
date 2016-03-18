@@ -378,8 +378,10 @@ __DATA__
 use warnings;
 use strict;
 
+my $make = -e 'Makefile.PL' ? 'make' : './Build';
+
 if ($^O ne 'MSWin32'){
-    system "cpanm --installdeps . && make && make test";
+    system "cpanm --installdeps . && $make && $make test";
 }
 else {
     system "cpanm --installdeps . && dmake && dmake test";

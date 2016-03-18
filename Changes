@@ -1,6 +1,10 @@
 Revision history for Test-BrewBuild
 
-0.04
+0.05    xxx
+        - we now recognize when Module::Build is being used, as opposed
+          to EUMM (fixes #12)
+
+0.04    2016-03-16
         - testing now properly works across all installed perls
         - the exec file is now auto-generated with File::Temp, and unlinked
           after use (closes #9)
@@ -8,7 +12,7 @@ Revision history for Test-BrewBuild
           install is already installed (closes #8)
         - added POD for both the script and module (closes #5)
 
-0.03
+0.03    2016-03-01
         - App::cpanminus now a prereq
         - fixed issue in split in results() (fixes #6)
 
