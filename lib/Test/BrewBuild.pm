@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use File::Temp;
+use Logging::Simple;
 use Test::BrewBuild::Plugin;
 
 our $VERSION = '0.05';
@@ -12,6 +13,8 @@ sub new {
     my ($class, %args) = @_;
     my $self = bless {}, $class;
     %{ $self->{args} } = %args;
+
+    $self->_log($args{debug});
 
     my $exec_plugin_name = $args{plugin} ? $args{plugin} : $ENV{TBB_PLUGIN};
     $exec_plugin_name = $self->plugin($exec_plugin_name);
@@ -218,6 +221,13 @@ sub brew_info {
         : `perlbrew available`;
 
     return $brew_info;
+}
+sub _log {
+    my ($self, $level) = @_;
+    $self->{log} = Logging::Simple->new(
+        name  => 'Test::BrewBuild',
+        level => $level,
+    );
 }
 1;
 

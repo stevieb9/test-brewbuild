@@ -8,6 +8,7 @@ Revision history for Test-BrewBuild
            exceptionally simplistic
         - added --remove, performs as --reload, and kept the latter for
           backwards compatibility
+        - fix undef issue in Plugin.pm if a plugin name can't be found
 
 0.04    2016-03-16
         - testing now properly works across all installed perls

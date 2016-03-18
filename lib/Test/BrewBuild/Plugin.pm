@@ -27,7 +27,7 @@ sub _load_plugin {
     my $inst = ExtUtils::Installed->new;
     my @modules = $inst->modules;
 
-    if (grep { $_ eq $plugin } @modules) {
+    if ($plugin && grep { $_ eq $plugin } @modules) {
         load $_;
         if ($_->can( 'brewbuild_exec' )) {
             return $plugin;

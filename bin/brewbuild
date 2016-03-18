@@ -28,7 +28,7 @@ if ($help){
     Options:
 
     --plugin | -p:  String, the module name of the exec command plugin to use
-    --debug  | -d:  Bool, enable verbosity
+    --debug  | -d:  Int (0-7), sets logging verbosity
     --count  | -c:  Integer, how many random versions of perl to install
     --remove | -r:  Bool, remove all installed perls (less the current one)
                     before installation of new ones
@@ -41,6 +41,9 @@ exit;
 }
 
 my $brew = Test::BrewBuild->new(%args);
+my $log = $brew->{log}->child('brewbuild.pl');
+
+$log->_7("executing run()");
 
 $brew->run($count);
 
@@ -76,7 +79,8 @@ installed *brew instances.
     brewbuild --count 3
 
     # enable debugging, and run against all installed instances (can be used
-    # in conjunction with all other args)
+    # in conjunction with all other args). Use 0-7 as the argument to it, the
+    # default is 4
 
     brewbuild --debug
 
