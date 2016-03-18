@@ -9,8 +9,6 @@ use Module::Load;
 
 our $VERSION = '0.05';
 
-my $log_lvl = 0;
-
 BEGIN {
     no strict 'refs';
     no warnings 'redefine';

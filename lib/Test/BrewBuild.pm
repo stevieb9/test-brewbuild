@@ -17,7 +17,7 @@ sub new {
     %{ $self->{args} } = %args;
 
     $log = $self->log($args{debug});
-    $log->_7("in new(), constructing" . __PACKAGE__ . "object");
+    $log->_7("in new(), constructing " . __PACKAGE__ . " object");
 
     my $exec_plugin_name = $args{plugin} ? $args{plugin} : $ENV{TBB_PLUGIN};
 
@@ -43,7 +43,7 @@ sub perls_available {
         ? $brew_info =~ /(\d\.\d+\.\d+_\d+)/g
         : $brew_info =~ /(perl-\d\.\d+\.\d+)/g;
 
-    $log->_5("perls available: " . join ', ', @perls_available);
+    $log->_7("perls available: " . join ', ', @perls_available);
 
     if ($self->is_win){
         for (@perls_available){
@@ -159,7 +159,7 @@ sub results {
 
     my @ver_results = $result =~ /[Pp]erl-\d\.\d+\.\d+.*?Result:\s+\w+\n/gs;
 
-    print "\n\n";
+    my @pass;
 
     for (@ver_results){
         my $ver;
@@ -173,14 +173,17 @@ sub results {
             $res = $1;
         }
         else {
-            $log->_5("$ver FAIL");
+            $log->_7("$ver FAIL");
             print $_;
             exit;
         }
 
-        $log->_5("$ver :: $res");
-        print "$ver :: $res\n";
+        $log->_7("$ver :: $res");
+        push @pass, "$ver :: $res\n";
     }
+
+    print "\n";
+    print $_ for @pass;
 
     $log->_7(__PACKAGE__ ."run finished");
 }
@@ -198,7 +201,7 @@ sub run {
 
     my @perls_installed = $self->perls_installed($brew_info);
 
-    $log->_5("installed perls" . join ', ', @perls_installed);
+    $log->_5("installed perls: " . join ', ', @perls_installed);
 
     $self->instance_remove(@perls_installed) if $self->{args}{remove};
     if ($count) {
@@ -252,16 +255,19 @@ sub brew_info {
 sub log {
     my ($self, $level) = @_;
 
-
-
     $self->{log} = Logging::Simple->new(
         name  => 'Test::BrewBuild',
         level => $level,
     );
 
     $self->{log}->_7("in log()");
-    $self->{log}->_7("setting log level to $level") if defined $level;
-    $self->{log}->_7("log object created with level $level") if $level;
+
+    if (defined $level && $level < 6){
+        $self->{log}->display(0);
+        $self->{log}->custom_display("-");
+        $self->{log}->_7("setting log level to $level");
+        $self->{log}->_7("log object created with level $level");
+    }
 
     return $self->{log};
 }
