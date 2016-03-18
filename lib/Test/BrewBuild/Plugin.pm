@@ -2,10 +2,14 @@ package Test::BrewBuild::Plugin;
 use strict;
 use warnings;
 
+use Data::Dumper;
 use ExtUtils::Installed;
+use Logging::Simple;
 use Module::Load;
 
-my $inst = ExtUtils::Installed->new;
+our $VERSION = '0.05';
+
+my $log_lvl = 0;
 
 BEGIN {
     no strict 'refs';
@@ -13,21 +17,27 @@ BEGIN {
 
     *Test::BrewBuild::plugin = sub {
         my ($self, $check) = @_;
-        return _get_plugin($check);
+        return _load_plugin($check);
     };
 };
-sub _get_plugin {
+
+sub _load_plugin {
     my $plugin = shift;
 
+    my $inst = ExtUtils::Installed->new;
     my @modules = $inst->modules;
 
-    if (grep { $_ eq $plugin } @modules){
+    if (grep { $_ eq $plugin } @modules) {
         load $_;
-        if ($_->can('brewbuild_exec')){
+        if ($_->can( 'brewbuild_exec' )) {
             return $plugin;
         }
-        else {
-            return 'Test::BrewBuild::Plugin::DefaultExec';
-        }
+    }
+    else {
+        $plugin = 'Test::BrewBuild::Plugin::DefaultExec';
+        load $plugin;
+        return $plugin;
     }
 }
+
+1;

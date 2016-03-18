@@ -2,7 +2,7 @@ Revision history for Test-BrewBuild
 
 0.05    xxx
         - we now recognize when Module::Build is being used, as opposed
-          to EUMM (fixes #12)
+          to EUMM, and it works properly (fixes #12)
 
 0.04    2016-03-16
         - testing now properly works across all installed perls

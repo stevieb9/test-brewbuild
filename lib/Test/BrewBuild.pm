@@ -12,6 +12,15 @@ sub new {
     my ($class, %args) = @_;
     my $self = bless {}, $class;
     %{ $self->{args} } = %args;
+
+    my $exec_plugin_name = $args{plugin} ? $args{plugin} : $ENV{TBB_PLUGIN};
+    $exec_plugin_name = $self->plugin($exec_plugin_name);
+
+    my $exec_plugin_sub = $exec_plugin_name .'::brewbuild_exec';
+    $self->{exec_plugin} = \&$exec_plugin_sub;
+
+    print "using plugin $exec_plugin_name\n" if $self->{args}{debug};
+
     return $self;
 }
 sub perls_available {
@@ -192,7 +201,8 @@ sub exec {
     my $wfh = File::Temp->new(UNLINK => 1);
     my $fname = $wfh->filename;
 
-    while(<DATA>){
+    my @exec_cmd = $self->{exec_plugin}->();
+    for (@exec_cmd){
         print $wfh $_;
     }
     close $wfh;
@@ -378,7 +388,6 @@ __DATA__
 #!/usr/bin/perl
 use warnings;
 use strict;
-
 
 if ($^O eq 'MSWin32'){
     my $make = -e 'Makefile.PL' ? 'dmake' : 'Build';

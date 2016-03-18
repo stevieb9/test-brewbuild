@@ -1,4 +1,4 @@
-package Test::BrewBuild::Plugin::DefaultExec
+package Test::BrewBuild::Plugin::DefaultExec;
 
 # default exec command set plugin for Test::BrewBuild
 
@@ -8,6 +8,7 @@ sub brewbuild_exec {
     return <DATA>;
 }
 
+1;
 __DATA__
 if ($^O eq 'MSWin32'){
     my $make = -e 'Makefile.PL' ? 'dmake' : 'Build';
