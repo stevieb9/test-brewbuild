@@ -9,6 +9,9 @@ Revision history for Test-BrewBuild
         - added --remove, performs as --reload, and kept the latter for
           backwards compatibility
         - fix undef issue in Plugin.pm if a plugin name can't be found
+        - --debug param now accepts a level param (0-7) to set the level (added
+          Logging::Simple as prereq)
+        - added numerous debug statements at varying levels
 
 0.04    2016-03-16
         - testing now properly works across all installed perls

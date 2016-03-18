@@ -11,7 +11,7 @@ our $VERSION = '0.05';
 my (%args, $count, $help);
 
 GetOptions(
-    "debug"     => \$args{debug},
+    "debug=i"     => \$args{debug},
     "reload"    => \$args{remove},
     "remove"    => \$args{remove},
     "version=s@" => \$args{version},
@@ -41,9 +41,14 @@ exit;
 }
 
 my $brew = Test::BrewBuild->new(%args);
-my $log = $brew->{log}->child('brewbuild.pl');
 
-$log->_7("executing run()");
+my $log = $brew->log()->child('brewbuild.pl');
+
+my @opts;
+for (keys %args){
+    push @opts, "$_ => $args{$_}" if defined $args{$_};
+}
+$log->_7("executing run() with args: " . join ', ', @opts);
 
 $brew->run($count);
 
