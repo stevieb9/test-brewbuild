@@ -441,18 +441,4 @@ See L<http://dev.perl.org/licenses/> for more information.
 
 =cut
 
-1; # End of Test::BrewBuild
-
-__DATA__
-#!/usr/bin/perl
-use warnings;
-use strict;
-
-if ($^O eq 'MSWin32'){
-    my $make = -e 'Makefile.PL' ? 'dmake' : 'Build';
-    system "cpanm --installdeps . && $make && $make test";
-}
-else {
-    my $make = -e 'Makefile.PL' ? 'make' : './Build';
-    system "cpanm --installdeps . && $make && $make test";
-}
+1;
