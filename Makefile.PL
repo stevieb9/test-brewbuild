@@ -1,4 +1,4 @@
-use 5.006;
+use 5.008;
 use strict;
 use warnings;
 use ExtUtils::MakeMaker;
@@ -11,7 +11,7 @@ WriteMakefile(
     LICENSE          => 'perl_5',
     PL_FILES         => {},
     EXE_FILES        => [ map "bin/$_", qw(brewbuild) ],
-    MIN_PERL_VERSION => 5.006,
+    MIN_PERL_VERSION => 5.008,
     META_MERGE => {
         'meta-spec' => { version => 2 },
         resources   => {
@@ -25,15 +25,7 @@ WriteMakefile(
             },
         },
     },
-    CONFIGURE_REQUIRES => {
-        'ExtUtils::MakeMaker' => 0,
-    },
-    BUILD_REQUIRES => {
-        'Test::More' => 0,
-    },
     PREREQ_PM => {
-        'Getopt::Long' => 0,
-        'File::Temp' => 0,
         'App::cpanminus' => 0,
     },
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
