@@ -12,7 +12,8 @@ my (%args, $count, $help);
 
 GetOptions(
     "debug"     => \$args{debug},
-    "reload"    => \$args{reload},
+    "reload"    => \$args{remove},
+    "remove"    => \$args{remove},
     "version=s@" => \$args{version},
     "plugin=s"  => \$args{plugin},
     "count=i"   => \$count,
@@ -29,7 +30,7 @@ if ($help){
     --plugin | -p:  String, the module name of the exec command plugin to use
     --debug  | -d:  Bool, enable verbosity
     --count  | -c:  Integer, how many random versions of perl to install
-    --reload | -r:  Bool, remove all installed perls (less the current one)
+    --remove | -r:  Bool, remove all installed perls (less the current one)
                     before installation of new ones
     --verion | -v:  String, the number portion of an available perl version
                     according to "*brew available". Multiple versions can be
@@ -82,7 +83,7 @@ installed *brew instances.
     # remove all perl instances (less the currently used one), install two
     # new random versions, and run tests against all installed perls
 
-    brewbuild --reload --count 2
+    brewbuild --remove --count 2
 
     # install all available perl versions, and run tests against all of them
 

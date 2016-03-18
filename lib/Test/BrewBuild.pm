@@ -176,7 +176,7 @@ sub run {
         print "\n";
     }
 
-    $self->instance_remove(@perls_installed) if $self->{args}{reload};
+    $self->instance_remove(@perls_installed) if $self->{args}{remove};
     if ($count) {
         $self->instance_install($count, \@perls_available, \@perls_installed);
     }
@@ -260,7 +260,7 @@ All unit tests are run against all installed instances.
 
     my %args = (
         debug   => 0,
-        reload  => 0,
+        remove  => 0,
         version => '',
         count   => 0,
     );

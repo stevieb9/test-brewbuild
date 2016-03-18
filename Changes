@@ -5,7 +5,9 @@ Revision history for Test-BrewBuild
           to EUMM, and it works properly (fixes #12)
         - *brew exec commands are now loaded via a plugin architecture. Set by
            the '-p|--plugin' or an environment variable, plugin writing is
-           exceptionally simplistic.
+           exceptionally simplistic
+        - added --remove, performs as --reload, and kept the latter for
+          backwards compatibility
 
 0.04    2016-03-16
         - testing now properly works across all installed perls
