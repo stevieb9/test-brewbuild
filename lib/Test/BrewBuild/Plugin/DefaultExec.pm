@@ -13,9 +13,8 @@ sub brewbuild_exec {
 __DATA__
 if ($^O eq 'MSWin32'){
     my $make = -e 'Makefile.PL' ? 'dmake' : 'Build';
-    system "cpanm --installdeps . && $make && $make test";
 }
 else {
     my $make = -e 'Makefile.PL' ? 'make' : './Build';
-    system "cpanm --installdeps . && $make && $make test";
 }
+system "cpanm --installdeps . && $make && $make test";
