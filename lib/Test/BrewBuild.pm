@@ -6,7 +6,7 @@ use File::Temp;
 use Logging::Simple;
 use Test::BrewBuild::Plugin;
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 my $log;
 
@@ -241,7 +241,6 @@ sub is_win {
     return $is_win;
 }
 sub exec {
-    my (@a, @b);
     my $self = shift;
 
     my $log = $log->child('exec');
@@ -267,9 +266,17 @@ sub exec {
 
     my $brew = $self->is_win ? 'berrybrew' : 'perlbrew';
 
-    $log->_7("exec'ing: $brew exec perl $fname");
+    if ($self->{args}{on}){
+        my $vers = join ',', @{ $self->{args}{on} };
+        $log->_7("versions to run on: $vers");
+        $log->_7("exec'ing: $brew exec --with $vers perl $fname");
 
-    return `$brew exec perl $fname`;
+        return `$brew exec --with $vers perl $fname`;
+    }
+    else {
+        $log->_7("exec'ing: $brew exec perl $fname");
+        return `$brew exec perl $fname`;
+    }
 }
 sub brew_info {
     my $self = shift;

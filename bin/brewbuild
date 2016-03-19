@@ -11,13 +11,14 @@ our $VERSION = '0.05';
 my (%args, $count, $help);
 
 GetOptions(
-    "debug=i"     => \$args{debug},
-    "reload"    => \$args{remove},
-    "remove"    => \$args{remove},
-    "version=s@" => \$args{version},
-    "plugin=s"  => \$args{plugin},
-    "count=i"   => \$count,
-    "help"      => \$help,
+    "debug=i"       => \$args{debug},
+    "reload"        => \$args{remove},
+    "remove"        => \$args{remove},
+    "version=s@"    => \$args{version},
+    "plugin=s"      => \$args{plugin},
+    "on=s@"         => \$args{on},
+    "count=i"       => \$count,
+    "help"          => \$help,
 );
 
 if ($help){
@@ -27,6 +28,8 @@ if ($help){
 
     Options:
 
+    --on     | -o:  String, perl version number to run against (can be supplied
+                    multiple times
     --plugin | -p:  String, the module name of the exec command plugin to use
     --debug  | -d:  Int (0-7), sets logging verbosity
     --count  | -c:  Integer, how many random versions of perl to install
