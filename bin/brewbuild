@@ -8,7 +8,7 @@ use Test::BrewBuild;
 
 our $VERSION = '0.05';
 
-my (%args, $count, $help);
+my (%args, $help);
 
 GetOptions(
     "debug=i"       => \$args{debug},
@@ -17,7 +17,8 @@ GetOptions(
     "version=s@"    => \$args{version},
     "plugin=s"      => \$args{plugin},
     "on=s@"         => \$args{on},
-    "count=i"       => \$count,
+    "new=i"         => \$args{new},
+    "count=i"       => \$args{new}, # backwards compat
     "help"          => \$help,
 );
 
@@ -32,7 +33,7 @@ if ($help){
                     multiple times
     --plugin | -p:  String, the module name of the exec command plugin to use
     --debug  | -d:  Int (0-7), sets logging verbosity
-    --count  | -c:  Integer, how many random versions of perl to install
+    --new    | -n:  Integer, how many random versions of perl to install
     --remove | -r:  Bool, remove all installed perls (less the current one)
                     before installation of new ones
     --verion | -v:  String, the number portion of an available perl version
@@ -54,7 +55,7 @@ for (keys %args){
 
 $log->_7("executing Test::BrewBuild run() with args: " . join ', ', @opts);
 
-$brew->run($count);
+$brew->run;
 
 =pod
 
@@ -91,7 +92,7 @@ installed *brew instances.
 
     # install three new instances of perl, randomly
 
-    brewbuild --count 3
+    brewbuild --new 3
 
     # enable debugging, and run against all installed instances (can be used
     # in conjunction with all other args). Use 0-7 as the argument to it.
@@ -102,11 +103,11 @@ installed *brew instances.
     # remove all perl instances (less the currently used one), install two
     # new random versions, and run tests against all installed perls
 
-    brewbuild --remove --count 2
+    brewbuild --remove --new 2
 
     # install all available perl versions, and run tests against all of them
 
-    brewbuild --count -1
+    brewbuild --new -1
 
     # print usage information
 

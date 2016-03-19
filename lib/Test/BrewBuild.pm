@@ -96,7 +96,6 @@ sub instance_remove {
 }
 sub instance_install {
     my $self = shift;
-    my $count = shift;
     my $perls_available = shift;
     my $perls_installed = shift;
 
@@ -109,6 +108,7 @@ sub instance_install {
     $log->_7("install cmd set to $install_cmd");
 
     my @new_installs;
+    my $new = $self->{args}{new};
 
     if ($self->{args}{version}->[0]){
         for my $version (@{ $self->{args}{version} }){
@@ -124,11 +124,11 @@ sub instance_install {
         }
     }
     else {
-        if ($count){
+        if ($new){
 
-            $log->_7("looking to install $count perl instances");
+            $log->_7("looking to install $new perl instances");
 
-            while ($count > 0){
+            while ($new > 0){
                 my $candidate = $perls_available->[rand @{ $perls_available }];
                 if (grep { $_ eq $candidate } @{ $perls_installed }) {
                     if ($self->{args}{debug}) {
@@ -137,7 +137,7 @@ sub instance_install {
                     next;
                 }
                 push @new_installs, $candidate;
-                $count--;
+                $new--;
             }
         }
     }
@@ -201,9 +201,8 @@ sub results {
 }
 sub run {
     my $self = shift;
-    my $count = shift;
 
-    $count = 0 if ! $count;
+    my $new = defined $self->{args}{new} ? $self->{args}{new} : 0;
 
     my $log = $log->child('run');
     $log->_7("commencing run()");
@@ -212,15 +211,15 @@ sub run {
 
     my @perls_available = $self->perls_available($brew_info);
 
-    $count = scalar @perls_available if $count < 0;
+    $new = scalar @perls_available if $new < 0;
 
     my @perls_installed = $self->perls_installed($brew_info);
 
     $log->_5("installed perls: " . join ', ', @perls_installed);
 
     $self->instance_remove(@perls_installed) if $self->{args}{remove};
-    if ($count) {
-        $self->instance_install($count, \@perls_available, \@perls_installed);
+    if ($new) {
+        $self->instance_install($new, \@perls_available, \@perls_installed);
     }
 
     $brew_info = $self->brew_info;
@@ -354,10 +353,12 @@ All unit tests are run against all installed instances.
     # default settings
 
     my %args = (
-        debug   => 0,
-        remove  => 0,
-        version => '',
-        count   => 0,
+        debug   => undef,
+        remove  => undef,
+        version => undef,
+        new     => undef,
+        plugin  => undef,
+        on      => undef,
     );
 
     my $bb = Test::BrewBuild->new(%args);
@@ -370,7 +371,7 @@ All unit tests are run against all installed instances.
 
     $bb->instance_remove;
 
-    # install a specific version (uses 'version' param, or 'count'. If 'count'
+    # install a specific version (uses 'version' param, or 'new'. If 'new'
     # is set to a positive integer, we'll randomly install that many instances)
 
     $bb->instance_install;
@@ -406,7 +407,7 @@ setup.
 
 =head2 instance_install
 
-If 'version' param is set, will install that specific version. If 'count' param
+If 'version' param is set, will install that specific version. If 'new' param
 is set to a positive integer, will install that many random versions of perl.
 
 =head2 instance_remove

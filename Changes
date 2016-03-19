@@ -3,6 +3,8 @@ Revision history for Test-BrewBuild
 0.06    x
         - added 'on' param, send in a list of perl versions to run against,
           instead of the default all (closes #17)
+        - renamed 'change' param to 'new', kept change for backwards
+          compatibility reasons (closes #23)
 
 0.05    2016-03-18
         - we now recognize when Module::Build is being used, as opposed
