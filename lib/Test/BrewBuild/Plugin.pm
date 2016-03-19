@@ -99,11 +99,11 @@ installed from.
 If the plugin in the C<$plugin_name> param can't be found, we return that of
 the default built-in C<Test::BrewBuild::Plugin::DefaultExec> one.
 
-=head2 _local_load_($plugin_name)
+=head2 _local_load_plugin($plugin_name)
 
-If the C<plugin()> method in C<Test::BerryBrew> is called with an additional
+If the C<plugin()> method in C<Test::BrewBuild> is called with an additional
 parameter of C<1>, we'll bypass normal checks and look for the plugin in
-C<@INC>. Note that this must be a single-name module (ie: C<MyPlugin>, or this
+C<@INC>. Note that this must be a single-name module (ie: C<MyPlugin>), or this
 will fail.
 
 Before you call the C<plugin()> method with the local search param set,

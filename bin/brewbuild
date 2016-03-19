@@ -76,7 +76,7 @@ installed *brew instances.
     brewbuild
 
     # use a custom plugin containing the build/test commands to pass to
-    # perlbrew (can also be set in $ENV{TBB_PLUGIN} for persistence)
+    # 'perlbrew exec' (can also be set in $ENV{TBB_PLUGIN} for persistence)
 
     brewbuild --plugin 'Test::BrewBuild::Plugin::DefaultExec' # default
 

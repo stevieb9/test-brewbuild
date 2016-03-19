@@ -36,6 +36,7 @@ sub new {
 sub perls_available {
     my ($self, $brew_info) = @_;
 
+    my $log = $log->child('perls_available');
     $log->_7("in perls_available()");
 
     my @perls_available = $self->is_win
@@ -311,8 +312,7 @@ sub log {
 
 =head1 NAME
 
-Test::BrewBuild - Perl/Berry brew unit testing automation across installed perl
-versions (Windows and Unix).
+Test::BrewBuild - Backend module for the L<brewbuild> command-line program.
 
 =for html
 <a href="http://travis-ci.org/stevieb9/p5-test-brewbuild"><img src="https://secure.travis-ci.org/stevieb9/p5-test-brewbuild.png"/>
@@ -321,14 +321,14 @@ versions (Windows and Unix).
 
 =head1 DESCRIPTION
 
-This module is the backend for the C<brewbuild> script that is accompanied
+This module is the backend for the C<brewbuild> script that is accompanied by
 this module. For almost all cases, you should be using that script instead of
 using this module directly (so go read that documentation for real use cases),
 as this module is just a helper for the installed script, and isn't designed
 for end-user use.
 
-It facilitates perform your unit tests across all of your Perlbrew (Unix) or
-Berrybrew (Windows) Perl instances.
+It provides you the ability to perform your unit tests across all of your
+Perlbrew (Unix) or Berrybrew (Windows) Perl instances.
 
 For Windows, you'll need to install Berrybrew (see L<SEE ALSO> for details).
 For Unix, you'll need Perlbrew.

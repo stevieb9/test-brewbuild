@@ -11,12 +11,12 @@ Revision history for Test-BrewBuild
         - fix undef issue in Plugin.pm if a plugin name can't be found
         - --debug param now accepts a level param (0-7) to set the level (added
           Logging::Simple as prereq)
-        - added numerous debug statements at varying levels
         - remove all prereqs from Makefile.PL that are already in core
           (closes #15)
         - add prereqs that aren't in core as of v5.8 into Makefile.PL (closes
           #20)
-        - completely peppered the modules with level 7 debugging statements
+        - completely peppered the modules with various debugging level
+          statements
         - added POD in Test::BrewBuild::Plugin
 
 
