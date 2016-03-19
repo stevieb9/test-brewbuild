@@ -1,7 +1,7 @@
 NAME
 
-    Test::BrewBuild - Perl/Berry brew unit testing automation across
-    installed perl versions (Windows and Unix).
+    brewbuild - Perl/Berry brew unit testing automation across installed
+    perl versions (Windows and Unix).
 
 SYNOPSIS
 
@@ -14,19 +14,25 @@ SYNOPSIS
     
         brewbuild
     
+        # use a custom plugin containing the build/test commands to pass to
+        # perlbrew (can also be set in $ENV{TBB_PLUGIN} for persistence)
+    
+        brewbuild --plugin 'Test::BrewBuild::Plugin::DefaultExec' # default
+    
         # install three new instances of perl, randomly
     
         brewbuild --count 3
     
         # enable debugging, and run against all installed instances (can be used
-        # in conjunction with all other args)
+        # in conjunction with all other args). Use 0-7 as the argument to it.
+        # Set to 5 to get typical output beyond just the results
     
-        brewbuild --debug
+        brewbuild --debug 5
     
         # remove all perl instances (less the currently used one), install two
         # new random versions, and run tests against all installed perls
     
-        brewbuild --reload --count 2
+        brewbuild --remove --count 2
     
         # install all available perl versions, and run tests against all of them
     
@@ -48,9 +54,12 @@ SYNOPSIS
 
 DESCRIPTION
 
-    The brewbuild script installed by this module allows you to perform
-    your unit tests across all of your Perlbrew (Unix) or Berrybrew
-    (Windows) Perl instances.
+    This brewbuild script installed by the Test::Brewbuild module allows
+    you to perform your unit tests across all of your Perlbrew (Unix) or
+    Berrybrew (Windows) Perl instances, with the ability to very easily
+    create your own plugins that contain the code that perlbrew/berrybrew
+    exec will process. (See Test::BrewBuild::Plugin::DefaultExec for an
+    example).
 
     For Windows, you'll need to install Berrybrew (see "SEE ALSO" for
     details). For Unix, you'll need Perlbrew.
@@ -67,14 +76,23 @@ AUTHOR
 
     Steve Bertrand, <steveb at cpan.org>
 
+ CONTRIBUTING
+
+    Any and all feedback and help is appreciated. A Pull Request is the
+    preferred method of receiving changes
+    (https://github.com/stevieb9/p5-test-brewbuild), but regular patches
+    through the bug tracker, or even just email discussions are welcomed.
+
 BUGS
 
     https://github.com/stevieb9/p5-test-brewbuild/issues
 
 SUPPORT
 
-    You can find documentation for this module with the perldoc command.
+    You can find documentation for this script and module with the perldoc
+    command.
 
+        perldoc brewbuild
         perldoc Test::BrewBuild
 
 SEE ALSO

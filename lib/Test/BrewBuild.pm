@@ -15,7 +15,7 @@ sub new {
     my $self = bless {}, $class;
     %{ $self->{args} } = %args;
 
-    $log = $self->log($args{debug});
+    $log = $self->_create_log($args{debug});
     $log->_7("in new(), constructing " . __PACKAGE__ . " object");
 
     my $exec_plugin_name = $args{plugin} ? $args{plugin} : $ENV{TBB_PLUGIN};
@@ -54,7 +54,8 @@ sub perls_available {
 sub perls_installed {
     my ($self, $brew_info) = @_;
 
-    $log->_7("in perls_installed()");
+    my $log = $log->child('perls_installed');
+    $log->_7("checking perls installed");
 
     return $self->is_win
         ? $brew_info =~ /(\d\.\d{2}\.\d(?:_\d{2}))(?!=_)\s+\[installed\]/ig
@@ -63,7 +64,7 @@ sub perls_installed {
 sub instance_remove {
     my ($self, @perls_installed) = @_;
 
-    $log->_7("in instance_remove()");
+    my $log = $log->child('instance_remove');
 
     if ($self->{args}{debug}) {
         $log->_5("perls installed: " . join ', ', @perls_installed);
@@ -84,6 +85,9 @@ sub instance_remove {
             $log->_5("skipping version we're using, $_");
             next;
         }
+
+        $log->_7("exec'ing $remove_cmd");
+
         `$remove_cmd $_`;
     }
 
@@ -95,13 +99,13 @@ sub instance_install {
     my $perls_available = shift;
     my $perls_installed = shift;
 
-    $log->_7("in instance_remove()");
+    my $log = $log->child('instance_install');
 
     my $install_cmd = $self->is_win
         ? 'berrybrew install'
         : 'perlbrew install --notest -j 4';
 
-    $log->_7("using $install_cmd install command");
+    $log->_7("install cmd set to $install_cmd");
 
     my @new_installs;
 
@@ -120,7 +124,9 @@ sub instance_install {
     }
     else {
         if ($count){
-            $log->_7("installing $count perl instances");
+
+            $log->_7("looking to install $count perl instances");
+
             while ($count > 0){
                 my $candidate = $perls_available->[rand @{ $perls_available }];
                 if (grep { $_ eq $candidate } @{ $perls_installed }) {
@@ -140,23 +146,28 @@ sub instance_install {
 
         for my $ver (@new_installs){
             $log->_5("installing $ver...");
+            $log->_7("...using cmd $install_cmd");
             `$install_cmd $ver`;
         }
     }
     else {
-        $log->_5("\nusing existing versions only");
+        $log->_5("using existing versions only");
     }
 }
 sub results {
     my $self = shift;
 
-    $log->_7("in results()");
+    my $log = $log->child('results');
 
     local $SIG{__WARN__} = sub {};
+
+    $log->_7("warnings trapped locally");
 
     my $result = $self->exec;
 
     my @ver_results = $result =~ /[Pp]erl-\d\.\d+\.\d+.*?Result:\s+\w+\n/gs;
+
+    $log->_7("got " . scalar @ver_results . " results");
 
     my @pass;
 
@@ -169,10 +180,11 @@ sub results {
         my $res;
 
         if (/Result:\s+(PASS)/){
+            $log->_7("$ver passed...");
             $res = $1;
         }
         else {
-            $log->_7("$ver FAIL");
+            $log->_7("$ver FAILED...");
             print $_;
             exit;
         }
@@ -184,13 +196,16 @@ sub results {
     print "\n";
     print $_ for @pass;
 
-    $log->_7(__PACKAGE__ ."run finished");
+    $log->_7(__PACKAGE__ ." run finished");
 }
 sub run {
     my $self = shift;
     my $count = shift;
 
     $count = 0 if ! $count;
+
+    my $log = $log->child('run');
+    $log->_7("commencing run()");
 
     my $brew_info = $self->brew_info;
 
@@ -219,39 +234,56 @@ sub run {
     $self->results();
 }
 sub is_win {
-    $log->_7("in is_win()");
-    return $^O =~ /Win/ ? 1 : 0;
+    my $log = $log->child("is_win");
+    my $is_win = ($^O =~ /Win/) ? 1 : 0;
+    $log->_7("is Windows: $is_win");
+    return $is_win;
 }
 sub exec {
     my (@a, @b);
     my $self = shift;
 
-    $log->_7("in exec()");
+    my $log = $log->child('exec');
+
+    $log->_7("creating temp file");
 
     my $wfh = File::Temp->new(UNLINK => 1);
     my $fname = $wfh->filename;
 
+    $log->_7("temp filename: $fname");
+    $log->_7("fetching instructions from the plugin");
+    $log->_7("instructions to be executed:");
+
     my @exec_cmd = $self->{exec_plugin}->();
+
     for (@exec_cmd){
+        $log->_7($_);
         print $wfh $_;
     }
     close $wfh;
 
+    $log->_7("temp file handle closed");
+
     my $brew = $self->is_win ? 'berrybrew' : 'perlbrew';
+
+    $log->_7("exec'ing: $brew exec perl $fname");
+
     return `$brew exec perl $fname`;
 }
 sub brew_info {
     my $self = shift;
 
-    $log->_7("in brew_info()");
+    my $log = $log->child('brew_info');
 
     my $brew_info = $self->is_win
         ? `berrybrew available`
         : `perlbrew available`;
 
+    $log->_7("brew info set to:\n$brew_info");
+
     return $brew_info;
 }
-sub log {
+sub _create_log {
     my ($self, $level) = @_;
 
     $self->{log} = Logging::Simple->new(
@@ -259,7 +291,7 @@ sub log {
         level => $level,
     );
 
-    $self->{log}->_7("in log()");
+    $self->{log}->_7("in _create_log()");
 
     if (defined $level && $level < 6){
         $self->{log}->display(0);
@@ -268,6 +300,11 @@ sub log {
         $self->{log}->_7("log object created with level $level");
     }
 
+    return $self->{log};
+}
+sub log {
+    my $self = shift;
+    $self->{log}->_7(ref($self) ." class/obj retrieving a log object");
     return $self->{log};
 }
 1;
@@ -393,6 +430,10 @@ Helper method, returns true if the current OS is Windows, false if not.
 Helper method, returns the appropriate *brew calls relative to the platform
 we're working on.
 
+=head2 log
+
+Developer method, returns an instance of the packages log object for creating
+child log objects.
 
 =head1 AUTHOR
 

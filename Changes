@@ -16,6 +16,9 @@ Revision history for Test-BrewBuild
           (closes #15)
         - add prereqs that aren't in core as of v5.8 into Makefile.PL (closes
           #20)
+        - completely peppered the modules with level 7 debugging statements
+        - added POD in Test::BrewBuild::Plugin
+
 
 0.04    2016-03-16
         - testing now properly works across all installed perls

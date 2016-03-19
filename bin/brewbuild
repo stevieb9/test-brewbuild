@@ -48,7 +48,8 @@ my @opts;
 for (keys %args){
     push @opts, "$_ => $args{$_}" if defined $args{$_};
 }
-$log->_7("executing run() with args: " . join ', ', @opts);
+
+$log->_7("executing Test::BrewBuild run() with args: " . join ', ', @opts);
 
 $brew->run($count);
 
@@ -84,10 +85,10 @@ installed *brew instances.
     brewbuild --count 3
 
     # enable debugging, and run against all installed instances (can be used
-    # in conjunction with all other args). Use 0-7 as the argument to it, the
-    # default is 4
+    # in conjunction with all other args). Use 0-7 as the argument to it.
+    # Set to 5 to get typical output beyond just the results
 
-    brewbuild --debug
+    brewbuild --debug 5
 
     # remove all perl instances (less the currently used one), install two
     # new random versions, and run tests against all installed perls

@@ -9,6 +9,7 @@ sub brewbuild_exec {
 }
 
 1;
+
 __DATA__
 if ($^O eq 'MSWin32'){
     my $make = -e 'Makefile.PL' ? 'dmake' : 'Build';
