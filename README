@@ -14,8 +14,14 @@ SYNOPSIS
     
         brewbuild
     
+        # yep, its that easy. Here's sample output:
+    
+        perl-5.8.9 :: PASS
+        perl-5.20.3 :: PASS
+        perl-5.22.1 :: PASS
+    
         # use a custom plugin containing the build/test commands to pass to
-        # perlbrew (can also be set in $ENV{TBB_PLUGIN} for persistence)
+        # 'perlbrew exec' (can also be set in $ENV{TBB_PLUGIN} for persistence)
     
         brewbuild --plugin 'Test::BrewBuild::Plugin::DefaultExec' # default
     
@@ -51,6 +57,10 @@ SYNOPSIS
         # multiple versions can be passed in at once
     
         brewbuild -v 5.20.3 -v 5.14.4 -v 5.23.5
+    
+        # run on specific versions only
+    
+        brewbuild --on 5.20.3 -o 5.8.9
 
 DESCRIPTION
 
