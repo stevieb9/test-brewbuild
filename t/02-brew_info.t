@@ -14,6 +14,8 @@ my $avail =  eval { `$cmd`; 1; };
 if ($avail){
     my $info = $bb->brew_info;
 
+    plan skip_all => "no brew info found" if ! $info;
+
     my @binfo = split /\n/, $info;
 
     for (@binfo){
