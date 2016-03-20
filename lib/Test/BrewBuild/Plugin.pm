@@ -3,6 +3,7 @@ use strict;
 use warnings;
 
 use Carp qw(croak);
+use Data::Dumper;
 use Logging::Simple;
 use Module::Load;
 
@@ -36,8 +37,14 @@ sub _load_plugin {
         $log->_7("checking $plugin plugin");
 
         if ($plugin =~ /(.*)\W(\w+)\.pm/){
-            unshift @INC, "$1";
-            $plugin = $2;
+            if (! $2){
+                unshift @INC, '.';
+                $plugin = $1;
+            }
+            else {
+                unshift @INC, $1,
+                $plugin = $2;
+            }
         }
 
         my $loaded = eval { load $plugin; 1; };
