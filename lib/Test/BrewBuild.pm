@@ -4,11 +4,13 @@ use warnings;
 
 use File::Temp;
 use Logging::Simple;
+use Test::BrewBuild::BrewCommands;
 use Test::BrewBuild::Plugin;
 
 our $VERSION = '0.06';
 
 my $log;
+my $bcmd = Test::BrewBuild::BrewCommands->new;
 
 sub new {
     my ($class, %args) = @_;
@@ -37,18 +39,11 @@ sub perls_available {
     my $log = $log->child('perls_available');
     $log->_7("in perls_available()");
 
-    my @perls_available = $self->is_win
-        ? $brew_info =~ /(\d\.\d+\.\d+_\d+)/g
-        : $brew_info =~ /(perl-\d\.\d+\.\d+)/g;
+    my @perls_available = $bcmd->available($brew_info);
 
     $log->_7("perls available: " . join ', ', @perls_available);
 
-    if ($self->is_win){
-        for (@perls_available){
-            s/perl-//;
-        }
-    }
-    return @perls_available;
+    return $bcmd->available($brew_info);
 }
 sub perls_installed {
     my ($self, $brew_info) = @_;
@@ -56,9 +51,7 @@ sub perls_installed {
     my $log = $log->child('perls_installed');
     $log->_7("checking perls installed");
 
-    return $self->is_win
-        ? $brew_info =~ /(\d\.\d{2}\.\d(?:_\d{2}))(?!=_)\s+\[installed\]/ig
-        : $brew_info =~ /i.*?(perl-\d\.\d+\.\d+)/g;
+    return $bcmd->installed($brew_info);
 }
 sub instance_remove {
     my ($self, @perls_installed) = @_;
@@ -70,9 +63,7 @@ sub instance_remove {
         $log->_5("removing previous installs...");
     }
 
-    my $remove_cmd = $self->is_win
-        ? 'berrybrew remove'
-        : 'perlbrew uninstall';
+    my $remove_cmd = $bcmd->remove;
 
     $log->_7("using $remove_cmd remove command");
 
@@ -99,9 +90,7 @@ sub instance_install {
 
     my $log = $log->child('instance_install');
 
-    my $install_cmd = $self->is_win
-        ? 'berrybrew install'
-        : 'perlbrew install --notest -j 4';
+    my $install_cmd = $bcmd->install;
 
     $log->_7("install cmd set to $install_cmd");
 
@@ -110,9 +99,7 @@ sub instance_install {
 
     if ($self->{args}{version}->[0]){
         for my $version (@{ $self->{args}{version} }){
-            $version = $self->is_win
-                ? $version
-                : "perl-$version";
+            $version = $bcmd->version($_);
 
             if (grep { $version eq $_ } @{ $perls_installed }){
                 $log->_5("$version is already installed... skipping");
@@ -231,12 +218,6 @@ sub run {
 
     $self->results();
 }
-sub is_win {
-    my $log = $log->child("is_win");
-    my $is_win = ($^O =~ /Win/) ? 1 : 0;
-    $log->_7("is Windows: $is_win");
-    return $is_win;
-}
 sub exec {
     my $self = shift;
 
@@ -261,7 +242,7 @@ sub exec {
 
     $log->_7("temp file handle closed");
 
-    my $brew = $self->is_win ? 'berrybrew' : 'perlbrew';
+    my $brew = $bcmd->brew;
 
     if ($self->{args}{on}){
         my $vers = join ',', @{ $self->{args}{on} };
@@ -280,9 +261,7 @@ sub brew_info {
 
     my $log = $log->child('brew_info');
 
-    my $brew_info = $self->is_win
-        ? `berrybrew available`
-        : `perlbrew available`;
+    my $brew_info = $bcmd->available;
 
     $log->_7("brew info set to:\n$brew_info");
 
@@ -311,6 +290,10 @@ sub log {
     my $self = shift;
     $self->{log}->_7(ref($self) ." class/obj retrieving a log object");
     return $self->{log};
+}
+sub is_win {
+    my $is_win = ($^O =~ /Win/) ? 1 : 0;
+    return $is_win;
 }
 1;
 

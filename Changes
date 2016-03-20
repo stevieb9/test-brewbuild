@@ -8,6 +8,8 @@ Revision history for Test-BrewBuild
         - we can now load non-installed local plugins by specifying the full or
           relative path name plus name of file to the --plugin param (closes
           #24)
+        - all *brew command creation moved to Test::BrewBuild::BrewCommands.pm
+          (closes #19)
 
 0.05    2016-03-18
         - we now recognize when Module::Build is being used, as opposed
