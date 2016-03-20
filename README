@@ -20,17 +20,13 @@ SYNOPSIS
         perl-5.20.3 :: PASS
         perl-5.22.1 :: PASS
     
+        # print usage information
+    
+        brewbuild -h
+    
         # run on specific versions only
     
         brewbuild --on 5.20.3 -o 5.8.9
-    
-        # use a custom plugin containing the build/test commands to pass to
-        # 'perlbrew exec' (can also be set in $ENV{TBB_PLUGIN} for persistence).
-        # The plugin arg will take a filename as well if the module isn't
-        # installed. Send in the relative/full path if the plugin isn't in the
-        # current working directory.
-    
-        brewbuild --plugin 'Test::BrewBuild::Plugin::DefaultExec' # default
     
         # install three new instances of perl, randomly
     
@@ -51,10 +47,6 @@ SYNOPSIS
     
         brewbuild --new -1
     
-        # print usage information
-    
-        brewbuild --help
-    
         # install a specific version and run tests on all instances (include just
         # the number portion of the version per "perlbrew available" or "berrybrew
         # available"
@@ -64,6 +56,14 @@ SYNOPSIS
         # multiple versions can be passed in at once
     
         brewbuild -v 5.20.3 -v 5.14.4 -v 5.23.5
+    
+        # use a custom plugin containing the build/test commands to pass to
+        # 'perlbrew exec' (can also be set in $ENV{TBB_PLUGIN} for persistence).
+        # The plugin arg will take a filename as well if the module isn't
+        # installed. Send in the relative/full path if the plugin isn't in the
+        # current working directory.
+    
+        brewbuild --plugin 'Test::BrewBuild::Plugin::DefaultExec' # default
 
 DESCRIPTION
 

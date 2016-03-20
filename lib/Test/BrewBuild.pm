@@ -84,9 +84,7 @@ sub instance_remove {
     $log->_5("removal of existing perl installs complete...");
 }
 sub instance_install {
-    my $self = shift;
-    my $perls_available = shift;
-    my $perls_installed = shift;
+    my ($self, $perls_available, $perls_installed) = @_;
 
     my $log = $log->child('instance_install');
 
@@ -116,9 +114,7 @@ sub instance_install {
             while ($new > 0){
                 my $candidate = $perls_available->[rand @{ $perls_available }];
                 if (grep { $_ eq $candidate } @{ $perls_installed }) {
-                    if ($self->{args}{debug}) {
-                        warn "$candidate already installed... skipping\n";
-                    }
+                    $log->_5("$candidate already installed... skipping");
                     next;
                 }
                 push @new_installs, $candidate;
@@ -203,6 +199,7 @@ sub run {
     $log->_5("installed perls: " . join ', ', @perls_installed);
 
     $self->instance_remove(@perls_installed) if $self->{args}{remove};
+
     if ($new) {
         $self->instance_install($new, \@perls_available, \@perls_installed);
     }
