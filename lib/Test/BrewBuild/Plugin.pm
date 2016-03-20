@@ -37,14 +37,12 @@ sub _load_plugin {
         $log->_7("checking $plugin plugin");
 
         if ($plugin =~ /(.*)\W(\w+)\.pm/){
-            if (! $2){
-                unshift @INC, '.';
-                $plugin = $1;
-            }
-            else {
-                unshift @INC, $1,
-                $plugin = $2;
-            }
+            unshift @INC, $1,
+            $plugin = $2;
+        }
+        elsif ($plugin =~ /(?<!\W)(\w+)\.pm/){
+            unshift @INC, '.';
+            $plugin = $1;
         }
 
         my $loaded = eval { load $plugin; 1; };

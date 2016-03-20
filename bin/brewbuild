@@ -85,8 +85,15 @@ installed *brew instances.
     perl-5.20.3 :: PASS
     perl-5.22.1 :: PASS
 
+    # run on specific versions only
+
+    brewbuild --on 5.20.3 -o 5.8.9
+
     # use a custom plugin containing the build/test commands to pass to
-    # 'perlbrew exec' (can also be set in $ENV{TBB_PLUGIN} for persistence)
+    # 'perlbrew exec' (can also be set in $ENV{TBB_PLUGIN} for persistence).
+    # The plugin arg will take a filename as well if the module isn't
+    # installed. Send in the relative/full path if the plugin isn't in the
+    # current working directory.
 
     brewbuild --plugin 'Test::BrewBuild::Plugin::DefaultExec' # default
 
@@ -123,9 +130,6 @@ installed *brew instances.
 
     brewbuild -v 5.20.3 -v 5.14.4 -v 5.23.5
 
-    # run on specific versions only
-
-    brewbuild --on 5.20.3 -o 5.8.9
 
 =head1 DESCRIPTION
 

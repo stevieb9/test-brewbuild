@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-use Data::Dumper;
+use File::Copy;
 use Test::BrewBuild;
 use Test::More;
 
@@ -45,6 +45,20 @@ my $bb = $mod->new;
         "calling for a path-based plugin ok)",
     );
 }
+{ # test cwd path-based plugin
+    copy 't/base/UnitTestPlugin.pm', 'UnitTestPlugin.pm';
+
+    my $plugin = $bb->plugin('UnitTestPlugin.pm');
+
+    is (
+        $plugin,
+        'UnitTestPlugin',
+        "calling for a cwd file plugin ok)",
+    );
+
+    unlink 'UnitTestPlugin.pm';
+    is (-e 'UnitTestPlugin.pm', undef, "unlinked TestPlugin.pm ok");
+}
 { # test no param
     my $plugin = $bb->plugin;
 
@@ -54,6 +68,7 @@ my $bb = $mod->new;
         "calling plugin() with no params returns the derfault plugin",
     );
 }
+
 { # test content of default plugin
     my $plugin = $bb->plugin;
     my @ret = $plugin->brewbuild_exec;

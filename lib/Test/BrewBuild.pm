@@ -179,7 +179,7 @@ sub results {
         my $res;
 
         if (/Result:\s+(PASS)/){
-            $log->_7("$ver passed...");
+            $log->_7("$ver PASSED...");
             $res = $1;
         }
         else {
@@ -392,6 +392,10 @@ C<perlbrew/berrybrew exec> will execute. If not used or the module specified
 can't be located (or it contains errors), we fall back to the default bundled
 L<Test::BrewBuild::Plugin::DefaultExec> (which is the canonical example for
 writing new plugins).
+
+Note that you can send in a custom plugin C<*.pm> filename to plugin as opposed
+to a module name if the module isn't installed. If the file isn't in the
+current working directory, send in the relative or full path.
 
 =head2 perls_available
 
