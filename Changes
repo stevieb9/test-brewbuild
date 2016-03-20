@@ -1,7 +1,7 @@
 Revision history for Test-BrewBuild
 
-0.06    x
-        - added 'on' param, send in a list of perl versions to run against,
+0.06    2016-03-20
+        - added '--on' param, send in a list of perl versions to run against,
           instead of the default all (closes #17)
         - renamed 'change' param to 'new', kept change for backwards
           compatibility reasons (closes #23)
@@ -10,6 +10,8 @@ Revision history for Test-BrewBuild
           #24)
         - all *brew command creation moved to Test::BrewBuild::BrewCommands.pm
           (closes #19)
+        - new round of unit tests
+        - Mock::Sub 1.06 now a prereq for testing purposes
 
 0.05    2016-03-18
         - we now recognize when Module::Build is being used, as opposed
@@ -29,7 +31,6 @@ Revision history for Test-BrewBuild
         - completely peppered the modules with various debugging level
           statements
         - added POD in Test::BrewBuild::Plugin
-
 
 0.04    2016-03-16
         - testing now properly works across all installed perls

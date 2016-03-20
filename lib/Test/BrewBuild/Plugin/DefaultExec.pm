@@ -10,6 +10,33 @@ sub brewbuild_exec {
 
 1;
 
+=pod
+
+=head1 NAME
+
+Test::BrewBuild::Plugin::DefaultExec - The default 'exec' command plugin.
+
+=head1 DESCRIPTION
+
+To create a temporary or test plugin, simply create a C<*.pm> file just like
+this one with the same subroutine, and in the data section, include the code
+you need executed by C<*brew exec>.
+
+To use, if you've actually installed your plugin:
+
+    berrybrew --plugin My::ExecPlugin
+
+If you have it in a local directory (ie. not installed) (note the path can be
+relative):
+
+    berrybrew --plugin /path/to/ExecPlugin.pm
+
+=head1 AUTHOR
+
+Steve Bertrand, C<< <steveb at cpan.org> >>
+
+=cut
+
 __DATA__
 if ($^O eq 'MSWin32'){
     my $make = -e 'Makefile.PL' ? 'dmake' : 'Build';
@@ -19,3 +46,6 @@ else {
     my $make = -e 'Makefile.PL' ? 'make' : './Build';
     system "cpanm --installdeps . && $make && $make test";
 }
+
+
+
