@@ -33,14 +33,17 @@ sub _load_plugin {
 
     if ($plugin) {
 
-        $log->_7("loading $plugin plugin");
+        $log->_7("checking $plugin plugin");
 
-        my $loaded = eval {
-            load $plugin;
-            1;
-        };
+        if ($plugin =~ /(.*)\W(\w+)\.pm/){
+            unshift @INC, "$1";
+            $plugin = $2;
+        }
+
+        my $loaded = eval { load $plugin; 1; };
 
         if ($loaded) {
+
             $log->_7("loaded $plugin plugin");
 
             if ($plugin->can('brewbuild_exec')) {
@@ -51,7 +54,9 @@ sub _load_plugin {
             }
         }
     }
-    $log->_7("using default plugin");
+
+    $log->_7("attempt to load default plugin");
+
     $plugin = 'Test::BrewBuild::Plugin::DefaultExec';
 
     my $loaded = eval { load $plugin; 1; };

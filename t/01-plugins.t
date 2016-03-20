@@ -19,7 +19,7 @@ my $bb = $mod->new;
     );
 }
 { # bad plugin
-    my $plugin = $bb->plugin('X');
+    my $plugin = $bb->plugin();
 
     is (
         $plugin,
@@ -28,12 +28,21 @@ my $bb = $mod->new;
     );
 }
 { # tests good plugin
-    my $plugin = $bb->plugin('UnitTestPlugin');
+    my $plugin = $bb->plugin('Test::BrewBuild::Plugin::UnitTestPluginInst');
+
+    is (
+        $plugin,
+        'Test::BrewBuild::Plugin::UnitTestPluginInst',
+        "calling for a good plugin works (so does local)",
+    );
+}
+{ # test path-based plugin
+    my $plugin = $bb->plugin('t/base/UnitTestPlugin.pm');
 
     is (
         $plugin,
         'UnitTestPlugin',
-        "calling for a good plugin works (so does local)",
+        "calling for a path-based plugin ok)",
     );
 }
 { # test no param

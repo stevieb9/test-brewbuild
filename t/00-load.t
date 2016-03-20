@@ -9,6 +9,7 @@ BEGIN {
     use_ok( 'Test::BrewBuild' ) || print "Bail out!\n";
     use_ok( 'Test::BrewBuild::Plugin' ) || print "Bail out!\n";
     use_ok( 'Test::BrewBuild::Plugin::DefaultExec' ) || print "Bail out!\n";
+    use_ok( 'Test::BrewBuild::Plugin::UnitTestPluginInst' ) || print "Bail out!\n";
 }
 
 {
