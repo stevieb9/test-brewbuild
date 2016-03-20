@@ -1,0 +1,28 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+use Test::BrewBuild;
+use Test::More;
+
+my $mod = 'Test::BrewBuild';
+my $bb = $mod->new;
+my $cmd = $bb->is_win ? 'berrybrew' : 'perlbrew';
+
+my $avail =  eval { `$cmd`; 1; };
+
+if ($avail){
+    my $info = $bb->brew_info;
+
+    my @binfo = split /\n/, $info;
+
+    for (@binfo){
+        like ($_, qr/\d\.\d{1,2}/, "$_ in brew_info contains a perl");
+    }
+}
+else {
+    plan skip_all => "$cmd not available... skipping";
+}
+
+done_testing();
+
