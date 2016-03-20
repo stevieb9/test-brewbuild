@@ -20,9 +20,7 @@ sub new {
 
     my $exec_plugin_name = $args{plugin} ? $args{plugin} : $ENV{TBB_PLUGIN};
 
-    if ($exec_plugin_name){
-        $log->_7("plugin param set to: $exec_plugin_name");
-    }
+    $log->_7("plugin param set to: $exec_plugin_name") if $exec_plugin_name;
 
     $exec_plugin_name = $self->plugin($exec_plugin_name);
 

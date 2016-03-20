@@ -2,11 +2,11 @@ package Test::BrewBuild::Plugin;
 use strict;
 use warnings;
 
-use ExtUtils::Installed;
+use Carp qw(croak);
 use Logging::Simple;
 use Module::Load;
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 my $log;
 
@@ -15,18 +15,14 @@ BEGIN {
     no warnings 'redefine';
 
     *Test::BrewBuild::plugin = sub {
-        my ($obj, $check, $local) = @_;
+        my ($obj, $check) = @_;
 
         $log = $obj->log()->child('Plugin');
 
-        $log->_7("ref obj: " . ref $obj);
+        $log->_7("ref obj: ".ref $obj);
         $log->_7("looking for plugin: $check") if $check;
-        $log->_7("looking for plugin locally") if $local;
 
-        if (! $local) {
-            return _load_plugin($check);
-        }
-        return _local_load_plugin($check);
+        return _load_plugin($check);
     };
 };
 
@@ -35,44 +31,39 @@ sub _load_plugin {
 
     my $log = $log->child('_load_plugin');
 
-    my $inst = ExtUtils::Installed->new;
-    my @modules = $inst->modules;
+    if ($plugin) {
 
-    if ($plugin && grep { $_ eq $plugin } @modules) {
+        $log->_7("loading $plugin plugin");
 
-        load $_;
-        $log->_7("loaded $_ plugin");
+        my $loaded = eval {
+            load $plugin;
+            1;
+        };
 
-        if ($_->can('brewbuild_exec')){
-            $log->_7("brewbuild_exec() found in plugin");
-            return $plugin;
+        if ($loaded) {
+            $log->_7("loaded $plugin plugin");
+
+            if ($plugin->can('brewbuild_exec')) {
+
+                $log->_7("brewbuild_exec() found in plugin");
+
+                return $plugin;
+            }
         }
     }
-    else {
-        $log->_7("using default plugin");
-        $plugin = 'Test::BrewBuild::Plugin::DefaultExec';
-        load $plugin;
-        return $plugin;
+    $log->_7("using default plugin");
+    $plugin = 'Test::BrewBuild::Plugin::DefaultExec';
+
+    my $loaded = eval { load $plugin; 1; };
+
+    if (! $loaded){
+        $log->_7("FATAL: couldn't load the default plugin");
+        croak "couldn't load the default plugin. This is fatal.\n";
     }
-}
-sub _local_load_plugin {
-    my $plugin = shift;
 
-    $log = $log->child('_local_load_plugin');
+    $log->_7("loaded default plugin");
 
-    load $plugin;
-
-    if ($plugin->can('brewbuild_exec')){
-        $log->_7("brewbuild_exec found in local plugin");
-
-        return $plugin;
-    }
-    else {
-        $log->_7("plugin not found in local... using default plugin");
-        $plugin = 'Test::BrewBuild::Plugin::DefaultExec';
-        load $plugin;
-        return $plugin;
-    }
+    return $plugin;
 }
 1;
 

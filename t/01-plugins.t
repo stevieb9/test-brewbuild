@@ -6,13 +6,11 @@ use Data::Dumper;
 use Test::BrewBuild;
 use Test::More;
 
-use lib 't/base';
-
 my $mod = 'Test::BrewBuild';
 my $bb = $mod->new;
 
 { # default plugin
-    my $plugin = $bb->plugin( 'Test::BrewBuild::Plugin::DefaultExec' );
+    my $plugin = $bb->plugin('Test::BrewBuild::Plugin::DefaultExec');
 
     is (
         $plugin,
@@ -30,7 +28,7 @@ my $bb = $mod->new;
     );
 }
 { # tests good plugin
-    my $plugin = $bb->plugin('UnitTestPlugin', 1);
+    my $plugin = $bb->plugin('UnitTestPlugin');
 
     is (
         $plugin,
@@ -66,8 +64,9 @@ done_testing();
 __DATA__
 if ($^O eq 'MSWin32'){
     my $make = -e 'Makefile.PL' ? 'dmake' : 'Build';
+    system "cpanm --installdeps . && $make && $make test";
 }
 else {
     my $make = -e 'Makefile.PL' ? 'make' : './Build';
+    system "cpanm --installdeps . && $make && $make test";
 }
-system "cpanm --installdeps . && $make && $make test";
