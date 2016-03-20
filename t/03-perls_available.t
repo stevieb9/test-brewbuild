@@ -14,6 +14,8 @@ my $avail =  eval { `$cmd`; 1; };
 if ($avail){
     my @perls_available = $bb->perls_available($bb->brew_info);
 
+    plan skip_all => "no brew info" if ! @perls_available;
+
     ok (@perls_available, 'perls are available');
 
     for (@perls_available){
