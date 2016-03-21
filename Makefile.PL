@@ -8,8 +8,9 @@ my $brew = $is_win ? 'berrybrew' : 'perlbrew';
 my $brew_link = $is_win 
     ? 'https://github.com/dnmfarrell/berrybrew'
     : 'http://perlbrew.pl';
+my $sep = $is_win ? ';' : ':';
 
-if (! grep { -x "$_/$brew"}split /:/,$ENV{PATH}){
+if (! grep { -x "$_/$brew"}split /$sep/,$ENV{PATH}){
         warn "\n$brew can't be found; we'll install this module, but it won't work...\n\n" .
              "You can fetch and install '$brew' here: $brew_link\n\n";
     sleep 3;

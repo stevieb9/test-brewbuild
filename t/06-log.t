@@ -8,8 +8,9 @@ use Test::More;
 my $mod = 'Test::BrewBuild';
 my $bb = $mod->new;
 my $cmd = $bb->is_win ? 'berrybrew' : 'perlbrew';
+my $sep = $bb->is_win ? ';' : ':';
 
-if (! grep { -x "$_/$cmd"}split /:/,$ENV{PATH}){
+if (! grep { -x "$_/$cmd"}split /$sep/,$ENV{PATH}){
     plan skip_all => "$cmd not installed... skipping";
 }
 

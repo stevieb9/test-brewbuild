@@ -44,8 +44,9 @@ my $brew_prog = $is_win ? 'berrybrew' : 'perlbrew';
 my $brew_link = $is_win 
     ? 'https://github.com/dnmfarrell/berrybrew'
     : 'http://perlbrew.pl';
+my $sep = $is_win ? ';' : ':';
 
-if (! grep { -x "$_/$brew_prog"}split /:/,$ENV{PATH}){
+if (! grep { -x "$_/$brew_prog"}split /$sep/,$ENV{PATH}){
     warn "\nYou need to install '$brew_prog' to use this program...\n\n" .
          "See $brew_link\n\n";
     exit;
