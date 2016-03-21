@@ -10,8 +10,9 @@ my $brew_link = $is_win
     : 'http://perlbrew.pl';
 my $sep = $is_win ? ';' : ':';
 
-if (! grep { -x "$_/$brew"}split /$sep/,$ENV{PATH}){
-        warn "\n$brew can't be found; we'll install this module, but it won't work...\n\n" .
+if (! grep { -x "$_/$brew" } split /$sep/, $ENV{PATH}){
+        warn "\n$brew can't be found; we'll install this module, but " .
+             "the 'brewbuild' command won't work\n\n" .
              "You can fetch and install '$brew' here: $brew_link\n\n";
     sleep 3;
 }
