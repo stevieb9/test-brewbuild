@@ -7,7 +7,7 @@ use Data::Dumper;
 use Logging::Simple;
 use Module::Load;
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
 my $log;
 
