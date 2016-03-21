@@ -12,6 +12,10 @@ Revision history for Test-BrewBuild
           (closes #19)
         - new round of unit tests
         - added debug logging to Test::BrewBuild::BrewCommands
+        - added warning in Makefile.PL and skip a bunch of tests if *brew isn't 
+          installed
+        - 'brewbuild' command warns with a link to the respective *brew, and
+          exits if it isn't installed
 
 0.05    2016-03-18
         - we now recognize when Module::Build is being used, as opposed

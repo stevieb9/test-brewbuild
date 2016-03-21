@@ -5,20 +5,16 @@ use ExtUtils::MakeMaker;
 
 my $is_win = $^O =~ /MSWin/ ? 1 : 0;
 my $brew = $is_win ? 'berrybrew' : 'perlbrew';
+my $brew_link = $is_win 
+    ? 'https://github.com/dnmfarrell/berrybrew'
+    : 'http://perlbrew.pl';
 
 if (! grep { -x "$_/$brew"}split /:/,$ENV{PATH}){
-    if ($is_win){
-        warn "\n'berrybrew' can't be found; we'll install the module, but won't test...\n\n" .
-             "You can fetch and install 'Berrybrew' here: " .
-             "https://github.com/dnmfarrell/berrybrew\n\n";
-    }
-    else {
-        warn "\n'perlbrew' can't be found, we'll install the module, but won't test...\n\n" .
-             "Go to http://perlbrew.pl for installation info\n\n";
-    }
-
+        warn "\n$brew can't be found; we'll install this module, but it won't work...\n\n" .
+             "You can fetch and install '$brew' here: $brew_link\n\n";
     sleep 3;
 }
+
 WriteMakefile(
     NAME             => 'Test::BrewBuild',
     AUTHOR           => q{Steve Bertrand <steveb@cpan.org>},

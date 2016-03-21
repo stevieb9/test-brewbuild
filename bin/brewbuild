@@ -39,6 +39,18 @@ EOF
 exit;
 }
 
+my $is_win = $^O =~ /MSWin/ ? 1 : 0;
+my $brew_prog = $is_win ? 'berrybrew' : 'perlbrew';
+my $brew_link = $is_win 
+    ? 'https://github.com/dnmfarrell/berrybrew'
+    : 'http://perlbrew.pl';
+
+if (! grep { -x "$_/$brew_prog"}split /:/,$ENV{PATH}){
+    warn "\nYou need to install '$brew_prog' to use this program...\n\n" .
+         "See $brew_link\n\n";
+    exit;
+}
+
 my $brew = Test::BrewBuild->new(%args);
 
 my $log = $brew->log()->child('brewbuild.pl');
