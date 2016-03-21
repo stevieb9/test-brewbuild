@@ -46,6 +46,3 @@ else {
     my $make = -e 'Makefile.PL' ? 'make' : './Build';
     system "cpanm --installdeps . && $make && $make test";
 }
-
-
-
