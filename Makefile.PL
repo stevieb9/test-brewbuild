@@ -3,6 +3,21 @@ use strict;
 use warnings;
 use ExtUtils::MakeMaker;
 
+my $is_win = $^O =~ /MSWin/ ? 1 : 0;
+
+if (! grep { -x "$_/blah"}split /:/,$ENV{PATH}){
+    if ($is_win){
+        warn "\n'berrybrew' can't be found; we can't proceed\n\n" .
+             "You can fetch and install 'Berrybrew' here: " .
+             "https://github.com/dnmfarrell/berrybrew\n\n";
+             exit;
+    }
+    else {
+        warn "\n'perlbrew' can't be found, we can't proceed\n\n" .
+             "Go to http://perlbrew.pl for installation info\n\n";
+        exit;
+    }
+}
 WriteMakefile(
     NAME             => 'Test::BrewBuild',
     AUTHOR           => q{Steve Bertrand <steveb@cpan.org>},
