@@ -8,13 +8,14 @@ use Test::More;
 my $mod = 'Test::BrewBuild';
 my $bb = $mod->new;
 
-my $cmd = $bb->is_win ? 'berrybrew' : 'perlbrew';
+my $brew_prog = $bb->is_win ? 'berrybrew.exe' : 'perlbrew';
 my $sep = $bb->is_win ? ';' : ':';
 
-if (! grep { -x "$_/$cmd"}split /$sep/,$ENV{PATH}){
-    plan skip_all => "$cmd not installed... skipping";
+if (! grep { -x "$_/$brew_prog"}split /$sep/,$ENV{PATH}){
+    plan skip_all => "$brew_prog not installed... skipping";
 }
 
+my $cmd = $bb->is_win ? 'berrybrew' : 'perlbrew';
 my @perls_available = $bb->perls_available($bb->brew_info);
 
 plan skip_all => "no brew info" if ! @perls_available;

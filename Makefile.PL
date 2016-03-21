@@ -4,7 +4,7 @@ use warnings;
 use ExtUtils::MakeMaker;
 
 my $is_win = $^O =~ /MSWin/ ? 1 : 0;
-my $brew = $is_win ? 'berrybrew' : 'perlbrew';
+my $brew = $is_win ? 'berrybrew.exe' : 'perlbrew';
 my $brew_link = $is_win 
     ? 'https://github.com/dnmfarrell/berrybrew'
     : 'http://perlbrew.pl';

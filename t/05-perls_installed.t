@@ -8,11 +8,11 @@ use Test::More;
 my $mod = 'Test::BrewBuild';
 my $bb = $mod->new;
 
-my $cmd = $bb->is_win ? 'berrybrew' : 'perlbrew';
+my $brew_prog = $bb->is_win ? 'berrybrew.exe' : 'perlbrew';
 my $sep = $bb->is_win ? ';' : ':';
 
-if (! grep { -x "$_/$cmd"}split /$sep/,$ENV{PATH}){
-    plan skip_all => "$cmd not installed... skipping";
+if (! grep { -x "$_/$brew_prog"}split /$sep/,$ENV{PATH}){
+    plan skip_all => "$brew_prog not installed... skipping";
 }
 
 my $info = $bb->brew_info;
