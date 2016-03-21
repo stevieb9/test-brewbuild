@@ -16,7 +16,7 @@ if ($avail){
 
     my @installed = $bb->perls_installed($info);
 
-    if ($info =~ /i/){
+    if ($info && $info =~ /i/){
         ok (@installed, "if a perl is installed, it shows");
         for (@installed){
             like ($_, qr/\d\.\d{1,2}/, "each installed perl is a perl $_");

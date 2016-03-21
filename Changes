@@ -1,9 +1,9 @@
 Revision history for Test-BrewBuild
 
-0.06    2016-03-20
+0.06    2016-03-21
         - added '--on' param, send in a list of perl versions to run against,
           instead of the default all (closes #17)
-        - renamed 'change' param to 'new', kept change for backwards
+        - renamed 'count' param to 'new', kept change for backwards
           compatibility reasons (closes #23)
         - we can now load non-installed local plugins by specifying the full or
           relative path name plus name of file to the --plugin param (closes
@@ -11,15 +11,15 @@ Revision history for Test-BrewBuild
         - all *brew command creation moved to Test::BrewBuild::BrewCommands.pm
           (closes #19)
         - new round of unit tests
+        - added debug logging to Test::BrewBuild::BrewCommands
 
 0.05    2016-03-18
         - we now recognize when Module::Build is being used, as opposed
           to EUMM, and it works properly (fixes #12)
         - *brew exec commands are now loaded via a plugin architecture. Set by
-           the '-p|--plugin' or an environment variable, plugin writing is
-           exceptionally simplistic
-        - added --remove, performs as --reload, and kept the latter for
-          backwards compatibility
+          the '-p|--plugin' or an environment variable, plugin writing is
+          exceptionally simplistic
+        - renamed --reload arg to --remove
         - fix undef issue in Plugin.pm if a plugin name can't be found
         - --debug param now accepts a level param (0-7) to set the level (added
           Logging::Simple as prereq)

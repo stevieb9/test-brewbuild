@@ -2,6 +2,7 @@ package Test::BrewBuild;
 use strict;
 use warnings;
 
+use Data::Dumper;
 use File::Temp;
 use Logging::Simple;
 use Test::BrewBuild::BrewCommands;
@@ -10,7 +11,7 @@ use Test::BrewBuild::Plugin;
 our $VERSION = '0.06';
 
 my $log;
-my $bcmd = Test::BrewBuild::BrewCommands->new;
+my $bcmd;
 
 sub new {
     my ($class, %args) = @_;
@@ -20,6 +21,7 @@ sub new {
     $log = $self->_create_log($args{debug});
     $log->_7("in new(), constructing " . __PACKAGE__ . " object");
 
+    $bcmd = Test::BrewBuild::BrewCommands->new($log);
     my $exec_plugin_name = $args{plugin} ? $args{plugin} : $ENV{TBB_PLUGIN};
 
     $log->_7("plugin param set to: $exec_plugin_name") if $exec_plugin_name;
@@ -37,13 +39,12 @@ sub perls_available {
     my ($self, $brew_info) = @_;
 
     my $log = $log->child('perls_available');
-    $log->_7("in perls_available()");
 
     my @perls_available = $bcmd->available($brew_info);
 
     $log->_7("perls available: " . join ', ', @perls_available);
 
-    return $bcmd->available($brew_info);
+    return @perls_available;
 }
 sub perls_installed {
     my ($self, $brew_info) = @_;
@@ -84,16 +85,13 @@ sub instance_remove {
     $log->_5("removal of existing perl installs complete...");
 }
 sub instance_install {
-    my ($self, $perls_available, $perls_installed) = @_;
+    my ($self, $new, $perls_available, $perls_installed) = @_;
 
     my $log = $log->child('instance_install');
 
     my $install_cmd = $bcmd->install;
 
-    $log->_7("install cmd set to $install_cmd");
-
     my @new_installs;
-    my $new = $self->{args}{new};
 
     if ($self->{args}{version}->[0]){
         for my $version (@{ $self->{args}{version} }){
@@ -109,14 +107,17 @@ sub instance_install {
     else {
         if ($new){
 
-            $log->_7("looking to install $new perl instances");
+            $log->_7("looking to install $new perl instance(s)");
 
             while ($new > 0){
+
                 my $candidate = $perls_available->[rand @{ $perls_available }];
+
                 if (grep { $_ eq $candidate } @{ $perls_installed }) {
-                    $log->_5("$candidate already installed... skipping");
+                    $log->_5( "$candidate already installed... skipping" );
                     next;
                 }
+
                 push @new_installs, $candidate;
                 $new--;
             }
@@ -127,8 +128,8 @@ sub instance_install {
         $log->_5("preparing to install..." . join ', ', @new_installs);
 
         for my $ver (@new_installs){
-            $log->_5("installing $ver...");
-            $log->_7("...using cmd $install_cmd");
+            $log->_0("installing $ver...");
+            $log->_7("...using cmd: $install_cmd");
             `$install_cmd $ver`;
         }
     }
@@ -260,7 +261,7 @@ sub brew_info {
 
     my $brew_info = $bcmd->available;
 
-    $log->_7("brew info set to:\n$brew_info");
+    $log->_7("brew info set to:\n$brew_info") if $brew_info;
 
     return $brew_info;
 }

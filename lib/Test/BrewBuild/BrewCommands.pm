@@ -2,24 +2,45 @@ package Test::BrewBuild::BrewCommands;
 use strict;
 use warnings;
 
+my $log;
+
 sub new {
-    return bless {}, shift;
+    my ($class, $plog) = @_;
+
+    my $self = bless {}, $class;
+
+    $self->{log} = $plog->child('Test::BrewBuild::BrewCommands');
+    $log = $self->{log};
+    $log->_7("constructing new Test::BrewBuild::BrewCommands object");
+
+    return $self;
 }
 sub brew {
     my $self = shift;
-    return $self->is_win ? 'berrybrew' : 'perlbrew';
+    my $brew = $self->is_win ? 'berrybrew' : 'perlbrew';
+    $log->child('brew')->_7("*brew cmd is: $brew");
+    return $brew;
 }
 sub installed {
     my ($self, $info) = @_;
 
+    $log->child('installed')->_7("cleaning up perls installed");
+
+    return if ! $info;
+
     return $self->is_win
-    ? $info =~ /(\d\.\d{2}\.\d(?:_\d{2}))(?!=_)\s+\[installed\]/ig
-    : $info =~ /i.*?(perl-\d\.\d+\.\d+)/g;
+        ? $info =~ /(\d\.\d{2}\.\d(?:_\d{2}))(?!=_)\s+\[installed\]/ig
+        : $info =~ /i.*?(perl-\d\.\d+\.\d+)/g;
+
 }
 sub available {
     my ($self, $info) = @_;
 
-    if ($info) {
+
+    if ($info){
+
+        $log->child('available')->_7("determining available perls");
+
         my @avail = $self->is_win
             ? $info =~ /(\d\.\d+\.\d+_\d+)/g
             : $info =~ /(perl-\d\.\d+\.\d+)/g;
@@ -32,6 +53,9 @@ sub available {
         return @avail;
     }
     else {
+
+        $log->child('available')->_7("generating available");
+
         return $self->is_win
             ? `berrybrew available`
             : `perlbrew available`;
@@ -43,16 +67,26 @@ sub install {
     my $install_cmd = $self->is_win
         ? 'berrybrew install'
         : 'perlbrew install --notest -j 4';
+
+    $log->child('install')->_7("install cmd is: $install_cmd");
+
+    return $install_cmd;
 }
 sub remove {
     my $self = shift;
 
-    return $self->is_win
+    my $remove_cmd = $self->is_win
         ? 'berrybrew remove'
         : 'perlbrew uninstall';
+
+    $log->child('remove')->_7("remove cmd is: $remove_cmd");
+
+    return $remove_cmd;
 }
 sub version {
     my ($self, $ver) = shift;
+
+    $log->child('version')->_7("configuring version");
 
     return $self->is_win
         ? $ver

@@ -12,7 +12,6 @@ my (%args, $help);
 
 GetOptions(
     "debug=i"       => \$args{debug},
-    "reload"        => \$args{remove},
     "remove"        => \$args{remove},
     "version=s@"    => \$args{version},
     "plugin=s"      => \$args{plugin},

@@ -19,8 +19,8 @@ Test::BrewBuild::Plugin::DefaultExec - The default 'exec' command plugin.
 =head1 DESCRIPTION
 
 To create a temporary or test plugin, simply create a C<*.pm> file just like
-this one with the same subroutine, and in the data section, include the code
-you need executed by C<*brew exec>.
+this one with the same subroutine, and in the C<__DATA__> section, include the
+code you need executed by C<*brew exec>.
 
 To use, if you've actually installed your plugin:
 

@@ -7,6 +7,7 @@ use Test::More;
 
 BEGIN {
     use_ok( 'Test::BrewBuild' ) || print "Bail out!\n";
+    use_ok( 'Test::BrewBuild::BrewCommands' ) || print "Bail out!\n";
     use_ok( 'Test::BrewBuild::Plugin' ) || print "Bail out!\n";
     use_ok( 'Test::BrewBuild::Plugin::DefaultExec' ) || print "Bail out!\n";
     use_ok( 'Test::BrewBuild::Plugin::UnitTestPluginInst' ) || print "Bail out!\n";
@@ -51,6 +52,24 @@ BEGIN {
 
     my @subs = qw(
         brewbuild_exec
+    );
+
+    for (@subs){
+        can_ok($mod, $_);
+    }
+}
+{
+    my $mod = 'Test::BrewBuild::BrewCommands';
+
+    my @subs = qw(
+        new
+        brew
+        installed
+        available
+        install
+        remove
+        version
+        is_win
     );
 
     for (@subs){
