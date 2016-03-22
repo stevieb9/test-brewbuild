@@ -21,7 +21,7 @@ if ($^O =~ /MSWin/) {
     is ($ok, 1, "win: instance_remove() ok");
 }
 else {
-    my $bb = Test::BrewBuild->new;
+    my $bb = Test::BrewBuild->new(debug => 7);
     my $ok = eval {
         $bb->instance_remove( qw(5.20.0) ); 1; };
     is ($remove_cmd->called, 1, "nix: BrewCommands::install() called");

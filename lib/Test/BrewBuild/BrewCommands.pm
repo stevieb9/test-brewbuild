@@ -85,6 +85,7 @@ sub version {
 
     $log->child('version')->_7("configuring version");
 
+    return $ver;
     return $self->is_win
         ? $ver
         : "perl-$ver";
