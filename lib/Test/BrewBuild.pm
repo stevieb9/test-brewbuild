@@ -80,7 +80,13 @@ sub instance_remove {
 
         $log->_7("exec'ing $remove_cmd");
 
-        `$remove_cmd $_`;
+        if ($bcmd->is_win) {
+            `$remove_cmd $_ 2>nul`;
+        }
+        else {
+            `$remove_cmd $_ 2>/dev/null`;
+
+        }
     }
 
     $log->_5("removal of existing perl installs complete...");
