@@ -157,6 +157,7 @@ sub results {
     $log->_7("got " . scalar @ver_results . " results");
 
     my @pass;
+    my $fail = 0;
 
     for (@ver_results){
         my $ver;
@@ -173,15 +174,18 @@ sub results {
         else {
             $log->_7("$ver FAILED...");
             print $_;
-            exit;
+            $fail = 1;
+            last;
         }
 
         $log->_7("$ver :: $res");
         push @pass, "$ver :: $res\n";
     }
 
-    print "\n";
-    print $_ for @pass;
+    if (! $fail) {
+        print "\n";
+        print $_ for @pass;
+    }
 
     $log->_7(__PACKAGE__ ." run finished");
 }
