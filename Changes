@@ -1,11 +1,12 @@
 Revision history for Test-BrewBuild
 
-0.07    x
+1.00    2016-03-22
         - removed Plugin.pm, we now use Plugin::Simple for the plugin init work
         - BUILD_REQUIRES Mock::Sub v1.06 for testing purposes, so we can test
           without *brew installed (and if it is, we don't want to be managing
           instances)
-
+        - finally got around to implementing a near full test suite (closes #4)
+        - bumped major version number now that we're tested and stable
 
 0.06    2016-03-21
         - added '--on' param, send in a list of perl versions to run against,

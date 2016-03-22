@@ -33,6 +33,15 @@ if ($^O =~ /MSWin/) {
         is ($inst_cmd->called, 1, "win: BrewCommands::install() called w/ ver");
         is ($ok, 1, "win: instance_install() with version ok");
     }
+    { # no @new_installs
+        my $bb = Test::BrewBuild->new(debug => 7);
+        my $ok = eval {
+            $bb->instance_install(0, [qw(5.18.4_64 5.18.4_32)], [qw(5.18.4_32)]);
+            1;
+        };
+        is ($inst_cmd->called, 1, "win: BrewCommands::install() called w/ no new vers");
+        is ($ok, 1, "win: instance_install() does nothing if nothing to install");
+    }
 }
 else {
     { # default install
@@ -52,6 +61,15 @@ else {
         };
         is ($inst_cmd->called, 1, "nix: BrewCommands::install() called w/ ver");
         is ($ok, 1, "nix: instance_install() with version ok");
+    }
+     { # no @new_installs
+        my $bb = Test::BrewBuild->new(debug => 7);
+        my $ok = eval {
+            $bb->instance_install(0, [qw(5.18.4_64 5.18.4_32)], [qw(5.18.4_32)]);
+            1;
+        };
+        is ($inst_cmd->called, 1, "nix: BrewCommands::install() called w/ no new vers");
+        is ($ok, 1, "nix: instance_install() does nothing if nothing to install");
     }
 }
 
