@@ -16,14 +16,14 @@ select $stdout;
 
 if ($^O =~ /MSWin/) {
     my $bb = Test::BrewBuild->new(debug => 7);
-    my $ok = eval { $bb->instance_remove('5.22.1_64'); 1; };
+    my $ok = eval { $bb->instance_remove(qw(5.20.0)); 1; };
     is ($remove_cmd->called, 1, "win: BrewCommands::remove() called");
     is ($ok, 1, "win: instance_remove() ok");
 }
 else {
     my $bb = Test::BrewBuild->new;
     my $ok = eval {
-        $bb->instance_remove( qw(5.8.9) ); 1; };
+        $bb->instance_remove( qw(5.20.0) ); 1; };
     is ($remove_cmd->called, 1, "nix: BrewCommands::install() called");
     is ( $ok, 1, "nix: instance_remove() ok" );
 }

@@ -60,10 +60,8 @@ sub instance_remove {
 
     my $log = $log->child('instance_remove');
 
-    if ($self->{args}{debug}) {
-        $log->_5("perls installed: " . join ', ', @perls_installed);
-        $log->_5("removing previous installs...");
-    }
+    $log->_5("perls installed: " . join ', ', @perls_installed);
+    $log->_5("removing previous installs...");
 
     my $remove_cmd = $bcmd->remove;
 

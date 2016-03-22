@@ -45,9 +45,9 @@ else {
         is ( $ok, 1, "nix: instance_install() ok" );
     }
     { # version install
-        my $bb = Test::BrewBuild->new(version => ['5.18.4']);
+        my $bb = Test::BrewBuild->new(version => ['5.20.0', '5.22.1']);
         my $ok = eval {
-            $bb->instance_install(0, [qw(5.18.4 5.16.3)], [qw(5.22.1)]);
+            $bb->instance_install(0, [qw(5.18.4 5.20.0)], [qw(5.20.0)]);
             1;
         };
         is ($inst_cmd->called, 1, "nix: BrewCommands::install() called w/ ver");
