@@ -209,7 +209,6 @@ sub run {
         $self->instance_install($new, \@perls_available, \@perls_installed);
     }
 
-    $brew_info = $self->brew_info;
     @perls_installed = $self->perls_installed($brew_info);
 
     if (! @perls_installed) {
