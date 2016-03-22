@@ -77,7 +77,7 @@ else {
         is ($instance_install->called, 1, "nix: instance_install called w/new");
     }
     { # no perls installed
-        my $bb = Test::BrewBuild->new;
+        my $bb = Test::BrewBuild->new(debug => 0);
         $perls_installed->return_value(0);
         $results->reset;
         $bb->run;
