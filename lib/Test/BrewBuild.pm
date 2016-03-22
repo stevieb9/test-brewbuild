@@ -258,11 +258,23 @@ sub exec {
         $log->_7("versions to run on: $vers");
         $log->_7("exec'ing: $brew exec --with $vers perl $fname");
 
-        return `$brew exec --with $vers perl $fname`;
+        if ($bcmd->is_win){
+            return `$brew exec --with $vers perl $fname 2>nul`;
+
+        }
+        else {
+            return `$brew exec --with $vers perl $fname 2>/dev/null`;
+        }
     }
     else {
         $log->_7("exec'ing: $brew exec perl $fname");
-        return `$brew exec perl $fname`;
+
+        if ($bcmd->is_win) {
+            return `$brew exec perl $fname 2>nul`;
+        }
+        else {
+            return `$brew exec perl $fname 2>/dev/null`;
+        }
     }
 }
 sub brew_info {
