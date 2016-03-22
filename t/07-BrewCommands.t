@@ -47,7 +47,7 @@ else {
    my @inst = $bc->installed($inst);
    is ($inst[0], "perl-5.22.1", "nix: installed is ok");
 
-   my $avail = '5.22.1';
+   my $avail = 'perl-5.22.1';
    my @avail = $bc->available($avail);
    is ($avail[0], 'perl-5.22.1', "nix: avail with info ok");
 

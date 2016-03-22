@@ -15,6 +15,7 @@ t/03-perls_available.t
 t/04-is_win.t
 t/05-perls_installed.t
 t/06-log.t
+t/07-BrewCommands.t
 t/base/UnitTestPlugin.pm
 t/manifest.t
 t/pod-coverage.t
