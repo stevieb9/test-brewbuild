@@ -16,10 +16,9 @@ if (! grep { -x "$_/$brew_prog"}split /$sep/,$ENV{PATH}){
 }
 
 my $info = $bb->brew_info;
-
 my @installed = $bb->perls_installed($info);
 
-if ($info && $info =~ /i/){
+if ($info && ($info =~ /(?:\si\s|install)/)){
     ok (@installed, "if a perl is installed, it shows");
     for (@installed){
         like ($_, qr/\d\.\d{1,2}/, "each installed perl is a perl $_");
