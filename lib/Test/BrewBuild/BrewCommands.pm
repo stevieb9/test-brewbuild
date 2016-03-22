@@ -59,8 +59,8 @@ sub available {
         $log->child('available')->_7("generating available");
 
         return $self->is_win
-            ? `berrybrew available`
-            : `perlbrew available`;
+            ? `berrybrew available 2>nul`
+            : `perlbrew available 2>/dev/null`;
     }
 }
 sub install {
@@ -86,7 +86,7 @@ sub remove {
     return $remove_cmd;
 }
 sub version {
-    my ($self, $ver) = shift;
+    my ($self, $ver) = @_;
 
     $log->child('version')->_7("configuring version");
 

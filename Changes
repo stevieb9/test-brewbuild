@@ -1,5 +1,9 @@
 Revision history for Test-BrewBuild
 
+0.07    x
+        - removed Plugin.pm, we now use Plugin::Simple for the plugin init work
+        -
+
 0.06    2016-03-21
         - added '--on' param, send in a list of perl versions to run against,
           instead of the default all (closes #17)
