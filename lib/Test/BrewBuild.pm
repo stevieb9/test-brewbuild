@@ -100,7 +100,6 @@ sub instance_install {
 
     if ($self->{args}{version}->[0]){
         for my $version (@{ $self->{args}{version} }){
-            $version = $bcmd->version($version);
             if (grep { $version eq $_ } @{ $perls_installed }){
                 $log->_5("$version is already installed... skipping");
                 next;

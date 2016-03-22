@@ -6,6 +6,7 @@ Revision history for Test-BrewBuild
           without *brew installed (and if it is, we don't want to be managing
           instances)
         - finally got around to implementing a near full test suite (closes #4)
+        - removed version() from BrewCommands.pm, not needed
         - bumped major version number now that we're tested and stable
 
 0.06    2016-03-21

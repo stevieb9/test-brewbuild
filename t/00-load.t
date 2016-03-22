@@ -56,7 +56,6 @@ BEGIN {
         available
         install
         remove
-        version
         is_win
     );
 

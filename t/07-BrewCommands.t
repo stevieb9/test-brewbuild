@@ -34,10 +34,6 @@ if ($im_on_windows){
    my $remove_cmd = $bc->remove;
    is ($remove_cmd, 'berrybrew remove', "win: remove() ok");
 
-   my $ver = '5.20.3';
-   my $newver = $bc->version($ver);
-   is ($newver, '5.20.3', "win: version() ok");
-
    is ($bc->is_win, 1, "win: is win ok");
 }
 else {
@@ -59,10 +55,6 @@ else {
 
    my $remove_cmd = $bc->remove;
    is ($remove_cmd, 'perlbrew uninstall', "nix: remove() ok");
-
-   my $ver = '5.20.3';
-   my $newver = $bc->version($ver);
-   is ($newver, '5.20.3', "nix: version() ok");
 
    is ($bc->is_win, 0, "nix: is win ok");
 }

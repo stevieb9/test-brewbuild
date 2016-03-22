@@ -80,16 +80,6 @@ sub remove {
 
     return $remove_cmd;
 }
-sub version {
-    my ($self, $ver) = @_;
-
-    $log->child('version')->_7("configuring version");
-
-    return $ver;
-    return $self->is_win
-        ? $ver
-        : "perl-$ver";
-}
 sub is_win {
     my $is_win = ($^O =~ /Win/) ? 1 : 0;
     return $is_win;
@@ -128,10 +118,6 @@ Returns the current OS's specific *brew install command.
 =head2 remove
 
 Returns the current OS's specific *brew remove command.
-
-=head2 version
-
-Returns the platform specific perl version string.
 
 =head2 is_win
 
