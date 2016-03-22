@@ -47,11 +47,6 @@ sub available {
             ? $info =~ /(\d\.\d+\.\d+_\d+)/g
             : $info =~ /(perl-\d\.\d+\.\d+)/g;
 
-        if ($self->is_win) {
-            for (@avail) {
-                s/perl-//;
-            }
-        }
         return @avail;
     }
     else {
