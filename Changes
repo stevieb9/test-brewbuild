@@ -1,5 +1,8 @@
 Revision history for Test-BrewBuild
 
+1.01    2016-03-22
+        - set README to the binary, not the module... d'oh!
+
 1.00    2016-03-22
         - removed Plugin.pm, we now use Plugin::Simple for the plugin init work
         - BUILD_REQUIRES Mock::Sub v1.06 for testing purposes, so we can test
