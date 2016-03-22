@@ -203,7 +203,10 @@ sub run {
 
     $log->_5("installed perls: " . join ', ', @perls_installed);
 
-    $self->instance_remove(@perls_installed) if $self->{args}{remove};
+    if ($self->{args}{remove}){
+        $self->instance_remove(@perls_installed);
+
+    }
 
     if ($new) {
         $self->instance_install($new, \@perls_available, \@perls_installed);
@@ -211,13 +214,14 @@ sub run {
 
     @perls_installed = $self->perls_installed($brew_info);
 
-    if (! @perls_installed) {
+    if (! $perls_installed[0]){
         $log->_0("no perls installed... exiting");
         print "no perls installed... exiting" if $log->level;
-        exit;
+    }
+    else {
+        $self->results();
     }
 
-    $self->results();
 }
 sub exec {
     my $self = shift;

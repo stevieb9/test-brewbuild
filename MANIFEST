@@ -18,6 +18,7 @@ t/06-log.t
 t/07-BrewCommands.t
 t/08-instance_remove.t
 t/09-instance_install.t
+t/10-run.t
 t/base/UnitTestPlugin.pm
 t/manifest.t
 t/pod-coverage.t
