@@ -6,7 +6,7 @@ use Data::Dumper;
 use File::Temp;
 use Logging::Simple;
 use Test::BrewBuild::BrewCommands;
-use Test::BrewBuild::Plugin;
+use Plugin::Simple default => 'Test::BrewBuild::Plugin::DefaultExec';
 
 our $VERSION = '0.07';
 
@@ -22,16 +22,17 @@ sub new {
     $log->_7("in new(), constructing " . __PACKAGE__ . " object");
 
     $bcmd = Test::BrewBuild::BrewCommands->new($log);
-    my $exec_plugin_name = $args{plugin} ? $args{plugin} : $ENV{TBB_PLUGIN};
+    my $plugin = $args{plugin} ? $args{plugin} : $ENV{TBB_PLUGIN};
+    $plugin = 'Test::BrewBuild::Plugin::DefaultExec' if ! $plugin;
 
-    $log->_7("plugin param set to: $exec_plugin_name") if $exec_plugin_name;
+    $log->_7("plugin param set to: $plugin");
 
-    $exec_plugin_name = $self->plugin($exec_plugin_name);
+    $plugin = $self->plugins($plugin, can => ['brewbuild_exec']);
 
-    my $exec_plugin_sub = $exec_plugin_name .'::brewbuild_exec';
+    my $exec_plugin_sub = $plugin .'::brewbuild_exec';
     $self->{exec_plugin} = \&$exec_plugin_sub;
 
-    $log->_7("using plugin $exec_plugin_name");
+    $log->_7("using plugin $plugin");
 
     return $self;
 }

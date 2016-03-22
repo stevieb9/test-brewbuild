@@ -2,7 +2,6 @@ bin/brewbuild
 Changes
 lib/Test/BrewBuild.pm
 lib/Test/BrewBuild/BrewCommands.pm
-lib/Test/BrewBuild/Plugin.pm
 lib/Test/BrewBuild/Plugin/DefaultExec.pm
 lib/Test/BrewBuild/Plugin/UnitTestPluginInst.pm
 Makefile.PL

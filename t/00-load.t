@@ -8,7 +8,6 @@ use Test::More;
 BEGIN {
     use_ok( 'Test::BrewBuild' ) || print "Bail out!\n";
     use_ok( 'Test::BrewBuild::BrewCommands' ) || print "Bail out!\n";
-    use_ok( 'Test::BrewBuild::Plugin' ) || print "Bail out!\n";
     use_ok( 'Test::BrewBuild::Plugin::DefaultExec' ) || print "Bail out!\n";
     use_ok( 'Test::BrewBuild::Plugin::UnitTestPluginInst' ) || print "Bail out!\n";
 }
@@ -30,18 +29,7 @@ BEGIN {
         log
     );
 
-    push @subs, 'plugin'; # dynamically installed by Plugin.pm
-
-    for (@subs){
-        can_ok($mod, $_);
-    }
-}
-{
-    my $mod = 'Test::BrewBuild::Plugin';
-
-    my @subs = qw(
-        _load_plugin
-    );
+    push @subs, 'plugins';
 
     for (@subs){
         can_ok($mod, $_);

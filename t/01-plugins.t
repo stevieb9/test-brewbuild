@@ -10,7 +10,7 @@ my $mod = 'Test::BrewBuild';
 my $bb = $mod->new;
 
 { # default plugin
-    my $plugin = $bb->plugin('Test::BrewBuild::Plugin::DefaultExec');
+    my $plugin = $bb->plugins('Test::BrewBuild::Plugin::DefaultExec');
 
     is (
         $plugin,
@@ -19,7 +19,7 @@ my $bb = $mod->new;
     );
 }
 { # bad plugin
-    my $plugin = $bb->plugin();
+    my $plugin = $bb->plugins();
 
     is (
         $plugin,
@@ -28,7 +28,7 @@ my $bb = $mod->new;
     );
 }
 { # tests good plugin
-    my $plugin = $bb->plugin('Test::BrewBuild::Plugin::UnitTestPluginInst');
+    my $plugin = $bb->plugins('Test::BrewBuild::Plugin::UnitTestPluginInst');
 
     is (
         $plugin,
@@ -37,7 +37,7 @@ my $bb = $mod->new;
     );
 }
 { # test path-based plugin
-    my $plugin = $bb->plugin('t/base/UnitTestPlugin.pm');
+    my $plugin = $bb->plugins('t/base/UnitTestPlugin.pm');
 
     is (
         $plugin,
@@ -48,7 +48,7 @@ my $bb = $mod->new;
 { # test cwd path-based plugin
     copy 't/base/UnitTestPlugin.pm', 'UnitTestPlugin.pm';
 
-    my $plugin = $bb->plugin('UnitTestPlugin.pm');
+    my $plugin = $bb->plugins('UnitTestPlugin.pm');
 
     is (
         $plugin,
@@ -60,7 +60,7 @@ my $bb = $mod->new;
     is (-e 'UnitTestPlugin.pm', undef, "unlinked TestPlugin.pm ok");
 }
 { # test no param
-    my $plugin = $bb->plugin;
+    my $plugin = $bb->plugins;
 
     is (
         $plugin,
@@ -70,7 +70,7 @@ my $bb = $mod->new;
 }
 
 { # test content of default plugin
-    my $plugin = $bb->plugin;
+    my $plugin = $bb->plugins;
     my @ret = $plugin->brewbuild_exec;
     my @data = <DATA>;
 
