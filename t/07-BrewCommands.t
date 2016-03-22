@@ -62,7 +62,7 @@ else {
 
    my $ver = '5.20.3';
    my $newver = $bc->version($ver);
-   is ($newver, 'perl-5.20.3', "nix: version() ok");
+   is ($newver, '5.20.3', "nix: version() ok");
 
    is ($bc->is_win, 0, "nix: is win ok");
 }
