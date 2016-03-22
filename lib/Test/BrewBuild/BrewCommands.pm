@@ -2,7 +2,7 @@ package Test::BrewBuild::BrewCommands;
 use strict;
 use warnings;
 
-our $VERSION = '0.07';
+our $VERSION = '1.00';
 
 my $log;
 
