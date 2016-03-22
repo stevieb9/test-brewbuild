@@ -78,7 +78,7 @@ else {
     }
     { # no perls installed
         my $bb = Test::BrewBuild->new;
-        $perls_installed->return_value(undef);
+        $perls_installed->return_value(0);
         $results->reset;
         $bb->run;
         is ($results->called, 0, "nix: if no perls installed, we exit");
