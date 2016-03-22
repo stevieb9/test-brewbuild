@@ -21,7 +21,7 @@ WriteMakefile(
     NAME             => 'Test::BrewBuild',
     AUTHOR           => q{Steve Bertrand <steveb@cpan.org>},
     VERSION_FROM     => 'lib/Test/BrewBuild.pm',
-    ABSTRACT_FROM    => 'bin/perlbrew',
+    ABSTRACT_FROM    => 'bin/brewbuild',
     LICENSE          => 'perl_5',
     PL_FILES         => {},
     EXE_FILES        => [ map "bin/$_", qw(brewbuild) ],
