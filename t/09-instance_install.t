@@ -10,22 +10,57 @@ my $mock = Mock::Sub->new;
 my $inst_cmd = $mock->mock('Test::BrewBuild::BrewCommands::install');
 $inst_cmd->return_value('echo "install"');
 
+my $out;
+open my $stdout, '>', \$out or die $!;
+select $stdout;
+
 if ($^O =~ /MSWin/) {
-    my $bb = Test::BrewBuild->new;
-    my $ok = eval {
-        $bb->instance_install(1, [qw(5.18.4_64 5.16.3_64)], [qw(5.18.4_64)]);
-        1;
-    };
-    is ($inst_cmd->called, 1, "win: BrewCommands::install() called");
-    is ($ok, 1, "win: instance_install() ok");
+    { # default install
+        my $bb = Test::BrewBuild->new;
+        my $ok = eval {
+            $bb->instance_install(1, [qw(5.18.4_64 5.16.3_64)], [qw(5.18.4_64)]);
+            1;
+        };
+        is ($inst_cmd->called, 1, "win: BrewCommands::install() called");
+        is ($ok, 1, "win: instance_install() ok");
+    }
+    { # version install
+        my $bb = Test::BrewBuild->new(version => ['5.18.4_64']);
+        my $ok = eval {
+            $bb->instance_install(0, [qw(5.18.4_64 5.18.4_32)], [qw(5.18.4_32)]);
+            1;
+        };
+        is ($inst_cmd->called, 1, "win: BrewCommands::install() called w/ ver");
+        is ($ok, 1, "win: instance_install() with version ok");
+    }
 }
 else {
-    my $bb = Test::BrewBuild->new;
-    my $ok = eval {
-        $bb->instance_install( qw(5.8.9) ); 1; };
-    is ($inst_cmd->called, 1, "nix: BrewCommands::install() called");
-    is ( $ok, 1, "nix: instance_install() ok" );
+    { # default install
+        my $bb = Test::BrewBuild->new;
+        my $ok = eval {
+            $bb->instance_install( qw(5.8.9) );
+            1;
+        };
+        is ( $inst_cmd->called, 1, "nix: BrewCommands::install() called" );
+        is ( $ok, 1, "nix: instance_install() ok" );
+    }
+    { # version install
+        my $bb = Test::BrewBuild->new(version => ['5.18.4']);
+        my $ok = eval {
+            $bb->instance_install(0, [qw(5.18.4 5.16.3)], [qw(5.22.1)]);
+            1;
+        };
+        is ($inst_cmd->called, 1, "nix: BrewCommands::install() called w/ ver");
+        is ($ok, 1, "nix: instance_install() with version ok");
+    }
 }
+
+for ($mock->mocked_objects){
+    $_->unmock;
+    is ($_->mocked_state, 0, $_->name ." has been unmocked ok");
+}
+
+select STDOUT;
 
 done_testing();
 
