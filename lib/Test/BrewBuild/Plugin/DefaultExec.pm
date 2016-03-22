@@ -2,7 +2,7 @@ package Test::BrewBuild::Plugin::DefaultExec;
 
 # default exec command set plugin for Test::BrewBuild
 
-our $VERSION = '1.00';
+our $VERSION = '1.01';
 
 sub brewbuild_exec {
     return <DATA>;
