@@ -6,7 +6,7 @@ use Getopt::Long;
 Getopt::Long::Configure('pass_through');
 use Test::BrewBuild;
 
-our $VERSION = '0.05';
+our $VERSION = '1.02';
 
 my (%args, $help);
 
@@ -71,8 +71,7 @@ $brew->run;
 
 =head1 NAME
 
-brewbuild - Perl/Berry brew unit testing automation across installed perl
-versions (Windows and Unix).
+brewbuild - This is the front-end script for L<Test::BrewBuild>
 
 =for html
 <a href="http://travis-ci.org/stevieb9/p5-test-brewbuild"><img src="https://secure.travis-ci.org/stevieb9/p5-test-brewbuild.png"/>
@@ -139,6 +138,11 @@ installed *brew instances.
     # current working directory.
 
     brewbuild --plugin 'Test::BrewBuild::Plugin::DefaultExec' # default
+
+    # send in args that custom plugins can use. The plugin receives this list
+    # as an array
+
+    brewbuild -p My::Plugin --args 1 -a 2
 
 =head1 DESCRIPTION
 

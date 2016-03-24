@@ -226,7 +226,6 @@ sub run {
     else {
         $self->results();
     }
-
 }
 sub exec {
     my $self = shift;
@@ -321,7 +320,8 @@ sub is_win {
 
 =head1 NAME
 
-Test::BrewBuild - Backend module for the L<brewbuild> command-line program.
+Test::BrewBuild - Perl/Berry brew unit testing automation across installed perl
+versions (Windows and Unix).
 
 =for html
 <a href="http://travis-ci.org/stevieb9/p5-test-brewbuild"><img src="https://secure.travis-ci.org/stevieb9/p5-test-brewbuild.png"/>

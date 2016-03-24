@@ -2,7 +2,7 @@ package Test::BrewBuild::Plugin::DefaultExec;
 
 # default exec command set plugin for Test::BrewBuild
 
-our $VERSION = '1.01';
+our $VERSION = '1.02';
 
 sub brewbuild_exec {
     return <DATA>;
@@ -38,12 +38,4 @@ Steve Bertrand, C<< <steveb at cpan.org> >>
 =cut
 
 __DATA__
-if ($^O eq 'MSWin32'){
-    my $make = -e 'Makefile.PL' ? 'dmake' : 'Build';
-    system "cpanm --installdeps . && $make && $make test";
-}
-else {
-    my $make = -e 'Makefile.PL' ? 'make' : './Build';
-#    system "cpanm --installdeps . && $make && $make test";
-    system "cpanm --installdeps . && cpanm --test-only .";
-}
+system "cpanm --installdeps . && cpanm --test-only .";

@@ -1,7 +1,6 @@
 NAME
 
-    brewbuild - Perl/Berry brew unit testing automation across installed
-    perl versions (Windows and Unix).
+    brewbuild - This is the front-end script for Test::BrewBuild
 
 SYNOPSIS
 
@@ -64,6 +63,11 @@ SYNOPSIS
         # current working directory.
     
         brewbuild --plugin 'Test::BrewBuild::Plugin::DefaultExec' # default
+    
+        # send in args that custom plugins can use. The plugin receives this list
+        # as an array
+    
+        brewbuild -p My::Plugin --args 1 -a 2
 
 DESCRIPTION
 

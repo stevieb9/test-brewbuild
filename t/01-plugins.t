@@ -68,7 +68,6 @@ my $bb = $mod->new;
         "calling plugin() with no params returns the derfault plugin",
     );
 }
-
 { # test content of default plugin
     my $plugin = $bb->plugins;
     my @ret = $plugin->brewbuild_exec;
@@ -86,11 +85,4 @@ my $bb = $mod->new;
 done_testing();
 
 __DATA__
-if ($^O eq 'MSWin32'){
-    my $make = -e 'Makefile.PL' ? 'dmake' : 'Build';
-    system "cpanm --installdeps . && $make && $make test";
-}
-else {
-    my $make = -e 'Makefile.PL' ? 'make' : './Build';
-    system "cpanm --installdeps . && $make && $make test";
-}
+system "cpanm --installdeps . && cpanm --test-only .";
