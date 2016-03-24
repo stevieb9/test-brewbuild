@@ -27,6 +27,12 @@ SYNOPSIS
     
         brewbuild --on 5.20.3 -o 5.8.9
     
+        # run tests on working directory, then run all tests of all reverse
+        # dependencies of this current module (as reported by CPAN), to ensure
+        # the down river modules will work with your new build
+    
+        brewbuild --revdep # or -R
+    
         # install three new instances of perl, randomly
     
         brewbuild --new 3
@@ -62,10 +68,14 @@ SYNOPSIS
         # installed. Send in the relative/full path if the plugin isn't in the
         # current working directory.
     
+        # your 'brewbuild_exec() function will receive a L<Logging::Simple> object,
+        # followed by a single argument if specified per below
+    
         brewbuild --plugin 'Test::BrewBuild::Plugin::DefaultExec' # default
     
-        # send in args that custom plugins can use. The plugin receives this list
-        # as an array
+        # send in args that custom plugins can use. brewbuild will be called once
+        # for each arg, passing a single argument from the list specified on each
+        # run. Note: --new and --remove are only executed on the first loop
     
         brewbuild -p My::Plugin --args 1 -a 2
 

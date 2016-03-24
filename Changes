@@ -4,7 +4,12 @@ Revision history for Test-BrewBuild
         - if --args is passed in, brewbuild runs the number of times the list
           has elements, and on each pass, the plugin receives the current arg
           in the list
-        - --args disables both --new and --remove, because of the looping
+        - --args executes --new and --remove only on first run through the loop
+        - plugins now get a copy of the parent log for cloning
+        - added --revdep, tests all CPAN reverse dependencies on the module
+          you're testing
+        - added prereq CPAN::ReverseDependencies for --revdep
+        -
 
 1.02    2016-03-24
         - default plugin now uses cpanm for all installs, rendering the build

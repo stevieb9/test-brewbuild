@@ -2,9 +2,10 @@
 use warnings;
 use strict;
 
-use Data::Dumper;
 use Getopt::Long;
 Getopt::Long::Configure('pass_through');
+use File::Find;
+use Module::Load;
 use Test::BrewBuild;
 
 our $VERSION = '1.03';
@@ -12,26 +13,28 @@ our $VERSION = '1.03';
 my (%args, $help);
 
 GetOptions(
-    "debug=i"       => \$args{debug},
+    "on=s@"         => \$args{on},
     "remove"        => \$args{remove},
-    "version=s@"    => \$args{version},
+    "new=i"         => \$args{new},
+    "revdep|R"      => \$args{revdep},
     "plugin=s"      => \$args{plugin},
     "args=s@"        => \$args{args},
-    "on=s@"         => \$args{on},
-    "new=i"         => \$args{new},
+    "debug=i"       => \$args{debug},
+    "version=s@"    => \$args{version},
     "help"          => \$help,
 );
 
 if ($help){
     print <<EOF;
-    
+
 Usage: perl build/brewbuild.pl [options]
 
 Options:
 
 --on     | -o:  String, perl version number to run against (can be supplied multiple times
 --plugin | -p:  String, the module name of the exec command plugin to use
---args   | -a:  Array reference of arguments to pass into a plugin
+--args   | -a:  List of args to pass into the plugin (one arg per loop)
+--revdep | -R:  Run tests, install, then run tests on all CPAN reverse dependency modules
 --debug  | -d:  Int (0-7), sets logging verbosity
 --new    | -n:  Integer, how many random versions of perl to install
 --remove | -r:  Bool, remove all installed perls (less the current one) before installation of new ones
@@ -47,6 +50,7 @@ my $brew_link = $is_win
     ? 'https://github.com/dnmfarrell/berrybrew'
     : 'http://perlbrew.pl';
 my $sep = $is_win ? ';' : ':';
+my @modules;
 
 if (! grep { -x "$_/$brew_prog"}split /$sep/,$ENV{PATH}){
     warn "\nYou need to install '$brew_prog' to use this program...\n\n" .
@@ -54,20 +58,42 @@ if (! grep { -x "$_/$brew_prog"}split /$sep/,$ENV{PATH}){
     exit;
 }
 
-if (defined $args{args}){
+if ($args{revdep}){
+    delete $args{args};
+    load 'CPAN::ReverseDependencies';
+
+    find({ wanted => \&_module_find, no_chdir => 1}, 'lib/');
+    my $mod = $modules[0];
+    $mod =~ s|lib/||;
+    $mod =~ s|/|-|g;
+    $mod =~ s|\.pm||;
+
+    my $rvdep = CPAN::ReverseDependencies->new;
+    my @revdeps = $rvdep->get_reverse_dependencies($mod);
+
+    $args{plugin} = 'Test::BrewBuild::Plugin::TestAgainst';
+
+    for (@revdeps){
+        s/-/::/g;
+        $args{plugin_arg} = $_;
+        _exec_brew(%args);
+    }
+}
+elsif (defined $args{args}){
     my %opts = %args;
 
     delete $args{args};
-    delete $args{new};
-    delete $args{remove};
 
     for (@{ $opts{args} }) {
         $args{plugin_arg} = $_;
         _exec_brew( %args );
     }
+
+    delete $args{new};
+    delete $args{remove};
 }
 else {
-    _exec_brew( %args );
+    _exec_brew(%args);
 }
 sub _exec_brew {
     my $brew = Test::BrewBuild->new(%args);
@@ -82,6 +108,9 @@ sub _exec_brew {
     $log->_6("executing Test::BrewBuild run() with args: " . join ', ', @opts);
 
     $brew->run;
+}
+sub _module_find {
+    push @modules, $_ if -f $_;
 }
 =pod
 
@@ -118,6 +147,12 @@ installed *brew instances.
 
     brewbuild --on 5.20.3 -o 5.8.9
 
+    # run tests on working directory, then run all tests of all reverse
+    # dependencies of this current module (as reported by CPAN), to ensure
+    # the down river modules will work with your new build
+
+    brewbuild --revdep # or -R
+
     # install three new instances of perl, randomly
 
     brewbuild --new 3
@@ -153,12 +188,14 @@ installed *brew instances.
     # installed. Send in the relative/full path if the plugin isn't in the
     # current working directory.
 
+    # your 'brewbuild_exec() function will receive a L<Logging::Simple> object,
+    # followed by a single argument if specified per below
+
     brewbuild --plugin 'Test::BrewBuild::Plugin::DefaultExec' # default
 
     # send in args that custom plugins can use. brewbuild will be called once
     # for each arg, passing a single argument from the list specified on each
-    # run. Note that sending in any number of args disables both --new and
-    # --remove
+    # run. Note: --new and --remove are only executed on the first loop
 
     brewbuild -p My::Plugin --args 1 -a 2
 
