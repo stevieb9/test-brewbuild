@@ -8,7 +8,7 @@ use Logging::Simple;
 use Test::BrewBuild::BrewCommands;
 use Plugin::Simple default => 'Test::BrewBuild::Plugin::DefaultExec';
 
-our $VERSION = '1.02';
+our $VERSION = '1.03';
 
 my $log;
 my $bcmd;
@@ -185,6 +185,7 @@ sub results {
 
     if (! $fail) {
         print "\n";
+        print "$self->{args}{plugin_arg}\n" if $self->{args}{plugin_arg};
         print $_ for @pass;
     }
 
@@ -238,10 +239,10 @@ sub exec {
     my $fname = $wfh->filename;
 
     $log->_6("temp filename: $fname");
-    $log->_6("fetching instructions from the plugin");
+    $log->_6("fetching instructions from the plugin with arg $self->{args}{plugin_arg}");
     $log->_6("instructions to be executed:");
 
-    my @exec_cmd = $self->{exec_plugin}->(@{ $self->{args}{args} });
+    my @exec_cmd = $self->{exec_plugin}->($self->{args}{plugin_arg});
 
     for (@exec_cmd){
         $log->_6($_);

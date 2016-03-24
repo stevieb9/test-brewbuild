@@ -1,5 +1,11 @@
 Revision history for Test-BrewBuild
 
+1.03    xxxx
+        - if --args is passed in, brewbuild runs the number of times the list
+          has elements, and on each pass, the plugin receives the current arg
+          in the list
+        - --args disables both --new and --remove, because of the looping
+
 1.02    2016-03-24
         - default plugin now uses cpanm for all installs, rendering the build
           system in use irrelevant (should work for distzilla) (closes #29)

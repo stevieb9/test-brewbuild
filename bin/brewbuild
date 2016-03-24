@@ -2,11 +2,12 @@
 use warnings;
 use strict;
 
+use Data::Dumper;
 use Getopt::Long;
 Getopt::Long::Configure('pass_through');
 use Test::BrewBuild;
 
-our $VERSION = '1.02';
+our $VERSION = '1.03';
 
 my (%args, $help);
 
@@ -18,7 +19,6 @@ GetOptions(
     "args=s@"        => \$args{args},
     "on=s@"         => \$args{on},
     "new=i"         => \$args{new},
-    "count=i"       => \$args{new}, # backwards compat
     "help"          => \$help,
 );
 
@@ -54,19 +54,35 @@ if (! grep { -x "$_/$brew_prog"}split /$sep/,$ENV{PATH}){
     exit;
 }
 
-my $brew = Test::BrewBuild->new(%args);
+if (defined $args{args}){
+    my %opts = %args;
 
-my $log = $brew->log()->child('brewbuild.pl');
+    delete $args{args};
+    delete $args{new};
+    delete $args{remove};
 
-my @opts;
-for (keys %args){
-    push @opts, "$_ => $args{$_}" if defined $args{$_};
+    for (@{ $opts{args} }) {
+        $args{plugin_arg} = $_;
+        _exec_brew( %args );
+    }
 }
+else {
+    _exec_brew( %args );
+}
+sub _exec_brew {
+    my $brew = Test::BrewBuild->new(%args);
 
-$log->_6("executing Test::BrewBuild run() with args: " . join ', ', @opts);
+    my $log = $brew->log()->child('brewbuild.pl');
 
-$brew->run;
+    my @opts;
+    for (keys %args){
+        push @opts, "$_ => $args{$_}" if defined $args{$_};
+    }
 
+    $log->_6("executing Test::BrewBuild run() with args: " . join ', ', @opts);
+
+    $brew->run;
+}
 =pod
 
 =head1 NAME
@@ -139,8 +155,10 @@ installed *brew instances.
 
     brewbuild --plugin 'Test::BrewBuild::Plugin::DefaultExec' # default
 
-    # send in args that custom plugins can use. The plugin receives this list
-    # as an array
+    # send in args that custom plugins can use. brewbuild will be called once
+    # for each arg, passing a single argument from the list specified on each
+    # run. Note that sending in any number of args disables both --new and
+    # --remove
 
     brewbuild -p My::Plugin --args 1 -a 2
 
