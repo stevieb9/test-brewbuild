@@ -22,11 +22,7 @@ sub brewbuild_exec {
 
 Test::BrewBuild::Plugin::DefaultExec - The default 'exec' command plugin.
 
-=head1 DESCRIPTION
-
-To create a temporary or test plugin, simply create a C<*.pm> file just like
-this one with the same subroutine, and in the C<__DATA__> section, include the
-code you need executed by C<*brew exec>.
+=head1 SYNOPSIS
 
 To use, if you've actually installed your plugin:
 
@@ -36,6 +32,22 @@ If you have it in a local directory (ie. not installed) (note the path can be
 relative):
 
     berrybrew --plugin /path/to/ExecPlugin.pm
+
+Send in arguments to your plugin. The C<--args, -a> flag sets an array. For
+each argument, C<brewbuild> is called once, passing in the next element of the
+array.
+
+    berrybrew -p My::Plugin --args 1 -a 2
+
+=head1 CREATION
+
+To create a temporary or test plugin, simply create a C<*.pm> file just like
+this one with the same subroutine, and in the C<__DATA__> section, include the
+code you need executed by C<*brew exec>.
+
+The first argument you will receive is the C<Logging::Simple> log object of
+the core C<Test::BrewBuild>. You can ignore this, or create a child and log
+throughout your plugin.
 
 =head1 AUTHOR
 
