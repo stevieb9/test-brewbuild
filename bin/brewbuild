@@ -15,6 +15,7 @@ GetOptions(
     "remove"        => \$args{remove},
     "version=s@"    => \$args{version},
     "plugin=s"      => \$args{plugin},
+    "args=s@"        => \$args{args},
     "on=s@"         => \$args{on},
     "new=i"         => \$args{new},
     "count=i"       => \$args{new}, # backwards compat
@@ -30,6 +31,7 @@ Options:
 
 --on     | -o:  String, perl version number to run against (can be supplied multiple times
 --plugin | -p:  String, the module name of the exec command plugin to use
+--args   | -a:  Array reference of arguments to pass into a plugin
 --debug  | -d:  Int (0-7), sets logging verbosity
 --new    | -n:  Integer, how many random versions of perl to install
 --remove | -r:  Bool, remove all installed perls (less the current one) before installation of new ones
@@ -61,7 +63,7 @@ for (keys %args){
     push @opts, "$_ => $args{$_}" if defined $args{$_};
 }
 
-$log->_7("executing Test::BrewBuild run() with args: " . join ', ', @opts);
+$log->_6("executing Test::BrewBuild run() with args: " . join ', ', @opts);
 
 $brew->run;
 

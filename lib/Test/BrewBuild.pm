@@ -19,20 +19,20 @@ sub new {
     %{ $self->{args} } = %args;
 
     $log = $self->_create_log($args{debug});
-    $log->_7("in new(), constructing " . __PACKAGE__ . " object");
+    $log->_6("in new(), constructing " . __PACKAGE__ . " object");
 
     $bcmd = Test::BrewBuild::BrewCommands->new($log);
 
     my $plugin = $args{plugin} ? $args{plugin} : $ENV{TBB_PLUGIN};
 
-    $log->_7("plugin param set to: " . defined $plugin ? $plugin : 'default');
+    $log->_6("plugin param set to: " . defined $plugin ? $plugin : 'default');
 
     $plugin = $self->plugins($plugin, can => ['brewbuild_exec']);
 
     my $exec_plugin_sub = $plugin .'::brewbuild_exec';
     $self->{exec_plugin} = \&$exec_plugin_sub;
 
-    $log->_7("using plugin $plugin");
+    $log->_6("using plugin $plugin");
 
     return $self;
 }
@@ -43,7 +43,7 @@ sub perls_available {
 
     my @perls_available = $bcmd->available($brew_info);
 
-    $log->_7("perls available: " . join ', ', @perls_available);
+    $log->_6("perls available: " . join ', ', @perls_available);
 
     return @perls_available;
 }
@@ -51,7 +51,7 @@ sub perls_installed {
     my ($self, $brew_info) = @_;
 
     my $log = $log->child('perls_installed');
-    $log->_7("checking perls installed");
+    $log->_6("checking perls installed");
 
     return $bcmd->installed($brew_info);
 }
@@ -65,7 +65,7 @@ sub instance_remove {
 
     my $remove_cmd = $bcmd->remove;
 
-    $log->_7("using $remove_cmd remove command");
+    $log->_6("using $remove_cmd remove command");
 
     for (@perls_installed){
         my $ver = $^V;
@@ -76,7 +76,7 @@ sub instance_remove {
             next;
         }
 
-        $log->_7("exec'ing $remove_cmd");
+        $log->_6("exec'ing $remove_cmd");
 
         if ($bcmd->is_win) {
             `$remove_cmd $_ 2>nul`;
@@ -110,7 +110,7 @@ sub instance_install {
     else {
         if ($new){
 
-            $log->_7("looking to install $new perl instance(s)");
+            $log->_6("looking to install $new perl instance(s)");
 
             while ($new > 0){
 
@@ -132,7 +132,7 @@ sub instance_install {
 
         for my $ver (@new_installs){
             $log->_0("installing $ver...");
-            $log->_7("...using cmd: $install_cmd");
+            $log->_6("...using cmd: $install_cmd");
             `$install_cmd $ver`;
         }
     }
@@ -147,13 +147,15 @@ sub results {
 
     local $SIG{__WARN__} = sub {};
 
-    $log->_7("warnings trapped locally");
+    $log->_6("warnings trapped locally");
 
     my $result = $self->exec;
 
-    my @ver_results = $result =~ /[Pp]erl-\d\.\d+\.\d+.*?Result:\s+\w+\n/gs;
+    $log->_7($result);
 
-    $log->_7("got " . scalar @ver_results . " results");
+    my @ver_results = $result =~ /[Pp]erl-\d\.\d+\.\d+.*?(?:Successfully tested .*?\n|FAIL\n)/gs;
+
+    $log->_6("got " . scalar @ver_results . " results");
 
     my @pass;
     my $fail = 0;
@@ -166,18 +168,18 @@ sub results {
         }
         my $res;
 
-        if (/Result:\s+(PASS)/){
-            $log->_7("$ver PASSED...");
-            $res = $1;
+        if (/Successfully tested /){
+            $log->_6("$ver PASSED...");
+            $res = 'PASS';
         }
         else {
-            $log->_7("$ver FAILED...");
+            $log->_6("$ver FAILED...");
             print $_;
             $fail = 1;
             last;
         }
 
-        $log->_7("$ver :: $res");
+        $log->_6("$ver :: $res");
         push @pass, "$ver :: $res\n";
     }
 
@@ -186,7 +188,7 @@ sub results {
         print $_ for @pass;
     }
 
-    $log->_7(__PACKAGE__ ." run finished");
+    $log->_6(__PACKAGE__ ." run finished");
 }
 sub run {
     my $self = shift;
@@ -194,7 +196,7 @@ sub run {
     my $new = defined $self->{args}{new} ? $self->{args}{new} : 0;
 
     my $log = $log->child('run');
-    $log->_7("commencing run()");
+    $log->_6("commencing run()");
 
     my $brew_info = $self->brew_info;
 
@@ -231,31 +233,31 @@ sub exec {
 
     my $log = $log->child('exec');
 
-    $log->_7("creating temp file");
+    $log->_6("creating temp file");
 
     my $wfh = File::Temp->new(UNLINK => 1);
     my $fname = $wfh->filename;
 
-    $log->_7("temp filename: $fname");
-    $log->_7("fetching instructions from the plugin");
-    $log->_7("instructions to be executed:");
+    $log->_6("temp filename: $fname");
+    $log->_6("fetching instructions from the plugin");
+    $log->_6("instructions to be executed:");
 
-    my @exec_cmd = $self->{exec_plugin}->();
+    my @exec_cmd = $self->{exec_plugin}->(@{ $self->{args}{args} });
 
     for (@exec_cmd){
-        $log->_7($_);
+        $log->_6($_);
         print $wfh $_;
     }
     close $wfh;
 
-    $log->_7("temp file handle closed");
+    $log->_6("temp file handle closed");
 
     my $brew = $bcmd->brew;
 
     if ($self->{args}{on}){
         my $vers = join ',', @{ $self->{args}{on} };
-        $log->_7("versions to run on: $vers");
-        $log->_7("exec'ing: $brew exec --with $vers perl $fname");
+        $log->_6("versions to run on: $vers");
+        $log->_6("exec'ing: $brew exec --with $vers perl $fname");
 
         if ($bcmd->is_win){
             return `$brew exec --with $vers perl $fname 2>nul`;
@@ -266,7 +268,7 @@ sub exec {
         }
     }
     else {
-        $log->_7("exec'ing: $brew exec perl $fname");
+        $log->_6("exec'ing: $brew exec perl $fname");
 
         if ($bcmd->is_win) {
             return `$brew exec perl $fname 2>nul`;
@@ -283,7 +285,7 @@ sub brew_info {
 
     my $brew_info = $bcmd->available;
 
-    $log->_7("brew info set to:\n$brew_info") if $brew_info;
+    $log->_6("brew info set to:\n$brew_info") if $brew_info;
 
     return $brew_info;
 }
@@ -295,20 +297,20 @@ sub _create_log {
         level => $level,
     );
 
-    $self->{log}->_7("in _create_log()");
+    $self->{log}->_6("in _create_log()");
 
     if (defined $level && $level < 6){
         $self->{log}->display(0);
         $self->{log}->custom_display("-");
-        $self->{log}->_7("setting log level to $level");
-        $self->{log}->_7("log object created with level $level");
+        $self->{log}->_6("setting log level to $level");
+        $self->{log}->_6("log object created with level $level");
     }
 
     return $self->{log};
 }
 sub log {
     my $self = shift;
-    $self->{log}->_7(ref($self) ." class/obj retrieving a log object");
+    $self->{log}->_6(ref($self) ." class/obj retrieving a log object");
     return $self->{log};
 }
 sub is_win {

@@ -1,5 +1,13 @@
 Revision history for Test-BrewBuild
 
+1.02    2016-03-24
+        - default plugin now uses cpanm for all installs, rendering the build
+          system in use irrelevant (should work for distzilla) (closes #29)
+        - modified logging levels
+        - added new --args arg to 'brewbuild', this is an aref that gets
+          dereferenced and the list passed into the 'brewbuild_exec()'sub
+          in each plugin
+
 1.01    2016-03-22
         - set README to the binary, not the module... d'oh!
 

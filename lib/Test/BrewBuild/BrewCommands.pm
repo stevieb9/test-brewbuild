@@ -13,20 +13,20 @@ sub new {
 
     $self->{log} = $plog->child('Test::BrewBuild::BrewCommands');
     $log = $self->{log};
-    $log->_7("constructing new Test::BrewBuild::BrewCommands object");
+    $log->_6("constructing new Test::BrewBuild::BrewCommands object");
 
     return $self;
 }
 sub brew {
     my $self = shift;
     my $brew = $self->is_win ? 'berrybrew' : 'perlbrew';
-    $log->child('brew')->_7("*brew cmd is: $brew");
+    $log->child('brew')->_6("*brew cmd is: $brew");
     return $brew;
 }
 sub installed {
     my ($self, $info) = @_;
 
-    $log->child('installed')->_7("cleaning up perls installed");
+    $log->child('installed')->_6("cleaning up perls installed");
 
     return if ! $info;
 
@@ -41,7 +41,7 @@ sub available {
 
     if ($info){
 
-        $log->child('available')->_7("determining available perls");
+        $log->child('available')->_6("determining available perls");
 
         my @avail = $self->is_win
             ? $info =~ /(\d\.\d+\.\d+_\d+)/g
@@ -51,7 +51,7 @@ sub available {
     }
     else {
 
-        $log->child('available')->_7("generating available");
+        $log->child('available')->_6("generating available");
 
         return $self->is_win
             ? `berrybrew available 2>nul`
@@ -65,7 +65,7 @@ sub install {
         ? 'berrybrew install'
         : 'perlbrew install --notest -j 4';
 
-    $log->child('install')->_7("install cmd is: $install_cmd");
+    $log->child('install')->_6("install cmd is: $install_cmd");
 
     return $install_cmd;
 }
@@ -76,7 +76,7 @@ sub remove {
         ? 'berrybrew remove'
         : 'perlbrew uninstall';
 
-    $log->child('remove')->_7("remove cmd is: $remove_cmd");
+    $log->child('remove')->_6("remove cmd is: $remove_cmd");
 
     return $remove_cmd;
 }
