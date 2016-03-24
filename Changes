@@ -5,6 +5,7 @@ Revision history for Test-BrewBuild
           has elements, and on each pass, the plugin receives the current arg
           in the list
         - --args disables both --new and --remove, because of the looping
+        - plugins now get a copy of the parent log for cloning
 
 1.02    2016-03-24
         - default plugin now uses cpanm for all installs, rendering the build

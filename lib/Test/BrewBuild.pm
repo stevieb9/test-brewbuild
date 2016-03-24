@@ -239,10 +239,12 @@ sub exec {
     my $fname = $wfh->filename;
 
     $log->_6("temp filename: $fname");
-    $log->_6("fetching instructions from the plugin with arg $self->{args}{plugin_arg}");
+    if ($self->{args}{plugin_arg}) {
+        $log->_6( "fetching instructions from the plugin with arg $self->{args}{plugin_arg}" );
+    }
     $log->_6("instructions to be executed:");
 
-    my @exec_cmd = $self->{exec_plugin}->($self->{args}{plugin_arg});
+    my @exec_cmd = $self->{exec_plugin}->($self->log, $self->{args}{plugin_arg});
 
     for (@exec_cmd){
         $log->_6($_);
