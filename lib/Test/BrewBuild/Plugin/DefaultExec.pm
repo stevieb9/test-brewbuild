@@ -5,8 +5,12 @@ package Test::BrewBuild::Plugin::DefaultExec;
 our $VERSION = '1.03';
 
 sub brewbuild_exec {
-    shift;
+    shift if ref $_[0] ne 'Logging::Simple';
+
     my $log = shift;
+    my $clog = $log->child( __PACKAGE__.'::brewbuild_exec' );
+    $clog->_6( 'performing plugin duties' );
+
     return <DATA>;
 }
 

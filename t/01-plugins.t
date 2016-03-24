@@ -70,7 +70,7 @@ my $bb = $mod->new;
 }
 { # test content of default plugin
     my $plugin = $bb->plugins;
-    my @ret = $plugin->brewbuild_exec;
+    my @ret = $plugin->brewbuild_exec( Logging::Simple->new );
     my @data = <DATA>;
 
     is (@ret, @data, "default plugin returns the correct num of lines of code");
