@@ -11,15 +11,16 @@ use Test::BrewBuild;
 
 our $VERSION = '1.03';
 
+my $log = Test::BrewBuild->new()->log()->child('brewbuild');
 my (%args, $help);
 
 GetOptions(
     "on=s@"         => \$args{on},
-    "remove"        => \$args{remove},
     "new=i"         => \$args{new},
-    "revdep|R"      => \$args{revdep},
+    "remove|r"      => \$args{remove},
+    "revdep"        => \$args{revdep},
     "plugin=s"      => \$args{plugin},
-    "args=s@"        => \$args{args},
+    "args=s@"       => \$args{args},
     "debug=i"       => \$args{debug},
     "version=s@"    => \$args{version},
     "help"          => \$help,
@@ -35,7 +36,7 @@ Options:
 --on     | -o:  String, perl version number to run against (can be supplied multiple times
 --plugin | -p:  String, the module name of the exec command plugin to use
 --args   | -a:  List of args to pass into the plugin (one arg per loop)
---revdep | -R:  Run tests, install, then run tests on all CPAN reverse dependency modules
+--revdep        Run tests, install, then run tests on all CPAN reverse dependency modules
 --debug  | -d:  Int (0-7), sets logging verbosity
 --new    | -n:  Integer, how many random versions of perl to install
 --remove | -r:  Bool, remove all installed perls (less the current one) before installation of new ones
@@ -64,17 +65,27 @@ if (! grep { -x "$_/$brew_prog"}split /$sep/,$ENV{PATH}){
 }
 
 if ($args{revdep}){
+
+    $log->_6('running --revdep');
+
     delete $args{args};
     load 'CPAN::ReverseDependencies';
 
     find({ wanted => \&_module_find, no_chdir => 1}, 'lib/');
     my $mod = $modules[0];
+
+    $log->_7("using '$mod' as the project we're working on");
+
     $mod =~ s|lib/||;
     $mod =~ s|/|-|g;
     $mod =~ s|\.pm||;
 
+    $log->_7("working module translated to $mod");
+
     my $rvdep = CPAN::ReverseDependencies->new;
     my @revdeps = $rvdep->get_reverse_dependencies($mod);
+
+    $log->_7("reverse deps: " . join ', ', @revdeps);
 
     $args{plugin} = 'Test::BrewBuild::Plugin::TestAgainst';
 
@@ -87,6 +98,8 @@ if ($args{revdep}){
 elsif (defined $args{args}){
     my %opts = %args;
 
+    $log->_7("running a plugin with args");
+
     delete $args{args};
 
     for (@{ $opts{args} }) {
@@ -98,12 +111,13 @@ elsif (defined $args{args}){
     delete $args{remove};
 }
 else {
+    $log->_7("default run");
     _exec_brew(%args);
 }
 sub _exec_brew {
     my $brew = Test::BrewBuild->new(%args);
 
-    my $log = $brew->log()->child('brewbuild.pl');
+    $log = $log->child('_exec_brew');
 
     my @opts;
     for (keys %args){
@@ -115,6 +129,8 @@ sub _exec_brew {
     $brew->run;
 }
 sub _module_find {
+    $log = $log->child('_module_find');
+    $log->_7("finding modules");
     push @modules, $_ if -f $_;
 }
 =pod
@@ -156,7 +172,7 @@ Run tests on the local working copy of the current module, then run all tests
 of all reverse dependencies of this module (as reported by CPAN), to ensure
 the down river modules will work with your new build
 
-    brewbuild --revdep # or -R
+    brewbuild --revdep
 
 Install three new instances of perl, randomly
 

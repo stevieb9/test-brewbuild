@@ -15,6 +15,9 @@ Revision history for Test-BrewBuild
         - add tests for --args param for plugins (closes #32)
         - we now croak if there's no 't/' dir, as there'd be nothing to test
           (closes #34)
+        - removed -R flag, -r was interfering. We'll figure this out later
+        - cleaned up logging. By default 0 will display install/remove actions,
+          all other logging needs debug 5-7 (closes #37)
 
 1.02    2016-03-24
         - default plugin now uses cpanm for all installs, rendering the build

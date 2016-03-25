@@ -31,7 +31,7 @@ SYNOPSIS
     tests of all reverse dependencies of this module (as reported by CPAN),
     to ensure the down river modules will work with your new build
 
-        brewbuild --revdep # or -R
+        brewbuild --revdep
 
     Install three new instances of perl, randomly
 
