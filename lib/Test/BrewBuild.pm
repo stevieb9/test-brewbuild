@@ -8,7 +8,7 @@ use Logging::Simple;
 use Test::BrewBuild::BrewCommands;
 use Plugin::Simple default => 'Test::BrewBuild::Plugin::DefaultExec';
 
-our $VERSION = '1.03';
+our $VERSION = '1.03_01';
 
 my $log;
 my $bcmd;
@@ -306,11 +306,10 @@ sub _create_log {
 
     $self->{log}->_7("in _create_log()");
 
-    if (defined $level && $level < 6){
+    if ($self->{log}->level < 6){
         $self->{log}->display(0);
         $self->{log}->custom_display("-");
-        $self->{log}->_6("setting log level to $level");
-        $self->{log}->_6("log object created with level $level");
+        $self->{log}->_6("set log level to " . defined $level ? $level : 4);
     }
 
     return $self->{log};

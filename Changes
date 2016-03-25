@@ -1,6 +1,6 @@
 Revision history for Test-BrewBuild
 
-1.03    xxxx
+1.03    2016-03-25
         - if --args is passed in, brewbuild runs the number of times the list
           has elements, and on each pass, the plugin receives the current arg
           in the list

@@ -85,7 +85,7 @@ if ($args{revdep}){
     my $rvdep = CPAN::ReverseDependencies->new;
     my @revdeps = $rvdep->get_reverse_dependencies($mod);
 
-    $log->_7("reverse deps: " . join ', ', @revdeps);
+    $log->_0("working on reverse dependencies: " . join ', ', @revdeps);
 
     $args{plugin} = 'Test::BrewBuild::Plugin::TestAgainst';
 
