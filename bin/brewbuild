@@ -129,73 +129,70 @@ that all arguments passed into the script have single-letter counterparts. Also
 note that each time the command is run, your unit tests will be run on all
 installed *brew instances.
 
-    # run all unit tests against all installed instances with no other action
+Run all unit tests against all installed instances with no other action
 
     brewbuild
 
-    # yep, its that easy. Here's sample output:
+    # output
 
     perl-5.8.9 :: PASS
     perl-5.20.3 :: PASS
     perl-5.22.1 :: PASS
 
-    # print usage information
+Print usage information
 
     brewbuild -h
 
-    # run on specific versions only
+Run on specific versions only
 
     brewbuild --on 5.20.3 -o 5.8.9
 
-    # run tests on working directory, then run all tests of all reverse
-    # dependencies of this current module (as reported by CPAN), to ensure
-    # the down river modules will work with your new build
+Run tests on the local working copy of the current module, then run all tests
+of all reverse dependencies of this module (as reported by CPAN), to ensure
+the down river modules will work with your new build
 
     brewbuild --revdep # or -R
 
-    # install three new instances of perl, randomly
+Install three new instances of perl, randomly
 
     brewbuild --new 3
 
-    # enable debugging, and run against all installed instances (can be used
-    # in conjunction with all other args). Use 0-7 as the argument to it.
-    # Set to 5 to get typical output beyond just the results
+Enable verbose output. '5' displays typical output. '7' is full debug
 
     brewbuild --debug 5
 
-    # remove all perl instances (less the currently used one), install two
-    # new random versions, and run tests against all installed perls
+Remove all perl instances (less the currently used one), install two new random
+versions, and run tests against all installed perls
 
     brewbuild --remove --new 2
 
-    # install all available perl versions, and run tests against all of them
+Install all available perl versions, and run tests against all of them
 
     brewbuild --new -1
 
-    # install a specific version and run tests on all instances (include just
-    # the number portion of the version per "perlbrew available" or "berrybrew
-    # available"
+Install a specific version and run tests on all instances (include just the
+number portion of the version per "perlbrew available" or "berrybrew available"
 
     brewbuild --version 5.20.3
 
-    # multiple versions can be passed in at once
+...multiple versions can be passed in at once
 
     brewbuild -v 5.20.3 -v 5.14.4 -v 5.23.5
 
-    # use a custom plugin containing the build/test commands to pass to
-    # 'perlbrew exec' (can also be set in $ENV{TBB_PLUGIN} for persistence).
-    # The plugin arg will take a filename as well if the module isn't
-    # installed. Send in the relative/full path if the plugin isn't in the
-    # current working directory.
+Use a custom plugin containing the build/test commands to pass to 'perlbrew
+exec' (can also be set in $ENV{TBB_PLUGIN} for persistence).
 
-    # your 'brewbuild_exec() function will receive a L<Logging::Simple> object,
-    # followed by a single argument if specified per below
+The plugin arg will take a filename as well if the module isn't installed. Send
+in the relative/full path if the plugin isn't in the current working directory.
+
+Your 'brewbuild_exec()' function will receive a L<Logging::Simple> object,
+followed by a single argument if specified per below
 
     brewbuild --plugin 'Test::BrewBuild::Plugin::DefaultExec' # default
 
-    # send in args that custom plugins can use. brewbuild will be called once
-    # for each arg, passing a single argument from the list specified on each
-    # run. Note: --new and --remove are only executed on the first loop
+Send in args that custom plugins can use. brewbuild will be called once for
+each arg, passing a single argument from the list specified on each run. Note:
+--new and --remove are only executed on the first loop
 
     brewbuild -p My::Plugin --args 1 -a 2
 

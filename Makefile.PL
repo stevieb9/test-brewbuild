@@ -47,7 +47,7 @@ WriteMakefile(
         'CPAN::ReverseDependencies' => 0,
         'Logging::Simple' => '0.07',
         'Module::Load'  => 0,   # corelist since 5.9.4
-        'Plugin::Simple' => '0.05',
+        'Plugin::Simple' => '0.06',
     },
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean => { FILES => 'Test-BrewBuild-*' },

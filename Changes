@@ -9,7 +9,9 @@ Revision history for Test-BrewBuild
         - added --revdep, tests all CPAN reverse dependencies on the module
           you're testing
         - added prereq CPAN::ReverseDependencies for --revdep
-        -
+        - Plugin::Simple v0.06 now required (fixes #28, #30)
+        - documented $log as first param to a plugin (closes #35)
+        - cleaned up SYNOPSIS (closes #38)
 
 1.02    2016-03-24
         - default plugin now uses cpanm for all installs, rendering the build
