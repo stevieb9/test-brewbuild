@@ -244,7 +244,11 @@ sub exec {
     }
     $log->_6("instructions to be executed:");
 
-    my @exec_cmd = $self->{exec_plugin}->($self->log, $self->{args}{plugin_arg});
+    my @exec_cmd = $self->{exec_plugin}->(
+        __PACKAGE__,
+        $self->log,
+        $self->{args}{plugin_arg}
+    );
 
     for (@exec_cmd){
         $log->_6($_);

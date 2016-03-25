@@ -9,6 +9,8 @@ use Test::More;
 my $mod = 'Test::BrewBuild';
 my $bb = $mod->new;
 
+#*plugins = \&Test::BrewBuild::plugins;
+
 { # default plugin
     my $plugin = $bb->plugins('Test::BrewBuild::Plugin::DefaultExec');
 
@@ -69,7 +71,7 @@ my $bb = $mod->new;
     );
 }
 { # test content of default plugin
-    my $plugin = $bb->plugins;
+    my $plugin = $bb->plugins();
     my @ret = $plugin->brewbuild_exec( Logging::Simple->new );
     my @data = <DATA>;
 
