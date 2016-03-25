@@ -13,7 +13,8 @@ Revision history for Test-BrewBuild
         - documented $log as first param to a plugin (closes #35)
         - cleaned up SYNOPSIS (closes #38)
         - add tests for --args param for plugins (closes #32)
-        -
+        - we now croak if there's no 't/' dir, as there'd be nothing to test
+          (closes #34)
 
 1.02    2016-03-24
         - default plugin now uses cpanm for all installs, rendering the build

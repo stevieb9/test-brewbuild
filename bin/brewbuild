@@ -2,6 +2,7 @@
 use warnings;
 use strict;
 
+use Carp qw(croak);
 use Getopt::Long;
 Getopt::Long::Configure('pass_through');
 use File::Find;
@@ -42,6 +43,10 @@ Options:
 --help   | -h:  print this help message
 EOF
 exit;
+}
+
+if (! -d 't/'){
+    croak "\nthere's no 't/' directory, nothing to test. Exiting...\n";
 }
 
 my $is_win = $^O =~ /MSWin/ ? 1 : 0;
