@@ -3,13 +3,12 @@ use warnings;
 use strict;
 
 use Carp qw(croak);
-use Getopt::Long;
-Getopt::Long::Configure('pass_through');
+use Getopt::Long qw(:config no_ignore_case pass_through);
 use File::Find;
 use Module::Load;
 use Test::BrewBuild;
 
-our $VERSION = '1.03';
+our $VERSION = '1.03_02';
 
 my $log = Test::BrewBuild->new()->log()->child('brewbuild');
 my (%args, $help);
@@ -17,8 +16,8 @@ my (%args, $help);
 GetOptions(
     "on=s@"         => \$args{on},
     "new=i"         => \$args{new},
-    "remove|r"      => \$args{remove},
-    "revdep"        => \$args{revdep},
+    "r|remove"      => \$args{remove},
+    "R|revdep"      => \$args{revdep},
     "plugin=s"      => \$args{plugin},
     "args=s@"       => \$args{args},
     "debug=i"       => \$args{debug},
@@ -36,7 +35,7 @@ Options:
 --on     | -o:  String, perl version number to run against (can be supplied multiple times
 --plugin | -p:  String, the module name of the exec command plugin to use
 --args   | -a:  List of args to pass into the plugin (one arg per loop)
---revdep        Run tests, install, then run tests on all CPAN reverse dependency modules
+--revdep | -R   Run tests, install, then run tests on all CPAN reverse dependency modules
 --debug  | -d:  Int (0-7), sets logging verbosity
 --new    | -n:  Integer, how many random versions of perl to install
 --remove | -r:  Bool, remove all installed perls (less the current one) before installation of new ones
@@ -172,7 +171,7 @@ Run tests on the local working copy of the current module, then run all tests
 of all reverse dependencies of this module (as reported by CPAN), to ensure
 the down river modules will work with your new build
 
-    brewbuild --revdep
+    brewbuild --revdep # or -R
 
 Install three new instances of perl, randomly
 
