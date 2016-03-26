@@ -2,7 +2,7 @@ package Test::BrewBuild::Plugin::DefaultExec;
 
 # default exec command set plugin for Test::BrewBuild
 
-our $VERSION = '1.03';
+our $VERSION = '1.03_02';
 
 sub brewbuild_exec {
     shift; # throw away the class
@@ -55,4 +55,4 @@ Steve Bertrand, C<< <steveb at cpan.org> >>
 =cut
 
 __DATA__
-system "cpanm --installdeps . && cpanm --test-only .";
+system "cpanm --installdeps . && cpanm -v --test-only .";

@@ -146,48 +146,57 @@ sub results {
     my $log = $log->child('results');
 
     local $SIG{__WARN__} = sub {};
-
     $log->_7("warnings trapped locally");
 
     my $result = $self->exec;
 
     $log->_7($result);
 
-    my @ver_results = $result =~ /[Pp]erl-\d\.\d+\.\d+.*?(?:Successfully tested .*?\n|FAIL\n)/gs;
+    my @ver_results = $result =~ /[Pp]erl-\d\.\d+\.\d+\n===.*?(?=(?:[Pp]erl-\d\.\d+\.\d+\n===|$))/gs;
 
     $log->_6("got " . scalar @ver_results . " results");
 
-    my @pass;
-    my $fail = 0;
+    my (@pass, @fail);
 
     for (@ver_results){
         my $ver;
 
         if (/^([Pp]erl-\d\.\d+\.\d+)/){
             $ver = $1;
+            $ver =~ s/[Pp]erl-//;
         }
         my $res;
 
         if (/Successfully tested /){
             $log->_7("$ver PASSED...");
             $res = 'PASS';
+            push @pass, "$ver :: $res\n";
         }
         else {
             $log->_7("$ver FAILED...");
-            print $_;
-            $fail = 1;
-            last;
+            $res = 'FAIL';
+            push @fail, "$ver :: $res\n";
+
+            my $tested_mod = $self->{args}{plugin_arg};
+
+            if (defined $tested_mod){
+                $tested_mod =~ s/::/-/g;
+                open my $wfh, '>', "$tested_mod-$ver.bblog"  or die $!;
+                print $wfh $_;
+                close $wfh;
+            }
+            else {
+                open my $wfh, '>', "$ver.bblog"  or die $!;
+                print $wfh $_;
+                close $wfh;
+            }
         }
-
-        $log->_6("$ver :: $res");
-        push @pass, "$ver :: $res\n";
     }
 
-    if (! $fail) {
-        print "\n";
-        print "$self->{args}{plugin_arg}\n" if $self->{args}{plugin_arg};
-        print $_ for @pass;
-    }
+    print "\n";
+    print "$self->{args}{plugin_arg}\n" if $self->{args}{plugin_arg};
+    print $_ for @pass;
+    print $_ for @fail;
 
     $log->_6(__PACKAGE__ ." run finished");
 }
@@ -267,21 +276,21 @@ sub exec {
         $log->_6("exec'ing: $brew exec --with $vers perl $fname");
 
         if ($bcmd->is_win){
-            return `$brew exec --with $vers perl $fname 2>nul`;
+            return `$brew exec --with $vers perl $fname 2>brewbuild_err.bblog`;
 
         }
         else {
-            return `$brew exec --with $vers perl $fname 2>/dev/null`;
+            return `$brew exec --with $vers perl $fname 2>brewbuild_err.bblog`;
         }
     }
     else {
         $log->_6("exec'ing: $brew exec perl $fname");
 
         if ($bcmd->is_win) {
-            return `$brew exec perl $fname 2>nul`;
+            return `$brew exec perl $fname 2>brewbuild_err.bblog`;
         }
         else {
-            return `$brew exec perl $fname 2>/dev/null`;
+            return `$brew exec perl $fname 2>brewbuild_err.bblog`;
         }
     }
 }

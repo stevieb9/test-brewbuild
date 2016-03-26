@@ -1,5 +1,14 @@
 Revision history for Test-BrewBuild
 
+1.03_02 2016-03-26
+        - FAIL strategy completed. If there's STDERR output, we write it all to
+          brewbuild_err.bblog. FAIL reports go into $perlver.bblog, and if
+          we're using a plugin that accepts a module, we put fail reports into
+          Tested::Module-$perlver.bblog, with the '::' replaced into '-'. The
+          results (PASS and FAIL) are now all displayed at the end of output
+          for easy identification
+          (closes #43)
+
 1.03_01 2016-03-25
         - if --args is passed in, brewbuild runs the number of times the list
           has elements, and on each pass, the plugin receives the current arg
