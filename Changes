@@ -7,6 +7,10 @@ Revision history for Test-BrewBuild
           Tested::Module-$perlver.bblog, with the '::' replaced into '-'. The
           results (PASS and FAIL) are now all displayed at the end of output
           for easy identification (closes #43)
+        - fixed case-insensitivity bug with options. -R and -r now do the
+          respective Right Thing
+        - cpanm is now called with the -v flag on the --test-only portion of
+          the default plugin
 
 1.03_01 2016-03-25
         - if --args is passed in, brewbuild runs the number of times the list
