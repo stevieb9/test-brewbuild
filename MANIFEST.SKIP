@@ -30,3 +30,5 @@ build/
 ^\w+.list$
 .bblog$
 .base$
+BB-Pass/
+BB-Fail/
