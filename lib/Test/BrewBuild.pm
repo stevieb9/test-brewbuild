@@ -8,7 +8,7 @@ use Logging::Simple;
 use Test::BrewBuild::BrewCommands;
 use Plugin::Simple default => 'Test::BrewBuild::Plugin::DefaultExec';
 
-our $VERSION = '1.03_02';
+our $VERSION = '1.04';
 
 my $log;
 my $bcmd;
@@ -19,20 +19,20 @@ sub new {
     %{ $self->{args} } = %args;
 
     $log = $self->_create_log($args{debug});
-    $log->_7("in new(), constructing " . __PACKAGE__ . " object");
+    $log->_6("in new(), constructing " . __PACKAGE__ . " object");
 
     $bcmd = Test::BrewBuild::BrewCommands->new($log);
 
     my $plugin = $args{plugin} ? $args{plugin} : $ENV{TBB_PLUGIN};
 
-    $log->_6("plugin param set to: " . defined $plugin ? $plugin : 'default');
+    $log->_5("plugin param set to: " . defined $plugin ? $plugin : 'default');
 
     $plugin = $self->plugins($plugin, can => ['brewbuild_exec']);
 
     my $exec_plugin_sub = $plugin .'::brewbuild_exec';
     $self->{exec_plugin} = \&$exec_plugin_sub;
 
-    $log->_5("successfully loaded $plugin plugin");
+    $log->_4("successfully loaded $plugin plugin");
 
     return $self;
 }
@@ -43,7 +43,7 @@ sub perls_available {
 
     my @perls_available = $bcmd->available($brew_info);
 
-    $log->_7("perls available: " . join ', ', @perls_available);
+    $log->_6("perls available: " . join ', ', @perls_available);
 
     return @perls_available;
 }
@@ -51,7 +51,7 @@ sub perls_installed {
     my ($self, $brew_info) = @_;
 
     my $log = $log->child('perls_installed');
-    $log->_7("checking perls installed");
+    $log->_6("checking perls installed");
 
     return $bcmd->installed($brew_info);
 }
@@ -60,23 +60,23 @@ sub instance_remove {
 
     my $log = $log->child('instance_remove');
 
-    $log->_7("perls installed: " . join ', ', @perls_installed);
+    $log->_6("perls installed: " . join ', ', @perls_installed);
     $log->_0("removing previous installs...");
 
     my $remove_cmd = $bcmd->remove;
 
-    $log->_5("using $remove_cmd remove command");
+    $log->_4("using $remove_cmd remove command");
 
     for (@perls_installed){
         my $ver = $^V;
         $ver =~ s/v//;
 
         if ($_ =~ /$ver$/){
-            $log->_6("skipping version we're using, $_");
+            $log->_5("skipping version we're using, $_");
             next;
         }
 
-        $log->_6("exec'ing $remove_cmd");
+        $log->_5("exec'ing $remove_cmd");
 
         if ($bcmd->is_win) {
             `$remove_cmd $_ 2>nul`;
@@ -87,7 +87,7 @@ sub instance_remove {
         }
     }
 
-    $log->_5("removal of existing perl installs complete...");
+    $log->_4("removal of existing perl installs complete...");
 }
 sub instance_install {
     my ($self, $new, $perls_available, $perls_installed) = @_;
@@ -101,7 +101,7 @@ sub instance_install {
     if ($self->{args}{version}->[0]){
         for my $version (@{ $self->{args}{version} }){
             if (grep { $version eq $_ } @{ $perls_installed }){
-                $log->_7("$version is already installed... skipping");
+                $log->_6("$version is already installed... skipping");
                 next;
             }
             push @new_installs, $version;
@@ -110,14 +110,14 @@ sub instance_install {
     else {
         if ($new){
 
-            $log->_6("looking to install $new perl instance(s)");
+            $log->_5("looking to install $new perl instance(s)");
 
             while ($new > 0){
 
                 my $candidate = $perls_available->[rand @{ $perls_available }];
 
                 if (grep { $_ eq $candidate } @{ $perls_installed }) {
-                    $log->_7( "$candidate already installed... skipping" );
+                    $log->_6( "$candidate already installed... skipping" );
                     next;
                 }
 
@@ -128,16 +128,16 @@ sub instance_install {
     }
 
     if (@new_installs){
-        $log->_5("preparing to install..." . join ', ', @new_installs);
+        $log->_4("preparing to install..." . join ', ', @new_installs);
 
         for my $ver (@new_installs){
             $log->_0("installing $ver...");
-            $log->_6("...using cmd: $install_cmd");
+            $log->_5("...using cmd: $install_cmd");
             `$install_cmd $ver`;
         }
     }
     else {
-        $log->_6("using existing versions only");
+        $log->_5("using existing versions only");
     }
 }
 sub results {
@@ -146,7 +146,7 @@ sub results {
     my $log = $log->child('results');
 
     local $SIG{__WARN__} = sub {};
-    $log->_7("warnings trapped locally");
+    $log->_6("warnings trapped locally");
 
     my $result = $self->exec;
 
@@ -154,7 +154,7 @@ sub results {
 
     my @ver_results = $result =~ /[Pp]erl-\d\.\d+\.\d+\n===.*?(?=(?:[Pp]erl-\d\.\d+\.\d+\n===|$))/gs;
 
-    $log->_6("got " . scalar @ver_results . " results");
+    $log->_5("got " . scalar @ver_results . " results");
 
     my (@pass, @fail);
 
@@ -168,12 +168,12 @@ sub results {
         my $res;
 
         if (/Successfully tested /){
-            $log->_7("$ver PASSED...");
+            $log->_6("$ver PASSED...");
             $res = 'PASS';
             push @pass, "$ver :: $res\n";
         }
         else {
-            $log->_7("$ver FAILED...");
+            $log->_6("$ver FAILED...");
             $res = 'FAIL';
             push @fail, "$ver :: $res\n";
 
@@ -198,7 +198,7 @@ sub results {
     print $_ for @pass;
     print $_ for @fail;
 
-    $log->_6(__PACKAGE__ ." run finished");
+    $log->_5(__PACKAGE__ ." run finished");
 }
 sub run {
     my $self = shift;
@@ -206,7 +206,7 @@ sub run {
     my $new = defined $self->{args}{new} ? $self->{args}{new} : 0;
 
     my $log = $log->child('run');
-    $log->_6("commencing run()");
+    $log->_5("commencing run()");
 
     my $brew_info = $self->brew_info;
 
@@ -216,7 +216,7 @@ sub run {
 
     my @perls_installed = $self->perls_installed($brew_info);
 
-    $log->_5("installed perls: " . join ', ', @perls_installed);
+    $log->_4("installed perls: " . join ', ', @perls_installed);
 
     if ($self->{args}{remove}){
         $self->instance_remove(@perls_installed);
@@ -242,14 +242,14 @@ sub exec {
 
     my $log = $log->child('exec');
 
-    $log->_7("creating temp file");
+    $log->_6("creating temp file");
 
     my $wfh = File::Temp->new(UNLINK => 1);
     my $fname = $wfh->filename;
 
-    $log->_7("temp filename: $fname");
+    $log->_6("temp filename: $fname");
     if ($self->{args}{plugin_arg}) {
-        $log->_6( "fetching instructions from the plugin with arg $self->{args}{plugin_arg}" );
+        $log->_5( "fetching instructions from the plugin with arg $self->{args}{plugin_arg}" );
     }
     
     my @exec_cmd = $self->{exec_plugin}->(
@@ -258,22 +258,22 @@ sub exec {
         $self->{args}{plugin_arg}
     );
 
-    $log->_7("instructions to be executed:\n" . join ', ', @exec_cmd);
+    $log->_6("instructions to be executed:\n" . join ', ', @exec_cmd);
 
     for (@exec_cmd){
-        $log->_7($_);
+        $log->_6($_);
         print $wfh $_;
     }
     close $wfh;
 
-    $log->_7("temp file handle closed");
+    $log->_6("temp file handle closed");
 
     my $brew = $bcmd->brew;
 
     if ($self->{args}{on}){
         my $vers = join ',', @{ $self->{args}{on} };
-        $log->_6("versions to run on: $vers");
-        $log->_6("exec'ing: $brew exec --with $vers perl $fname");
+        $log->_5("versions to run on: $vers");
+        $log->_5("exec'ing: $brew exec --with $vers perl $fname");
 
         if ($bcmd->is_win){
             return `$brew exec --with $vers perl $fname 2>brewbuild_err.bblog`;
@@ -284,7 +284,7 @@ sub exec {
         }
     }
     else {
-        $log->_6("exec'ing: $brew exec perl $fname");
+        $log->_5("exec'ing: $brew exec perl $fname");
 
         if ($bcmd->is_win) {
             return `$brew exec perl $fname 2>brewbuild_err.bblog`;
@@ -301,7 +301,7 @@ sub brew_info {
 
     my $brew_info = $bcmd->available;
 
-    $log->_7("brew info set to:\n$brew_info") if $brew_info;
+    $log->_6("brew info set to:\n$brew_info") if $brew_info;
 
     return $brew_info;
 }
@@ -313,19 +313,19 @@ sub _create_log {
         level => $level,
     );
 
-    $self->{log}->_7("in _create_log()");
+    $self->{log}->_6("in _create_log()");
 
     if ($self->{log}->level < 6){
         $self->{log}->display(0);
         $self->{log}->custom_display("-");
-        $self->{log}->_6("set log level to " . defined $level ? $level : 4);
+        $self->{log}->_5("set log level to " . defined $level ? $level : 4);
     }
 
     return $self->{log};
 }
 sub log {
     my $self = shift;
-    $self->{log}->_7(ref($self) ." class/obj retrieving a log object");
+    $self->{log}->_6(ref($self) ." class/obj retrieving a log object");
     return $self->{log};
 }
 sub is_win {
