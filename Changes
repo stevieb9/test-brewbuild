@@ -1,5 +1,11 @@
 Revision history for Test-BrewBuild
 
+1.04    xxx
+        - added t/1xx tests, need perlbrew/berrybrew installed to run. Set
+          BBDEV_TESTING environment variable to run these tests
+        - added Archive::Extract prereq for BBDEV_TESTING
+        - fixed bug where --version wasn't doing anything
+
 1.03_02 2016-03-26
         - FAIL strategy completed. If there's STDERR output, we write it all to
           brewbuild_err.bblog. FAIL reports go into $perlver.bblog, and if

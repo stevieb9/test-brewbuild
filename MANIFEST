@@ -21,8 +21,12 @@ t/09-instance_install.t
 t/10-run.t
 t/12-TestPluginInst.t
 t/13-exec.t
+t/99-pass_fail.t
+t/99-remove.dev
+t/99-remove.t
 t/__clean.t
 t/base/UnitTestPlugin.pm
 t/manifest.t
+t/modules/bb-pass.zip
 t/pod-coverage.t
 t/pod.t

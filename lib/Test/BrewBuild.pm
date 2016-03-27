@@ -149,7 +149,7 @@ sub results {
 
     my $result = $self->exec;
 
-    $log->_7($result);
+    $log->_7("\n*****\n$result\n*****");
 
     my @ver_results = $result =~ /[Pp]erl-\d\.\d+\.\d+\n===.*?(?=(?:[Pp]erl-\d\.\d+\.\d+\n===|$))/gs;
 
@@ -222,7 +222,7 @@ sub run {
 
     }
 
-    if ($new) {
+    if ($new || $self->{args}{version}) {
         $self->instance_install($new, \@perls_available, \@perls_installed);
     }
 

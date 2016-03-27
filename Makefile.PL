@@ -44,9 +44,10 @@ WriteMakefile(
     },
     PREREQ_PM => {
         'App::cpanminus' => 0,
+        'Archive::Extract' => 0,
         'CPAN::ReverseDependencies' => 0,
         'Logging::Simple' => '0.07',
-        'Module::Load'  => 0,   # corelist since 5.9.4
+        'Module::Load' => 0,   # corelist since 5.9.4
         'Plugin::Simple' => '0.06',
         'Test::BrewBuild::Plugin::TestAgainst' => '0.03',
     },
