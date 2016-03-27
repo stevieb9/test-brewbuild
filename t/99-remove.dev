@@ -1,0 +1,27 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+use Test::BrewBuild;
+use Test::More;
+
+{
+    # standard brewbuild output after --remove
+    my $ret = `perl bin/brewbuild --remove`;
+    my @res = split /\n/, $ret;
+
+    @res = grep /\S/, @res;
+    print "*$_*\n" for @res;
+
+   # is ($ret, "5.22.1 :: PASS\n", "output from 'brewbuild' with --remove ok");
+}
+#    my $ret = `perl bin/brewbuild --new 1`;
+#    my @res = split /\n/, $ret;
+
+   # is (@res, 2, "proper count of results after --remove and --new 1");
+
+#    for (@res){
+   #     like ($_, qr/\d\.\d+\.\d.*:: PASS/, "$_ ok");
+ #   }
+done_testing();
+

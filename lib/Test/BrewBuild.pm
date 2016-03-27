@@ -2,11 +2,10 @@ package Test::BrewBuild;
 use strict;
 use warnings;
 
-use Data::Dumper;
 use File::Temp;
 use Logging::Simple;
-use Test::BrewBuild::BrewCommands;
 use Plugin::Simple default => 'Test::BrewBuild::Plugin::DefaultExec';
+use Test::BrewBuild::BrewCommands;
 
 our $VERSION = '1.04';
 
@@ -310,7 +309,7 @@ sub _create_log {
 
     $self->{log} = Logging::Simple->new(
         name  => 'Test::BrewBuild',
-        level => $level,
+        level => defined $level ? $level : 0,
     );
 
     $self->{log}->_6("in _create_log()");
@@ -318,7 +317,7 @@ sub _create_log {
     if ($self->{log}->level < 6){
         $self->{log}->display(0);
         $self->{log}->custom_display("-");
-        $self->{log}->_5("set log level to " . defined $level ? $level : 4);
+        $self->{log}->_5("set log level to " . defined $level ? $level : 0);
     }
 
     return $self->{log};
