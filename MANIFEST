@@ -5,7 +5,7 @@ lib/Test/BrewBuild/BrewCommands.pm
 lib/Test/BrewBuild/Plugin/DefaultExec.pm
 lib/Test/BrewBuild/Plugin/UnitTestPluginInst.pm
 Makefile.PL
-MANIFEST			This list of files
+MANIFEST
 MANIFEST.SKIP
 README
 t/00-load.t
@@ -21,12 +21,20 @@ t/09-instance_install.t
 t/10-run.t
 t/12-TestPluginInst.t
 t/13-exec.t
-t/99-pass_fail.t
-t/99-remove.dev
-t/99-remove.t
 t/__clean.t
+t/base/115-level6.data
+t/base/115-level7.data
 t/base/UnitTestPlugin.pm
+t/dev-100-pass.t
+t/dev-101-fail.t
+t/dev-102-version.t
+t/dev-103-v.t
+t/dev-104-pass_fail_multi.t
+t/dev-115-debug.t
+t/dev-120-new.t
+t/dev-125-remove.t
 t/manifest.t
+t/modules/bb-fail.zip
 t/modules/bb-pass.zip
 t/pod-coverage.t
 t/pod.t
