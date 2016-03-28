@@ -9,6 +9,9 @@ Revision history for Test-BrewBuild
           currently in-use perl instance
         - if an invalid arg is sent in to 'berrybrew', we now print help screen
           and exit (closes #45)
+        - fix bug in results(), where the regex wasn't capturing properly on
+          Windows
+        -
 
 1.03_02 2016-03-26
         - FAIL strategy completed. If there's STDERR output, we write it all to

@@ -152,7 +152,7 @@ sub results {
 
     $log->_7("\n*****\n$result\n*****");
 
-    my @ver_results = $result =~ /[Pp]erl-\d\.\d+\.\d+\n===.*?(?=(?:[Pp]erl-\d\.\d+\.\d+\n===|$))/gs;
+    my @ver_results = $result =~ /[Pp]erl-\d\.\d+\.\d+.*?\n===.*?(?=(?:[Pp]erl-\d\.\d+\.\d+.*?\n===|$))/gs;
 
     $log->_5("got " . scalar @ver_results . " results");
 
