@@ -231,7 +231,9 @@ sub run {
         $self->instance_install($new, \@perls_available, \@perls_installed);
     }
 
-    @perls_installed = $self->perls_installed($brew_info);
+    # refetch $brew_info in case we have installed a new one
+
+    @perls_installed = $self->perls_installed($self->brew_info);
 
     if (! $perls_installed[0]){
         $log->_0("no perls installed... exiting");

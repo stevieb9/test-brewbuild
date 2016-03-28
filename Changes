@@ -13,6 +13,9 @@ Revision history for Test-BrewBuild
           Windows
         - added blurb in SYNOPSIS about the importance of having a central
           cpanm (closes #44)
+        - we now re-check brew_info after an install, so we don't exit
+          prematurely thinking no perls are installed, even after a --new 1
+          (closes #46)
 
 1.03_02 2016-03-26
         - FAIL strategy completed. If there's STDERR output, we write it all to
