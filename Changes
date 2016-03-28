@@ -5,6 +5,8 @@ Revision history for Test-BrewBuild
           BBDEV_TESTING environment variable to run these tests
         - added Archive::Extract prereq for BBDEV_TESTING
         - fixed bug where --version wasn't doing anything
+        - fixed bug on Windows where instance_remove() was removing the
+          currently in-use perl instance
 
 1.03_02 2016-03-26
         - FAIL strategy completed. If there's STDERR output, we write it all to

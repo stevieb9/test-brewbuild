@@ -69,6 +69,7 @@ sub instance_remove {
     for (@perls_installed){
         my $ver = $^V;
         $ver =~ s/v//;
+        $_ =~ s/_.*$//;
 
         if ($_ =~ /$ver$/){
             $log->_5("skipping version we're using, $_");
