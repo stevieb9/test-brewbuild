@@ -27,7 +27,7 @@ if (! $ENV{BBDEV_TESTING}){
 
     my $file = $^O =~ /MSWin/
         ? 't/base/115-level7_win.data'
-        : 't/base/115-level7_win.data';
+        : 't/base/115-level7.data';
 
     open my $fh, '<', $file or die $!;
 
@@ -56,7 +56,7 @@ if (! $ENV{BBDEV_TESTING}){
 
     my $file = $^O =~ /MSWin/
         ? 't/base/115-level6_win.data'
-        : 't/base/115-level6_win.data';
+        : 't/base/115-level6.data';
 
     open my $fh, '<', $file or die $!;
     my @base = <$fh>;
