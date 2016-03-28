@@ -11,7 +11,10 @@ if (! $ENV{BBDEV_TESTING}){
     plan skip_all => "developer tests only";
     exit;
 }
-
+if ($^O =~ /MSWin/) {
+    plan skip_all => "skip debug tests on windows";
+    exit;
+}
 { # -d 7
 
     my $ae = Archive::Extract->new(archive => 't/modules/bb-pass.zip');
