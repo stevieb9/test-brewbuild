@@ -26,16 +26,13 @@ if (! $ENV{BBDEV_TESTING}){
     my $ret = `brewbuild --version $new_ver`;
     chdir '..';
 
-    print $ret;
-    done_testing();
-    exit;
     my @res = split /\n/, $ret;
     @res = grep /\S/, @res;
 
     if ($^O =~ /MSWin/) {
-        is ( @res, 2, "proper result count with --version" );
-        like ( $res[0], qr/\d\.\d{2}\.\d :: PASS/, "--version ok $res[0]" );
-        like ( $res[1], qr/\d\.\d{2}\.\d :: PASS/, "--version ok $res[1]" );
+        is ( @res, 3, "proper result count with --version" );
+        like ( $res[1], qr/\d\.\d{2}\.\d.*? :: PASS/, "--version ok $res[0]" );
+        like ( $res[2], qr/\d\.\d{2}\.\d.*? :: PASS/, "--version ok $res[1]" );
     }
     else {
         is ( @res, 3, "proper result count with --version" );

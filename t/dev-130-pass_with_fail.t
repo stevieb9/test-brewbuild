@@ -19,13 +19,17 @@ if (! $ENV{BBDEV_TESTING}){
 
     chdir 'BB-522';
 
+    my $ver = $^O =~ /MSWin/ ? '5.10.1_32' : '5.10.1';
+
     `brewbuild --remove`;
-    my $ret = `brewbuild --version 5.10.1`;
+    my $ret = `brewbuild --version $ver`;
 
     chdir '..';
 
     my @res = split /\n/, $ret;
     @res = grep /\S/, @res;
+
+    print "*$_*\n" for @res;
 
     is (@res, 3, "pass and fail simultaneously has proper count");
     is ($res[1], '5.10.1 :: PASS', "pass & fail $res[1] line 1 ok");

@@ -30,9 +30,10 @@ if (! $ENV{BBDEV_TESTING}){
     @res = grep /\S/, @res;
 
     if ($^O =~ /MSWin/) {
-        is ( @res, 2, "proper result count with -v" );
-        like ( $res[0], qr/\d\.\d{2}\.\d :: PASS/, "-v ok $res[0]" );
-        like ( $res[1], qr/\d\.\d{2}\.\d :: PASS/, "-v ok $res[1]" );
+        is ( @res, 3, "proper result count with -v" );
+        is ( $res[0], "- installing $new_ver...", "-v ok" );
+        like ( $res[1], qr/\d\.\d{2}\.\d.*? :: PASS/, "-v ok $res[1]" );
+        like ( $res[2], qr/\d\.\d{2}\.\d.*? :: PASS/, "-v ok $res[2]" );
     }
     else {
         is ( @res, 3, "proper result count with -v" );
