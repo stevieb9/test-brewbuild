@@ -35,6 +35,7 @@ t/dev-120-new.t
 t/dev-125-remove.t
 t/dev-130-pass_with_fail.t
 t/dev-135-on.t
+t/dev-140-invalid_args.t
 t/manifest.t
 t/modules/bb-522.zip
 t/modules/bb-fail.zip

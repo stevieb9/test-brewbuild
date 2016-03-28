@@ -7,6 +7,8 @@ Revision history for Test-BrewBuild
         - fixed bug where --version wasn't doing anything
         - fixed bug on Windows where instance_remove() was removing the
           currently in-use perl instance
+        - if an invalid arg is sent in to 'berrybrew', we now print help screen
+          and exit (closes #45)
 
 1.03_02 2016-03-26
         - FAIL strategy completed. If there's STDERR output, we write it all to

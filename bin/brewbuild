@@ -25,6 +25,20 @@ GetOptions(
     "help"          => \$help,
 );
 
+my @valid_args = qw(
+    on o new n remove r revdep R plugin p args a debug d version v help h
+);
+
+if (@ARGV){
+    my @args = grep /^-/, @ARGV;
+    for my $arg (@args){
+        $arg =~ s/-//g;
+        if (! grep { $arg eq $_ } @valid_args){
+            $help = 1;
+        }
+    }
+}
+
 if ($help){
     print <<EOF;
 
