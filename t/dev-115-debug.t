@@ -22,11 +22,15 @@ if (! $ENV{BBDEV_TESTING}){
     my $ret = `brewbuild -d 7`;
     chdir '..';
 
-    print $ret;
     my @res = split /\n/, $ret;
     @res = grep /\S/, @res;
 
-    open my $fh, '<', 't/base/115-level7.data' or die $!;
+    my $file = $^O =~ /MSWin/
+        ? 't/base/115-level7_win.data'
+        : 't/base/115-level7_win.data';
+
+    open my $fh, '<', $file or die $!;
+
     my @base = <$fh>;
     close $fh;
     @base = grep /\S/, @base;
@@ -50,7 +54,11 @@ if (! $ENV{BBDEV_TESTING}){
     my @res = split /\n/, $ret;
     @res = grep /\S/, @res;
 
-    open my $fh, '<', 't/base/115-level6.data' or die $!;
+    my $file = $^O =~ /MSWin/
+        ? 't/base/115-level6_win.data'
+        : 't/base/115-level6_win.data';
+
+    open my $fh, '<', $file or die $!;
     my @base = <$fh>;
     close $fh;
     @base = grep /\S/, @base;
@@ -58,8 +66,8 @@ if (! $ENV{BBDEV_TESTING}){
     is (@res, @base, "--devel 6 proper line count");
     like ($res[-1], qr/run finished/, "--devel 6 last line ok");
 
-    remove_tree('BB-Pass');
-    is (-d 'BB-Pass', undef, "--devel 6 dir removed ok");
+    #    remove_tree('BB-Pass');
+    #    is (-d 'BB-Pass', undef, "--devel 6 dir removed ok");
 }
 
 done_testing();
