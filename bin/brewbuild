@@ -158,10 +158,9 @@ brewbuild - This is the front-end script for L<Test::BrewBuild>
 
 =head1 SYNOPSIS
 
-You must be in the root directory of the distribution you want to test. Note
-that all arguments passed into the script have single-letter counterparts. Also
-note that each time the command is run, your unit tests will be run on all
-installed *brew instances.
+You must be in the root directory of the distribution you want to test. Also,
+it is imperative that you have C<cpanm> installed in a global location (eg:
+C<perlbrew install-cpanm>.
 
 Run all unit tests against all installed instances with no other action
 
@@ -173,6 +172,12 @@ Run all unit tests against all installed instances with no other action
     perl-5.20.3 :: PASS
     perl-5.22.1 :: PASS
 
+Run tests on the local working copy of the current module, then run all tests
+of all reverse dependencies of this module (as reported by CPAN), to ensure
+the down river modules will work with your new build
+
+    brewbuild --revdep # or -R
+
 Print usage information
 
     brewbuild -h
@@ -180,12 +185,6 @@ Print usage information
 Run on specific versions only
 
     brewbuild --on 5.20.3 -o 5.8.9
-
-Run tests on the local working copy of the current module, then run all tests
-of all reverse dependencies of this module (as reported by CPAN), to ensure
-the down river modules will work with your new build
-
-    brewbuild --revdep # or -R
 
 Install three new instances of perl, randomly
 
