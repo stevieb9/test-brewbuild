@@ -70,7 +70,8 @@ sub instance_remove {
         my $ver = $^V;
         $ver =~ s/v//;
         my $win_ver = $_;
-        my ($nix_ver) = () = s/_.*$//;
+        my $nix_ver = $_;
+        $nix_ver =~ s/_.*$//;
 
         my $brew_ver = $self->is_win ? $win_ver : $nix_ver;
 
