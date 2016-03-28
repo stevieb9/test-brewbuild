@@ -25,7 +25,6 @@ if (! $ENV{BBDEV_TESTING}){
     my @res = split /\n/, $ret;
     @res = grep /\S/, @res;
 
-    print "*$_*\n" for @res;
     is (@res, 2, "--remove flag works");
 
     is (
