@@ -250,10 +250,6 @@ sub exec {
 
     $log->_6("creating temp file");
 
-    my $wfh = File::Temp->new(UNLINK => 1);
-    my $fname = $wfh->filename;
-
-    $log->_6("temp filename: $fname");
     if ($self->{args}{plugin_arg}) {
         $log->_5( "fetching instructions from the plugin with arg $self->{args}{plugin_arg}" );
     }
@@ -266,38 +262,28 @@ sub exec {
 
     $log->_6("instructions to be executed:\n" . join ', ', @exec_cmd);
 
-    for (@exec_cmd){
-        $log->_6($_);
-        print $wfh $_;
-    }
-    close $wfh;
-
-    $log->_6("temp file handle closed");
-
     my $brew = $bcmd->brew;
 
     if ($self->{args}{on}){
         my $vers = join ',', @{ $self->{args}{on} };
         $log->_5("versions to run on: $vers");
-        $log->_5("exec'ing: $brew exec --with $vers perl $fname");
+        $log->_5("exec'ing: $brew exec --with $vers " . join ', ', @exec_cmd);
 
-        if ($bcmd->is_win){
-            return `$brew exec --with $vers perl $fname 2>brewbuild_err.bblog`;
+        my $test = pop @exec_cmd;
 
+        for (@exec_cmd){
+            `$brew exec --with $vers $_ 2>brewbuild_err.bblog`;
         }
-        else {
-            return `$brew exec --with $vers perl $fname 2>brewbuild_err.bblog`;
-        }
+        return `$brew exec $test`;
     }
     else {
-        $log->_5("exec'ing: $brew exec perl $fname");
+        $log->_5("exec'ing: $brew exec ". join ', ', @exec_cmd);
 
-        if ($bcmd->is_win) {
-            return `$brew exec perl $fname 2>brewbuild_err.bblog`;
+        my $test = pop @exec_cmd;
+        for (@exec_cmd){
+            `$brew exec $_ 2>brewbuild_err.bblog`;
         }
-        else {
-            return `$brew exec perl $fname 2>brewbuild_err.bblog`;
-        }
+        return `$brew exec $test`;
     }
 }
 sub brew_info {

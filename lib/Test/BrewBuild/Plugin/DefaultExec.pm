@@ -55,4 +55,6 @@ Steve Bertrand, C<< <steveb at cpan.org> >>
 =cut
 
 __DATA__
-system "cpanm --installdeps . && cpanm -v --test-only .";
+cpan App::cpanminus
+cpanm --installdeps .
+cpanm -v --test-only .

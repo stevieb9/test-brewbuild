@@ -100,4 +100,6 @@ my $bb = $mod->new;
 done_testing();
 
 __DATA__
-system "cpanm --installdeps . && cpanm -v --test-only .";
+cpan App::cpanminus
+cpanm --installdeps .
+cpanm -v --test-only .
