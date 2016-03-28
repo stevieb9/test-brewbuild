@@ -283,7 +283,11 @@ sub exec {
         for (@exec_cmd){
             `$brew exec $_ 2>brewbuild_err.bblog`;
         }
+        my $out;
+        open my $stdout, '>', \$out or die $!;
+        select $stdout;
         return `$brew exec $test`;
+        select STDOUT;
     }
 }
 sub brew_info {
