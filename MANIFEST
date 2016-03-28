@@ -36,9 +36,11 @@ t/dev-125-remove.t
 t/dev-130-pass_with_fail.t
 t/dev-135-on.t
 t/dev-140-invalid_args.t
+t/dev-145-revdep-single.t
 t/manifest.t
 t/modules/bb-522.zip
 t/modules/bb-fail.zip
 t/modules/bb-pass.zip
+t/modules/mock-sub.tgz
 t/pod-coverage.t
 t/pod.t
