@@ -33,7 +33,9 @@ t/dev-104-pass_fail_multi.t
 t/dev-115-debug.t
 t/dev-120-new.t
 t/dev-125-remove.t
+t/dev-130-pass_with_fail.t
 t/manifest.t
+t/modules/bb-522.zip
 t/modules/bb-fail.zip
 t/modules/bb-pass.zip
 t/pod-coverage.t
