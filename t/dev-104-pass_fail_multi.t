@@ -23,6 +23,7 @@ if (! $ENV{BBDEV_TESTING}){
     my @res = split /\n/, $ret;
     @res = grep /\S/, @res;
 
+    print "*$_\n" for @res;
     is (@res, 2, "proper result count for mutli PASS");
 
     is ( $res[0], "5.20.3 :: PASS", "5.20.3 PASS ok (multi perl)" );
