@@ -23,13 +23,14 @@ if (! $ENV{BBDEV_TESTING}){
     my @res = split /\n/, $ret;
     @res = grep /\S/, @res;
 
-    is (@res, 2, "proper result count for mutli PASS");
 
     if ($^O =~ /MSWin/) {
+        is (@res, 2, "proper result count for mutli PASS");
         is ( $res[0], "5.22.1 :: PASS", "5.22.1 PASS ok (multi perl)" );
         is ( $res[1], "5.20.3 :: PASS", "5.20.3 PASS ok (multi perl)" );
     }
     else {
+        is (@res, 2, "proper result count for mutli PASS");
         is ( $res[0], "5.20.3 :: PASS", "5.20.3 PASS ok (multi perl)" );
         is ( $res[1], "5.22.1 :: PASS", "5.22.1 PASS ok (multi perl)" );
     }
@@ -49,13 +50,13 @@ if (! $ENV{BBDEV_TESTING}){
     my @res = split /\n/, $ret;
     @res = grep /\S/, @res;
 
-    is (@res, 2, "got proper result count for multi FAIL");
-
     if ($^O =~ /MSWin/) {
+        is (@res, 2, "got proper result count for multi FAIL");
         is ( $res[0], "5.22.1 :: FAIL", "5.22.1 FAIL ok (multi perl)" );
         is ( $res[1], "5.20.3 :: FAIL", "5.20.3 FAIL ok (multi perl)" );
     }
     else {
+        is (@res, 2, "got proper result count for multi FAIL");
         is ( $res[0], "5.20.3 :: FAIL", "5.20.3 FAIL ok (multi perl)" );
         is ( $res[1], "5.22.1 :: FAIL", "5.22.1 FAIL ok (multi perl)" );
     }
