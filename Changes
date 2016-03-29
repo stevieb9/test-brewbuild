@@ -19,6 +19,11 @@ Revision history for Test-BrewBuild
         - we now re-check brew_info after an install, so we don't exit
           prematurely thinking no perls are installed, even after a --new 1
           (closes #46)
+        - had to change the DATA section in the plugins to one cmd per line, due
+          to Windows not properly able to manage PATH env var on each exec run.
+          The actual command to perform the tests *must* be the last line
+          executed
+        -
 
 1.03_02 2016-03-26
         - FAIL strategy completed. If there's STDERR output, we write it all to

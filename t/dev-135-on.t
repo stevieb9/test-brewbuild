@@ -19,7 +19,7 @@ if (! $ENV{BBDEV_TESTING}){
 
     chdir 'BB-Pass';
 
-    my $ret = `brewbuild --on 5.10.1 -o 5.22.1`;
+    my $ret = `brewbuild --on 5.22.1 -o 5.10.1`;
 
     chdir '..';
 
@@ -28,8 +28,8 @@ if (! $ENV{BBDEV_TESTING}){
 
     is (@res, 2, "--new 1 & -n 2 combined results in ok output");
 
-    like ($res[0], '5.10.1 :: PASS', "$res[0] --on ok");
-    like ($res[1], '5.22.1 :: PASS', "$res[1] -o ok");
+    like ($res[0], qr/5.10.1 :: PASS/, "$res[0] --on ok");
+    like ($res[1], qr/5.22.1 :: PASS/, "$res[1] -o ok");
 
     remove_tree('BB-Pass');
     is (-d 'BB-Pass', undef, "--version pass dir removed ok");
