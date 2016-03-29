@@ -18,7 +18,7 @@ if ($bcmd->is_win) {
 else {
     my $info = $bb->brew_info;
     my $using = $bcmd->using( $info );
-    is ( $using, '5.22.1', "nix: using() is ok" );
+    is ( $using, 'perl-5.22.1', "nix: using() is ok" );
 }
 done_testing();
 
