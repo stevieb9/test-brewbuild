@@ -25,7 +25,7 @@ if (! $ENV{BBDEV_TESTING}){
     my @res = split /\n/, $ret;
     @res = grep /\S/, @res;
 
-    ok (@res >= 2, "--remove flag works");
+    is ( @res, 2, "--remove flag works" );
 
     is (
         $res[0],
@@ -50,7 +50,7 @@ if (! $ENV{BBDEV_TESTING}){
     my @res = split /\n/, $ret;
     @res = grep /\S/, @res;
 
-    ok (@res >= 2, "--r flag works");
+    is ( @res, 2, "--r flag works" );
 
     is (
         $res[0],
