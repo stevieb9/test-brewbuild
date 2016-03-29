@@ -11,7 +11,10 @@ if (! $ENV{BBDEV_TESTING}){
     plan skip_all => "developer tests only";
     exit;
 }
-
+if ($^O =~ /MSWin/){
+    plan skip_all => "berrybrew exec doesn't have a --with flag";
+    exit;
+}
 { # --on and -o
 
     my $ae = Archive::Extract->new(archive => 't/modules/bb-pass.zip');
@@ -21,6 +24,7 @@ if (! $ENV{BBDEV_TESTING}){
 
     my $ret = `brewbuild --on 5.22.1 -o 5.10.1`;
 
+    print "*$ret*\n";
     chdir '..';
 
     my @res = split /\n/, $ret;

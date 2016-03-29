@@ -23,7 +23,11 @@ Revision history for Test-BrewBuild
           to Windows not properly able to manage PATH env var on each exec run.
           The actual command to perform the tests *must* be the last line
           executed
-        -
+        - added BrewExec::using(), sends back the exact version we're using, so
+          remove_instance() does the right thing on Windows (fixes #47)
+        - disabled 'on' tests on Windows, as berrybrew doesn't have a --with
+          flag for 'exec'. We warn() if it's attempted
+
 
 1.03_02 2016-03-26
         - FAIL strategy completed. If there's STDERR output, we write it all to

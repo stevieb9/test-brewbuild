@@ -29,6 +29,11 @@ my @valid_args = qw(
     on o new n remove r revdep R plugin p args a debug d version v help h
 );
 
+if ($^O =~ /MSWin/ && $args{on}){
+    warn "\nwe can't use --on with Windows... running on all\n\n";
+    delete $args{on};
+}
+
 if (@ARGV){
     my @args = grep /^-/, @ARGV;
     for my $arg (@args){
@@ -46,7 +51,7 @@ Usage: perl build/brewbuild.pl [options]
 
 Options:
 
---on     | -o:  String, perl version number to run against (can be supplied multiple times
+--on     | -o:  String, perl version number to run against (can be supplied multiple times). Can not be used on Windows
 --plugin | -p:  String, the module name of the exec command plugin to use
 --args   | -a:  List of args to pass into the plugin (one arg per loop)
 --revdep | -R   Run tests, install, then run tests on all CPAN reverse dependency modules
