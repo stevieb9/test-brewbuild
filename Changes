@@ -27,7 +27,7 @@ Revision history for Test-BrewBuild
           remove_instance() does the right thing on Windows (fixes #47)
         - disabled 'on' tests on Windows, as berrybrew doesn't have a --with
           flag for 'exec'. We warn() if it's attempted
-        - finally, all tests pass on Windows and Unix
+        - added examples/config.txt, shows a working Windows %PATH% env setup
 
 
 1.03_02 2016-03-26
