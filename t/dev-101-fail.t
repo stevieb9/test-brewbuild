@@ -18,7 +18,7 @@ if (! $ENV{BBDEV_TESTING}){
     $ae->extract(to => '.');
 
     chdir 'BB-Fail';
-    my $ret = `brewbuild --remove`;
+    my $ret = `brewbuild --remove 2>asd`;
     chdir '..';
 
     my @res = split /\n/, $ret;
