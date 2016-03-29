@@ -269,21 +269,43 @@ sub exec {
         $log->_5("versions to run on: $vers");
         $log->_5("exec'ing: $brew exec --with $vers " . join ', ', @exec_cmd);
 
-        my $test = pop @exec_cmd;
-
-        for (@exec_cmd){
-            `$brew exec --with $vers $_ 2>brewbuild_err.bblog`;
+        if ($bcmd->is_win){
+            my $test = pop @exec_cmd;
+            for (@exec_cmd){
+                `$brew exec --with $vers $_ 2>brewbuild_err.bblog`;
+            }
+            return `$brew exec --with $vers $test 2>brewbuild_err.bblog`;
         }
-        return `$brew exec $test`;
+        else {
+            my $wfh = File::Temp->new(UNLINK => 1);
+            my $fname = $wfh->filename;
+            open $wfh, '>', $fname or die $!;
+            my $cmd = "system(\"join ' && ', @exec_cmd\")";
+            print $wfh $_;
+            close $wfh;
+            return `$brew exec --with $vers perl $fname 2>stderr.bblog`; 
+        }
+
     }
     else {
         $log->_5("exec'ing: $brew exec ". join ', ', @exec_cmd);
 
-        my $test = pop @exec_cmd;
-        for (@exec_cmd){
-            `$brew exec $_ 2>brewbuild_err.bblog`;
+        if ($bcmd->is_win){
+            my $test = pop @exec_cmd;
+            for (@exec_cmd){
+                `$brew exec $_ 2>brewbuild_err.bblog`;
+            }
+            return `$brew exec $test 2>brewbuild_err.bblog`;
         }
-        return `$brew exec $test 2>brewbuild_err.bblog`;
+        else {
+            my $wfh = File::Temp->new(UNLINK => 1);
+            my $fname = $wfh->filename;
+            open $wfh, '>', $fname or die $!;
+            my $cmd = "system(\"join ' && ', @exec_cmd\")";
+            print $wfh $_;
+            close $wfh;
+            return `$brew exec perl $fname 2>stderr.bblog`; 
+        }
     }
 }
 sub brew_info {
