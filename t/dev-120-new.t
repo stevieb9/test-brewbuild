@@ -37,10 +37,10 @@ if (! $ENV{BBDEV_TESTING}){
 
     like ($res[0], qr/- installing /, "$res[0] installing ok");
     like ($res[1], qr/- installing /, "$res[1] installing ok");
-    like ($res[2], qr/5\.\d{1,2}\.\d :: PASS/, "$res[2] run ok");
-    like ($res[3], qr/5\.\d{1,2}\.\d :: PASS/, "$res[3] run ok");
-    like ($res[4], qr/5\.\d{1,2}\.\d :: PASS/, "$res[4] run ok");
-    like ($res[5], qr/5\.\d{1,2}\.\d :: PASS/, "$res[5] run ok");
+    like ($res[2], qr/5\.\d{1,2}\.\d :: PASS/, "PASS run ok");
+    like ($res[3], qr/5\.\d{1,2}\.\d :: PASS/, "PASS run ok");
+    like ($res[4], qr/5\.\d{1,2}\.\d :: PASS/, "PASS run ok");
+    like ($res[5], qr/5\.\d{1,2}\.\d :: PASS/, "PASS run ok");
 
     remove_tree('BB-Pass');
     is (-d 'BB-Pass', undef, "--version pass dir removed ok");
