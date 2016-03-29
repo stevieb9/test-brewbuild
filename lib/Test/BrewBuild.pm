@@ -280,12 +280,15 @@ sub exec {
             my $wfh = File::Temp->new(UNLINK => 1);
             my $fname = $wfh->filename;
             open $wfh, '>', $fname or die $!;
-            my $cmd = "system(\"join ' && ', @exec_cmd\")";
-            print $wfh $_;
+            for (@exec_cmd){
+                s/\n//g;
+            }
+            my $cmd = join ' && ', @exec_cmd;
+            $cmd = "system(\"$cmd\")";
+            print $wfh $cmd;
             close $wfh;
-            return `$brew exec --with $vers perl $fname 2>stderr.bblog`; 
+            return `$brew exec perl $fname 2>stderr.bblog`; 
         }
-
     }
     else {
         $log->_5("exec'ing: $brew exec ". join ', ', @exec_cmd);

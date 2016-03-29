@@ -35,8 +35,8 @@ if (! $ENV{BBDEV_TESTING}){
     }
     else {
         is (@res, 3, "pass and fail simultaneously has proper count");
-        is ($res[1], '5.22.1 :: FAIL', "pass & fail $res[1] line 1 ok");
-        is ($res[2], '5.10.1 :: PASS', "pass & fail $res[2] line 2 ok");
+        is ($res[1], '5.10.1 :: PASS', "PASS ok");
+        is ($res[2], '5.22.1 :: FAIL', "FAIL ok");
     }
 
     remove_tree('BB-522');

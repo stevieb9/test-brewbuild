@@ -28,8 +28,8 @@ if (! $ENV{BBDEV_TESTING}){
 
     is ( $res[1], "5.22.1 :: PASS", "PASS ok" );
 
-#    remove_tree('BB-Pass');
-#    is (-d 'BB-Pass', undef, "pass dir removed ok");
+    remove_tree('BB-Pass');
+    is (-d 'BB-Pass', undef, "pass dir removed ok");
 }
 
 done_testing();
