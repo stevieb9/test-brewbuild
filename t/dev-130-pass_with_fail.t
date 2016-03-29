@@ -25,6 +25,8 @@ if (! $ENV{BBDEV_TESTING}){
     my $ret = `brewbuild --version $ver`;
     chdir '..';
 
+    print $ret;
+
     my @res = split /\n/, $ret;
     @res = grep /\S/, @res;
 
