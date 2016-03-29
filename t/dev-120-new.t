@@ -28,7 +28,12 @@ if (! $ENV{BBDEV_TESTING}){
     my @res = split /\n/, $ret;
     @res = grep /\S/, @res;
 
-    is (@res, 6, "--new 1 & -n 2 combined results in ok output");
+    if ($^O =~ /MSWin/){
+        is (@res, 7, "--new 1 & -n 2 combined results in ok output");
+    }
+    else {
+        is (@res, 6, "--new 1 & -n 2 combined results in ok output");
+    }
 
     like ($res[0], qr/- installing /, "$res[0] installing ok");
     like ($res[1], qr/- installing /, "$res[1] installing ok");
