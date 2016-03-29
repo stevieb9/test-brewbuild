@@ -33,7 +33,21 @@ sub installed {
     return $self->is_win
         ? $info =~ /(\d\.\d{2}\.\d(?:_\d{2}))(?!=_)\s+\[installed\]/ig
         : $info =~ /i.*?(perl-\d\.\d+\.\d+)/g;
+}
+sub using {
+    my ($self, $info) = @_;
 
+    $log->child( 'using' )->_6( "checking for which ver we're using" );
+
+    if ($self->is_win) {
+        my @installed = $info =~ /(\d\.\d{2}\.\d(?:_\d{2}))(?!=_)\s+\[installed\]\*/ig;
+        return $installed[0];
+    }
+    else {
+        my $using = $^V;
+        $using =~ s/v//;
+        return $using;
+    }
 }
 sub available {
     my ($self, $info) = @_;
@@ -110,6 +124,10 @@ installed versions, formatted in a platform specific manner.
 =head2 available($info)
 
 Similar to C<installed()>, but returns all perls available.
+
+=head2 using($info)
+
+Returns the current version of perl we're using.
 
 =head2 install
 

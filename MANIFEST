@@ -21,6 +21,7 @@ t/09-instance_install.t
 t/10-run.t
 t/12-TestPluginInst.t
 t/13-exec.t
+t/14-using.t
 t/__clean.t
 t/base/115-level6.data
 t/base/115-level6_win.data

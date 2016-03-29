@@ -2,7 +2,8 @@ Revision history for Test-BrewBuild
 
 1.04    xxx
         - added t/dev-1xx tests, need perlbrew/berrybrew installed to run. Set
-          BBDEV_TESTING environment variable to run these tests
+          BBDEV_TESTING environment variable to run these tests (these tests
+          can take a very long time to run)
         - added Archive::Extract prereq for BBDEV_TESTING
         - fixed bug where --version wasn't doing anything
         - fixed bug on Windows where instance_remove() was removing the
@@ -13,6 +14,8 @@ Revision history for Test-BrewBuild
           Windows
         - added blurb in SYNOPSIS about the importance of having a central
           cpanm (closes #44)
+        - corrected a whole bunch of inconsistencies between win/nix throughout
+          the dev test writing
         - we now re-check brew_info after an install, so we don't exit
           prematurely thinking no perls are installed, even after a --new 1
           (closes #46)
