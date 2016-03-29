@@ -18,7 +18,7 @@ if ($bcmd->is_win) {
 else {
     my $info = $bb->brew_info;
     my $using = $bcmd->using( $info );
-    like ( $using, qr/perl-\d\.\d{1,2}\.d/, "nix: using() is ok" );
+    like ( $using, qr/perl-\d\.\d{1,2}\.\d/, "nix: using() is ok" );
 }
 done_testing();
 
