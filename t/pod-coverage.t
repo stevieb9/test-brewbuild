@@ -21,7 +21,8 @@ eval "use Pod::Coverage $min_pc";
 plan skip_all => "Pod::Coverage $min_pc required for testing POD coverage"
     if $@;
 
+
 pod_coverage_ok('Test::BrewBuild');
-pod_coverage_ok('Test::BrewBuild::Plugin');
+pod_coverage_ok('Test::BrewBuild::BrewCommands');
 
 done_testing();
