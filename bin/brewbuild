@@ -8,7 +8,7 @@ use File::Find;
 use Module::Load;
 use Test::BrewBuild;
 
-our $VERSION = '1.03_03';
+our $VERSION = '1.03_04';
 
 my $log = Test::BrewBuild->new()->log()->child('brewbuild');
 my (%args, $help);
