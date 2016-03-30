@@ -40,7 +40,7 @@ sub perls_available {
 
     my $log = $log->child('perls_available');
 
-    my @perls_available = $bcmd->available($brew_info);
+    my @perls_available = $bcmd->available($self->{args}{legacy}, $brew_info);
 
     $log->_6("perls available: " . join ', ', @perls_available);
 
@@ -52,7 +52,7 @@ sub perls_installed {
     my $log = $log->child('perls_installed');
     $log->_6("checking perls installed");
 
-    return $bcmd->installed($brew_info);
+    return $bcmd->installed($self->{args}{legacy}, $brew_info);
 }
 sub instance_remove {
     my ($self, @perls_installed) = @_;
@@ -318,7 +318,7 @@ sub brew_info {
 
     my $log = $log->child('brew_info');
 
-    my $brew_info = $bcmd->available;
+    my $brew_info = $bcmd->info;
 
     $log->_6("brew info set to:\n$brew_info") if $brew_info;
 

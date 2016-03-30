@@ -18,7 +18,7 @@ if ($im_on_windows){
    is ($bc->brew, 'berrybrew', "win: brew() is ok");
 
    my $inst = '5.20.3_64       [installed]';
-   my @inst = $bc->installed($inst);
+   my @inst = $bc->installed(0, $inst);
    is ($inst[0], "5.20.3_64", "win: installed is ok");
 
    my $avail = '5.22.1_32_NO64';
@@ -40,7 +40,7 @@ else {
    is ($bc->brew, 'perlbrew', "nix: brew() is ok");
 
    my $inst = 'i perl-5.22.1';
-   my @inst = $bc->installed($inst);
+   my @inst = $bc->installed(0, $inst);
    is ($inst[0], "perl-5.22.1", "nix: installed is ok");
 
    my $avail = 'perl-5.22.1';

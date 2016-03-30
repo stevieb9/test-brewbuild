@@ -25,16 +25,31 @@ sub brew {
     $log->child('brew')->_6("*brew cmd is: $brew");
     return $brew;
 }
+sub info {
+    my $self = shift;
+    return $self->is_win
+        ? `berrybrew available 2>nul`
+        : `perlbrew available 2>/dev/null`;
+}
 sub installed {
-    my ($self, $info) = @_;
+    my ($self, $legacy, $info) = @_;
 
     $log->child('installed')->_6("cleaning up perls installed");
 
     return if ! $info;
 
-    return $self->is_win
+    my @installed = $self->is_win
         ? $info =~ /(\d\.\d{2}\.\d(?:_\d{2}))(?!=_)\s+\[installed\]/ig
         : $info =~ /i.*?(perl-\d\.\d+\.\d+)/g;
+
+    if (! $legacy){
+        @installed = grep { /^(?:perl-)?\d\.(\d+)/; $1 >= 8 } @installed;
+    }
+
+    use Data::Dumper;
+    print Dumper \@installed;
+    return @installed;
+
 }
 sub using {
     my ($self, $info) = @_;
@@ -53,27 +68,18 @@ sub using {
     }
 }
 sub available {
-    my ($self, $info) = @_;
+    my ($self, $legacy, $info) = @_;
 
+    $log->child('available')->_6("determining available perls");
 
-    if ($info){
+    my @avail = $self->is_win
+        ? $info =~ /(\d\.\d+\.\d+_\d+)/g
+        : $info =~ /(perl-\d\.\d+\.\d+)/g;
 
-        $log->child('available')->_6("determining available perls");
-
-        my @avail = $self->is_win
-            ? $info =~ /(\d\.\d+\.\d+_\d+)/g
-            : $info =~ /(perl-\d\.\d+\.\d+)/g;
-
-        return @avail;
+    if (! $legacy){
+        @avail = grep { /^(?:perl-)?\d\.(\d+)/; $1 > 8 } @avail;
     }
-    else {
-
-        $log->child('available')->_6("generating available");
-
-        return $self->is_win
-            ? `berrybrew available 2>nul`
-            : `perlbrew available 2>/dev/null`;
-    }
+    return @avail;
 }
 sub install {
     my $self = shift;
@@ -119,12 +125,16 @@ Returns a new Test::BrewBuild::BrewCommands object.
 
 Returns 'perlbrew' if on Unix, and 'berrybrew' if on Windows.
 
+=head2 info
+
+Returns the string result of *brew available.
+
 =head2 installed($info)
 
 Takes the output of '*brew available' in a string form. Returns the currently
 installed versions, formatted in a platform specific manner.
 
-=head2 available($info)
+=head2 available($legacy, $info)
 
 Similar to C<installed()>, but returns all perls available.
 
@@ -171,4 +181,4 @@ See L<http://dev.perl.org/licenses/> for more information.
 
 
 =cut
-
+ 

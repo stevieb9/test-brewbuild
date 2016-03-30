@@ -12,6 +12,9 @@ Revision history for Test-BrewBuild
         - added --notest|-N, allows install/remove without running exec()
           (closes #49)
         - added --setup|-s, displays Windows and Unix test platform setup guide
+        - added --legacy|-L. Due to the fact ``cpanm'' requires 5.8.1, and we
+          use it in the default exec plugin, we won't install versions lower
+          than that, unless this flag is set
 
 1.03_03 2016-03-29
         - --revdep, auto-testing of CPAN down-river modules working very well

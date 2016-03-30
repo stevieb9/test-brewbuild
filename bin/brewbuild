@@ -23,13 +23,14 @@ GetOptions(
     "debug=i"       => \$args{debug},
     "install=s@"    => \$args{install},
     "N|notest"      => \$args{notest},
+    "L|legacy"      => \$args{legacy},
     "setup"         => \$setup,
     "help"          => \$help,
 );
 
 my @valid_args = qw(
     on o new n remove r revdep R plugin p args a debug d install i help h
-    n notest setup s
+    n notest setup s legacy L
 );
 
 if ($^O =~ /MSWin/ && $args{on}){
@@ -63,6 +64,7 @@ Options:
 --remove  | -r:  Remove all installed perls (less the current one) before installation of new ones
 --install | -i:  String, the number portion of an available perl version according to "*brew available". Multiple versions can besent in at once
 --notest  | -N:  Do not run tests. Allows you to --remove and install without testing
+--legacy  | -L:  Operate on perls < 5.8.x. The default plugins won't work with this flag set
 --setup   | -s:  Display test platform setup information
 --help    | -h:  print this help message
 EOF
@@ -96,6 +98,10 @@ if (! grep { -x "$_/$brew_prog"} split /$sep/, $ENV{PATH}){
          "See $brew_link\n\n";
     exit;
 }
+
+# legacy perls in use?
+
+$args{legacy} = defined $args{legacy} ? 1 : 0;
 
 if ($args{revdep}){
 
