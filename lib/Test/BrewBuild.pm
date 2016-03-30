@@ -7,7 +7,7 @@ use Logging::Simple;
 use Plugin::Simple default => 'Test::BrewBuild::Plugin::DefaultExec';
 use Test::BrewBuild::BrewCommands;
 
-our $VERSION = '1.03_03';
+our $VERSION = '1.04';
 
 my $log;
 my $bcmd;

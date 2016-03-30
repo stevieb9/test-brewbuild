@@ -29,7 +29,7 @@ GetOptions(
 
 my @valid_args = qw(
     on o new n remove r revdep R plugin p args a debug d install i help h
-    n notest
+    n notest setup s
 );
 
 if ($^O =~ /MSWin/ && $args{on}){
