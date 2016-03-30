@@ -11,6 +11,7 @@ Revision history for Test-BrewBuild
         - renamed --version|-v to --install|-i
         - added --notest|-N, allows install/remove without running exec()
           (closes #49)
+        - added --setup|-s, displays Windows and Unix test platform setup guide
 
 1.03_03 2016-03-29
         - --revdep, auto-testing of CPAN down-river modules working very well

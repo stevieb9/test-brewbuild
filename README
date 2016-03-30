@@ -83,6 +83,10 @@ SYNOPSIS
 
         brewbuild -i 5.20.3 -i 5.14.4 -i 5.23.5
 
+    Display test platform setup instructions for Unix and Windows
+
+        brewbuild --setup
+
 DESCRIPTION
 
     This brewbuild script installed by the Test::Brewbuild module allows
@@ -102,47 +106,6 @@ DESCRIPTION
 
     The actual module is just a helper for the installed script, and isn't
     designed for end-user use.
-
-CONFIGURATION OF TEST SYSTEMS
-
-Unix
-
-    Install perlbrew and related requirements: cpanm App::perlbrew perlbrew
-    install-patchperl perlbrew install-cpanm
-
-    Install and switch to your base perl instance, and install
-    Test::BrewBuild: perlbrew install 5.22.1 perlbrew switch 5.22.1 cpanm
-    Test::BrewBuild
-
-Windows
-
-    Note that the key here is that your %PATH% must be free and clear of
-    anything Perl. That means that if you're using an existing box with
-    Strawberry or ActiveState installed, you *must* remove all traces of
-    them in the PATH environment variable for ``brewbuild'' to work
-    correctly.
-
-    Easiest way to guarantee a working environment is using a clean-slate
-    Windows server with nothing on it. For a Windows test platform, I
-    mainly used an Amazon AWS t2.small server.
-
-    Download/install git for Windows: https://git-scm.com/download/win)
-
-    Create a repository directory, and enter it: mkdir c:\repos cd c:\repos
-
-    Clone and configure berrybrew git clone
-    https://github.com/dnmfarrell/berrybrew cd berrybrew bin\berrybrew.exe
-    config (type 'y' when asked to install in PATH)
-
-    Close the current CMD window and open a new one to update env vars
-
-    Check available perls, and install one that'll become your core base
-    install berrybrew available berrybrew install 5.22.1_64 berrybrew
-    switch 5.22.1_64 close CMD window, and open new one
-
-    Make sure it took perl -v
-
-    Install Test::BrewBuild cpanm Test::BrewBuild
 
 AUTHOR
 
