@@ -63,6 +63,7 @@ Options:
 --remove  | -r:  Remove all installed perls (less the current one) before installation of new ones
 --install | -i:  String, the number portion of an available perl version according to "*brew available". Multiple versions can besent in at once
 --notest  | -N:  Do not run tests. Allows you to --remove and install without testing
+--setup   | -s:  Display test platform setup information
 --help    | -h:  print this help message
 EOF
 exit;
