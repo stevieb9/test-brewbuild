@@ -265,7 +265,7 @@ for end-user use.
 
 =head1 CONFIGURATION OF TEST SYSTEMS
 
-=head2 Unix
+=head1 Unix
 
 Install perlbrew and related requirements:
     cpanm App::perlbrew
@@ -277,7 +277,7 @@ Install and switch to your base perl instance, and install C<Test::BrewBuild>:
     perlbrew switch 5.22.1
     cpanm Test::BrewBuild
 
-=head2 Windows
+=head1 Windows
 
 Note that the key here is that your %PATH% must be free and clear of anything
 Perl. That means that if you're using an existing box with Strawberry or
