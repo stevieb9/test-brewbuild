@@ -1,6 +1,8 @@
 Revision history for Test-BrewBuild
 
 1.03_03 2016-03-29
+        - --revdep, auto-testing of CPAN down-river modules working very well
+          (work on #39)
         - added t/dev-1xx tests, need perlbrew/berrybrew installed to run. Set
           BBDEV_TESTING environment variable to run these tests (these tests
           can take a very long time to process, and currently, may be
