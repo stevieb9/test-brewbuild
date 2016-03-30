@@ -46,8 +46,6 @@ sub installed {
         @installed = grep { /^(?:perl-)?\d\.(\d+)/; $1 >= 8 } @installed;
     }
 
-    use Data::Dumper;
-    print Dumper \@installed;
     return @installed;
 
 }
