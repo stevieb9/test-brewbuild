@@ -1,15 +1,16 @@
 Revision history for Test-BrewBuild
 
-1.04    xxx
+1.03_03 2016-03-29
         - added t/dev-1xx tests, need perlbrew/berrybrew installed to run. Set
           BBDEV_TESTING environment variable to run these tests (these tests
-          can take a very long time to run)
+          can take a very long time to process, and currently, may be
+          unreliable)
         - added Archive::Extract prereq for BBDEV_TESTING
         - fixed bug where --version wasn't doing anything
         - fixed bug on Windows where instance_remove() was removing the
           currently in-use perl instance
-        - if an invalid arg is sent in to 'berrybrew', we now print help screen
-          and exit (closes #45)
+        - if an invalid arg is sent in, we now print help screen and exit
+          (closes #45)
         - fix bug in results(), where the regex wasn't capturing properly on
           Windows
         - added blurb in SYNOPSIS about the importance of having a central
@@ -19,16 +20,20 @@ Revision history for Test-BrewBuild
         - we now re-check brew_info after an install, so we don't exit
           prematurely thinking no perls are installed, even after a --new 1
           (closes #46)
-        - had to change the DATA section in the plugins to one cmd per line, due
-          to Windows not properly able to manage PATH env var on each exec run.
-          The actual command to perform the tests *must* be the last line
+        - had to change the DATA section in the plugins to one cmd per line,
+          due to Windows not properly able to manage PATH env var on each exec
+          run. The actual command to perform the tests *must* be the last line
           executed
         - added BrewExec::using(), sends back the exact version we're using, so
           remove_instance() does the right thing on Windows (fixes #47)
         - disabled 'on' tests on Windows, as berrybrew doesn't have a --with
           flag for 'exec'. We warn() if it's attempted
         - added examples/config.txt, shows a working Windows %PATH% env setup
-
+        - began, albeit lightly, code cleanup (#36)
+        - set objectives for v1.05 (full win/nix compat, document pristine
+          testing environment, fix all outstanding non-wishlist issues and
+          at minimum, document irregularities of test failures beyond this
+          modules control)
 
 1.03_02 2016-03-26
         - FAIL strategy completed. If there's STDERR output, we write it all to

@@ -7,7 +7,7 @@ use Logging::Simple;
 use Plugin::Simple default => 'Test::BrewBuild::Plugin::DefaultExec';
 use Test::BrewBuild::BrewCommands;
 
-our $VERSION = '1.04';
+our $VERSION = '1.03_03';
 
 my $log;
 my $bcmd;
@@ -67,10 +67,11 @@ sub instance_remove {
     $log->_4( "using '$remove_cmd' remove command" );
 
     for my $installed_perl (@perls_installed){
+
         my $using = $bcmd->using( $self->brew_info );
 
         if ($using eq $installed_perl) {
-            $log->_5( "skipping version we're using: $using" );
+            $log->_5( "not removing version we're using: $using" );
             next;
         }
 
@@ -225,7 +226,7 @@ sub run {
         $self->instance_install($new, \@perls_available, \@perls_installed);
     }
 
-    # refetch $brew_info in case we have installed a new one
+    # refetch installed in case we have installed a new instance
 
     @perls_installed = $self->perls_installed($self->brew_info);
 

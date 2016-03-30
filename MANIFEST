@@ -31,7 +31,6 @@ t/base/UnitTestPlugin.pm
 t/dev-100-pass.t
 t/dev-101-fail.t
 t/dev-102-version.t
-t/dev-103-v.t
 t/dev-104-pass_fail_multi.t
 t/dev-115-debug.t
 t/dev-120-new.t

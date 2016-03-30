@@ -2,6 +2,18 @@ NAME
 
     brewbuild - This is the front-end script for Test::BrewBuild
 
+NOTICE
+
+    This is a devel version and shouldn't be used. I'm working out the
+    myriad of caveats that encompass Windows' 'berrybrew' that doesn't
+    exist on Unix-type platforms.
+
+    By v1.05, I'll have the majority of the problems resolved, the code
+    cleaned up, and documentation on suitable setups for pristine testing
+    platforms written.
+
+    Pass or fail, I need this on CPAN for internal testing.
+
 SYNOPSIS
 
     You must be in the root directory of the distribution you want to test.
@@ -28,7 +40,7 @@ SYNOPSIS
 
         brewbuild -h
 
-    Run on specific versions only
+    Run on specific versions only (Unix)
 
         brewbuild --on 5.20.3 -o 5.8.9
 
@@ -36,7 +48,7 @@ SYNOPSIS
 
         brewbuild --new 3
 
-    Enable verbose output. '5' displays typical output. '7' is full debug
+    Enable verbose output. Default is 0, maximum is 7
 
         brewbuild --debug 5
 
@@ -58,24 +70,6 @@ SYNOPSIS
     ...multiple versions can be passed in at once
 
         brewbuild -v 5.20.3 -v 5.14.4 -v 5.23.5
-
-    Use a custom plugin containing the build/test commands to pass to
-    'perlbrew exec' (can also be set in $ENV{TBB_PLUGIN} for persistence).
-
-    The plugin arg will take a filename as well if the module isn't
-    installed. Send in the relative/full path if the plugin isn't in the
-    current working directory.
-
-    Your 'brewbuild_exec()' function will receive a Logging::Simple object,
-    followed by a single argument if specified per below
-
-        brewbuild --plugin 'Test::BrewBuild::Plugin::DefaultExec' # default
-
-    Send in args that custom plugins can use. brewbuild will be called once
-    for each arg, passing a single argument from the list specified on each
-    run. Note: --new and --remove are only executed on the first loop
-
-        brewbuild -p My::Plugin --args 1 -a 2
 
 DESCRIPTION
 

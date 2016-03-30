@@ -2,7 +2,7 @@ package Test::BrewBuild::Plugin::DefaultExec;
 
 # default exec command set plugin for Test::BrewBuild
 
-our $VERSION = '1.03_02';
+our $VERSION = '1.03_03';
 
 sub brewbuild_exec {
     shift; # throw away the class
