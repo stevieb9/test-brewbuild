@@ -99,6 +99,7 @@ sub instance_install {
 
     if ($self->{args}{version}->[0]){
         for my $version (@{ $self->{args}{version} }){
+            $version = "perl-$version" if ! $self->is_win;
             if (grep { $version eq $_ } @{ $perls_installed }){
                 $log->_6("$version is already installed... skipping");
                 next;
