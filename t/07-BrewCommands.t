@@ -22,11 +22,8 @@ if ($im_on_windows){
    is ($inst[0], "5.20.3_64", "win: installed is ok");
 
    my $avail = '5.22.1_32_NO64';
-   my @avail = $bc->available($avail);
+   my @avail = $bc->available(0, $avail);
    is ($avail[0], '5.22.1_32', "win: avail with info ok");
-
-   my $res = $bc->available;
-   ok ($res || ! $res, "win: available ok");
 
    my $inst_cmd = $bc->install;
    is ($inst_cmd, 'berrybrew install', "win: install() ok");
@@ -44,11 +41,8 @@ else {
    is ($inst[0], "perl-5.22.1", "nix: installed is ok");
 
    my $avail = 'perl-5.22.1';
-   my @avail = $bc->available($avail);
+   my @avail = $bc->available(0, $avail);
    is ($avail[0], 'perl-5.22.1', "nix: avail with info ok");
-
-   my $res = $bc->available;
-   ok ($res || ! $res, "nix: available ok");
 
    my $inst_cmd = $bc->install;
    is ($inst_cmd, 'perlbrew install --notest -j 4', "nix: install() ok");
