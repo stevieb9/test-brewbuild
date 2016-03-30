@@ -156,16 +156,16 @@ sub results {
 
     my (@pass, @fail);
 
-    for (@ver_results){
+    for my $result (@ver_results){
         my $ver;
 
-        if (/^([Pp]erl-\d\.\d+\.\d+)/){
+        if ($result =~ /^([Pp]erl-\d\.\d+\.\d+)/){
             $ver = $1;
             $ver =~ s/[Pp]erl-//;
         }
         my $res;
 
-        if (/Successfully tested /){
+        if ($result =~ /Successfully tested /){
             $log->_6("$ver PASSED...");
             $res = 'PASS';
             push @pass, "$ver :: $res\n";
@@ -180,12 +180,12 @@ sub results {
             if (defined $tested_mod){
                 $tested_mod =~ s/::/-/g;
                 open my $wfh, '>', "$tested_mod-$ver.bblog"  or die $!;
-                print $wfh $_;
+                print $wfh $result;
                 close $wfh;
             }
             else {
                 open my $wfh, '>', "$ver.bblog"  or die $!;
-                print $wfh $_;
+                print $wfh $result;
                 close $wfh;
             }
         }
