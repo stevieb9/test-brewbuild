@@ -15,7 +15,7 @@ my (%args, $setup, $help);
 
 GetOptions(
     "on=s@"         => \$args{on},
-    "new=i"         => \$args{new},
+    "n|new=i"       => \$args{new},
     "r|remove"      => \$args{remove},
     "R|revdep"      => \$args{revdep},
     "plugin=s"      => \$args{plugin},

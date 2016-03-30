@@ -36,7 +36,7 @@ if (! $ENV{BBDEV_TESTING}){
     }
     else {
         is ( @res, 3, "proper result count with --install" );
-        is ( $res[0], "- installing $new_ver...", "--install ok" );
+        is ( $res[0], "- installing perl-$new_ver...", "--install ok" );
         like ( $res[1], qr/\d\.\d{2}\.\d :: PASS/, "--install ok $res[1]" );
         like ( $res[2], qr/\d\.\d{2}\.\d :: PASS/, "--install ok $res[2]" );
     }

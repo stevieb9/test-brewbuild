@@ -24,16 +24,15 @@ if ($^O =~ /MSWin/){
 
     my $ret = `brewbuild --on 5.22.1 -o 5.10.1`;
 
-    print "*$ret*\n";
     chdir '..';
 
     my @res = split /\n/, $ret;
     @res = grep /\S/, @res;
 
-    is (@res, 2, "--new 1 & -n 2 combined results in ok output");
+    is (@res, 2, "-o and --on have proper return count");
 
-    like ($res[0], qr/5.10.1 :: PASS/, "$res[0] --on ok");
-    like ($res[1], qr/5.22.1 :: PASS/, "$res[1] -o ok");
+    like ($res[0], qr/5.22.1 :: PASS/, "--on ok");
+    like ($res[1], qr/5.10.1 :: PASS/, "-o ok");
 
     remove_tree('BB-Pass');
     is (-d 'BB-Pass', undef, "--on pass dir removed ok");
