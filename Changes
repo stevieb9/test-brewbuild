@@ -1,5 +1,13 @@
 Revision history for Test-BrewBuild
 
+1.04    2016-03-30
+        - ensure FAIL files are created properly and test (closes #53)
+        - fix issue where --on wasn't setting up the environment correctly
+          (fixes #54)
+        - on Unix, we catch if an installed version is attempting to be
+          installed, instead of letting perlbrew handle it (closes #50)
+        -
+
 1.03_03 2016-03-29
         - --revdep, auto-testing of CPAN down-river modules working very well
           (work on #39)

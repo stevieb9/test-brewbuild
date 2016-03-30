@@ -161,38 +161,51 @@ sub _module_find {
 
 brewbuild - This is the front-end script for L<Test::BrewBuild>
 
-=head1 NOTICE
-
-This is a devel version and shouldn't be used. I'm working out the myriad of
-caveats that encompass Windows' 'berrybrew' that doesn't exist on Unix-type
-platforms.
-
-By v1.05, I'll have the majority of the problems resolved, the code cleaned up,
-and documentation on suitable setups for pristine testing platforms written.
-
-Pass or fail, I need this on CPAN for internal testing.
-
 =head1 SYNOPSIS
 
 You must be in the root directory of the distribution you want to test. Also,
 it is imperative that you have C<cpanm> installed in a global location (eg:
 C<perlbrew install-cpanm>.
 
-Run all unit tests against all installed instances with no other action
+Run all unit tests against all installed instances with no other action. Upon a
+FAIL, a log file will be generated in the current working directory named
+"version.bblog"
 
     brewbuild
 
     # output
 
-    perl-5.8.9 :: PASS
-    perl-5.20.3 :: PASS
-    perl-5.22.1 :: PASS
+    5.8.9 :: PASS
+    5.20.3 :: FAIL
+    5.22.1 :: PASS
 
 Run tests on the local working copy of the current module, then run all tests
 of all reverse dependencies of this module (as reported by CPAN), to ensure
-the down river modules will work with your new build
+the down river modules will work with your new build. In this case, FAILs are
+stored in "revdep-module-name.version.bblog"
 
     brewbuild --revdep # or -R
+
+    # example output, in my Mock::Sub repo directory
+
+    - working on reverse dependencies: Test-BrewBuild, File-Edit-Portable,
+      Devel-Examine-Subs, Devel-Trace-Subs
+
+    Test::BrewBuild
+    5.18.4 :: FAIL
+    5.22.1 :: PASS
+
+    File::Edit::Portable
+    5.18.4 :: PASS
+    5.22.1 :: PASS
+
+    Devel::Examine::Subs
+    5.18.4 :: PASS
+    5.22.1 :: PASS
+
+    Devel::Trace::Subs
+    5.18.4 :: PASS
+    5.22.1 :: PASS
 
 Print usage information
 
@@ -246,6 +259,57 @@ All unit tests are run against all installed instances.
 
 The actual module is just a helper for the installed script, and isn't designed
 for end-user use.
+
+=head1 CONFIGURATION OF TEST SYSTEMS
+
+=head2 Unix
+
+Install perlbrew and related requirements:
+    cpanm App::perlbrew
+    perlbrew install-patchperl
+    perlbrew install-cpanm
+
+Install and switch to your base perl instance, and install C<Test::BrewBuild>:
+    perlbrew install 5.22.1
+    perlbrew switch 5.22.1
+    cpanm Test::BrewBuild
+
+=head2 Windows
+
+Note that the key here is that your %PATH% must be free and clear of anything
+Perl. That means that if you're using an existing box with Strawberry or
+ActiveState installed, you *must* remove all traces of them in the PATH
+environment variable for ``brewbuild'' to work correctly.
+
+Easiest way to guarantee a working environment is using a clean-slate Windows
+server with nothing on it. For a Windows test platform, I mainly used an
+Amazon AWS t2.small server.
+
+Download/install git for Windows:
+    https://git-scm.com/download/win)
+
+Create a repository directory, and enter it:
+    mkdir c:\repos
+    cd c:\repos
+
+Clone and configure berrybrew
+    git clone https://github.com/dnmfarrell/berrybrew
+    cd berrybrew
+    bin\berrybrew.exe config (type 'y' when asked to install in PATH)
+
+Close the current CMD window and open a new one to update env vars
+
+Check available perls, and install one that'll become your core base install
+    berrybrew available
+    berrybrew install 5.22.1_64
+    berrybrew switch 5.22.1_64
+    close CMD window, and open new one
+
+Make sure it took
+    perl -v
+
+Install Test::BrewBuild
+    cpanm Test::BrewBuild
 
 =head1 AUTHOR
 

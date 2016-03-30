@@ -19,7 +19,6 @@ if (! $ENV{BBDEV_TESTING}){
 
     chdir 'BB-Fail';
     my $ret = `brewbuild --remove`;
-    chdir '..';
 
     my @res = split /\n/, $ret;
     @res = grep /\S/, @res;
@@ -28,6 +27,9 @@ if (! $ENV{BBDEV_TESTING}){
 
     is ( $res[1], "5.22.1 :: FAIL", "FAIL ok" );
 
+    is (-e '5.22.1.bblog', 1, "fail log for 5.22.1 created ok");
+
+    chdir '..';
     remove_tree('BB-Fail');
     is (-d 'BB-Fail', undef, "pass dir removed ok");
 }
