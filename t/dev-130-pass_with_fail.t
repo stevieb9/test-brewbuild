@@ -22,7 +22,7 @@ if (! $ENV{BBDEV_TESTING}){
     my $ver = $^O =~ /MSWin/ ? '5.10.1_32' : '5.10.1';
 
     `brewbuild --remove`;
-    my $ret = `brewbuild --version $ver`;
+    my $ret = `brewbuild --install $ver`;
     chdir '..';
 
     print $ret;

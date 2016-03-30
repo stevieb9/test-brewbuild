@@ -97,8 +97,8 @@ sub instance_install {
 
     my @new_installs;
 
-    if ($self->{args}{version}->[0]){
-        for my $version (@{ $self->{args}{version} }){
+    if ($self->{args}{install}->[0]){
+        for my $version (@{ $self->{args}{install} }){
             $version = "perl-$version" if ! $self->is_win && $version !~ /perl/;
             if (grep { $version eq $_ } @{ $perls_installed }){
                 $log->_6("$version is already installed... skipping");
@@ -223,7 +223,7 @@ sub run {
 
     }
 
-    if ($new || $self->{args}{version}) {
+    if ($new || $self->{args}{install}) {
         $self->instance_install($new, \@perls_available, \@perls_installed);
     }
 
@@ -236,7 +236,9 @@ sub run {
         print "no perls installed... exiting" if $log->level;
     }
     else {
-        $self->results();
+        if (! $self->{args}{notest}){
+            $self->results();
+        }
     }
 }
 sub exec {
@@ -391,7 +393,7 @@ All unit tests are run against all installed instances.
     my %args = (
         debug   => undef,
         remove  => undef,
-        version => undef,
+        install => undef,
         new     => undef,
         plugin  => undef,
         on      => undef,
@@ -447,7 +449,7 @@ setup.
 
 =head2 instance_install
 
-If 'version' param is set, will install that specific version. If 'new' param
+If 'install' param is set, will install that specific version. If 'new' param
 is set to a positive integer, will install that many random versions of perl.
 
 =head2 instance_remove

@@ -8,6 +8,9 @@ Revision history for Test-BrewBuild
           installed, instead of letting perlbrew handle it (closes #50)
         - prereq 'version' added to correctly get version info from pre 5.10
           (fixes #51)
+        - renamed --version|-v to --install|-i
+        - added --notest|-N, allows install/remove without running exec()
+          (closes #49)
 
 1.03_03 2016-03-29
         - --revdep, auto-testing of CPAN down-river modules working very well

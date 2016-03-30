@@ -36,7 +36,7 @@ if ($^O =~ /MSWin/){
     like ($res[1], qr/5.22.1 :: PASS/, "$res[1] -o ok");
 
     remove_tree('BB-Pass');
-    is (-d 'BB-Pass', undef, "--version pass dir removed ok");
+    is (-d 'BB-Pass', undef, "--on pass dir removed ok");
 }
 
 done_testing();

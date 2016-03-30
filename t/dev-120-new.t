@@ -38,7 +38,7 @@ if (! $ENV{BBDEV_TESTING}){
     like ($res[5], qr/5\.\d{1,2}\.\d :: PASS/, "PASS run ok");
 
     remove_tree('BB-Pass');
-    is (-d 'BB-Pass', undef, "--version pass dir removed ok");
+    is (-d 'BB-Pass', undef, "--new pass dir removed ok");
 }
 
 done_testing();

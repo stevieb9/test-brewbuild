@@ -77,11 +77,11 @@ SYNOPSIS
     the number portion of the version per "perlbrew available" or
     "berrybrew available"
 
-        brewbuild --version 5.20.3
+        brewbuild --install 5.20.3
 
     ...multiple versions can be passed in at once
 
-        brewbuild -v 5.20.3 -v 5.14.4 -v 5.23.5
+        brewbuild -i 5.20.3 -i 5.14.4 -i 5.23.5
 
 DESCRIPTION
 
