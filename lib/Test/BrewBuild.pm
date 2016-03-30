@@ -146,11 +146,11 @@ sub results {
     local $SIG{__WARN__} = sub {};
     $log->_6("warnings trapped locally");
 
-    my $result = $self->exec;
+    my $results = $self->exec;
 
-    $log->_7("\n*****\n$result\n*****");
+    $log->_7("\n*****\n$results\n*****");
 
-    my @ver_results = $result =~ /[Pp]erl-\d\.\d+\.\d+(?:_\w+)?\s+===.*?(?=(?:[Pp]erl-\d\.\d+\.\d+(?:_\w+)?\s+===|$))/gs;
+    my @ver_results = $results =~ /[Pp]erl-\d\.\d+\.\d+(?:_\w+)?\s+===.*?(?=(?:[Pp]erl-\d\.\d+\.\d+(?:_\w+)?\s+===|$))/gs;
 
     $log->_5("got " . scalar @ver_results . " results");
 
