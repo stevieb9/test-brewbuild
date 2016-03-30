@@ -287,7 +287,7 @@ sub exec {
         }
     }
     else {
-        $log->_5("exec'ing: $brew exec ". join ', ', @exec_cmd);
+        $log->_5("exec'ing: $brew exec:\n". join ', ', @exec_cmd);
 
         if ($bcmd->is_win){
             my $test = pop @exec_cmd;
