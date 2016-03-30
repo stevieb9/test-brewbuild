@@ -50,6 +50,7 @@ WriteMakefile(
         'Module::Load' => 0,   # corelist since 5.9.4
         'Plugin::Simple' => '0.06',
         'Test::BrewBuild::Plugin::TestAgainst' => '0.03',
+        'version' => 0,
     },
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean => { FILES => 'Test-BrewBuild-*' },

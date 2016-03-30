@@ -2,7 +2,9 @@ package Test::BrewBuild::BrewCommands;
 use strict;
 use warnings;
 
-our $VERSION = '1.03_03';
+use version;
+
+our $VERSION = '1.04';
 
 my $log;
 
@@ -44,7 +46,7 @@ sub using {
         return $installed[0];
     }
     else {
-        my $using = $^V;
+        my $using = version->parse($])->normal;
         $using =~ s/v//;
         $using = "perl-$using";
         return $using;

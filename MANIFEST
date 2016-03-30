@@ -8,6 +8,8 @@ Makefile.PL
 MANIFEST
 MANIFEST.SKIP
 README
+setup/unix_setup.txt
+setup/windows_setup.txt
 t/00-load.t
 t/01-plugins.t
 t/02-brew_info.t
