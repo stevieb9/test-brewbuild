@@ -57,7 +57,7 @@ Options:
 --revdep | -R   Run tests, install, then run tests on all CPAN reverse dependency modules
 --debug  | -d:  Int (0-7), sets logging verbosity
 --new    | -n:  Integer, how many random versions of perl to install
---remove | -r:  Bool, remove all installed perls (less the current one) before installation of new ones
+--remove | -r:  Remove all installed perls (less the current one) before installation of new ones
 --verion | -v:  String, the number portion of an available perl version according to "*brew available". Multiple versions can besent in at once
 --help   | -h:  print this help message
 EOF
@@ -68,6 +68,8 @@ if (! -d 't/'){
     croak "\nthere's no 't/' directory, nothing to test. Exiting...\n";
 }
 
+# configure output for if *brew isn't installed
+
 my $is_win = $^O =~ /MSWin/ ? 1 : 0;
 my $brew_prog = $is_win ? 'berrybrew.exe' : 'perlbrew';
 my $brew_link = $is_win 
@@ -76,7 +78,9 @@ my $brew_link = $is_win
 my $sep = $is_win ? ';' : ':';
 my @modules;
 
-if (! grep { -x "$_/$brew_prog"}split /$sep/,$ENV{PATH}){
+# check in PATH to see if berry/perlbrew exists
+
+if (! grep { -x "$_/$brew_prog"} split /$sep/, $ENV{PATH}){
     warn "\nYou need to install '$brew_prog' to use this program...\n\n" .
          "See $brew_link\n\n";
     exit;

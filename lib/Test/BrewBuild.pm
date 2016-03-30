@@ -283,7 +283,7 @@ sub exec {
             $cmd = "system(\"$cmd\")";
             print $wfh $cmd;
             close $wfh;
-            return `$brew exec perl $fname 2>stderr.bblog`; 
+            return `$brew exec --with $vers perl $fname 2>stderr.bblog`; 
         }
     }
     else {
