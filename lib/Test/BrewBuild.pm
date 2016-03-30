@@ -66,21 +66,21 @@ sub instance_remove {
 
     $log->_4( "using '$remove_cmd' remove command" );
 
-    for (@perls_installed){
+    for my $installed_perl (@perls_installed){
         my $using = $bcmd->using( $self->brew_info );
 
-        if ($using eq $_) {
+        if ($using eq $installed_perl) {
             $log->_5( "skipping version we're using: $using" );
             next;
         }
 
-        $log->_5( "exec'ing $remove_cmd $_" );
+        $log->_5( "exec'ing $remove_cmd $installed_perl" );
 
         if ($bcmd->is_win) {
-            `$remove_cmd $_ 2>nul`;
+            `$remove_cmd $installed_perl 2>nul`;
         }
         else {
-            `$remove_cmd $_ 2>/dev/null`;
+            `$remove_cmd $installed_perl 2>/dev/null`;
 
         }
     }
