@@ -29,6 +29,8 @@ my $dir = 'Mock-Sub-1.06';
     my @res = split /\n/, $ret;
     @res = grep /\S/, @res;
 
+    print "*$_*\n" for @res;
+
     if ($^O =~ /MSWin/){
         is (@res, 14, "proper result count");
         like ($res[0], qr/working on/, "first like is the list of revdeps" );
@@ -53,15 +55,18 @@ my $dir = 'Mock-Sub-1.06';
         like ($res[2], qr/\w+::\w+/, "is a module name");
         like ($res[3], qr/5.18.4 :: \w+/, "is a valid result");
         like ($res[4], qr/5.22.1 :: \w+/, "is a valid result");
-        like ($res[5], qr/\w+::\w+/, "is a module name");
-        like ($res[6], qr/5.18.4 :: \w+/, "is a valid result");
-        like ($res[7], qr/5.22.1 :: \w+/, "is a valid result");
-        like ($res[8], qr/\w+::\w+/, "is a module name");
-        like ($res[9], qr/5.18.4 :: \w+/, "is a valid result");
-        like ($res[10], qr/5.22.1 :: \w+/, "is a valid result");
-        like ($res[11], qr/\w+::\w+/, "is a module name");
-        like ($res[12], qr/5.18.4 :: \w+/, "is a valid result");
-        like ($res[13], qr/5.22.1 :: \w+/, "is a valid result");
+        like ($res[5], qr/- installing/, "line 2 ok");
+        like ($res[6], qr/\w+::\w+/, "is a module name");
+        like ($res[7], qr/5.18.4 :: \w+/, "is a valid result");
+        like ($res[8], qr/5.22.1 :: \w+/, "is a valid result");
+        like ($res[9], qr/- installing/, "line 2 ok");
+        like ($res[10], qr/\w+::\w+/, "is a module name");
+        like ($res[11], qr/5.18.4 :: \w+/, "is a valid result");
+        like ($res[12], qr/5.22.1 :: \w+/, "is a valid result");
+        like ($res[13], qr/- installing/, "line 2 ok");
+        like ($res[14], qr/\w+::\w+/, "is a module name");
+        like ($res[15], qr/5.18.4 :: \w+/, "is a valid result");
+        like ($res[16], qr/5.22.1 :: \w+/, "is a valid result");
     }
 
     remove_tree($dir);
