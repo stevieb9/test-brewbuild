@@ -29,9 +29,8 @@ my $dir = 'Mock-Sub-1.06';
     my @res = split /\n/, $ret;
     @res = grep /\S/, @res;
 
-    is (@res, 14, "proper result count");
-
     if ($^O =~ /MSWin/){
+        is (@res, 14, "proper result count");
         like ($res[0], qr/working on/, "first like is the list of revdeps" );
         like ($res[1], qr/- installing/, "line 2 is ok");
         like ($res[2], qr/\w+::\w+/, "is a module name");
@@ -48,19 +47,21 @@ my $dir = 'Mock-Sub-1.06';
         like ($res[13], qr/5.18.4 :: \w+/, "is a valid result");
     }
     else {
-        like ($res[0], qr/working on/, "first like is the list of revdeps" );
-        like ($res[1], qr/\w+::\w+/, "$res[1] is a module name");
-        like ($res[2], qr/5.22.1 :: \w+/, "$res[2] is a valid result");
-        like ($res[3], qr/5.18.4 :: \w+/, "$res[3] is a valid result");
-        like ($res[4], qr/\w+::\w+/, "$res[4] is a module name");
-        like ($res[5], qr/5.22.1 :: \w+/, "$res[5] is a valid result");
-        like ($res[6], qr/5.18.4 :: \w+/, "$res[6] is a valid result");
-        like ($res[7], qr/\w+::\w+/, "$res[7] is a module name");
-        like ($res[8], qr/5.22.1 :: \w+/, "$res[8] is a valid result");
-        like ($res[9], qr/5.18.4 :: \w+/, "$res[9] is a valid result");
-        like ($res[10], qr/\w+::\w+/, "$res[10] is a module name");
-        like ($res[11], qr/5.22.1 :: \w+/, "$res[11] is a valid result");
-        like ($res[12], qr/5.18.4 :: \w+/, "$res[13] is a valid result");
+        is (@res, 17, "proper result count");
+        like ($res[0], qr/working on/, "first line is the list of revdeps" );
+        like ($res[1], qr/- installing/, "line 2 ok");
+        like ($res[2], qr/\w+::\w+/, "is a module name");
+        like ($res[3], qr/5.18.4 :: \w+/, "is a valid result");
+        like ($res[4], qr/5.22.1 :: \w+/, "is a valid result");
+        like ($res[5], qr/\w+::\w+/, "is a module name");
+        like ($res[6], qr/5.18.4 :: \w+/, "is a valid result");
+        like ($res[7], qr/5.22.1 :: \w+/, "is a valid result");
+        like ($res[8], qr/\w+::\w+/, "is a module name");
+        like ($res[9], qr/5.18.4 :: \w+/, "is a valid result");
+        like ($res[10], qr/5.22.1 :: \w+/, "is a valid result");
+        like ($res[11], qr/\w+::\w+/, "is a module name");
+        like ($res[12], qr/5.18.4 :: \w+/, "is a valid result");
+        like ($res[13], qr/5.22.1 :: \w+/, "is a valid result");
     }
 
     remove_tree($dir);
