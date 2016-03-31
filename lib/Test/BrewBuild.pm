@@ -34,6 +34,7 @@ sub new {
     $log->_4("successfully loaded $plugin plugin");
 
     $self->tempdir;
+    $log->_7("using temp bblog dir: " . $self->tempdir);
 
     return $self;
 }
@@ -150,6 +151,8 @@ sub results {
     local $SIG{__WARN__} = sub {};
     $log->_6("warnings trapped locally");
 
+    my $failed = 0;
+
     my $results = $self->exec;
 
     $log->_7("\n*****\n$results\n*****");
@@ -169,14 +172,16 @@ sub results {
         }
         my $res;
 
-        if ($result =~ /Successfully tested /){
+        if ($result =~ /Successfully tested / && $result !~ /FAIL/){
             $log->_6("$ver PASSED...");
             $res = 'PASS';
+            print "******************************\n$result\n********************\n";
             push @pass, "$ver :: $res\n";
         }
         else {
             $log->_6("$ver FAILED...");
             $res = 'FAIL';
+            $failed = 1;
             push @fail, "$ver :: $res\n";
 
             my $tested_mod = $self->{args}{plugin_arg};
@@ -295,10 +300,12 @@ sub exec {
 
         if ($bcmd->is_win){
             my $test = pop @exec_cmd;
+            my $result;
             for (@exec_cmd){
-                `$brew exec $_ 2>$self->{tempdir}/stderr.bblog`;
+                $result .= `$brew exec $_ 2>$self->{tempdir}/stderr.bblog`;
             }
-            return `$brew exec $test 2>$self->{tempdir}/.bblog`;
+            $result .= `$brew exec $test 2>$self->{tempdir}/.bblog`;
+            return $result;
         }
         else {
             my $wfh = File::Temp->new(UNLINK => 1);
@@ -347,8 +354,7 @@ sub _create_log {
 sub tempdir {
     my $self = shift;
     $self->{tempdir} = $self->{args}{tempdir} if defined $self->{args}{tempdir};
-    delete $self->{args}{tempdir};
-    return $self->{tempdir};
+    return $self->{tempdir} || '';
 }
 sub log {
     my $self = shift;

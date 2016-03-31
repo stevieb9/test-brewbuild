@@ -4,7 +4,7 @@ use strict;
 
 use Carp qw(croak);
 use Getopt::Long qw(:config no_ignore_case pass_through);
-use File::Copy;
+use File::Copy::Recursive qw(dircopy);
 use File::Find;
 use File::Path qw(remove_tree);
 use File::Temp;
@@ -111,6 +111,7 @@ $args{legacy} = defined $args{legacy} ? 1 : 0;
 remove_tree 'bblog';
 my $dir = File::Temp->newdir;
 my $dir_name = $dir->dirname;
+
 $args{tempdir} = $dir_name;
 
 if ($args{revdep}){
@@ -167,8 +168,8 @@ else {
 # clean up the logs
 
 mkdir 'bblog';
-copy glob("$dir_name/*.bblog"), 'bblog';
-
+dircopy $dir_name, 'bblog';
+system("dir $dir_name");
 sub _exec_brew {
     my $brew = Test::BrewBuild->new(%args);
 
