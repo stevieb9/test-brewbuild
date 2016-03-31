@@ -29,6 +29,8 @@ my $dir = 'Mock-Sub-1.06';
     my @res = split /\n/, $ret;
     @res = grep /\S/, @res;
 
+    print "*$_*\n" for @res;
+
     if ($^O =~ /MSWin/){
         is (@res, 14, "proper result count");
         like ($res[0], qr/working on/, "first like is the list of revdeps" );
