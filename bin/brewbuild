@@ -58,16 +58,18 @@ Usage: perl build/brewbuild.pl [options]
 
 Options:
 
---on      | -o:  String, perl version number to run against (can be supplied multiple times). Can not be used on Windows
---plugin  | -p:  String, the module name of the exec command plugin to use
+--on      | -o:  perl version number to run against (can be supplied multiple times). Can not be used on Windows
+--revdep  | -R   run tests, install, then run tests on all CPAN reverse dependency modules
+--debug   | -d:  0-7, sets logging verbosity
+--new     | -n:  how many random versions of perl to install
+--remove  | -r:  remove all installed perls (less the current one)
+--install | -i:  number portion of an available perl version according to "*brew available". Multiple versions can besent in at once
+--notest  | -N:  do not run tests. Allows you to --remove and install without testing
+--legacy  | -L:  operate on perls < 5.8.x. The default plugins won't work with this flag set if a lower version is installed
+
+--plugin  | -p:  module name of the exec command plugin to use
 --args    | -a:  List of args to pass into the plugin (one arg per loop)
---revdep  | -R   Run tests, install, then run tests on all CPAN reverse dependency modules
---debug   | -d:  Int (0-7), sets logging verbosity
---new     | -n:  Integer, how many random versions of perl to install
---remove  | -r:  Remove all installed perls (less the current one) before installation of new ones
---install | -i:  String, the number portion of an available perl version according to "*brew available". Multiple versions can besent in at once
---notest  | -N:  Do not run tests. Allows you to --remove and install without testing
---legacy  | -L:  Operate on perls < 5.8.x. The default plugins won't work with this flag set
+
 --setup   | -s:  Display test platform setup information
 --help    | -h:  print this help message
 EOF
@@ -284,9 +286,8 @@ Display test platform setup instructions for Unix and Windows
 
 This C<brewbuild> script installed by the L<Test::Brewbuild> module allows you
 to perform your unit tests across all of your Perlbrew (Unix) or Berrybrew
-(Windows) Perl instances, with the ability to very easily create your own
-plugins that contain the code that C<perlbrew/berrybrew exec> will process.
-(See L<Test::BrewBuild::Plugin::DefaultExec> for an example).
+(Windows) Perl instances, as well as test all of your down-river CPAN modules
+that rely on your module against the locally updated version.
 
 For Windows, you'll need to install Berrybrew (see L<SEE ALSO> for details).
 For Unix, you'll need Perlbrew.
@@ -299,6 +300,66 @@ All unit tests are run against all installed instances.
 The actual module is just a helper for the installed script, and isn't designed
 for end-user use.
 
+=head1 TEST PLATFORM CONFIGURATION
+
+Test::BrewBuild test platform configuration guide
+
+=head2 UNIX
+
+Install perlbrew and related requirements:
+
+    cpanm App::perlbrew
+    perlbrew install-patchperl
+    perlbrew install-cpanm
+
+Install and switch to your base perl instance, and install C<Test::BrewBuild>:
+
+    perlbrew install 5.22.1
+    perlbrew switch 5.22.1
+    cpanm Test::BrewBuild
+
+=head2 WINDOWS
+
+Note that the key here is that your %PATH% must be free and clear of anything
+Perl. That means that if you're using an existing box with Strawberry or
+ActiveState installed, you *must* remove all traces of them in the PATH
+environment variable for ``brewbuild'' to work correctly.
+
+Easiest way to guarantee a working environment is using a clean-slate Windows
+server with nothing on it. For a Windows test platform, I mainly used an
+Amazon AWS t2.small server.
+
+Download/install git for Windows:
+
+    https://git-scm.com/download/win)
+
+Create a repository directory, and enter it:
+
+    mkdir c:\repos
+    cd c:\repos
+
+Clone and configure berrybrew
+
+    git clone https://github.com/dnmfarrell/berrybrew
+    cd berrybrew
+    bin\berrybrew.exe config (type 'y' when asked to install in PATH)
+
+Close the current CMD window and open a new one to update env vars
+
+Check available perls, and install one that'll become your core base install
+
+    berrybrew available
+    berrybrew install 5.22.1_64
+    berrybrew switch 5.22.1_64
+    close CMD window, and open new one
+
+Make sure it took
+
+    perl -v
+
+Install Test::BrewBuild
+
+    cpanm Test::BrewBuild
 
 =head1 AUTHOR
 
