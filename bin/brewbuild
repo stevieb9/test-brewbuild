@@ -82,7 +82,7 @@ if ($setup){
     print $_ for @setup;
     exit;
 }
-if (! -d 't/'){
+if (! -d 't/' && ! $args{notest}){
     croak "\nthere's no 't/' directory, nothing to test. Exiting...\n";
 }
 
