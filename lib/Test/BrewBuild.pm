@@ -3,6 +3,7 @@ use strict;
 use warnings;
 
 use File::Copy;
+use File::Temp;
 use Logging::Simple;
 use Plugin::Simple default => 'Test::BrewBuild::Plugin::DefaultExec';
 use Test::BrewBuild::BrewCommands;
