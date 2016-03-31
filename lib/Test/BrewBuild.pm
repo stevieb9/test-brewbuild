@@ -2,7 +2,7 @@ package Test::BrewBuild;
 use strict;
 use warnings;
 
-use File::Temp;
+use File::Copy;
 use Logging::Simple;
 use Plugin::Simple default => 'Test::BrewBuild::Plugin::DefaultExec';
 use Test::BrewBuild::BrewCommands;
@@ -32,6 +32,8 @@ sub new {
     $self->{exec_plugin} = \&$exec_plugin_sub;
 
     $log->_4("successfully loaded $plugin plugin");
+
+    $self->tempdir;
 
     return $self;
 }
@@ -181,12 +183,12 @@ sub results {
 
             if (defined $tested_mod){
                 $tested_mod =~ s/::/-/g;
-                open my $wfh, '>', "$tested_mod-$ver.bblog"  or die $!;
+                open my $wfh, '>', "$self->{tempdir}/$tested_mod-$ver.bblog"  or die $!;
                 print $wfh $result;
                 close $wfh;
             }
             else {
-                open my $wfh, '>', "$ver.bblog"  or die $!;
+                open my $wfh, '>', "$self->{tempdir}/$ver.bblog"  or die $!;
                 print $wfh $result;
                 close $wfh;
             }
@@ -270,9 +272,9 @@ sub exec {
         if ($bcmd->is_win){
             my $test = pop @exec_cmd;
             for (@exec_cmd){
-                `$brew exec --with $vers $_ 2>brewbuild_err.bblog`;
+                `$brew exec --with $vers $_ 2>$self->{tempdir}/stderr.bblog`;
             }
-            return `$brew exec --with $vers $test 2>brewbuild_err.bblog`;
+            return `$brew exec --with $vers $test 2>$self->{tempdir}/stderr.bblog`;
         }
         else {
             my $wfh = File::Temp->new(UNLINK => 1);
@@ -285,7 +287,7 @@ sub exec {
             $cmd = "system(\"$cmd\")";
             print $wfh $cmd;
             close $wfh;
-            return `$brew exec --with $vers perl $fname 2>brewbuild_err.bblog`;
+            return `$brew exec --with $vers perl $fname 2>$self->{tempdir}/stderr.bblog`;
         }
     }
     else {
@@ -294,9 +296,9 @@ sub exec {
         if ($bcmd->is_win){
             my $test = pop @exec_cmd;
             for (@exec_cmd){
-                `$brew exec $_ 2>brewbuild_err.bblog`;
+                `$brew exec $_ 2>$self->{tempdir}/stderr.bblog`;
             }
-            return `$brew exec $test 2>brewbuild_err.bblog`;
+            return `$brew exec $test 2>$self->{tempdir}/.bblog`;
         }
         else {
             my $wfh = File::Temp->new(UNLINK => 1);
@@ -309,7 +311,7 @@ sub exec {
             $cmd = "system(\"$cmd\")";
             print $wfh $cmd;
             close $wfh;
-            return `$brew exec perl $fname 2>stderr.bblog`; 
+            return `$brew exec perl $fname 2>$self->{tempdir}/stderr.bblog`;
         }
     }
 }
@@ -341,6 +343,12 @@ sub _create_log {
     }
 
     return $self->{log};
+}
+sub tempdir {
+    my $self = shift;
+    $self->{tempdir} = $self->{args}{tempdir} if defined $self->{args}{tempdir};
+    delete $self->{args}{tempdir};
+    return $self->{tempdir};
 }
 sub log {
     my $self = shift;
