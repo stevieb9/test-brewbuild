@@ -27,7 +27,7 @@ if (! $ENV{BBDEV_TESTING}){
 
     is ( $res[1], "5.22.1 :: FAIL", "FAIL ok" );
 
-    is (-e '5.22.1.bblog', 1, "fail log for 5.22.1 created ok");
+    is (-e 'bblog/5.22.1.bblog', 1, "fail log for 5.22.1 created ok");
 
     chdir '..';
     remove_tree('BB-Fail');
