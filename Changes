@@ -17,6 +17,8 @@ Revision history for Test-BrewBuild
           than that, unless this flag is set
         - FAIL logs are now stored in a temp directory, then moved to './bblog'
           after completion, ensuring manifest.t tests don't fail (fixes #56)
+        - fixed bug where on Windows, if a module build fails, the revdeps
+          could still pass (fixes #57)
 
 1.03_03 2016-03-29
         - --revdep, auto-testing of CPAN down-river modules working very well
