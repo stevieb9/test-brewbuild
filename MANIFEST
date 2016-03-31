@@ -43,10 +43,12 @@ t/dev-140-invalid_args.t
 t/dev-145-revdep-single.t
 t/dev-150-revdep-multi.t
 t/dev-155-notest.t
+t/dev-160-revdep-multi-fail.t
 t/manifest.t
 t/modules/bb-522.zip
 t/modules/bb-fail.zip
 t/modules/bb-pass.zip
+t/modules/mock-sub-bad.zip
 t/modules/mock-sub.tgz
 t/pod-coverage.t
 t/pod.t
