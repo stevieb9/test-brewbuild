@@ -157,7 +157,11 @@ sub results {
 
     $log->_7("\n*****\n$results\n*****");
 
-    my @ver_results = $results =~ /[Pp]erl-\d\.\d+\.\d+(?:_\w+)?\s+===.*?(?=(?:[Pp]erl-\d\.\d+\.\d+(?:_\w+)?\s+===|$))/gs;
+    my @ver_results = $results =~ /
+        [Pp]erl-\d\.\d+\.\d+(?:_\w+)?\s+===
+        .*?
+        (?=(?:[Pp]erl-\d\.\d+\.\d+(?:_\w+)?\s+===|$))
+        /gsx;
 
     $log->_5("got " . scalar @ver_results . " results");
 
@@ -175,7 +179,6 @@ sub results {
         if ($result =~ /Successfully tested / && $result !~ /FAIL/){
             $log->_6("$ver PASSED...");
             $res = 'PASS';
-            print "******************************\n$result\n********************\n";
             push @pass, "$ver :: $res\n";
         }
         else {
@@ -188,7 +191,8 @@ sub results {
 
             if (defined $tested_mod){
                 $tested_mod =~ s/::/-/g;
-                open my $wfh, '>', "$self->{tempdir}/$tested_mod-$ver.bblog"  or die $!;
+                open my $wfh, '>', "$self->{tempdir}/$tested_mod-$ver.bblog"
+                    or die $!;
                 print $wfh $result;
                 close $wfh;
             }
@@ -256,7 +260,10 @@ sub exec {
     $log->_6("creating temp file");
 
     if ($self->{args}{plugin_arg}) {
-        $log->_5( "fetching instructions from the plugin with arg $self->{args}{plugin_arg}" );
+        $log->_5( "" .
+            "fetching instructions from the plugin with arg " .
+            $self->{args}{plugin_arg}
+        );
     }
     
     my @exec_cmd = $self->{exec_plugin}->(
@@ -274,37 +281,55 @@ sub exec {
         $log->_5("versions to run on: $vers");
         $log->_5("exec'ing: $brew exec --with $vers " . join ', ', @exec_cmd);
 
-        if ($bcmd->is_win){
-            my $test = pop @exec_cmd;
-            for (@exec_cmd){
-                `$brew exec --with $vers $_ 2>$self->{tempdir}/stderr.bblog`;
-            }
-            return `$brew exec --with $vers $test 2>$self->{tempdir}/stderr.bblog`;
+        my $wfh = File::Temp->new(UNLINK => 1);
+        my $fname = $wfh->filename;
+        open $wfh, '>', $fname or die $!;
+        for (@exec_cmd){
+            s/\n//g;
         }
-        else {
-            my $wfh = File::Temp->new(UNLINK => 1);
-            my $fname = $wfh->filename;
-            open $wfh, '>', $fname or die $!;
-            for (@exec_cmd){
-                s/\n//g;
-            }
-            my $cmd = join ' && ', @exec_cmd;
-            $cmd = "system(\"$cmd\")";
-            print $wfh $cmd;
-            close $wfh;
-            return `$brew exec --with $vers perl $fname 2>$self->{tempdir}/stderr.bblog`;
-        }
+        my $cmd = join ' && ', @exec_cmd;
+        $cmd = "system(\"$cmd\")";
+        print $wfh $cmd;
+        close $wfh;
+        return `$brew exec --with $vers perl $fname 2>$self->{tempdir}/stderr.bblog`;
     }
     else {
         $log->_5("exec'ing: $brew exec:\n". join ', ', @exec_cmd);
 
         if ($bcmd->is_win){
-            my $test = pop @exec_cmd;
-            my $result;
+
+            # all of this shit because berrybrew doesn't get the path right
+            # when calling ``berrybrew exec perl ...''
+
+            my %res_hash;
+
             for (@exec_cmd){
-                $result .= `$brew exec $_ 2>$self->{tempdir}/stderr.bblog`;
+                my $res = `$brew exec $_ 2>$self->{tempdir}/stderr.bblog`;
+
+                my @results = $res =~ /
+                    [Pp]erl-\d\.\d+\.\d+(?:_\w+)?\s+===
+                    .*?
+                    (?=(?:[Pp]erl-\d\.\d+\.\d+(?:_\w+)?\s+===|$))
+                    /gsx;
+
+                for (@results){
+                    if ($_ =~ /
+                        ([Pp]erl-\d\.\d+\.\d+(?:_\w+)?\s+=+?)
+                        (\s+.*?)
+                        (?=(?:[Pp]erl-\d\.\d+\.\d+(?:_\w+)?\s+===|$))
+                        /gsx)
+                    {
+                        push @{ $res_hash{$1} }, $2;
+                    }
+                }
             }
-            $result .= `$brew exec $test 2>$self->{tempdir}/.bblog`;
+
+            my $result;
+
+            for (keys %res_hash){
+                $result .= $_ . join '', @{ $res_hash{$_} };
+            }
+
             return $result;
         }
         else {

@@ -169,7 +169,7 @@ else {
 
 mkdir 'bblog';
 dircopy $dir_name, 'bblog';
-system("dir $dir_name");
+
 sub _exec_brew {
     my $brew = Test::BrewBuild->new(%args);
 
