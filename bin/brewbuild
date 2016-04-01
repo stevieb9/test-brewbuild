@@ -33,7 +33,7 @@ GetOptions(
 
 my @valid_args = qw(
     on o new n remove r revdep R plugin p args a debug d install i help h
-    n notest setup s legacy L
+    N notest setup s legacy L
 );
 
 if ($^O =~ /MSWin/ && $args{on}){
@@ -204,7 +204,7 @@ You must be in the root directory of the distribution you want to test.
 
 Run all unit tests against all installed instances with no other action. Upon a
 FAIL, a log file will be generated in the current working directory named
-"bblog/version.bblog"
+C<bblog/version.bblog>
 
     brewbuild
 
@@ -217,7 +217,7 @@ FAIL, a log file will be generated in the current working directory named
 Run tests on the local working copy of the current module, then run all tests
 of all reverse dependencies of this module (as reported by CPAN), to ensure
 the down river modules will work with your new build. In this case, FAILs are
-stored in "bblog/revdep-module-name.version.bblog"
+stored in C<bblog/revdep-module-name.version.bblog>
 
     brewbuild --revdep # or -R
 

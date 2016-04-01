@@ -9,7 +9,7 @@ SYNOPSIS
 
     Run all unit tests against all installed instances with no other
     action. Upon a FAIL, a log file will be generated in the current
-    working directory named "bblog/version.bblog"
+    working directory named bblog/version.bblog
 
         brewbuild
     
@@ -22,7 +22,7 @@ SYNOPSIS
     Run tests on the local working copy of the current module, then run all
     tests of all reverse dependencies of this module (as reported by CPAN),
     to ensure the down river modules will work with your new build. In this
-    case, FAILs are stored in "bblog/revdep-module-name.version.bblog"
+    case, FAILs are stored in bblog/revdep-module-name.version.bblog
 
         brewbuild --revdep # or -R
     
