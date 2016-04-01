@@ -360,7 +360,7 @@ Install Test::BrewBuild
 
 Steve Bertrand, C<< <steveb at cpan.org> >>
 
-=head2 CONTRIBUTING
+=head1 CONTRIBUTING
 
 Any and all feedback and help is appreciated. A Pull Request is the preferred
 method of receiving changes (L<https://github.com/stevieb9/p5-test-brewbuild>),
