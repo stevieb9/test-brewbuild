@@ -23,21 +23,23 @@ sub new {
 
     $bcmd = Test::BrewBuild::BrewCommands->new($log);
 
-    my $plugin = $args{plugin} ? $args{plugin} : $ENV{TBB_PLUGIN};
-
-    $log->_5("plugin param set to: " . defined $plugin ? $plugin : 'default');
-
-    $plugin = $self->plugins($plugin, can => ['brewbuild_exec']);
-
-    my $exec_plugin_sub = $plugin .'::brewbuild_exec';
-    $self->{exec_plugin} = \&$exec_plugin_sub;
-
-    $log->_4("successfully loaded $plugin plugin");
+    $self->_set_plugin();
 
     $self->tempdir;
     $log->_7("using temp bblog dir: " . $self->tempdir);
 
     return $self;
+}
+sub brew_info {
+    my $self = shift;
+
+    my $log = $log->child('brew_info');
+
+    my $brew_info = $bcmd->info;
+
+    $log->_6("brew info set to:\n$brew_info") if $brew_info;
+
+    return $brew_info;
 }
 sub perls_available {
     my ($self, $brew_info) = @_;
@@ -57,40 +59,6 @@ sub perls_installed {
     $log->_6("checking perls installed");
 
     return $bcmd->installed($self->{args}{legacy}, $brew_info);
-}
-sub instance_remove {
-    my ($self, @perls_installed) = @_;
-
-    my $log = $log->child('instance_remove');
-
-    $log->_6("perls installed: " . join ', ', @perls_installed);
-    $log->_0("removing previous installs...");
-
-    my $remove_cmd = $bcmd->remove;
-
-    $log->_4( "using '$remove_cmd' remove command" );
-
-    for my $installed_perl (@perls_installed){
-
-        my $using = $bcmd->using( $self->brew_info );
-
-        if ($using eq $installed_perl) {
-            $log->_5( "not removing version we're using: $using" );
-            next;
-        }
-
-        $log->_5( "exec'ing $remove_cmd $installed_perl" );
-
-        if ($bcmd->is_win) {
-            `$remove_cmd $installed_perl 2>nul`;
-        }
-        else {
-            `$remove_cmd $installed_perl 2>/dev/null`;
-
-        }
-    }
-
-    $log->_4("removal of existing perl installs complete...");
 }
 sub instance_install {
     my ($self, $new, $perls_available, $perls_installed) = @_;
@@ -142,6 +110,81 @@ sub instance_install {
     }
     else {
         $log->_5("using existing versions only");
+    }
+}
+sub instance_remove {
+    my ($self, @perls_installed) = @_;
+
+    my $log = $log->child('instance_remove');
+
+    $log->_6("perls installed: " . join ', ', @perls_installed);
+    $log->_0("removing previous installs...");
+
+    my $remove_cmd = $bcmd->remove;
+
+    $log->_4( "using '$remove_cmd' remove command" );
+
+    for my $installed_perl (@perls_installed){
+
+        my $using = $bcmd->using( $self->brew_info );
+
+        if ($using eq $installed_perl) {
+            $log->_5( "not removing version we're using: $using" );
+            next;
+        }
+
+        $log->_5( "exec'ing $remove_cmd $installed_perl" );
+
+        if ($bcmd->is_win) {
+            `$remove_cmd $installed_perl 2>nul`;
+        }
+        else {
+            `$remove_cmd $installed_perl 2>/dev/null`;
+
+        }
+    }
+
+    $log->_4("removal of existing perl installs complete...");
+}
+sub run {
+    my $self = shift;
+
+    my $new = defined $self->{args}{new} ? $self->{args}{new} : 0;
+
+    my $log = $log->child('run');
+    $log->_5("commencing run()");
+
+    my $brew_info = $self->brew_info;
+
+    my @perls_available = $self->perls_available($brew_info);
+
+    $new = scalar @perls_available if $new < 0;
+
+    my @perls_installed = $self->perls_installed($brew_info);
+
+    $log->_4("installed perls: " . join ', ', @perls_installed);
+
+    if ($self->{args}{remove}){
+        $self->instance_remove(@perls_installed);
+
+    }
+
+    if ($new || $self->{args}{install}) {
+        $self->instance_install($new, \@perls_available, \@perls_installed);
+    }
+
+    # refetch installed in case we have installed a new instance
+
+    @perls_installed = $self->perls_installed($self->brew_info);
+
+    if (! $perls_installed[0]){
+        $log->_0("no perls installed... exiting");
+        print "no perls installed... exiting" if $log->level;
+    }
+    else {
+        if (! $self->{args}{notest}){
+            $self->results();
+        }
     }
 }
 sub results {
@@ -211,47 +254,6 @@ sub results {
     print $_ for @fail;
 
     $log->_5(__PACKAGE__ ." run finished");
-}
-sub run {
-    my $self = shift;
-
-    my $new = defined $self->{args}{new} ? $self->{args}{new} : 0;
-
-    my $log = $log->child('run');
-    $log->_5("commencing run()");
-
-    my $brew_info = $self->brew_info;
-
-    my @perls_available = $self->perls_available($brew_info);
-
-    $new = scalar @perls_available if $new < 0;
-
-    my @perls_installed = $self->perls_installed($brew_info);
-
-    $log->_4("installed perls: " . join ', ', @perls_installed);
-
-    if ($self->{args}{remove}){
-        $self->instance_remove(@perls_installed);
-
-    }
-
-    if ($new || $self->{args}{install}) {
-        $self->instance_install($new, \@perls_available, \@perls_installed);
-    }
-
-    # refetch installed in case we have installed a new instance
-
-    @perls_installed = $self->perls_installed($self->brew_info);
-
-    if (! $perls_installed[0]){
-        $log->_0("no perls installed... exiting");
-        print "no perls installed... exiting" if $log->level;
-    }
-    else {
-        if (! $self->{args}{notest}){
-            $self->results();
-        }
-    }
 }
 sub exec {
     my $self = shift;
@@ -348,16 +350,19 @@ sub exec {
         }
     }
 }
-sub brew_info {
+sub tempdir {
     my $self = shift;
-
-    my $log = $log->child('brew_info');
-
-    my $brew_info = $bcmd->info;
-
-    $log->_6("brew info set to:\n$brew_info") if $brew_info;
-
-    return $brew_info;
+    $self->{tempdir} = $self->{args}{tempdir} if defined $self->{args}{tempdir};
+    return $self->{tempdir} || '';
+}
+sub log {
+    my $self = shift;
+    $self->{log}->_6(ref($self) ." class/obj retrieving a log object");
+    return $self->{log};
+}
+sub is_win {
+    my $is_win = ($^O =~ /Win/) ? 1 : 0;
+    return $is_win;
 }
 sub _create_log {
     my ($self, $level) = @_;
@@ -377,19 +382,20 @@ sub _create_log {
 
     return $self->{log};
 }
-sub tempdir {
+sub _set_plugin {
     my $self = shift;
-    $self->{tempdir} = $self->{args}{tempdir} if defined $self->{args}{tempdir};
-    return $self->{tempdir} || '';
-}
-sub log {
-    my $self = shift;
-    $self->{log}->_6(ref($self) ." class/obj retrieving a log object");
-    return $self->{log};
-}
-sub is_win {
-    my $is_win = ($^O =~ /Win/) ? 1 : 0;
-    return $is_win;
+
+    my $log = $log->child('_set_plugin');
+    my $plugin = $args{plugin} ? $args{plugin} : $ENV{TBB_PLUGIN};
+
+    $log->_5("plugin param set to: " . defined $plugin ? $plugin : 'default');
+
+    $plugin = $self->plugins($plugin, can => ['brewbuild_exec']);
+
+    my $exec_plugin_sub = $plugin .'::brewbuild_exec';
+    $self->{exec_plugin} = \&$exec_plugin_sub;
+
+    $log->_4("successfully loaded $plugin plugin");
 }
 1;
 

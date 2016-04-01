@@ -20,6 +20,8 @@ Revision history for Test-BrewBuild
         - fixed bug where on Windows, if a module build fails, the revdeps
           could still pass (fixes #57)
         - POD updates
+        - created berrybrew PR dnmfarrell/brewberry#16 which added the --with
+          arg to exec
 
 1.03_03 2016-03-29
         - --revdep, auto-testing of CPAN down-river modules working very well
