@@ -384,9 +384,8 @@ sub _create_log {
 }
 sub _set_plugin {
     my $self = shift;
-
     my $log = $log->child('_set_plugin');
-    my $plugin = $args{plugin} ? $args{plugin} : $ENV{TBB_PLUGIN};
+    my $plugin = $self->{args}{plugin} ? $self->{args}{plugin} : $ENV{TBB_PLUGIN};
 
     $log->_5("plugin param set to: " . defined $plugin ? $plugin : 'default');
 
