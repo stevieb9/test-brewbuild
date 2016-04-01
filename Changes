@@ -1,6 +1,6 @@
 Revision history for Test-BrewBuild
 
-1.04    2016-03-30
+1.04    2016-04-01
         - ensure FAIL files are created properly and test (closes #53)
         - fix issue where --on wasn't setting up the environment correctly
           (fixes #54)
@@ -22,6 +22,8 @@ Revision history for Test-BrewBuild
         - POD updates
         - created berrybrew PR dnmfarrell/brewberry#16 which added the --with
           arg to exec
+        - bumped prereq of Test::BrewBuild::Plugin::TestAgainst to 0.05 due
+          to the Windows path issues
 
 1.03_03 2016-03-29
         - --revdep, auto-testing of CPAN down-river modules working very well
