@@ -530,6 +530,10 @@ we're working on.
 Developer method, returns an instance of the packages log object for creating
 child log objects.
 
+=head2 tempdir
+
+Sets up the object with a temporary directory that will be removed after run.
+
 =head1 AUTHOR
 
 Steve Bertrand, C<< <steveb at cpan.org> >>
