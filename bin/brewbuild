@@ -196,13 +196,11 @@ sub _module_find {
 
 =head1 NAME
 
-brewbuild - This is the front-end script for L<Test::BrewBuild>
+brewbuild - Automate module and reverse-dependency testing, on Windows and Unix.
 
 =head1 SYNOPSIS
 
-You must be in the root directory of the distribution you want to test. Also,
-it is imperative that you have C<cpanm> installed in a global location (eg:
-C<perlbrew install-cpanm>.
+You must be in the root directory of the distribution you want to test.
 
 Run all unit tests against all installed instances with no other action. Upon a
 FAIL, a log file will be generated in the current working directory named
@@ -256,10 +254,6 @@ Install three new instances of perl, randomly
 
     brewbuild --new 3
 
-Enable verbose output. Default is 0, maximum is 7
-
-    brewbuild --debug 5
-
 Remove all perl instances (less the currently used one), install two new random
 versions, and run tests against all installed perls
 
@@ -295,7 +289,8 @@ For Unix, you'll need Perlbrew.
 It allows you to remove and reinstall on each test run, install random versions
 of perl, or install specific versions.
 
-All unit tests are run against all installed instances.
+All unit tests are run against all installed instances, unless otherwise
+specified.
 
 The actual module is just a helper for the installed script, and isn't designed
 for end-user use.
@@ -331,7 +326,7 @@ Amazon AWS t2.small server.
 
 Download/install git for Windows:
 
-    https://git-scm.com/download/win)
+    https://git-scm.com/download/win
 
 Create a repository directory, and enter it:
 
