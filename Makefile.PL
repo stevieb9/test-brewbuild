@@ -50,7 +50,7 @@ WriteMakefile(
         'Logging::Simple' => '0.07',
         'Module::Load' => 0,   # corelist since 5.9.4
         'Plugin::Simple' => '0.06',
-        'Test::BrewBuild::Plugin::TestAgainst' => '0.05',
+        'Test::BrewBuild::Plugin::TestAgainst' => '0.06',
         'version' => 0,
     },
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
