@@ -14,8 +14,8 @@ if (! $ENV{BBDEV_TESTING}){
 
 my $dir = 'Mock-Sub-1.06';
 
-{ # revdep 
-    
+{ # revdep
+
     $ENV{BBDEV_TESTING} = 0;
 
     my $ae = Archive::Extract->new(archive => 't/modules/mock-sub-bad.zip');

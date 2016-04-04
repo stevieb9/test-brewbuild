@@ -7,6 +7,8 @@ Revision history for Test-BrewBuild
         - POD updates
         - stderr.bblog as well as cpanm build.log files are now aggregated into
           the FAIL log reports (closes #61 and #62)
+        - added -T, --selftest, to avoid recursive testing of Test::BrewBuild
+          with the BBDEV_TESTING env var set
 
 1.04    2016-04-01
         - ensure FAIL files are created properly and test (closes #53)
