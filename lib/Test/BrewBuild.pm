@@ -235,15 +235,49 @@ sub results {
 
             if (defined $tested_mod){
                 $tested_mod =~ s/::/-/g;
-                open my $wfh, '>', "$self->{tempdir}/$tested_mod-$ver.bblog"
-                    or die $!;
+                my $fail_log = "$self->{tempdir}/$tested_mod-$ver.bblog";
+                open my $wfh, '>', $fail_log or die $!;
+
                 print $wfh $result;
+
+                if (! $self->is_win){
+                    my %errors = $self->_process_stderr;
+
+                    if (defined $errors{0}){
+                        print $wfh "\nCPANM ERROR LOG\n";
+                        print $wfh "===============\n";
+                        print $wfh $errors{0};
+                    }
+                    else {
+                        for (keys %errors){
+                            if (version->parse($_) == version->parse($ver)){
+                                print $wfh "\nCPANM ERROR LOG\n";
+                                print $wfh "===============\n";
+                                print $wfh $errors{$_};
+                            }
+                        }
+                    }
+                }
                 close $wfh;
+                $self->_attach_build_log($fail_log);
             }
             else {
-                open my $wfh, '>', "$self->{tempdir}/$ver.bblog"  or die $!;
+                my $fail_log = "$self->{tempdir}/$ver.bblog";
+                open my $wfh, '>', $fail_log or die $!;
                 print $wfh $result;
+
+                if (! $self->is_win){
+                    my %errors = $self->_process_stderr;
+                    for (keys %errors){
+                        if (version->parse($_) == version->parse($ver)){
+                            print $wfh "\nCPANM ERROR LOG\n";
+                            print $wfh "===============\n";
+                            print $wfh $errors{$_};
+                        }
+                    }
+                }
                 close $wfh;
+                $self->_attach_build_log($fail_log);
             }
         }
     }
@@ -396,6 +430,67 @@ sub _set_plugin {
 
     $log->_4("successfully loaded $plugin plugin");
 }
+sub _process_stderr {
+    my $self = shift;
+    
+    my $errlog = "$self->{tempdir}/stderr.bblog";
+
+    if (-e $errlog){
+        open my $errlog_fh, '<', $errlog or die $!;
+    
+        my $error_contents;
+        {
+            local $/ = undef;
+            $error_contents = <$errlog_fh>;
+        }
+        close $errlog_fh;
+
+        my @errors = $error_contents =~ /
+                cpanm\s+\(App::cpanminus\)
+                .*?
+                (?=(?:cpanm\s+\(App::cpanminus\)|$))
+            /xgs;
+
+        my %error_map;
+
+        for (@errors){
+            if (/cpanm.*?perl\s(5\.\d+)\s/){
+                $error_map{$1} = $_;
+            }
+        }
+        
+        if (! keys %error_map){
+            $error_map{0} = $error_contents;
+        }
+        return %error_map;
+    }
+}
+sub _attach_build_log {
+    my ($self, $bblog) = @_;
+
+    my $bbfile;
+    {
+        local $/ = undef;
+        open my $bblog_fh, '<', $bblog or die $!;
+        $bbfile = <$bblog_fh>;
+        close $bblog_fh;
+    }
+    
+    if ($bbfile =~ m|failed.*?See\s+(.*?)\s+for details|){
+        my $build_log = $1;
+        open my $bblog_wfh, '>>', $bblog or die $!;
+        print $bblog_wfh "\nCPANM BUILD LOG\n";
+        print $bblog_wfh "===============\n";
+
+        open my $build_log_fh, '<', $build_log or die $!;
+
+        while (<$build_log_fh>){
+            print $bblog_wfh $_;
+        }
+        close $bblog_wfh;
+    }
+}
+
 1;
 
 =head1 NAME

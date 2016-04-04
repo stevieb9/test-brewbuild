@@ -61,8 +61,8 @@ if (! $ENV{BBDEV_TESTING}){
         is ( $res[1], "5.22.1 :: FAIL", "5.22.1 FAIL ok (multi perl)" );
     }
 
-    remove_tree('BB-Fail');
-    is (-d 'BB-Fail', undef, "pass dir removed ok");
+#    remove_tree('BB-Fail');
+#    is (-d 'BB-Fail', undef, "pass dir removed ok");
 }
 
 done_testing();
