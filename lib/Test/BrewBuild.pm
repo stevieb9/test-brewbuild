@@ -277,7 +277,7 @@ sub results {
                     }
                 }
                 close $wfh;
-                $self->_attach_build_log($fail_log);
+                $self->_attach_build_log($fail_log) if ! $self->is_win;
             }
         }
     }

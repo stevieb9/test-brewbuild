@@ -170,7 +170,9 @@ else {
 # clean up the logs
 
 mkdir 'bblog';
-unlink "$dir_name/stderr.bblog" or die $!;
+if (-e "$dir_name/stderr.bblog"){
+    unlink "$dir_name/stderr.bblog" or die $!;
+}
 dircopy $dir_name, 'bblog';
 
 sub _exec_brew {

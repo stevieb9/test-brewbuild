@@ -66,8 +66,8 @@ my $dir = 'Mock-Sub-1.06';
         like ($res[13], qr/5.22.1 :: FAIL/, "FAIL");
     }
 
-    remove_tree($dir);
-    is (-d $dir, undef, "$dir removed ok");
+#    remove_tree($dir);
+#    is (-d $dir, undef, "$dir removed ok");
 }
 
 done_testing();
