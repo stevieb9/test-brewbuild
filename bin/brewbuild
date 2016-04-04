@@ -61,7 +61,6 @@ OPTIONS:
 
 -o | --on       Perl version number to run against (can be supplied multiple times). Can not be used on Windows
 -R | --revdep   Run tests, install, then run tests on all CPAN reverse dependency modules
--d | --debug    0-7, sets logging verbosity, default is 0
 -n | --new      How many random versions of perl to install (-1 to install all)
 -r | --remove   Remove all installed perls (less the current one)
 -i | --install  Number portion of an available perl version according to "*brew available". Multiple versions can be sent in at once
@@ -72,6 +71,7 @@ OPTIONS:
 -a | --args     List of args to pass into the plugin (one arg per loop)
 
 -T | --selftest Testing only: prevent recursive testing on Test::BrewBuild
+-d | --debug    0-7, sets logging verbosity, default is 0
 
 -s | --setup    Display test platform setup instructions
 -h | --help     Print this help message

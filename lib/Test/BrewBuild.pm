@@ -531,12 +531,19 @@ All unit tests are run against all installed instances.
     # default settings
 
     my %args = (
-        debug   => undef,
-        remove  => undef,
-        install => undef,
-        new     => undef,
-        plugin  => undef,
-        on      => undef,
+        on          => undef,
+        revdep      => undef,
+        new         => undef,
+        remove      => undef,
+        install     => undef,
+        notest      => undef,
+        legacy      => undef,
+        plugin      => undef,
+        plugin_arg  => undef, # derived from ``args''
+        selftest    => undef,
+        debug       => undef,
+        setup       => undef,
+        help        => undef,
     );
 
     my $bb = Test::BrewBuild->new(%args);
