@@ -1,5 +1,13 @@
 Revision history for Test-BrewBuild
 
+1.05    2016-04-04
+        - bumped prereq of TestAgainst plugin to 0.06
+        - added -T (--selftest), to prevent recursive testing loops when 
+          testing this distribution
+        - POD updates
+        - stderr.bblog as well as cpanm build.log files are now aggregated into
+          the FAIL log reports (closes #61 and #62)
+
 1.04    2016-04-01
         - ensure FAIL files are created properly and test (closes #53)
         - fix issue where --on wasn't setting up the environment correctly

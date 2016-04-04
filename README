@@ -24,9 +24,9 @@ SYNOPSIS
     to ensure the down river modules will work with your new build. In this
     case, FAILs are stored in bblog/revdep-module-name.version.bblog
 
-        brewbuild --revdep # or -R
+        brewbuild -R
     
-        # example output, in my Mock::Sub repo directory
+        # output, in my Mock::Sub repo directory
     
         - working on reverse dependencies: Test-BrewBuild, File-Edit-Portable,
           Devel-Examine-Subs, Devel-Trace-Subs
@@ -53,26 +53,26 @@ SYNOPSIS
 
     Run on specific versions only (Unix)
 
-        brewbuild --on 5.20.3 -o 5.8.9
+        brewbuild -o 5.20.3 -o 5.8.9
 
     Install three new instances of perl, randomly
 
-        brewbuild --new 3
+        brewbuild -n 3
 
     Remove all perl instances (less the currently used one), install two
     new random versions, and run tests against all installed perls
 
-        brewbuild --remove --new 2
+        brewbuild -r -n 2
 
     Install all available perl versions, and run tests against all of them
 
-        brewbuild --new -1
+        brewbuild -n -1
 
     Install a specific version and run tests on all instances (include just
     the number portion of the version per "perlbrew available" or
     "berrybrew available"
 
-        brewbuild --install 5.20.3
+        brewbuild -i 5.20.3
 
     ...multiple versions can be passed in at once
 
@@ -101,6 +101,64 @@ DESCRIPTION
 
     The actual module is just a helper for the installed script, and isn't
     designed for end-user use.
+
+USAGE
+
+ --on, -o
+
+    Perl version number to run against (can be supplied multiple times).
+    Can not be used on Windows
+
+ --revdep, -R
+
+    Run tests, install, then run tests on all CPAN reverse dependency
+    modules
+
+ --debug, -d
+
+    0-7, sets logging verbosity, default is 0
+
+ --new, -n
+
+    How many random versions of perl to install (-1 to install all)
+
+ --remove, -r
+
+    Remove all installed perls (less the current one)
+
+ --install, -i
+
+    Number portion of an available perl version according to "*brew
+    available". Multiple versions can be sent in at once
+
+ --notest, -N
+
+    Do not run tests. Allows you to --remove and --install without testing
+
+ --legacy, -L
+
+    Operate on perls < 5.8.x. The default plugins won't work with this flag
+    set if a lower version is installed
+
+ --plugin, -p
+
+    Optional module name of the exec command plugin to use
+
+ --args, -a
+
+    List of args to pass into the plugin (one arg per loop)
+
+ --selftest, -T
+
+    Test::BrewBuild development testing only. Prevents recursive test loops
+
+ --setup, -s
+
+    Display test platform setup instructions
+
+ --help, -h
+
+    Print this help message, and exit
 
 TEST PLATFORM CONFIGURATION
 

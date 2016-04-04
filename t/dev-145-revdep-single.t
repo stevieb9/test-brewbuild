@@ -23,7 +23,7 @@ my $dir = 'Mock-Sub-1.06';
 
     chdir $dir;
     `brewbuild -r`;
-    my $ret = `brewbuild --revdep`;
+    my $ret = `brewbuild --revdep -T`;
     chdir '..';
 
     my @res = split /\n/, $ret;

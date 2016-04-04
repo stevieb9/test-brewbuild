@@ -27,6 +27,7 @@ GetOptions(
     "install=s@"    => \$args{install},
     "N|notest"      => \$args{notest},
     "L|legacy"      => \$args{legacy},
+    "T|selftest"    => \$args{selftest},
     "setup"         => \$setup,
     "help"          => \$help,
 );
@@ -54,24 +55,27 @@ if (@ARGV){
 if ($help){
     print <<EOF;
 
-Usage: perl build/brewbuild.pl [options]
+Usage: brewbuild [OPTIONS]
 
-Options:
+OPTIONS:
 
---on      | -o:  perl version number to run against (can be supplied multiple times). Can not be used on Windows
---revdep  | -R   run tests, install, then run tests on all CPAN reverse dependency modules
---debug   | -d:  0-7, sets logging verbosity
---new     | -n:  how many random versions of perl to install
---remove  | -r:  remove all installed perls (less the current one)
---install | -i:  number portion of an available perl version according to "*brew available". Multiple versions can besent in at once
---notest  | -N:  do not run tests. Allows you to --remove and install without testing
---legacy  | -L:  operate on perls < 5.8.x. The default plugins won't work with this flag set if a lower version is installed
+-o | --on       Perl version number to run against (can be supplied multiple times). Can not be used on Windows
+-R | --revdep   Run tests, install, then run tests on all CPAN reverse dependency modules
+-d | --debug    0-7, sets logging verbosity, default is 0
+-n | --new      How many random versions of perl to install (-1 to install all)
+-r | --remove   Remove all installed perls (less the current one)
+-i | --install  Number portion of an available perl version according to "*brew available". Multiple versions can be sent in at once
+-N | --notest   Do not run tests. Allows you to --remove and --install without testing
+-L | --legacy   Operate on perls < 5.8.x. The default plugins won't work with this flag set if a lower version is installed
 
---plugin  | -p:  module name of the exec command plugin to use
---args    | -a:  List of args to pass into the plugin (one arg per loop)
+-p | --plugin   Module name of the exec command plugin to use
+-a | --args     List of args to pass into the plugin (one arg per loop)
 
---setup   | -s:  Display test platform setup information
---help    | -h:  print this help message
+-T | --selftest Testing only: prevent recursive testing on Test::BrewBuild
+
+-s | --setup    Display test platform setup instructions
+-h | --help     Print this help message
+
 EOF
 exit;
 }
@@ -116,6 +120,8 @@ my $dir_name = $dir->dirname;
 
 $args{tempdir} = $dir_name;
 
+# revdep
+
 if ($args{revdep}){
 
     $log->_6('running --revdep');
@@ -136,6 +142,10 @@ if ($args{revdep}){
 
     my $rvdep = CPAN::ReverseDependencies->new;
     my @revdeps = $rvdep->get_reverse_dependencies($mod);
+
+    if ($args{selftest}){
+        @revdeps = grep {$_ ne 'Test::BrewBuild'} @revdeps;
+    }
 
     $log->_0("working on reverse dependencies: " . join ', ', @revdeps);
 
@@ -222,9 +232,9 @@ of all reverse dependencies of this module (as reported by CPAN), to ensure
 the down river modules will work with your new build. In this case, FAILs are
 stored in C<bblog/revdep-module-name.version.bblog>
 
-    brewbuild --revdep # or -R
+    brewbuild -R
 
-    # example output, in my Mock::Sub repo directory
+    # output, in my Mock::Sub repo directory
 
     - working on reverse dependencies: Test-BrewBuild, File-Edit-Portable,
       Devel-Examine-Subs, Devel-Trace-Subs
@@ -251,25 +261,25 @@ Print usage information
 
 Run on specific versions only (Unix)
 
-    brewbuild --on 5.20.3 -o 5.8.9
+    brewbuild -o 5.20.3 -o 5.8.9
 
 Install three new instances of perl, randomly
 
-    brewbuild --new 3
+    brewbuild -n 3
 
 Remove all perl instances (less the currently used one), install two new random
 versions, and run tests against all installed perls
 
-    brewbuild --remove --new 2
+    brewbuild -r -n 2
 
 Install all available perl versions, and run tests against all of them
 
-    brewbuild --new -1
+    brewbuild -n -1
 
 Install a specific version and run tests on all instances (include just the
 number portion of the version per "perlbrew available" or "berrybrew available"
 
-    brewbuild --install 5.20.3
+    brewbuild -i 5.20.3
 
 ...multiple versions can be passed in at once
 
@@ -297,6 +307,60 @@ specified.
 
 The actual module is just a helper for the installed script, and isn't designed
 for end-user use.
+
+=head1 USAGE
+
+=head2 --on, -o
+
+Perl version number to run against (can be supplied multiple times). Can not be used on Windows
+
+=head2 --revdep, -R   
+
+Run tests, install, then run tests on all CPAN reverse dependency modules
+
+=head2 --debug, -d
+
+0-7, sets logging verbosity, default is 0
+
+=head2 --new, -n      
+
+How many random versions of perl to install (-1 to install all)
+
+=head2 --remove, -r
+
+Remove all installed perls (less the current one)
+
+=head2 --install, -i  
+
+Number portion of an available perl version according to "*brew available". Multiple versions can be sent in at once
+
+=head2 --notest, -N   
+
+Do not run tests. Allows you to --remove and --install without testing
+
+=head2 --legacy, -L   
+
+Operate on perls < 5.8.x. The default plugins won't work with this flag set if a lower version is installed
+
+=head2 --plugin, -p   
+
+Optional module name of the exec command plugin to use
+
+=head2 --args, -a     
+
+List of args to pass into the plugin (one arg per loop)
+
+=head2 --selftest, -T
+
+C<Test::BrewBuild> development testing only. Prevents recursive test loops
+
+=head2 --setup, -s    
+
+Display test platform setup instructions
+
+=head2 --help, -h     
+
+Print this help message, and exit
 
 =head1 TEST PLATFORM CONFIGURATION
 
