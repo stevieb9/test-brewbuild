@@ -19,6 +19,8 @@ my $dir = 'Mock-Sub-1.06';
     my $ae = Archive::Extract->new(archive => 't/modules/mock-sub.tgz');
     $ae->extract(to => '.');
 
+    $ENV{BBDEV_TESTING} = 0;
+
     chdir $dir;
     `brewbuild -r`;
     my $ret = `brewbuild --revdep`;
@@ -40,6 +42,8 @@ my $dir = 'Mock-Sub-1.06';
 
     remove_tree($dir);
     is (-d $dir, undef, "$dir removed ok");
+
+    $ENV{BBDEV_TESTING} = 1;
 }
 
 done_testing();

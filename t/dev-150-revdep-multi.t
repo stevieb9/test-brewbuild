@@ -16,6 +16,8 @@ my $dir = 'Mock-Sub-1.06';
 
 { # revdep single
 
+    $ENV{BBDEV_TESTING} = 0;
+    
     my $ae = Archive::Extract->new(archive => 't/modules/mock-sub.tgz');
     $ae->extract(to => '.');
 
@@ -68,6 +70,8 @@ my $dir = 'Mock-Sub-1.06';
 
     remove_tree($dir);
     is (-d $dir, undef, "$dir removed ok");
+
+    $ENV{BBDEV_TESTING} = 1;
 }
 
 done_testing();

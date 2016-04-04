@@ -14,7 +14,9 @@ if (! $ENV{BBDEV_TESTING}){
 
 my $dir = 'Mock-Sub-1.06';
 
-{ # revdep single
+{ # revdep 
+    
+    $ENV{BBDEV_TESTING} = 0;
 
     my $ae = Archive::Extract->new(archive => 't/modules/mock-sub-bad.zip');
     $ae->extract(to => '.');
@@ -66,8 +68,10 @@ my $dir = 'Mock-Sub-1.06';
         like ($res[13], qr/5.22.1 :: FAIL/, "FAIL");
     }
 
-#    remove_tree($dir);
-#    is (-d $dir, undef, "$dir removed ok");
+    remove_tree($dir);
+    is (-d $dir, undef, "$dir removed ok");
+
+    $ENV{BBDEV_TESTING} = 0;
 }
 
 done_testing();
