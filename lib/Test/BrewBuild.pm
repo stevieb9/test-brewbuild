@@ -307,7 +307,7 @@ sub exec {
             my %res_hash;
 
             for (@exec_cmd){
-                my $res = `$brew exec $_ 2>$self->{tempdir}/stderr.bblog`;
+                my $res = `$brew exec $_`;
 
                 my @results = $res =~ /
                     [Pp]erl-\d\.\d+\.\d+(?:_\w+)?\s+===
