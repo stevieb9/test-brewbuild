@@ -34,7 +34,7 @@ my $dir = 'Mock-Sub-1.06';
     print "*$_*\n" for @res;
 
     if ($^O =~ /MSWin/){
-        is (@res, 14, "proper result count");
+        is (@res, 11, "proper result count");
         like ($res[0], qr/working on/, "first like is the list of revdeps" );
         like ($res[1], qr/- installing/, "line 2 is ok");
         like ($res[2], qr/\w+::\w+/, "is a module name");
@@ -46,12 +46,9 @@ my $dir = 'Mock-Sub-1.06';
         like ($res[8], qr/\w+::\w+/, "is a module name");
         like ($res[9], qr/5.18.4 :: PASS/, "PASS");
         like ($res[10], qr/5.22.1 :: FAIL/, "FAIL");
-        like ($res[11], qr/\w+::\w+/, "is a module name");
-        like ($res[12], qr/5.18.4 :: PASS/, "PASS");
-        like ($res[13], qr/5.22.1 :: FAIL/, "FAIL");
     }
     else {
-        is (@res, 14, "proper result count");
+        is (@res, 11, "proper result count");
         like ($res[0], qr/working on/, "first line is the list of revdeps" );
         like ($res[1], qr/- installing/, "line 2 ok");
         like ($res[2], qr/\w+::\w+/, "is a module name");
@@ -63,9 +60,6 @@ my $dir = 'Mock-Sub-1.06';
         like ($res[8], qr/\w+::\w+/, "is a module name");
         like ($res[9], qr/5.18.4 :: PASS/, "PASS");
         like ($res[10], qr/5.22.1 :: FAIL/, "FAIL");
-        like ($res[11], qr/\w+::\w+/, "is a module name");
-        like ($res[12], qr/5.18.4 :: PASS/, "PASS");
-        like ($res[13], qr/5.22.1 :: FAIL/, "FAIL");
     }
 
     remove_tree($dir);
