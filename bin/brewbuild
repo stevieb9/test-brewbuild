@@ -34,7 +34,7 @@ GetOptions(
 
 my @valid_args = qw(
     on o new n remove r revdep R plugin p args a debug d install i help h
-    N notest setup s legacy L
+    N notest setup s legacy L selftest T
 );
 
 if ($^O =~ /MSWin/ && $args{on}){
@@ -144,7 +144,7 @@ if ($args{revdep}){
     my @revdeps = $rvdep->get_reverse_dependencies($mod);
 
     if ($args{selftest}){
-        @revdeps = grep {$_ ne 'Test::BrewBuild'} @revdeps;
+        @revdeps = grep {$_ ne 'Test-BrewBuild'} @revdeps;
     }
 
     $log->_0("working on reverse dependencies: " . join ', ', @revdeps);
