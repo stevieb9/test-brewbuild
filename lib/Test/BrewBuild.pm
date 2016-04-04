@@ -479,7 +479,7 @@ sub _attach_build_log {
     if ($bbfile =~ m|failed.*?See\s+(.*?)\s+for details|){
         my $build_log = $1;
         open my $bblog_wfh, '>>', $bblog or die $!;
-        print $bblog_wfh "\nCPANM BUILD LOG\n";
+        print $bblog_wfh "\n\nCPANM BUILD LOG\n";
         print $bblog_wfh "===============\n";
 
         open my $build_log_fh, '<', $build_log or die $!;

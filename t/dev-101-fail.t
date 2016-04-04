@@ -29,6 +29,16 @@ if (! $ENV{BBDEV_TESTING}){
 
     is (-e 'bblog/5.22.1.bblog', 1, "fail log for 5.22.1 created ok");
 
+    open my $log, '<', 'bblog/5.22.1.bblog' or die $!;
+    my @entries = <$log>;
+    chomp @entries;
+    close $log;
+
+    if ($^O !~ /MSWin/){
+        is ((scalar grep {$_ eq 'CPANM ERROR LOG'} @entries), 1, "error log got attached"); 
+        is ((scalar grep {$_ eq 'CPANM BUILD LOG'} @entries), 1, "build log got attached"); 
+    }
+
     chdir '..';
     remove_tree('BB-Fail');
     is (-d 'BB-Fail', undef, "pass dir removed ok");
