@@ -2,6 +2,7 @@ package Test::BrewBuild;
 use strict;
 use warnings;
 
+use Carp qw(croak);
 use File::Copy;
 use File::Temp;
 use Logging::Simple;
@@ -328,7 +329,10 @@ sub exec {
         $cmd = "system(\"$cmd\")";
         print $wfh $cmd;
         close $wfh;
+
+        $self->_dzil_shim($fname);
         return `$brew exec --with $vers perl $fname 2>$self->{tempdir}/stderr.bblog`;
+        $self->_dzil_unshim if $self->{is_dzil};
     }
     else {
         $log->_5("exec'ing: $brew exec:\n". join ', ', @exec_cmd);
@@ -339,6 +343,8 @@ sub exec {
             # when calling ``berrybrew exec perl ...''
 
             my %res_hash;
+
+            $self->_dzil_shim;
 
             for (@exec_cmd){
                 my $res = `$brew exec $_`;
@@ -361,6 +367,8 @@ sub exec {
                 }
             }
 
+            $self->_dzil_unshim if $self->{is_dzil};
+
             my $result;
 
             for (keys %res_hash){
@@ -380,7 +388,10 @@ sub exec {
             $cmd = "system(\"$cmd\")";
             print $wfh $cmd;
             close $wfh;
+
+            $self->_dzil_shim($fname);
             return `$brew exec perl $fname 2>$self->{tempdir}/stderr.bblog`;
+            $self->_dzil_unshim if $self->{is_dzil};
         }
     }
 }
@@ -489,6 +500,50 @@ sub _attach_build_log {
         }
         close $bblog_wfh;
     }
+}
+sub _dzil_shim {
+    my ($self, $cmd_file) = @_;
+
+    # return early if possible
+
+    return if -e 'Build.PL' || -e 'Makefile.PL';
+
+    return if ! -e 'dist.ini';
+
+    my $path_sep = $self->is_win ? ';' : ':';
+
+    if (! grep {-x "$_/dzil"} split /$path_sep/, $ENV{PATH} ){
+        croak "this appears to be a Dist::Zilla module, but the dzil binary " .
+              "can't be found\n";
+    }
+
+    $self->{is_dzil} = 1;
+
+    open my $fh, '<', 'dist.ini' or die $!;
+
+    my ($dist, $version);
+
+    while (<$fh>){
+        if (/^name\s+=\s+(.*)$/){
+            $dist = $1;
+        }
+        if (/^version\s+=\s+(.*)$/){
+            $version = $1;
+        }
+        last if $dist && $version;
+    }
+
+    `dzil clean`;
+    `dzil build`;
+
+    my $dir = "$dist-$version";
+    copy $cmd_file, $dir if defined $cmd_file;
+    chdir $dir;
+}
+sub _dzil_unshim {
+    my $self = shift;
+    $self->{is_dzil} = 0;
+    chdir '..';
 }
 
 1;
