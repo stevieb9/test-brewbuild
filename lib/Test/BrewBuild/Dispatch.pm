@@ -104,6 +104,7 @@ sub listen {
             $self->_clone_repo($repo);
             $res->{data} = `$cmd`;
             $client->send(encode_json($res));
+            chdir '..';
         }
     }
     $sock->close();
@@ -124,7 +125,7 @@ sub _clone_repo {
     my $clone_ok = `git clone $repo`;
 
     if ($repo =~ m!.*[^/](.*)(?=(\.git|$))!){
-        cd $repo;
+        chdir $repo;
     }
 }
 1;
