@@ -101,7 +101,8 @@ sub listen {
         $res->{cmd} = $cmd;
 
         if ($cmd && $repo){
-            my $ret = $self->_clone_repo($repo);
+            my $repo_dir = $self->_clone_repo($repo);
+            chdir $repo_dir;
             $res->{data} = $ret;
             $client->send(encode_json($res));
             chdir '..';
@@ -118,12 +119,13 @@ sub _clone_repo {
     }
 
     if ($repo =~ m!.*/(.*?)(?:\.git)*$!){
-            if (! -d $1){
-            my $clone_ok = `git clone $repo`;
+        if (! -d $1){
+            my $clone_ok = system("git clone $repo");
         }
         else {
             chdir $1;
-            `git pull`;
+            system("git pull");
+            chdir '..';
         }
         return $1;
     }
