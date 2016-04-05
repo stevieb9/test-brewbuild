@@ -101,11 +101,10 @@ sub listen {
         $res->{cmd} = $cmd;
 
         if ($cmd && $repo){
-            my $dir = $self->_clone_repo($repo);
-            chdir $dir;
+            $self->_clone_repo($repo);
+            chdir $self->{repo};
             $res->{data} = `$cmd`;
             $client->send(encode_json($res));
-            chdir '..';
         }
     }
     $sock->close();
@@ -119,11 +118,12 @@ sub _clone_repo {
     }
 
     my $dir = File::Temp->newdir;
-    my $dir_name = $dir->dirname;
+    $self->{dir_name} = $dir->dirname;
 
+    chdir $self->{dir_name};
     my $clone_ok = `git clone $repo`;
     if ($repo =~ m!.*/(.*)(?=(\.git$|/$))!){
-        return "$dir_name/$1";
+        $self->{repo} = "$self->{dir_name}/$repo";
     }
 }
 1;
