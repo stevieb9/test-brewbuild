@@ -9,7 +9,6 @@ MYMETA.*
 *.tar.gz
 _build/
 blib/
-test/
 Build/
 META.json
 META.yml
