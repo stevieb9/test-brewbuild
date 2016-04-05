@@ -5,6 +5,7 @@ use warnings;
 use Carp qw(croak);
 use Config;
 use Data::Dumper;
+use File::Temp;
 use IO::Socket::INET;
 use JSON;
 
@@ -96,14 +97,33 @@ sub listen {
         my $repo = '';
         $client->recv($repo, 1024);
 
+        $res->{repo} = $repo;
+        $res->{cmd} = $cmd;
+
         if ($cmd && $repo){
-            $res->{repo} = $repo;
-            $res->{cmd} = $cmd;
+            $self->_clone_repo($repo);
             $res->{data} = `$cmd`;
             $client->send(encode_json($res));
         }
     }
     $sock->close();
+}
+sub _clone_repo {
+    my ($self, $repo) = @_;
+
+    my $sep = $is_win ? ';' : ':';
+    if (!grep { -x "$_/git"} split /$sep/, $ENV{PATH}) {
+        croak "git not found\n";
+    }
+
+    my $dir = File::Temp->newdir;
+    my $dir_name = $dir->dirname;
+
+    chdir $dir_name;
+
+    my $clone_ok = `git clone $repo`;
+
+    system("ls -la $dir_name");
 }
 1;
 
