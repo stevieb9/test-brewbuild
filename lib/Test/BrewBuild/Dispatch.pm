@@ -123,7 +123,9 @@ sub _clone_repo {
 
     my $clone_ok = `git clone $repo`;
 
-    system("ls -la $dir_name");
+    if ($repo =~ m!.*[^/](.*)(?=(\.git|$))!){
+        cd $repo;
+    }
 }
 1;
 
