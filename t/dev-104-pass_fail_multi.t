@@ -26,8 +26,8 @@ if (! $ENV{BBDEV_TESTING}){
 
     if ($^O =~ /MSWin/) {
         is (@res, 2, "proper result count for mutli PASS");
-        is ( $res[0], "5.22.1 :: PASS", "5.22.1 PASS ok (multi perl)" );
-        is ( $res[1], "5.20.3 :: PASS", "5.20.3 PASS ok (multi perl)" );
+        like ( $res[0], / :: PASS/, "PASS ok (multi perl)" );
+        like ( $res[1], / :: PASS/, "PASS ok (multi perl)" );
     }
     else {
         is (@res, 2, "proper result count for mutli PASS");
