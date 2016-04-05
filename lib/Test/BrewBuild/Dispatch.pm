@@ -104,6 +104,17 @@ sub listen {
             my $repo_dir = $self->_clone_repo($repo);
             chdir $repo_dir;
             $res->{data} = `$cmd`;
+            if (-d 'bblog'){
+                chdir 'bblog';
+                my @entries = glob '*';
+                for (@entries){
+                    next if ! -f || ! /\.bblog/;
+                    open my $fh, '<', $_ or die $!;
+                    @{ $res->{files}{$_} } = <$fh>;
+                    close $fh;
+                }
+                chdir '..';
+            }
             $client->send(encode_json($res));
             chdir '..';
         }
