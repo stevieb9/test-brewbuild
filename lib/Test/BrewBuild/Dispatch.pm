@@ -117,7 +117,9 @@ sub _clone_repo {
         croak "git not found\n";
     }
 
+    open my $wfh, '>', 'out.txt' or die $!;
     if ($repo =~ m!.*/(.*)(?=(\.git$|/$))!){
+        print $wfh "$1\n";
         if (! -d $1){
             my $clone_ok = `git clone $repo`;
         }
