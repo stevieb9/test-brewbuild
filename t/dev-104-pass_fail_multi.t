@@ -23,7 +23,6 @@ if (! $ENV{BBDEV_TESTING}){
     my @res = split /\n/, $ret;
     @res = grep /\S/, @res;
 
-
     if ($^O =~ /MSWin/) {
         is (@res, 2, "proper result count for mutli PASS");
         like ( $res[0], / :: PASS/, "PASS ok (multi perl)" );

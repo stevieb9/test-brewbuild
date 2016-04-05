@@ -2,6 +2,7 @@ bin/brewbuild
 Changes
 lib/Test/BrewBuild.pm
 lib/Test/BrewBuild/BrewCommands.pm
+lib/Test/BrewBuild/Dispatch.pm
 lib/Test/BrewBuild/Plugin/DefaultExec.pm
 lib/Test/BrewBuild/Plugin/UnitTestPluginInst.pm
 Makefile.PL
@@ -24,6 +25,7 @@ t/10-run.t
 t/12-TestPluginInst.t
 t/13-exec.t.norun
 t/14-using.t
+t/15-network.t
 t/__clean.t
 t/base/115-level6.data
 t/base/115-level6_win.data
