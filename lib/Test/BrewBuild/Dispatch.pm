@@ -145,8 +145,8 @@ sub _clone_repo {
 
 =head1 NAME
 
-Test::BrewBuild::BrewCommands - Provides Windows/Unix *brew command
-translations.
+Test::BrewBuild::Dispatch - Provides dispatching/listening services for
+Test::Brewbuild
 
 =head1 METHODS
 
