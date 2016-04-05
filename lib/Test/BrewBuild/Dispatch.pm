@@ -101,10 +101,11 @@ sub listen {
         $res->{cmd} = $cmd;
 
         if ($cmd && $repo){
-            $self->_clone_repo($repo);
-            chdir $self->{repo};
+            my $dir = $self->_clone_repo($repo);
+            chdir $dir;
             $res->{data} = `$cmd`;
             $client->send(encode_json($res));
+            chdir '..';
         }
     }
     $sock->close();
@@ -117,13 +118,9 @@ sub _clone_repo {
         croak "git not found\n";
     }
 
-    my $dir = File::Temp->newdir;
-    $self->{dir_name} = $dir->dirname;
-
-    chdir $self->{dir_name};
     my $clone_ok = `git clone $repo`;
     if ($repo =~ m!.*/(.*)(?=(\.git$|/$))!){
-        $self->{repo} = "$self->{dir_name}/$repo";
+        return $1;
     }
 }
 1;
