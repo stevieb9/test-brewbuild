@@ -13,14 +13,12 @@ our $VERSION = '1.05';
 $| = 1;
 
 sub new {
-    my ($class, $plog) = @_;
-
+    my ($class) = @_;
     my $self = bless {}, $class;
-
     return $self;
 }
 sub dispatch {
-    my ($self, $params) = @_;
+    my ($self, $params, $cmd) = @_;
 
     my %remotes;
 
@@ -56,7 +54,7 @@ sub dispatch {
         $socket->recv($ok, 1024);
 
         if ($ok eq 'ok'){
-            $socket->send('ready');
+            $socket->send($cmd);
             my $data;
             $socket->recv($data, 1024);
             $remotes{$client}{build} = decode_json($data);
@@ -70,7 +68,7 @@ sub dispatch {
     print Dumper \%remotes;
 }
 sub listen {
-    my ($self, $listener) = @_;
+    my ($self) = @_;
 
     my $ip = '0.0.0.0';
     my $port = '7800';
@@ -86,12 +84,6 @@ sub listen {
 
     my $res = {
         platform => $Config{archname},
-        res => [qw(a b c d)],
-        files =>
-        [
-            [1, 2],
-            [3, 4],
-        ],
     };
 
     while (1){
@@ -102,10 +94,11 @@ sub listen {
 
         $client->send('ok');
 
-        my $ready = '';
-        $client->recv($ready, 1024);
+        my $cmd = '';
+        $client->recv($cmd, 1024);
 
-        if ($ready){
+        if ($cmd){
+            $res->{data} = `$cmd`;
             $client->send(encode_json($res));
         }
     }

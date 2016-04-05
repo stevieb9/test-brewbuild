@@ -7,6 +7,7 @@ use Test::BrewBuild::Dispatch;
 
 my $d = Test::BrewBuild::Dispatch->new;
 
-$d->dispatch([qw(54.187.92.0:7800)]);
+$d->dispatch([qw(54.187.92.0:7800)], 'ls');
+
 #done_testing();
 
