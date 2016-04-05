@@ -10,6 +10,7 @@ use File::Path qw(remove_tree);
 use File::Temp;
 use Module::Load;
 use Test::BrewBuild;
+use Test::BrewBuild::Dispatch;
 
 our $VERSION = '1.04';
 
@@ -28,15 +29,24 @@ GetOptions(
     "N|notest"      => \$args{notest},
     "L|legacy"      => \$args{legacy},
     "T|selftest"    => \$args{selftest},
+    "L|listen"      => \$args{listen},
+    "D|dispatch"    => \$args{dispatch},
     "setup"         => \$setup,
     "help"          => \$help,
 );
 
 my @valid_args = qw(
     on o new n remove r revdep R plugin p args a debug d install i help h
-    N notest setup s legacy L selftest T
+    N notest setup s legacy l selftest T
 );
 
+if ($args{listen}){
+    delete $args{listen};
+
+    my $dispatch = Test::BrewBuild::Dispatch->new;
+    $dispatch->listen;
+    exit;
+}
 if ($^O =~ /MSWin/ && $args{on}){
     warn "\nwe can't use --on with Windows... running on all\n\n";
     delete $args{on};
@@ -65,7 +75,7 @@ OPTIONS:
 -r | --remove   Remove all installed perls (less the current one)
 -i | --install  Number portion of an available perl version according to "*brew available". Multiple versions can be sent in at once
 -N | --notest   Do not run tests. Allows you to --remove and --install without testing
--L | --legacy   Operate on perls < 5.8.x. The default plugins won't work with this flag set if a lower version is installed
+-l | --legacy   Operate on perls < 5.8.x. The default plugins won't work with this flag set if a lower version is installed
 
 -p | --plugin   Module name of the exec command plugin to use
 -a | --args     List of args to pass into the plugin (one arg per loop)
@@ -337,7 +347,7 @@ Number portion of an available perl version according to "*brew available". Mult
 
 Do not run tests. Allows you to --remove and --install without testing
 
-=head2 --legacy, -L   
+=head2 --legacy, -l
 
 Operate on perls < 5.8.x. The default plugins won't work with this flag set if a lower version is installed
 
