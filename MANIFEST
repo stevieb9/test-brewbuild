@@ -5,7 +5,7 @@ lib/Test/BrewBuild/BrewCommands.pm
 lib/Test/BrewBuild/Plugin/DefaultExec.pm
 lib/Test/BrewBuild/Plugin/UnitTestPluginInst.pm
 Makefile.PL
-MANIFEST
+MANIFEST			This list of files
 MANIFEST.SKIP
 README
 setup/unix_setup.txt
@@ -44,10 +44,12 @@ t/dev-145-revdep-single.t
 t/dev-150-revdep-multi.t
 t/dev-155-notest.t
 t/dev-160-revdep-multi-fail.t
+t/dev-165-dzil.t
 t/manifest.t
 t/modules/bb-522.zip
 t/modules/bb-fail.zip
 t/modules/bb-pass.zip
+t/modules/dzil-test.zip
 t/modules/mock-sub-bad.zip
 t/modules/mock-sub.tgz
 t/pod-coverage.t

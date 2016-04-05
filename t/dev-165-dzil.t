@@ -12,6 +12,12 @@ if (! $ENV{BBDEV_TESTING}){
     exit;
 }
 
+my $path_sep = $^O =~ /MSWin/ ? ';' : ':';
+
+if (! grep {-x "$_/dzil"} split /$path_sep/, $ENV{PATH} ){
+    plan skip_all => "dzil not found for Dist::Zilla tests";
+}
+
 { # PASS
 
     my $ae = Archive::Extract->new(archive => 't/modules/dzil-test.zip');

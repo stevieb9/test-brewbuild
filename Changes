@@ -1,6 +1,8 @@
 Revision history for Test-BrewBuild
 
 1.05    2016-04-04
+        - we're now Dist::Zilla compliant and tested (closes #33)
+        - added _dzil_shim() and _dzil_unshim() for Dist::Zilla distributions
         - bumped prereq of TestAgainst plugin to 0.06
         - added -T (--selftest), to prevent recursive testing loops when 
           testing this distribution
@@ -9,7 +11,6 @@ Revision history for Test-BrewBuild
           the FAIL log reports (closes #61 and #62)
         - added -T, --selftest, to avoid recursive testing of Test::BrewBuild
           with the BBDEV_TESTING env var set
-        - added _dzil_shim() and _dzil_unshim() for Dist::Zilla distributions
 
 1.04    2016-04-01
         - ensure FAIL files are created properly and test (closes #53)
