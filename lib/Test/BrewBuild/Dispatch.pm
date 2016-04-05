@@ -18,7 +18,7 @@ sub new {
     return $self;
 }
 sub dispatch {
-    my ($self, $params, $cmd) = @_;
+    my ($self, $cmd, $repo, $params) = @_;
 
     my %remotes;
 
@@ -47,14 +47,13 @@ sub dispatch {
         );
         warn "can't connect to remote $client on port $remotes{$client} $!\n" unless $socket;
 
-        my $req = 'avail';
-        $socket->send($req);
+        $socket->send($cmd);
 
         my $ok = '';
         $socket->recv($ok, 1024);
 
         if ($ok eq 'ok'){
-            $socket->send($cmd);
+            $socket->send($repo);
             my $data;
             $socket->recv($data, 1024);
             $remotes{$client}{build} = decode_json($data);
@@ -89,15 +88,17 @@ sub listen {
     while (1){
         my $client = $sock->accept;
 
-        my $status = '';
-        $client->recv($status, 1024);
+        my $cmd;
+        $client->recv($cmd, 1024);
 
         $client->send('ok');
 
-        my $cmd = '';
-        $client->recv($cmd, 1024);
+        my $repo = '';
+        $client->recv($repo, 1024);
 
-        if ($cmd){
+        if ($cmd && $repo){
+            $res->{repo} = $repo;
+            $res->{cmd} = $cmd;
             $res->{data} = `$cmd`;
             $client->send(encode_json($res));
         }

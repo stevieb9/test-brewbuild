@@ -30,7 +30,8 @@ GetOptions(
     "L|legacy"      => \$args{legacy},
     "T|selftest"    => \$args{selftest},
     "L|listen"      => \$args{listen},
-    "D|dispatch"    => \$args{dispatch},
+    "D|dispatch" => \$args{dispatch},
+    "repo"          => \$args{repo},
     "setup"         => \$setup,
     "help"          => \$help,
 );
@@ -43,9 +44,23 @@ my @valid_args = qw(
 if ($args{listen}){
     delete $args{listen};
 
+
     my $dispatch = Test::BrewBuild::Dispatch->new;
     $dispatch->listen;
     exit;
+}
+if ($args{dispatch}){
+    if (! $args{repo}){
+        croak "you must supply a repository link with --repo\n";
+    }
+
+    my $repo = $args{repo};
+    my $cmd = $args{dispatch};
+    delete $args{dispatch};
+    delete $args{repo};
+
+    my $dispatch = Test::BrewBuild::Dispatch->new;
+    $dispatch->dispatch($cmd, $repo);
 }
 if ($^O =~ /MSWin/ && $args{on}){
     warn "\nwe can't use --on with Windows... running on all\n\n";
