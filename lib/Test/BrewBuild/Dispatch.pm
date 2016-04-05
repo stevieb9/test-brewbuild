@@ -101,8 +101,8 @@ sub listen {
         $res->{cmd} = $cmd;
 
         if ($cmd && $repo){
-            $self->_clone_repo($repo);
-            $res->{data} = `$cmd`;
+            my $ret = $self->_clone_repo($repo);
+            $res->{data} = $ret;
             $client->send(encode_json($res));
             chdir '..';
         }
@@ -117,9 +117,7 @@ sub _clone_repo {
         croak "git not found\n";
     }
 
-    open my $wfh, '>', 'out.txt' or die $!;
     if ($repo =~ m!.*/(.*)(?=(\.git$|/$))!){
-        print $wfh "$1\n";
         if (! -d $1){
             my $clone_ok = `git clone $repo`;
         }
@@ -127,6 +125,7 @@ sub _clone_repo {
             chdir $1;
             `git pull`;
         }
+        return $1;
     }
 }
 1;
