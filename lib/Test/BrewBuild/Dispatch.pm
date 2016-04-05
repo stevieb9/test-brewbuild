@@ -123,8 +123,7 @@ sub _clone_repo {
     chdir $dir_name;
 
     my $clone_ok = `git clone $repo`;
-
-    if ($repo =~ m!.*[^/](.*)(?=(\.git|$))!){
+    if ($repo =~ m!.*/(.*)(?=(\.git$|/$))!){
         chdir $repo;
     }
 }
