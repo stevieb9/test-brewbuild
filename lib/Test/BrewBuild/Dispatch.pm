@@ -103,7 +103,7 @@ sub listen {
         if ($cmd && $repo){
             my $repo_dir = $self->_clone_repo($repo);
             chdir $repo_dir;
-            $res->{data} = $ret;
+            $res->{data} = `$cmd`;
             $client->send(encode_json($res));
             chdir '..';
         }
