@@ -111,7 +111,7 @@ sub listen {
 sub _clone_repo {
     my ($self, $repo) = @_;
 
-    my $sep = $is_win ? ';' : ':';
+    my $sep = $^O =~ /MSWin/ ? ';' : ':';
     if (!grep { -x "$_/git"} split /$sep/, $ENV{PATH}) {
         croak "git not found\n";
     }
