@@ -85,10 +85,11 @@ SYNOPSIS
 DESCRIPTION
 
     This brewbuild script installed by the Test::Brewbuild module allows
-    you to perform your unit tests across all of your Perlbrew (Unix) or
-    Berrybrew (Windows) Perl instances, as well as test all of your
-    down-river CPAN modules that rely on your module against the locally
-    updated version.
+    you to perform your unit tests seamlessly across all of your Perlbrew
+    (Unix) or Berrybrew (Windows) Perl instances, as well as test all of
+    your down-river CPAN modules that rely on your module against the
+    locally updated version, with support for ExtUtils::MakeMaker,
+    Module::Build and Dist::Zilla distributions.
 
     For Windows, you'll need to install Berrybrew (see "SEE ALSO" for
     details). For Unix, you'll need Perlbrew.
@@ -98,9 +99,6 @@ DESCRIPTION
 
     All unit tests are run against all installed instances, unless
     otherwise specified.
-
-    The actual module is just a helper for the installed script, and isn't
-    designed for end-user use.
 
 USAGE
 

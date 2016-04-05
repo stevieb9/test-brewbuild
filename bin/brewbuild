@@ -292,9 +292,11 @@ Display test platform setup instructions for Unix and Windows
 =head1 DESCRIPTION
 
 This C<brewbuild> script installed by the L<Test::Brewbuild> module allows you
-to perform your unit tests across all of your Perlbrew (Unix) or Berrybrew
-(Windows) Perl instances, as well as test all of your down-river CPAN modules
-that rely on your module against the locally updated version.
+to perform your unit tests seamlessly across all of your Perlbrew (Unix) or
+Berrybrew (Windows) Perl instances, as well as test all of your down-river CPAN
+modules that rely on your module against the locally updated version, with
+support for L<ExtUtils::MakeMaker>, L<Module::Build> and L<Dist::Zilla>
+distributions.
 
 For Windows, you'll need to install Berrybrew (see L<SEE ALSO> for details).
 For Unix, you'll need Perlbrew.
@@ -304,9 +306,6 @@ of perl, or install specific versions.
 
 All unit tests are run against all installed instances, unless otherwise
 specified.
-
-The actual module is just a helper for the installed script, and isn't designed
-for end-user use.
 
 =head1 USAGE
 
