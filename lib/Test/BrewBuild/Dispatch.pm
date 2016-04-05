@@ -56,7 +56,7 @@ sub dispatch {
         if ($ok eq 'ok'){
             $socket->send($repo);
             my $data;
-            $socket->recv($data, 1024);
+            $socket->recv($data, 101024);
             $remotes{$client}{build} = decode_json($data);
         }
         else {
