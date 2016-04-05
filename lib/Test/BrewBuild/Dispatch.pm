@@ -117,8 +117,8 @@ sub _clone_repo {
         croak "git not found\n";
     }
 
-    if ($repo =~ m!.*/(.*)(?=(\.git$|/$))!){
-        if (! -d $1){
+    if ($repo =~ m!.*/(.*?)(?:\.git)*$!){
+            if (! -d $1){
             my $clone_ok = `git clone $repo`;
         }
         else {
