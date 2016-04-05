@@ -121,8 +121,6 @@ sub _clone_repo {
     my $dir = File::Temp->newdir;
     my $dir_name = $dir->dirname;
 
-    chdir $dir_name;
-
     my $clone_ok = `git clone $repo`;
     if ($repo =~ m!.*/(.*)(?=(\.git$|/$))!){
         return "$dir_name/$1";
