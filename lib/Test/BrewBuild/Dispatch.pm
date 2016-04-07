@@ -52,12 +52,13 @@ sub dispatch {
         $socket->send($cmd);
 
         my $ok = '';
-        $socket->recv($ok, 1024);
+        $socket->recv($ok, 10240000);
 
         if ($ok eq 'ok'){
             $socket->send($repo);
             my $data;
-            $socket->recv($data, 101024);
+            $socket->recv($data, 10102040);
+            print Dumper $data;
             $remotes{$client}{build} = decode_json($data);
         }
         else {
@@ -66,7 +67,6 @@ sub dispatch {
         }
     }
 
-    print Dumper \%remotes;
     # process the results
 
     mkdir 'bblog' if ! -d 'bblog';
@@ -107,11 +107,12 @@ sub listen {
     );
     die "cannot create socket $!\n" unless $sock;
 
-    my $res = {
-        platform => $Config{archname},
-    };
+
 
     while (1){
+        my $res = {
+            platform => $Config{archname},
+        };
         my $client = $sock->accept;
 
         my $cmd;

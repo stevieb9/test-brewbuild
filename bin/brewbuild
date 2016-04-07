@@ -12,7 +12,7 @@ use Module::Load;
 use Test::BrewBuild;
 use Test::BrewBuild::Dispatch;
 
-our $VERSION = '1.04';
+our $VERSION = '1.05';
 
 my $log = Test::BrewBuild->new()->log()->child('brewbuild');
 my (%args, $setup, $help);
@@ -61,6 +61,7 @@ if ($args{dispatch}){
 
     my $dispatch = Test::BrewBuild::Dispatch->new;
     $dispatch->dispatch($cmd, $repo);
+    exit;
 }
 if ($^O =~ /MSWin/ && $args{on}){
     warn "\nwe can't use --on with Windows... running on all\n\n";
