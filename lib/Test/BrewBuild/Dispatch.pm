@@ -67,6 +67,7 @@ sub dispatch {
     # process the results
 
     mkdir 'bblog' if ! -d 'bblog';
+    print "\n";
 
     for my $ip (keys %remotes){
 
