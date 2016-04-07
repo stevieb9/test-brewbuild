@@ -7,7 +7,7 @@ use Config;
 use Data::Dumper;
 use File::Temp;
 use IO::Socket::INET;
-use JSON;
+use Storable;
 
 our $VERSION = '1.05';
 
@@ -52,14 +52,11 @@ sub dispatch {
         $socket->send($cmd);
 
         my $ok = '';
-        $socket->recv($ok, 10240000);
+        $socket->recv($ok, 1024000);
 
         if ($ok eq 'ok'){
             $socket->send($repo);
-            my $data;
-            $socket->recv($data, 10102040);
-            print Dumper $data;
-            $remotes{$client}{build} = decode_json($data);
+            $remotes{$client}{build} = Storable::fd_retrieve($socket);
         }
         else {
             delete $remotes{$client};
@@ -77,8 +74,8 @@ sub dispatch {
 
         for my $fail_file (keys %{ $remotes{$ip}{build}{files} }){
             my $content = $remotes{$ip}{build}{files}{$fail_file};
-            open my $wfh, '>', "bblog/$ip.$fail_file" or die $!;
-            while (@$content){
+            open my $wfh, '>', "bblog/$ip\_v$fail_file" or die $!;
+            for (@$content){
                 print $wfh $_;
             }
         }
@@ -110,9 +107,11 @@ sub listen {
 
 
     while (1){
+
         my $res = {
             platform => $Config{archname},
         };
+
         my $client = $sock->accept;
 
         my $cmd;
