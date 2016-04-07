@@ -46,7 +46,8 @@ sub dispatch {
             PeerPort => $remotes{$client}{port},
             Proto => 'tcp',
         );
-        warn "can't connect to remote $client on port $remotes{$client} $!\n" unless $socket;
+        warn "can't connect to remote $client on port $remotes{$client} $!\n"
+          unless $socket;
 
         $socket->send($cmd);
 
@@ -66,6 +67,30 @@ sub dispatch {
     }
 
     print Dumper \%remotes;
+    # process the results
+
+    mkdir 'bblog' if ! -d 'bblog';
+
+    for my $ip (keys %remotes){
+
+        # FAIL file generation
+
+        for my $fail_file (keys %{ $remotes{$ip}{build}{files} }){
+            my $content = $remotes{$ip}{build}{files}{$fail_file};
+            open my $wfh, '>', "bblog/$ip.$fail_file" or die $!;
+            while (@$content){
+                print $wfh $_;
+            }
+        }
+
+        # dump out the info
+
+        my $build = $remotes{$ip}{build};
+
+        print "$ip - $build->{platform}\n" .
+              "$build->{data}\n";
+
+    }
 }
 sub listen {
     my ($self) = @_;
@@ -125,8 +150,10 @@ sub _clone_repo {
     my ($self, $repo) = @_;
 
     my $sep = $^O =~ /MSWin/ ? ';' : ':';
-    if (!grep { -x "$_/git"} split /$sep/, $ENV{PATH}) {
-        croak "git not found\n";
+    my $git = $^O =~ /MSWin/ ? 'git.exe' : 'git';
+
+    if (!grep { -x "$_/$git"} split /$sep/, $ENV{PATH}) {
+        croak "$git not found\n";
     }
 
     if ($repo =~ m!.*/(.*?)(?:\.git)*$!){
