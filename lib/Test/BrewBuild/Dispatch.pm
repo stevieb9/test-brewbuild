@@ -140,7 +140,7 @@ sub listen {
                 }
                 chdir '..';
             }
-            $client->send(encode_json($res));
+            Storable::nstore_fd($res, $client);
             chdir '..';
         }
     }
