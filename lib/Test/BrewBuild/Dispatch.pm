@@ -60,8 +60,8 @@ sub dispatch {
         }
         else {
             delete $remotes{$client};
-            $socket->close();
         }
+        $socket->close();
     }
 
     # process the results
