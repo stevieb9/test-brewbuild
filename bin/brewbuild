@@ -11,7 +11,7 @@ use File::Temp;
 use Module::Load;
 use Test::BrewBuild;
 use Test::BrewBuild::Dispatch;
-use Test::BrewBuild::Tester;
+use Test::BrewBuild::Listen;
 
 our $VERSION = '1.05';
 

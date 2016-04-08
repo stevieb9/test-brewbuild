@@ -5,6 +5,9 @@ use strict;
 use if $^O !~ /MSWin/, "Proc::Daemon";
 use if $^O =~ /MSWin/, "Win32::Daemon";
 
+print "$INC{'Win32/Daemon.pm'}\n";
+exit;
+
 if (! $^O =~ /MSWin/){
     my $tester = Proc::Daemon->new(
         work_dir => '.',
