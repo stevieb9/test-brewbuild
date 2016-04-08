@@ -69,7 +69,8 @@ if (! $is_win){
         );
 
         my $pid = $tester->Init;
-        print "\nStarted the Test::BrewBuild test server at PID $pid...\n\n";
+        print "\nStarted the Test::BrewBuild test server at PID $pid on IP " .
+              "address $ip and TCP port $port...\n\n";
         open my $wfh, '>', $pid_file or die $!;
         print $wfh $pid;
         close $wfh;
@@ -85,9 +86,88 @@ if (! $is_win){
            
             if ($existing_pid){
                 if (! kill(0, $existing_pid)){
-                    die "error! run brewbuild -L at the command line and check for failure\n\n";
+                    die "error! run brewbuild -L at the command line and " .
+                        "check for failure\n\n";
                 }
             }
         }
     }
 }
+
+=pod
+
+=head1 NAME
+
+bbtester - Remote testing platform server daemon for L<Test::BrewBuild>'s
+L<brewbuild> (Win and Unix).
+
+=head1 SYNOPSIS
+
+Listen for incoming C<brewbuild> build requests on all IPs and port 7800 (TCP)
+
+    bbtester start
+
+Listen using a different IP/Port pair
+
+    bbtester start -i 192.168.10.5 -p 7789
+
+Stop the service from running
+
+    bbtester stop
+
+=head1 DESCRIPTION
+
+This script is the listener end of the distributed C<Test::BrewBuild> testing
+environment.
+
+C<bbtester> daemonizes itself (on Unix... on Windows we become a Service), and
+listens to incoming requests from a C<brewbuild> test dispatch server.
+
+We then run the appropriate commands, and return the results to the dispatcher
+for processing.
+
+=head1 AUTHOR
+
+Steve Bertrand, C<< <steveb at cpan.org> >>
+
+=head1 CONTRIBUTING
+
+Any and all feedback and help is appreciated. A Pull Request is the preferred
+method of receiving changes (L<https://github.com/stevieb9/p5-test-brewbuild>),
+but regular patches through the bug tracker, or even just email discussions are
+welcomed.
+
+=head1 BUGS
+
+L<https://github.com/stevieb9/p5-test-brewbuild/issues>
+
+=head1 SUPPORT
+
+You can find documentation for this script and module with the perldoc command.
+
+    perldoc bbtester
+    perldoc brewbuild
+    perldoc Test::BrewBuild
+
+=head1 SEE ALSO
+
+Berrybrew for Windows:
+
+L<https://github.com/dnmfarrell/berrybrew>
+
+Perlbrew for Unixes:
+
+L<http://perlbrew.pl>
+
+=head1 LICENSE AND COPYRIGHT
+
+Copyright 2016 Steve Bertrand.
+
+This program is free software; you can redistribute it and/or modify it
+under the terms of either: the GNU General Public License as published
+by the Free Software Foundation; or the Artistic License.
+
+See L<http://dev.perl.org/licenses/> for more information.
+
+=cut
+
