@@ -7,6 +7,7 @@ use Config;
 use Data::Dumper;
 use File::Temp;
 use IO::Socket::INET;
+use Parallel::ForkManager;
 use Storable;
 
 our $VERSION = '1.05';
@@ -42,25 +43,38 @@ sub dispatch {
 
     # spin up the comms
 
-    for my $client (keys %remotes){
+    my $pm = Parallel::ForkManager->new(4);
+
+    $pm->run_on_finish(
+        sub {
+            my (undef, undef, undef, undef, undef, $tester_data) = @_;
+            map {$remotes{$_} = $tester_data->{$_}} keys %$tester_data;
+        }
+
+    );
+
+    CLIENTS:
+    for my $tester (keys %remotes){
+        $pm->start and next CLIENTS;
+
+        my %return;
+
         my $socket = new IO::Socket::INET (
-            PeerHost => $client,
-            PeerPort => $remotes{$client}{port},
+            PeerHost => $tester,
+            PeerPort => $remotes{$tester}{port},
             Proto => 'tcp',
         );
-        warn "can't connect to remote $client on port $remotes{$client} $!\n"
+        warn "can't connect to remote $tester on port $remotes{$tester} $!\n"
           unless $socket;
 
         # syn
-        $socket->send($client);
+        $socket->send($tester);
 
         # ack
         my $ack;
         $socket->recv($ack, 1024);
 
-        die "comms issue\n" if ! $ack eq $client;
-
-        print "$ack\n";
+        die "comms issue\n" if ! $ack eq $tester;
 
         $socket->send($cmd);
 
@@ -69,13 +83,16 @@ sub dispatch {
 
         if ($ok eq 'ok'){
             $socket->send($repo);
-            $remotes{$client}{build} = Storable::fd_retrieve($socket);
+            $return{$tester}{build} = Storable::fd_retrieve($socket);
         }
         else {
-            delete $remotes{$client};
+            delete $remotes{$tester};
         }
         $socket->close();
+        $pm->finish(0, \%return);
     }
+
+    $pm->wait_all_children;
 
     # process the results
 
@@ -83,7 +100,6 @@ sub dispatch {
     print "\n";
 
     for my $ip (keys %remotes){
-
         # FAIL file generation
 
         for my $fail_file (keys %{ $remotes{$ip}{build}{files} }){
@@ -100,7 +116,6 @@ sub dispatch {
 
         print "$ip - $build->{platform}\n" .
               "$build->{data}\n";
-
     }
 }
 sub listen {
@@ -125,20 +140,20 @@ sub listen {
             platform => $Config{archname},
         };
 
-        my $client = $sock->accept;
+        my $dispatch = $sock->accept;
 
         # ack
         my $ack;
-        $client->recv($ack, 1024);
+        $dispatch->recv($ack, 1024);
 
-        $client->send($ack);
+        $dispatch->send($ack);
 
         my $cmd;
-        $client->recv($cmd, 1024);
-        $client->send('ok');
+        $dispatch->recv($cmd, 1024);
+        $dispatch->send('ok');
 
         my $repo = '';
-        $client->recv($repo, 1024);
+        $dispatch->recv($repo, 1024);
 
         $res->{repo} = $repo;
         $res->{cmd} = $cmd;
@@ -158,7 +173,7 @@ sub listen {
                 }
                 chdir '..';
             }
-            Storable::nstore_fd($res, $client);
+            Storable::nstore_fd($res, $dispatch);
             chdir '..';
         }
     }
