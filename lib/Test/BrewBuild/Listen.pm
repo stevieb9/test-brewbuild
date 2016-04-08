@@ -18,11 +18,11 @@ sub new {
     return $self;
 }
 sub listen {
-    my ($self) = @_;
+    my ($self, $ip, $port) = @_;
     #my $log = $self->{log}->child('Dispatch::listen');
 
-    my $ip = '0.0.0.0';
-    my $port = '7800';
+    $ip = '0.0.0.0' if ! $ip;
+    $port = '7800' if ! $port;
 
     my $sock = new IO::Socket::INET (
         LocalHost => $ip,

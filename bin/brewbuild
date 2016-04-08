@@ -36,12 +36,15 @@ GetOptions(
     "D|dispatch"    => \$args{dispatch},
     "repo"          => \$args{repo},
     "setup"         => \$setup,
+    "tester-ip"     => \$args{tester_ip},
+    "tester-port"   => \$args{tester_port},
     "help"          => \$help,
 );
 
 my @valid_args = qw(
     on o new n remove r revdep R plugin p args a debug d install i help h
-    N notest setup s legacy l selftest T listen L dispatch D
+    N notest setup s legacy l selftest T listen L dispatch D tester-ip
+    tester-port
 );
 
 if (@ARGV){
@@ -56,7 +59,7 @@ if (@ARGV){
 if ($args{listen}){
     delete $args{listen};
     my $tester = Test::BrewBuild::Listen->new($bb_log);
-    $tester->listen;
+    $tester->listen($args{tester-ip}, $args{tester-port});
     exit;
 }
 if ($args{dispatch}){

@@ -29,7 +29,8 @@ sub dispatch {
             $remotes{$_} = $conf->{remotes}{$_};
         }
         if (!$conf) {
-            croak "dispatch requires clients sent in or config file which isn't found";
+            croak "dispatch requires clients sent in or config file which " .
+                  "isn't found\n";
         }
     }
     else {
@@ -73,7 +74,7 @@ sub dispatch {
         my $ack;
         $socket->recv($ack, 1024);
 
-        die "comms issue\n" if ! $ack eq $tester;
+        die "comm discrepancy: expected $tester, got $ack\n" if $ack ne $tester;
 
         $socket->send($cmd);
 
