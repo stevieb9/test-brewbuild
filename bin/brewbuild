@@ -36,8 +36,8 @@ GetOptions(
     "D|dispatch"    => \$args{dispatch},
     "repo"          => \$args{repo},
     "setup"         => \$setup,
-    "tester-ip"     => \$args{tester_ip},
-    "tester-port"   => \$args{tester_port},
+    "tester-ip=s"   => \$args{tester_ip},
+    "tester-port=i" => \$args{tester_port},
     "help"          => \$help,
 );
 
