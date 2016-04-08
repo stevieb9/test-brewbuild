@@ -11,6 +11,7 @@ use File::Temp;
 use Module::Load;
 use Test::BrewBuild;
 use Test::BrewBuild::Dispatch;
+use Test::BrewBuild::Listen;
 
 our $VERSION = '1.05';
 
@@ -29,10 +30,10 @@ GetOptions(
     "debug=i"       => \$args{debug},
     "install=s@"    => \$args{install},
     "N|notest"      => \$args{notest},
-    "L|legacy"      => \$args{legacy},
+    "l|legacy"      => \$args{legacy},
     "T|selftest"    => \$args{selftest},
     "L|listen"      => \$args{listen},
-    "D|dispatch" => \$args{dispatch},
+    "D|dispatch"    => \$args{dispatch},
     "repo"          => \$args{repo},
     "setup"         => \$setup,
     "help"          => \$help,
@@ -45,8 +46,8 @@ my @valid_args = qw(
 
 if ($args{listen}){
     delete $args{listen};
-    my $dispatch = Test::BrewBuild::Dispatch->new($bb_log);
-    $dispatch->listen;
+    my $tester = Test::BrewBuild::Listen->new($bb_log);
+    $tester->listen;
     exit;
 }
 if ($args{dispatch}){

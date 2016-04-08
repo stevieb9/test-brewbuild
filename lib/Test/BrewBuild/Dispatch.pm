@@ -3,9 +3,6 @@ use strict;
 use warnings;
 
 use Carp qw(croak);
-use Config;
-use Data::Dumper;
-use File::Temp;
 use IO::Socket::INET;
 use Parallel::ForkManager;
 use Storable;
@@ -118,95 +115,12 @@ sub dispatch {
               "$build->{data}\n";
     }
 }
-sub listen {
-    my ($self) = @_;
-    #my $log = $self->{log}->child('Dispatch::listen');
-
-    my $ip = '0.0.0.0';
-    my $port = '7800';
-
-    my $sock = new IO::Socket::INET (
-        LocalHost => $ip,
-        LocalPort => $port,
-        Proto => 'tcp',
-        Listen => 5,
-        Reuse => 1,
-    );
-    die "cannot create socket $!\n" unless $sock;
-
-    while (1){
-
-        my $res = {
-            platform => $Config{archname},
-        };
-
-        my $dispatch = $sock->accept;
-
-        # ack
-        my $ack;
-        $dispatch->recv($ack, 1024);
-
-        $dispatch->send($ack);
-
-        my $cmd;
-        $dispatch->recv($cmd, 1024);
-        $dispatch->send('ok');
-
-        my $repo = '';
-        $dispatch->recv($repo, 1024);
-
-        $res->{repo} = $repo;
-        $res->{cmd} = $cmd;
-
-        if ($cmd && $repo){
-            my $repo_dir = $self->_clone_repo($repo);
-            chdir $repo_dir;
-            $res->{data} = `$cmd`;
-            if (-d 'bblog'){
-                chdir 'bblog';
-                my @entries = glob '*';
-                for (@entries){
-                    next if ! -f || ! /\.bblog/;
-                    open my $fh, '<', $_ or die $!;
-                    @{ $res->{files}{$_} } = <$fh>;
-                    close $fh;
-                }
-                chdir '..';
-            }
-            Storable::nstore_fd($res, $dispatch);
-            chdir '..';
-        }
-    }
-    $sock->close();
-}
-sub _clone_repo {
-    my ($self, $repo) = @_;
-
-    my $sep = $^O =~ /MSWin/ ? ';' : ':';
-    my $git = $^O =~ /MSWin/ ? 'git.exe' : 'git';
-
-    if (!grep { -x "$_/$git"} split /$sep/, $ENV{PATH}) {
-        croak "$git not found\n";
-    }
-
-    if ($repo =~ m!.*/(.*?)(?:\.git)*$!){
-        if (! -d $1){
-            my $clone_ok = system("git clone $repo");
-        }
-        else {
-            chdir $1;
-            system("git pull");
-            chdir '..';
-        }
-        return $1;
-    }
-}
 1;
 
 =head1 NAME
 
-Test::BrewBuild::Dispatch - Provides dispatching/listening services for
-Test::Brewbuild
+Test::BrewBuild::Dispatch - Dispatch C<brewbuild> testing to remote test
+servers.
 
 =head1 METHODS
 
