@@ -84,8 +84,6 @@ sub dispatch {
         if ($ok eq 'ok'){
             $socket->send($repo);
             $return{$tester}{build} = Storable::fd_retrieve($socket);
-            use Data::Dumper;
-            print Dumper \%return;
         }
         else {
             delete $remotes{$tester};
@@ -131,44 +129,32 @@ sub dispatch {
 Test::BrewBuild::Dispatch - Dispatch C<brewbuild> testing to remote test
 servers.
 
+=head1 DESCRIPTION
+
+This is the helper module for the remote dispatching system of
+L<Test::BrewBuild>, and shouldn't be used directly.
+
+It dispatches out test runs for remote test servers to perform, then processes
+the results returned from those testers.
+
 =head1 METHODS
 
 =head2 new
 
-Returns a new Test::BrewBuild::BrewCommands object.
+Returns a new Test::BrewBuild::Dispatch object.
 
-=head2 brew
+=head2 dispatch($cmd, $repo, $params)
 
-Returns 'perlbrew' if on Unix, and 'berrybrew' if on Windows.
+C<$cmd> is the C<brewbuild> command string that will be executed.
 
-=head2 info
+C<$repo> is the git repository to base the testing on.
 
-Returns the string result of *brew available.
+C<$params> is optional, and contains an array reference of IP/Port pairs for
+remote testers to dispatch to and follow. eg: C<10.1.1.5:7800>.
 
-=head2 installed($info)
+By default, the testers run on all IPs and port TCP/7800.
 
-Takes the output of '*brew available' in a string form. Returns the currently
-installed versions, formatted in a platform specific manner.
-
-=head2 available($legacy, $info)
-
-Similar to C<installed()>, but returns all perls available.
-
-=head2 using($info)
-
-Returns the current version of perl we're using.
-
-=head2 install
-
-Returns the current OS's specific *brew install command.
-
-=head2 remove
-
-Returns the current OS's specific *brew remove command.
-
-=head2 is_win
-
-Returns 0 if on Unix, and 1 if on Windows.
+See L<Test::BrewBuild::Listen>.
 
 =head1 AUTHOR
 
@@ -194,7 +180,6 @@ under the terms of either: the GNU General Public License as published
 by the Free Software Foundation; or the Artistic License.
 
 See L<http://dev.perl.org/licenses/> for more information.
-
 
 =cut
  
