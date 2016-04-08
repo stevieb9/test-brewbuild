@@ -63,7 +63,7 @@ if (! $is_win){
         }
 
     my $tester = Proc::Daemon->new(
-        work_dir => '.',
+        work_dir => '~/scratch',
         exec_command => "brewbuild -L --tester-ip $ip --tester-port $port",
     );
 

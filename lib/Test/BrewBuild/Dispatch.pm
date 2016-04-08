@@ -84,6 +84,8 @@ sub dispatch {
         if ($ok eq 'ok'){
             $socket->send($repo);
             $return{$tester}{build} = Storable::fd_retrieve($socket);
+            use Data::Dumper;
+            print Dumper \%return;
         }
         else {
             delete $remotes{$tester};
