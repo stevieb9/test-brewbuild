@@ -11,7 +11,7 @@ use File::Temp;
 use Module::Load;
 use Test::BrewBuild;
 use Test::BrewBuild::Dispatch;
-use Test::BrewBuild::Listen;
+use Test::BrewBuild::Tester;
 
 our $VERSION = '1.05';
 
@@ -41,9 +41,18 @@ GetOptions(
 
 my @valid_args = qw(
     on o new n remove r revdep R plugin p args a debug d install i help h
-    N notest setup s legacy l selftest T
+    N notest setup s legacy l selftest T listen L dispatch D
 );
 
+if (@ARGV){
+    my @args = grep /^-/, @ARGV;
+    for my $arg (@args){
+        $arg =~ s/-//g;
+        if (! grep { $arg eq $_ } @valid_args){
+            $help = 1;
+        }
+    }
+}
 if ($args{listen}){
     delete $args{listen};
     my $tester = Test::BrewBuild::Listen->new($bb_log);

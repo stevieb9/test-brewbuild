@@ -1,3 +1,4 @@
+bin/bbtester
 bin/brewbuild
 Changes
 lib/Test/BrewBuild.pm

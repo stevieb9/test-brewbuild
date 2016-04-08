@@ -1,0 +1,37 @@
+#!/usr/bin/perl
+use warnings;
+use strict;
+
+use if $^O !~ /MSWin/, "Proc::Daemon";
+use if $^O =~ /MSWin/, "Win32::Daemon";
+
+if (! $^O =~ /MSWin/){
+    my $tester = Proc::Daemon->new(
+        work_dir => '.',
+        exec_command => 'brewbuild -L',
+    );
+
+    my $pid_file = 'brewbuild.pid';
+
+    if ($ARGV[0] eq 'start'){
+        if (-f $pid_file){
+            my $fh;
+            open $fh, '<', $pid_file or die $!;
+            my $existing_pid = <$fh>;
+
+            if ($existing_pid){
+                if (kill(0, $existing_pid)){
+                    die "only one instance of brewbuild tester can run at a time\n";
+                }
+            }
+        }
+        my $pid = $tester->Init;
+        open my $wfh, '>', $pid_file or die $!;
+        print $wfh $pid;
+    }
+    if ($ARGV[0] eq 'stop'){
+        $tester->Kill_Daemon;
+        unlink $pid_file;
+    }
+}
+

@@ -17,6 +17,8 @@ if (! grep { -x "$_/$brew" } split /$sep/, $ENV{PATH}){
     sleep 3;
 }
 
+my $daemon_module = $is_win ? 'Win32::Daemon' : 'Proc::Daemon';
+
 WriteMakefile(
     NAME             => 'Test::BrewBuild',
     AUTHOR           => q{Steve Bertrand <steveb@cpan.org>},
@@ -24,7 +26,7 @@ WriteMakefile(
     ABSTRACT_FROM    => 'lib/Test/BrewBuild.pm',
     LICENSE          => 'perl_5',
     PL_FILES         => {},
-    EXE_FILES        => [ map "bin/$_", qw(brewbuild) ],
+    EXE_FILES        => [ map "bin/$_", qw(brewbuild bbtester) ],
     MIN_PERL_VERSION => 5.008,
     META_MERGE => {
         'meta-spec' => { version => 2 },
@@ -51,6 +53,7 @@ WriteMakefile(
         'Module::Load' => 0,   # corelist since 5.9.4
         'Parallel::ForkManager' => 0,
         'Plugin::Simple' => '0.06',
+        $daemon_module => 0,
         'Test::BrewBuild::Plugin::TestAgainst' => '0.06',
         'version' => 0,
     },
