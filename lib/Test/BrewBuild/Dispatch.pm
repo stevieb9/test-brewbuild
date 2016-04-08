@@ -61,8 +61,10 @@ sub dispatch {
             PeerPort => $remotes{$tester}{port},
             Proto => 'tcp',
         );
-        warn "can't connect to remote $tester on port $remotes{$tester} $!\n"
-          unless $socket;
+        if (! $socket){
+            die "can't connect to remote $tester on port " .
+                "$remotes{$tester}{port} $!\n";
+        }
 
         # syn
         $socket->send($tester);
@@ -97,6 +99,10 @@ sub dispatch {
     print "\n";
 
     for my $ip (keys %remotes){
+        if (! defined $remotes{$ip}{build}){
+            delete $remotes{$ip};
+            next;
+        }
         # FAIL file generation
 
         for my $fail_file (keys %{ $remotes{$ip}{build}{files} }){
