@@ -105,46 +105,25 @@ sub _clone_repo {
 =head1 NAME
 
 Test::BrewBuild::Listen - Daemonized testing service for dispatched test run
-execution.
+execution, Windows & Unix.
+
+=head1 DESCRIPTION
+
+This is the helper module for the L<bbtester> daemon/service that listens for
+incoming L<brewbuild> dispatcher remote build requests.
+
+It is not designed for end-user use.
 
 =head1 METHODS
 
 =head2 new
 
-Returns a new Test::BrewBuild::BrewCommands object.
+Returns a new Test::BrewBuild::Listen object.
 
-=head2 brew
+=head2 listen($ip, $port)
 
-Returns 'perlbrew' if on Unix, and 'berrybrew' if on Windows.
-
-=head2 info
-
-Returns the string result of *brew available.
-
-=head2 installed($info)
-
-Takes the output of '*brew available' in a string form. Returns the currently
-installed versions, formatted in a platform specific manner.
-
-=head2 available($legacy, $info)
-
-Similar to C<installed()>, but returns all perls available.
-
-=head2 using($info)
-
-Returns the current version of perl we're using.
-
-=head2 install
-
-Returns the current OS's specific *brew install command.
-
-=head2 remove
-
-Returns the current OS's specific *brew remove command.
-
-=head2 is_win
-
-Returns 0 if on Unix, and 1 if on Windows.
+Sets the IP and TCP ports up to listen on. By default, we listen on all IPs and
+TCP port 7800.
 
 =head1 AUTHOR
 
