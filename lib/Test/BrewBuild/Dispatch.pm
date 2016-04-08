@@ -14,13 +14,15 @@ our $VERSION = '1.05';
 $| = 1;
 
 sub new {
-    my ($class) = @_;
-    my $self = bless {}, $class;
+    my $class = shift;
+    my $log = shift;
+    my $self = bless {log => $log}, $class;
     return $self;
 }
 sub dispatch {
     my ($self, $cmd, $repo, $params) = @_;
 
+    #my $log = $self->{log}->child('Dispatch::dispatch');
     my %remotes;
 
     if (!$params->[0]) {
@@ -49,10 +51,21 @@ sub dispatch {
         warn "can't connect to remote $client on port $remotes{$client} $!\n"
           unless $socket;
 
+        # syn
+        $socket->send($client);
+
+        # ack
+        my $ack;
+        $socket->recv($ack, 1024);
+
+        die "comms issue\n" if ! $ack eq $client;
+
+        print "$ack\n";
+
         $socket->send($cmd);
 
         my $ok = '';
-        $socket->recv($ok, 1024000);
+        $socket->recv($ok, 1024);
 
         if ($ok eq 'ok'){
             $socket->send($repo);
@@ -92,6 +105,7 @@ sub dispatch {
 }
 sub listen {
     my ($self) = @_;
+    #my $log = $self->{log}->child('Dispatch::listen');
 
     my $ip = '0.0.0.0';
     my $port = '7800';
@@ -105,8 +119,6 @@ sub listen {
     );
     die "cannot create socket $!\n" unless $sock;
 
-
-
     while (1){
 
         my $res = {
@@ -115,9 +127,14 @@ sub listen {
 
         my $client = $sock->accept;
 
+        # ack
+        my $ack;
+        $client->recv($ack, 1024);
+
+        $client->send($ack);
+
         my $cmd;
         $client->recv($cmd, 1024);
-
         $client->send('ok');
 
         my $repo = '';

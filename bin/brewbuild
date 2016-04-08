@@ -14,7 +14,9 @@ use Test::BrewBuild::Dispatch;
 
 our $VERSION = '1.05';
 
-my $log = Test::BrewBuild->new()->log()->child('brewbuild');
+my $bb_log = Test::BrewBuild->new()->log();
+my $log = $bb_log->child('brewbuild');
+
 my (%args, $setup, $help);
 
 GetOptions(
@@ -43,9 +45,7 @@ my @valid_args = qw(
 
 if ($args{listen}){
     delete $args{listen};
-
-
-    my $dispatch = Test::BrewBuild::Dispatch->new;
+    my $dispatch = Test::BrewBuild::Dispatch->new($bb_log);
     $dispatch->listen;
     exit;
 }
@@ -59,7 +59,7 @@ if ($args{dispatch}){
     delete $args{dispatch};
     delete $args{repo};
 
-    my $dispatch = Test::BrewBuild::Dispatch->new;
+    my $dispatch = Test::BrewBuild::Dispatch->new($bb_log);
     $dispatch->dispatch($cmd, $repo);
     exit;
 }
