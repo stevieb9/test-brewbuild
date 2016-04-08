@@ -33,9 +33,10 @@ GetOptions(
     "l|legacy"      => \$args{legacy},
     "T|selftest"    => \$args{selftest},
     "L|listen"      => \$args{listen},
-    "D|dispatch"    => \$args{dispatch},
-    "repo"          => \$args{repo},
+    "D|dispatch=s"  => \$args{dispatch},
+    "X|repo=s"      => \$args{repo},
     "setup"         => \$setup,
+    "t|testers=s@"  => \$args{testers},
     "tester-ip=s"   => \$args{tester_ip},
     "tester-port=i" => \$args{tester_port},
     "help"          => \$help,
@@ -44,7 +45,7 @@ GetOptions(
 my @valid_args = qw(
     on o new n remove r revdep R plugin p args a debug d install i help h
     N notest setup s legacy l selftest T listen L dispatch D tester_ip
-    tester_port
+    tester_port t testers
 );
 
 if (@ARGV){
@@ -69,11 +70,10 @@ if ($args{dispatch}){
 
     my $repo = $args{repo};
     my $cmd = $args{dispatch};
-    delete $args{dispatch};
-    delete $args{repo};
+    my $testers = $args{testers};
 
     my $dispatch = Test::BrewBuild::Dispatch->new($bb_log);
-    $dispatch->dispatch($cmd, $repo);
+    $dispatch->dispatch($cmd, $repo, $testers);
     exit;
 }
 if ($^O =~ /MSWin/ && $args{on}){
@@ -96,7 +96,7 @@ if ($help){
 
 Usage: brewbuild [OPTIONS]
 
-OPTIONS:
+Local usage options:
 
 -o | --on       Perl version number to run against (can be supplied multiple times). Can not be used on Windows
 -R | --revdep   Run tests, install, then run tests on all CPAN reverse dependency modules
@@ -106,14 +106,25 @@ OPTIONS:
 -N | --notest   Do not run tests. Allows you to --remove and --install without testing
 -l | --legacy   Operate on perls < 5.8.x. The default plugins won't work with this flag set if a lower version is installed
 
--p | --plugin   Module name of the exec command plugin to use
--a | --args     List of args to pass into the plugin (one arg per loop)
+Dispatching Server options (see perldoc brewbuild):
 
--T | --selftest Testing only: prevent recursive testing on Test::BrewBuild
--d | --debug    0-7, sets logging verbosity, default is 0
+-D | --dispatch The brewbuild command string to dispatch to the remote testing servers, and enable the dispatcher
+-t | --testers  "IP:PORT" pairs of the remote testesrs
+-X | --repo     The git repository to clone and test out of
+
+Help options:
 
 -s | --setup    Display test platform setup instructions
 -h | --help     Print this help message
+
+Special options:
+
+-p | --plugin   Module name of the exec command plugin to use
+-a | --args     List of args to pass into the plugin (one arg per loop)
+-T | --selftest Testing only: prevent recursive testing on Test::BrewBuild
+-d | --debug    0-7, sets logging verbosity, default is 0
+
+
 
 EOF
 exit;
