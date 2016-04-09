@@ -33,7 +33,7 @@ sub listen {
     );
     die "cannot create socket $!\n" unless $sock;
 
-    while (1){
+    while (! $ENV{STOP}){
 
         my $res = {
             platform => $Config{archname},
