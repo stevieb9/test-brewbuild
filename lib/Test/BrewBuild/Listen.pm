@@ -47,7 +47,13 @@ sub listen {
 
         my $cmd;
         $dispatch->recv($cmd, 1024);
-        $cmd = "where brewbuild";
+        my @args = split /\s+/, $cmd;
+        if ($args[0] ne 'brewbuild'){
+            die "only brewbuild is allowed as a command\n";
+        }
+        else{
+            shift @args;
+        }
         $dispatch->send('ok');
 
         my $repo = '';
@@ -59,9 +65,11 @@ sub listen {
         if ($cmd && $repo){
             my $repo_dir = $self->_clone_repo($repo);
             chdir $repo_dir;
-            open my $fh, '>', 'a.txt' or die $!;
-            $res->{data} = `$cmd`;
-            print $fh $res->{data};
+
+            my %opts = Test::BrewBuild->options(\@args);
+            my $bb = Test::BrewBuild->new(%opts);
+            $res->{data} = $bb->run;
+
             if (-d 'bblog'){
                 chdir 'bblog';
                 my @entries = glob '*';
