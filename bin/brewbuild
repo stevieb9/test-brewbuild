@@ -7,20 +7,18 @@ use File::Find;
 use File::Temp;
 use Module::Load;
 use Test::BrewBuild;
-use Test::BrewBuild::Dispatch;
-use Test::BrewBuild::Listen;
 
 our $VERSION = '1.05';
 
-my $bb_log = Test::BrewBuild->new()->log();
+my $bb = Test::BrewBuild->new;
+my $bb_log = $bb->log;
 my $log = $bb_log->child('brewbuild');
 
-my %args = Test::BrewBuild->options(\@ARGV) if @ARGV;
-my $is_win = Test::BrewBuild->is_win;
+my %args = $bb->options(\@ARGV) if @ARGV;
+my $is_win = $bb->is_win;
 
 if ($args{listen}){
-    delete $args{listen};
-    my $tester = Test::BrewBuild::Listen->new;
+    my $tester = $bb->tester;
     $tester->listen($args{tester_ip}, $args{tester_port});
     exit;
 }
@@ -33,8 +31,8 @@ if ($args{dispatch}){
     my $cmd = $args{dispatch};
     my $testers = $args{testers};
 
-    my $dispatch = Test::BrewBuild::Dispatch->new($bb_log);
-    $dispatch->dispatch($cmd, $repo, $testers);
+    my $dispatcher = $bb->dispatcher;
+    $dispatcher->dispatch($cmd, $repo, $testers);
     exit;
 }
 if ($is_win && $args{on}){

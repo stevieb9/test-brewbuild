@@ -12,6 +12,8 @@ Getopt::Long::Configure ("no_ignore_case", "pass_through");
 use Logging::Simple;
 use Plugin::Simple default => 'Test::BrewBuild::Plugin::DefaultExec';
 use Test::BrewBuild::BrewCommands;
+use Test::BrewBuild::Dispatch;
+use Test::BrewBuild::Listen;
 
 our $VERSION = '1.05';
 
@@ -466,6 +468,16 @@ sub options {
 
     return %opts;
 }
+sub tester {
+    my $self = shift;
+    my $tester = Test::BrewBuild::Listen->new;
+    return $tester;
+}
+sub dispatcher {
+    my $self = shift;
+    my $dispatcher = Test::BrewBuild::Dispatch->new;
+    return $dispatcher;
+}
 sub setup {
     print "\n";
     my @setup = <DATA>;
@@ -677,7 +689,6 @@ sub _dzil_unshim {
     $self->{is_dzil} = 0;
     chdir '..';
 }
-
 1;
 
 =head1 NAME
