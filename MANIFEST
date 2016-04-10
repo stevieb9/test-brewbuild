@@ -1,4 +1,5 @@
 bin/bbtester
+bin/bbtestersvc
 bin/brewbuild
 Changes
 lib/Test/BrewBuild.pm
@@ -27,7 +28,7 @@ t/10-run.t
 t/12-TestPluginInst.t
 t/13-exec.t.norun
 t/14-using.t
-t/15-network.t
+t/15-network.t.norun
 t/__clean.t
 t/base/115-level6.data
 t/base/115-level6_win.data

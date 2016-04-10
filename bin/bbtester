@@ -4,6 +4,10 @@ use strict;
 
 use Getopt::Long;
 
+if ($^O =~ /MSWin/){
+    die "bbtester is a Unix script. Please run bbtestersvc on Windows\n";
+}
+
 my $ip = '0.0.0.0';
 my $port = 7800;
 my $help;
