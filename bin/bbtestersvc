@@ -11,7 +11,7 @@ use Test::BrewBuild::Listen;
 
 my $svc_installed = `net start | find "BrewBuild Tester"`;
 
-if (! $svc_installed) {
+if (! $svc_installed){
 
     #FIXME: use ``where'' to find the paths
     my $svc_path = 'perl.exe';
@@ -28,59 +28,59 @@ if (! $svc_installed) {
         parameters  => $svc_params
     );
 
-    if (Win32::Daemon::CreateService( \%service_info )) {
+    if (Win32::Daemon::CreateService(\%service_info)){
         print "Successfully added.\n";
         system("net start bbtestersvc");
     }
     else {
         print "Failed to add service: ".
-              Win32::FormatMessage( Win32::Daemon::GetLastError() )."\n";
+              Win32::FormatMessage(Win32::Daemon::GetLastError())."\n";
     }
 }
 
 if ($svc_installed){
 
-    Win32::Daemon::RegisterCallbacks( {
+    Win32::Daemon::RegisterCallbacks({
         start    => \&start,
         running  => \&running,
         pause    => \&pause,
         continue => \&continue,
         stop     => \&stop,
-    } );
+    });
 
     my %context = (
         last_state => SERVICE_STOPPED,
         start_time => time(),
     );
 
-    Win32::Daemon::StartService( \%context, 2000 );
+    Win32::Daemon::StartService(\%context, 2000);
 
     sub start {
-        my ( $event, $context ) = @_;
+        my ($event, $context) = @_;
         $context->{last_state} = SERVICE_RUNNING;
-        Win32::Daemon::State( SERVICE_RUNNING );
+        Win32::Daemon::State(SERVICE_RUNNING);
     }
     sub running {
-        my ( $event, $context ) = @_;
-        if (SERVICE_RUNNING == Win32::Daemon::State()) {
+        my ($event, $context) = @_;
+        if (SERVICE_RUNNING == Win32::Daemon::State()){
             my $tester = Test::BrewBuild::Listen->new;
             $tester->listen;
         }
     }
     sub pause {
-        my ( $event, $context ) = @_;
+        my ($event, $context) = @_;
         $context->{last_state} = SERVICE_PAUSED;
-        Win32::Daemon::State( SERVICE_PAUSED );
+        Win32::Daemon::State(SERVICE_PAUSED);
     }
     sub continue {
-        my ( $event, $context ) = @_;
+        my ($event, $context) = @_;
         $context->{last_state} = SERVICE_RUNNING;
-        Win32::Daemon::State( SERVICE_RUNNING );
+        Win32::Daemon::State(SERVICE_RUNNING);
     }
     sub stop {
-        my ( $event, $context ) = @_;
+        my ($event, $context) = @_;
         $context->{last_state} = SERVICE_STOPPED;
-        Win32::Daemon::State( SERVICE_STOPPED );
+        Win32::Daemon::State(SERVICE_STOPPED);
         Win32::Daemon::StopService();
     }
 }
