@@ -2,17 +2,31 @@ package Test::BrewBuild::Plugin::DefaultExec;
 
 # default exec command set plugin for Test::BrewBuild
 
-our $VERSION = '1.04';
+our $VERSION = '1.05';
 
-sub brewbuild_exec {
-    shift; # throw away the class
+my $state = bless {}, __PACKAGE__;
+
+sub brewbuild_exec{
+    shift; # throw away class
     my $log = shift;
     my $clog = $log->child( __PACKAGE__.'::brewbuild_exec' );
     $clog->_6( 'performing plugin duties' );
-
-    return <DATA>;
+    return _cmd();
 }
+sub _cmd {
+    my $module = shift;
 
+    #FIXME: we have to do the below nonsense, because DATA can't
+    # be opened twice if we get called more than once per run
+
+    if (! defined $state->{raw}){
+        @{ $state->{raw} } = <DATA>;
+    }
+
+    my @cmd = @{ $state->{raw} };
+
+    return @cmd;
+}
 1;
 
 =pod

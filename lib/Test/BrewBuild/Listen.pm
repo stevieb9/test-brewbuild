@@ -33,6 +33,11 @@ sub listen {
     die "cannot create socket $!\n" unless $sock;
 
     while (1){
+        if ($^O =~ /MSWin/){
+            mkdir "c:/brewbuild" if ! -d "c:/brewbuild";
+            chdir "c:/brewbuild";
+        }
+
         my $res = {
             platform => $Config{archname},
         };
@@ -47,6 +52,8 @@ sub listen {
 
         my $cmd;
         $dispatch->recv($cmd, 1024);
+        $res->{cmd} = $cmd;
+
         my @args = split /\s+/, $cmd;
         if ($args[0] ne 'brewbuild'){
             die "only brewbuild is allowed as a command\n";
@@ -58,18 +65,18 @@ sub listen {
 
         my $repo = '';
         $dispatch->recv($repo, 1024);
-
         $res->{repo} = $repo;
-        $res->{cmd} = $cmd;
 
-        if ($cmd && $repo){
+        if ($repo){
             my $repo_dir = $self->_clone_repo($repo);
             chdir $repo_dir;
 
             push @args, '--return';
-            my %opts = Test::BrewBuild->options(\@args);
-            my $bb = Test::BrewBuild->new(%opts);
-            $res->{data} = $bb->run;
+            {
+                my %opts = Test::BrewBuild->options(\@args);
+                my $bb = Test::BrewBuild->new(%opts);
+                $res->{data} = $bb->run;
+            }
 
             if (-d 'bblog'){
                 chdir 'bblog';
@@ -84,6 +91,7 @@ sub listen {
             }
             Storable::nstore_fd($res, $dispatch);
             chdir '..';
+
         }
     }
     $sock->close();

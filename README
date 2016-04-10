@@ -129,11 +129,15 @@ USAGE
     Number portion of an available perl version according to "*brew
     available". Multiple versions can be sent in at once
 
+ --return
+
+    Return the results in string form, as opposed to printing them
+
  --notest, -N
 
     Do not run tests. Allows you to --remove and --install without testing
 
- --legacy, -L
+ --legacy, -l
 
     Operate on perls < 5.8.x. The default plugins won't work with this flag
     set if a lower version is installed

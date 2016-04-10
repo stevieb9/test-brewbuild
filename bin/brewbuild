@@ -290,6 +290,10 @@ Remove all installed perls (less the current one)
 
 Number portion of an available perl version according to "*brew available". Multiple versions can be sent in at once
 
+=head2 --return
+
+Return the results in string form, as opposed to printing them
+
 =head2 --notest, -N   
 
 Do not run tests. Allows you to --remove and --install without testing

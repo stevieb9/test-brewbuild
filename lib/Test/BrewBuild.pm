@@ -5,7 +5,8 @@ use warnings;
 use Carp qw(croak);
 use File::Copy;
 use File::Temp;
-use Getopt::Long qw(GetOptionsFromArray :config no_ignore_case pass_through);
+use Getopt::Long qw(GetOptionsFromArray);
+Getopt::Long::Configure ("no_ignore_case", "pass_through");
 use Logging::Simple;
 use Plugin::Simple default => 'Test::BrewBuild::Plugin::DefaultExec';
 use Test::BrewBuild::BrewCommands;
@@ -433,9 +434,9 @@ sub options {
         "r|remove"      => \$opts{remove},
         "R|revdep"      => \$opts{revdep},
         "plugin=s"      => \$opts{plugin},
-        "args=s@"       => \$opts{args},
-        "debug=i"       => \$opts{debug},
-        "install=s@"    => \$opts{install},
+        "a|args=s@"     => \$opts{args},
+        "d|debug=i"     => \$opts{debug},
+        "i|install=s@"  => \$opts{install},
         "N|notest"      => \$opts{notest},
         "return"        => \$opts{return},
         "l|legacy"      => \$opts{legacy},
@@ -447,7 +448,7 @@ sub options {
         "t|testers=s@"  => \$opts{testers},
         "tester-ip=s"   => \$opts{tester_ip},
         "tester-port=i" => \$opts{tester_port},
-        "help"          => \$help,
+        "h|help"        => \$help,
     );
 
     help() if $help;
