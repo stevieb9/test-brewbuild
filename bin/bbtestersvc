@@ -12,11 +12,11 @@ use Test::BrewBuild::Listen;
 my $svc_installed = `net start | find "BrewBuild Tester"`;
 
 if (! $svc_installed){
+    my $svc_path = (split(/\n/, `where perl.exe`))[0];
+    my $svc_params = (split(/\n/, `where bbtestersvc`))[0];
 
-    #FIXME: use ``where'' to find the paths
-    my $svc_path = 'perl.exe';
-    my $svc_params = 'C:\repos\p5-test-brewbuild\bin\bbtestersvc';
-
+    print "$svc_path, $svc_params\n";
+    exit;
     my %service_info = (
         machine     => '',
         name        => 'bbtestersvc',

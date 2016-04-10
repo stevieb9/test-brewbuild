@@ -42,9 +42,10 @@ GetOptions(
 );
 
 Test::BrewBuild->opts(\@ARGV) if @ARGV;
-my $is_win = Test::BrewBuild->is_win;
 Test::BrewBuild->help if $help;
 Test::BrewBuild->setup if $setup;
+
+my $is_win = Test::BrewBuild->is_win;
 
 if ($args{listen}){
     delete $args{listen};
