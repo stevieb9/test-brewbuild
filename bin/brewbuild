@@ -36,7 +36,6 @@ if ($is_win && $args{on}){
     warn "\nwe can't use --on with Windows... running on all\n\n";
     delete $args{on};
 }
-
 if (! -d 't/' && ! $args{notest}){
     croak "\nthere's no 't/' directory, nothing to test. Exiting...\n";
 }
@@ -104,7 +103,6 @@ sub _exec_brew {
 
     $brew->run;
 }
-
 
 =pod
 
