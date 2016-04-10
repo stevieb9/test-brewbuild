@@ -40,16 +40,53 @@ sub opts {
         tester_port t testers
     );
 
+    my $bad_opt = 0;
+
     if (@$args){
         my @args = grep /^-/, @$args;
         for my $arg (@args){
             $arg =~ s/-//g;
             if (! grep { $arg eq $_ } @valid_args){
-                return 1;
+                $bad_opt = 1;
+                last;
             }
         }
     }
-    return 0;
+
+     print <<EOF;
+
+Usage: brewbuild [OPTIONS]
+
+Local usage options:
+
+-o | --on       Perl version number to run against (can be supplied multiple times). Can not be used on Windows
+-R | --revdep   Run tests, install, then run tests on all CPAN reverse dependency modules
+-n | --new      How many random versions of perl to install (-1 to install all)
+-r | --remove   Remove all installed perls (less the current one)
+-i | --install  Number portion of an available perl version according to "*brew available". Multiple versions can be sent in at once
+-N | --notest   Do not run tests. Allows you to --remove and --install without testing
+-l | --legacy   Operate on perls < 5.8.x. The default plugins won't work with this flag set if a lower version is installed
+
+Dispatching Server options (see perldoc brewbuild):
+
+-D | --dispatch The brewbuild command string to dispatch to the remote testing servers, and enable the dispatcher
+-t | --testers  "IP:PORT" pairs of the remote testesrs
+-X | --repo     The git repository to clone and test out of
+
+Help options:
+
+-s | --setup    Display test platform setup instructions
+-h | --help     Print this help message
+
+Special options:
+
+-p | --plugin   Module name of the exec command plugin to use
+-a | --args     List of args to pass into the plugin (one arg per loop)
+-T | --selftest Testing only: prevent recursive testing on Test::BrewBuild
+-d | --debug    0-7, sets logging verbosity, default is 0
+
+EOF
+exit;
 }
 sub brew_info {
     my $self = shift;
