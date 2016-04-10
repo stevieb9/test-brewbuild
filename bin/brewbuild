@@ -3,7 +3,6 @@ use warnings;
 use strict;
 
 use Carp qw(croak);
-use Getopt::Long qw(:config no_ignore_case pass_through);
 use File::Copy::Recursive qw(dircopy);
 use File::Find;
 use File::Path qw(remove_tree);
@@ -17,34 +16,8 @@ our $VERSION = '1.05';
 
 my $bb_log = Test::BrewBuild->new()->log();
 my $log = $bb_log->child('brewbuild');
-my (%args, $setup, $help);
 
-GetOptions(
-    "on=s@"         => \$args{on},
-    "n|new=i"       => \$args{new},
-    "r|remove"      => \$args{remove},
-    "R|revdep"      => \$args{revdep},
-    "plugin=s"      => \$args{plugin},
-    "args=s@"       => \$args{args},
-    "debug=i"       => \$args{debug},
-    "install=s@"    => \$args{install},
-    "N|notest"      => \$args{notest},
-    "l|legacy"      => \$args{legacy},
-    "T|selftest"    => \$args{selftest},
-    "L|listen"      => \$args{listen},
-    "D|dispatch=s"  => \$args{dispatch},
-    "X|repo=s"      => \$args{repo},
-    "s|setup"       => \$setup,
-    "t|testers=s@"  => \$args{testers},
-    "tester-ip=s"   => \$args{tester_ip},
-    "tester-port=i" => \$args{tester_port},
-    "help"          => \$help,
-);
-
-Test::BrewBuild->opts(\@ARGV) if @ARGV;
-Test::BrewBuild->help if $help;
-Test::BrewBuild->setup if $setup;
-
+my %args = Test::BrewBuild->options(\@ARGV) if @ARGV;
 my $is_win = Test::BrewBuild->is_win;
 
 if ($args{listen}){

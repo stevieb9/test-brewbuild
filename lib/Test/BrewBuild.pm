@@ -5,6 +5,7 @@ use warnings;
 use Carp qw(croak);
 use File::Copy;
 use File::Temp;
+use Getopt::Long qw(GetOptionsFromArray :config no_ignore_case pass_through);
 use Logging::Simple;
 use Plugin::Simple default => 'Test::BrewBuild::Plugin::DefaultExec';
 use Test::BrewBuild::BrewCommands;
@@ -31,31 +32,6 @@ sub new {
 
     return $self;
 }
-sub opts {
-    my ($self, $args) = @_;
-
-    my @valid_args = qw(
-        on o new n remove r revdep R plugin p args a debug d install i help h
-        N notest setup s legacy l selftest T listen L dispatch D tester_ip
-        tester_port t testers
-        );
-
-    my $bad_opt = 0;
-
-    if (@$args) {
-        my @args = grep /^-/, @$args;
-        for my $arg (@args) {
-            $arg =~ s/-//g;
-            if (!grep { $arg eq $_ } @valid_args) {
-                $bad_opt = 1;
-                last;
-            }
-        }
-    }
-
-    $self->help if $bad_opt;
-}
-
 sub brew_info {
     my $self = shift;
 
@@ -434,12 +410,47 @@ sub is_win {
     my $is_win = ($^O =~ /Win/) ? 1 : 0;
     return $is_win;
 }
+sub options {
+    my ($self, $args) = @_;
+    my (%opts, $help, $setup);
+
+    _validate_opts($args);
+
+    GetOptionsFromArray(
+        $args,
+        "on=s@"         => \$opts{on},
+        "n|new=i"       => \$opts{new},
+        "r|remove"      => \$opts{remove},
+        "R|revdep"      => \$opts{revdep},
+        "plugin=s"      => \$opts{plugin},
+        "args=s@"       => \$opts{args},
+        "debug=i"       => \$opts{debug},
+        "install=s@"    => \$opts{install},
+        "N|notest"      => \$opts{notest},
+        "l|legacy"      => \$opts{legacy},
+        "T|selftest"    => \$opts{selftest},
+        "L|listen"      => \$opts{listen},
+        "D|dispatch=s"  => \$opts{dispatch},
+        "X|repo=s"      => \$opts{repo},
+        "s|setup"       => \$setup,
+        "t|testers=s@"  => \$opts{testers},
+        "tester-ip=s"   => \$opts{tester_ip},
+        "tester-port=i" => \$opts{tester_port},
+        "help"          => \$help,
+    );
+
+    help() if $help;
+    setup() if $setup;
+
+    return %opts;
+}
 sub setup {
     print "\n";
     my @setup = <DATA>;
     print $_ for @setup;
     exit;
 }
+
 sub help {
      print <<EOF;
 
@@ -475,6 +486,30 @@ Special options:
 
 EOF
 exit;
+}
+sub _validate_opts {
+    my $args = shift;
+
+    my @valid_args = qw(
+        on o new n remove r revdep R plugin p args a debug d install i help h
+        N notest setup s legacy l selftest T listen L dispatch D tester_ip
+        tester_port t testers
+        );
+
+    my $bad_opt = 0;
+
+    if (@$args) {
+        my @args = grep /^-/, @$args;
+        for my $arg (@args) {
+            $arg =~ s/-//g;
+            if (!grep { $arg eq $_ } @valid_args) {
+                $bad_opt = 1;
+                last;
+            }
+        }
+    }
+
+    help() if $bad_opt;
 }
 sub _create_log {
     my ($self, $level) = @_;
