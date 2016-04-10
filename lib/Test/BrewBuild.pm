@@ -508,8 +508,8 @@ sub _validate_opts {
 
     my @valid_args = qw(
         on o new n remove r revdep R plugin p args a debug d install i help h
-        N notest setup s legacy l selftest T listen L dispatch D tester_ip
-        tester_port t testers return
+        N notest setup s legacy l selftest T listen L dispatch D tester-ip
+        tester-port t testers return
         );
 
     my $bad_opt = 0;
@@ -517,7 +517,7 @@ sub _validate_opts {
     if (@$args) {
         my @args = grep /^-/, @$args;
         for my $arg (@args) {
-            $arg =~ s/-//g;
+            $arg =~ s/^-{1,2}//g;
             if (!grep { $arg eq $_ } @valid_args) {
                 $bad_opt = 1;
                 last;
