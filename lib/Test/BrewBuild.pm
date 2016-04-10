@@ -284,12 +284,22 @@ sub results {
         }
     }
 
-    print "\n";
-    print "$self->{args}{plugin_arg}\n" if $self->{args}{plugin_arg};
-    print $_ for @pass;
-    print $_ for @fail;
-
     $log->_5(__PACKAGE__ ." run finished");
+
+    if ($self->{args}{return}){
+        my $ret = "\n";
+        $ret .= "$self->{args}{plugin_arg}\n" if $self->{args}{plugin_arg};
+        $ret .= $_ for @pass;
+        $ret .= $_ for @fail;
+
+        return $ret;
+    }
+    else {
+        print "\n";
+        print "$self->{args}{plugin_arg}\n" if $self->{args}{plugin_arg};
+        print $_ for @pass;
+        print $_ for @fail;
+    }
 }
 sub exec {
     my $self = shift;
@@ -427,6 +437,7 @@ sub options {
         "debug=i"       => \$opts{debug},
         "install=s@"    => \$opts{install},
         "N|notest"      => \$opts{notest},
+        "return"        => \$opts{return},
         "l|legacy"      => \$opts{legacy},
         "T|selftest"    => \$opts{selftest},
         "L|listen"      => \$opts{listen},
@@ -472,6 +483,10 @@ Dispatching Server options (see perldoc brewbuild):
 -t | --testers  "IP:PORT" pairs of the remote testesrs
 -X | --repo     The git repository to clone and test out of
 
+API options:
+
+--return        Return the results as a string as opposed to printing to STDOUT
+
 Help options:
 
 -s | --setup    Display test platform setup instructions
@@ -493,7 +508,7 @@ sub _validate_opts {
     my @valid_args = qw(
         on o new n remove r revdep R plugin p args a debug d install i help h
         N notest setup s legacy l selftest T listen L dispatch D tester_ip
-        tester_port t testers
+        tester_port t testers return
         );
 
     my $bad_opt = 0;
