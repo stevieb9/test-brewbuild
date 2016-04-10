@@ -17,7 +17,6 @@ our $VERSION = '1.05';
 
 my $bb_log = Test::BrewBuild->new()->log();
 my $log = $bb_log->child('brewbuild');
-
 my (%args, $setup, $help);
 
 GetOptions(
@@ -35,7 +34,7 @@ GetOptions(
     "L|listen"      => \$args{listen},
     "D|dispatch=s"  => \$args{dispatch},
     "X|repo=s"      => \$args{repo},
-    "setup"         => \$setup,
+    "s|setup"       => \$setup,
     "t|testers=s@"  => \$args{testers},
     "tester-ip=s"   => \$args{tester_ip},
     "tester-port=i" => \$args{tester_port},
@@ -43,6 +42,9 @@ GetOptions(
 );
 
 Test::BrewBuild->opts(\@ARGV) if @ARGV;
+my $is_win = Test::BrewBuild->is_win;
+Test::BrewBuild->help if $help;
+Test::BrewBuild->setup if $setup;
 
 if ($args{listen}){
     delete $args{listen};
@@ -63,23 +65,17 @@ if ($args{dispatch}){
     $dispatch->dispatch($cmd, $repo, $testers);
     exit;
 }
-if ($^O =~ /MSWin/ && $args{on}){
+if ($is_win && $args{on}){
     warn "\nwe can't use --on with Windows... running on all\n\n";
     delete $args{on};
 }
-if ($setup){
-    print "\n";
-    my @setup = <DATA>;
-    print $_ for @setup;
-    exit;
-}
+
 if (! -d 't/' && ! $args{notest}){
     croak "\nthere's no 't/' directory, nothing to test. Exiting...\n";
 }
 
 # configure output for if *brew isn't installed
 
-my $is_win = $^O =~ /MSWin/ ? 1 : 0;
 my $brew_prog = $is_win ? 'berrybrew.exe' : 'perlbrew';
 my $brew_link = $is_win 
     ? 'https://github.com/dnmfarrell/berrybrew'
@@ -452,57 +448,3 @@ by the Free Software Foundation; or the Artistic License.
 See L<http://dev.perl.org/licenses/> for more information.
 
 =cut
-
-__DATA__
-
-Test::BrewBuild test platform configuration guide
-
-*** Unix ***
-
-Install perlbrew and related requirements:
-    cpanm App::perlbrew
-    perlbrew install-patchperl
-    perlbrew install-cpanm
-
-Install and switch to your base perl instance, and install C<Test::BrewBuild>:
-    perlbrew install 5.22.1
-    perlbrew switch 5.22.1
-    cpanm Test::BrewBuild
-
-*** Windows ***
-
-Note that the key here is that your %PATH% must be free and clear of anything
-Perl. That means that if you're using an existing box with Strawberry or
-ActiveState installed, you *must* remove all traces of them in the PATH
-environment variable for ``brewbuild'' to work correctly.
-
-Easiest way to guarantee a working environment is using a clean-slate Windows
-server with nothing on it. For a Windows test platform, I mainly used an
-Amazon AWS t2.small server.
-
-Download/install git for Windows:
-    https://git-scm.com/download/win)
-
-Create a repository directory, and enter it:
-    mkdir c:\repos
-    cd c:\repos
-
-Clone and configure berrybrew
-    git clone https://github.com/dnmfarrell/berrybrew
-    cd berrybrew
-    bin\berrybrew.exe config (type 'y' when asked to install in PATH)
-
-Close the current CMD window and open a new one to update env vars
-
-Check available perls, and install one that'll become your core base install
-    berrybrew available
-    berrybrew install 5.22.1_64
-    berrybrew switch 5.22.1_64
-    close CMD window, and open new one
-
-Make sure it took
-    perl -v
-
-Install Test::BrewBuild
-    cpanm Test::BrewBuild
-

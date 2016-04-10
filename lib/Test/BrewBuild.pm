@@ -38,56 +38,24 @@ sub opts {
         on o new n remove r revdep R plugin p args a debug d install i help h
         N notest setup s legacy l selftest T listen L dispatch D tester_ip
         tester_port t testers
-    );
+        );
 
     my $bad_opt = 0;
 
-    if (@$args){
+    if (@$args) {
         my @args = grep /^-/, @$args;
-        for my $arg (@args){
+        for my $arg (@args) {
             $arg =~ s/-//g;
-            if (! grep { $arg eq $_ } @valid_args){
+            if (!grep { $arg eq $_ } @valid_args) {
                 $bad_opt = 1;
                 last;
             }
         }
     }
 
-     print <<EOF;
-
-Usage: brewbuild [OPTIONS]
-
-Local usage options:
-
--o | --on       Perl version number to run against (can be supplied multiple times). Can not be used on Windows
--R | --revdep   Run tests, install, then run tests on all CPAN reverse dependency modules
--n | --new      How many random versions of perl to install (-1 to install all)
--r | --remove   Remove all installed perls (less the current one)
--i | --install  Number portion of an available perl version according to "*brew available". Multiple versions can be sent in at once
--N | --notest   Do not run tests. Allows you to --remove and --install without testing
--l | --legacy   Operate on perls < 5.8.x. The default plugins won't work with this flag set if a lower version is installed
-
-Dispatching Server options (see perldoc brewbuild):
-
--D | --dispatch The brewbuild command string to dispatch to the remote testing servers, and enable the dispatcher
--t | --testers  "IP:PORT" pairs of the remote testesrs
--X | --repo     The git repository to clone and test out of
-
-Help options:
-
--s | --setup    Display test platform setup instructions
--h | --help     Print this help message
-
-Special options:
-
--p | --plugin   Module name of the exec command plugin to use
--a | --args     List of args to pass into the plugin (one arg per loop)
--T | --selftest Testing only: prevent recursive testing on Test::BrewBuild
--d | --debug    0-7, sets logging verbosity, default is 0
-
-EOF
-exit;
+    $self->help if $bad_opt;
 }
+
 sub brew_info {
     my $self = shift;
 
@@ -466,6 +434,48 @@ sub is_win {
     my $is_win = ($^O =~ /Win/) ? 1 : 0;
     return $is_win;
 }
+sub setup {
+    print "\n";
+    my @setup = <DATA>;
+    print $_ for @setup;
+    exit;
+}
+sub help {
+     print <<EOF;
+
+Usage: brewbuild [OPTIONS]
+
+Local usage options:
+
+-o | --on       Perl version number to run against (can be supplied multiple times). Can not be used on Windows
+-R | --revdep   Run tests, install, then run tests on all CPAN reverse dependency modules
+-n | --new      How many random versions of perl to install (-1 to install all)
+-r | --remove   Remove all installed perls (less the current one)
+-i | --install  Number portion of an available perl version according to "*brew available". Multiple versions can be sent in at once
+-N | --notest   Do not run tests. Allows you to --remove and --install without testing
+-l | --legacy   Operate on perls < 5.8.x. The default plugins won't work with this flag set if a lower version is installed
+
+Dispatching Server options (see perldoc brewbuild):
+
+-D | --dispatch The brewbuild command string to dispatch to the remote testing servers, and enable the dispatcher
+-t | --testers  "IP:PORT" pairs of the remote testesrs
+-X | --repo     The git repository to clone and test out of
+
+Help options:
+
+-s | --setup    Display test platform setup instructions
+-h | --help     Print this help message
+
+Special options:
+
+-p | --plugin   Module name of the exec command plugin to use
+-a | --args     List of args to pass into the plugin (one arg per loop)
+-T | --selftest Testing only: prevent recursive testing on Test::BrewBuild
+-d | --debug    0-7, sets logging verbosity, default is 0
+
+EOF
+exit;
+}
 sub _create_log {
     my ($self, $level) = @_;
 
@@ -796,7 +806,60 @@ by the Free Software Foundation; or the Artistic License.
 
 See L<http://dev.perl.org/licenses/> for more information.
 
-
 =cut
 
 1;
+
+__DATA__
+
+Test::BrewBuild test platform configuration guide
+
+*** Unix ***
+
+Install perlbrew and related requirements:
+    cpanm App::perlbrew
+    perlbrew install-patchperl
+    perlbrew install-cpanm
+
+Install and switch to your base perl instance, and install C<Test::BrewBuild>:
+    perlbrew install 5.22.1
+    perlbrew switch 5.22.1
+    cpanm Test::BrewBuild
+
+*** Windows ***
+
+Note that the key here is that your %PATH% must be free and clear of anything
+Perl. That means that if you're using an existing box with Strawberry or
+ActiveState installed, you *must* remove all traces of them in the PATH
+environment variable for ``brewbuild'' to work correctly.
+
+Easiest way to guarantee a working environment is using a clean-slate Windows
+server with nothing on it. For a Windows test platform, I mainly used an
+Amazon AWS t2.small server.
+
+Download/install git for Windows:
+    https://git-scm.com/download/win)
+
+Create a repository directory, and enter it:
+    mkdir c:\repos
+    cd c:\repos
+
+Clone and configure berrybrew
+    git clone https://github.com/dnmfarrell/berrybrew
+    cd berrybrew
+    bin\berrybrew.exe config (type 'y' when asked to install in PATH)
+
+Close the current CMD window and open a new one to update env vars
+
+Check available perls, and install one that'll become your core base install
+    berrybrew available
+    berrybrew install 5.22.1_64
+    berrybrew switch 5.22.1_64
+    close CMD window, and open new one
+
+Make sure it took
+    perl -v
+
+Install Test::BrewBuild
+    cpanm Test::BrewBuild
+
