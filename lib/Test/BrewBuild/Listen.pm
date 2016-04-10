@@ -19,7 +19,6 @@ sub new {
 }
 sub listen {
     my ($self, $ip, $port) = @_;
-    #my $log = $self->{log}->child('Dispatch::listen');
 
     $ip = '0.0.0.0' if ! $ip;
     $port = '7800' if ! $port;
@@ -33,8 +32,7 @@ sub listen {
     );
     die "cannot create socket $!\n" unless $sock;
 
-    while (! $ENV{STOP}){
-
+    while (1){
         my $res = {
             platform => $Config{archname},
         };
@@ -49,6 +47,7 @@ sub listen {
 
         my $cmd;
         $dispatch->recv($cmd, 1024);
+        $cmd = "where brewbuild";
         $dispatch->send('ok');
 
         my $repo = '';
@@ -60,7 +59,9 @@ sub listen {
         if ($cmd && $repo){
             my $repo_dir = $self->_clone_repo($repo);
             chdir $repo_dir;
+            open my $fh, '>', 'a.txt' or die $!;
             $res->{data} = `$cmd`;
+            print $fh $res->{data};
             if (-d 'bblog'){
                 chdir 'bblog';
                 my @entries = glob '*';

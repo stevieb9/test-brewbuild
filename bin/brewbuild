@@ -49,7 +49,7 @@ my $is_win = Test::BrewBuild->is_win;
 
 if ($args{listen}){
     delete $args{listen};
-    my $tester = Test::BrewBuild::Listen->new($bb_log);
+    my $tester = Test::BrewBuild::Listen->new;
     $tester->listen($args{tester_ip}, $args{tester_port});
     exit;
 }

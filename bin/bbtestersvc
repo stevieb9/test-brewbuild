@@ -15,8 +15,6 @@ if (! $svc_installed){
     my $svc_path = (split(/\n/, `where perl.exe`))[0];
     my $svc_params = (split(/\n/, `where bbtestersvc`))[0];
 
-    print "$svc_path, $svc_params\n";
-    exit;
     my %service_info = (
         machine     => '',
         name        => 'bbtestersvc',
@@ -63,6 +61,8 @@ if ($svc_installed){
     sub running {
         my ($event, $context) = @_;
         if (SERVICE_RUNNING == Win32::Daemon::State()){
+            mkdir "c:/brewbuild" if ! -d "c:/brewbuild";
+            chdir "c:/brewbuild";
             my $tester = Test::BrewBuild::Listen->new;
             $tester->listen;
         }
