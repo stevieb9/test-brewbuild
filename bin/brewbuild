@@ -3,9 +3,6 @@ use warnings;
 use strict;
 
 use Carp qw(croak);
-use File::Find;
-use File::Temp;
-use Module::Load;
 use Test::BrewBuild;
 
 our $VERSION = '1.05';
@@ -51,7 +48,6 @@ my $brew_link = $is_win
     ? 'https://github.com/dnmfarrell/berrybrew'
     : 'http://perlbrew.pl';
 my $sep = $is_win ? ';' : ':';
-my @modules;
 
 # check in PATH to see if berry/perlbrew exists
 
@@ -68,39 +64,9 @@ $args{legacy} = defined $args{legacy} ? 1 : 0;
 # revdep
 
 if ($args{revdep}){
-
     $log->_6('running --revdep');
 
-    delete $args{args};
-    load 'CPAN::ReverseDependencies';
-
-    find({ wanted => \&_module_find, no_chdir => 1}, 'lib/');
-    my $mod = $modules[0];
-
-    $log->_7("using '$mod' as the project we're working on");
-
-    $mod =~ s|lib/||;
-    $mod =~ s|/|-|g;
-    $mod =~ s|\.pm||;
-
-    $log->_7("working module translated to $mod");
-
-    my $rvdep = CPAN::ReverseDependencies->new;
-    my @revdeps = $rvdep->get_reverse_dependencies($mod);
-
-    if ($args{selftest}){
-        @revdeps = grep {$_ ne 'Test-BrewBuild'} @revdeps;
-    }
-
-    $log->_0("working on reverse dependencies: " . join ', ', @revdeps);
-
-    $args{plugin} = 'Test::BrewBuild::Plugin::TestAgainst';
-
-    for (@revdeps){
-        s/-/::/g;
-        $args{plugin_arg} = $_;
-        _exec_brew(%args);
-    }
+    $bb->revdep(%args);
 }
 elsif (defined $args{args}){
     my %opts = %args;
@@ -136,11 +102,7 @@ sub _exec_brew {
 
     $brew->run;
 }
-sub _module_find {
-    $log = $log->child('_module_find');
-    $log->_7("finding modules");
-    push @modules, $_ if -f $_;
-}
+
 
 =pod
 

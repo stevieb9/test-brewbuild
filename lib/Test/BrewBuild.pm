@@ -3,13 +3,16 @@ use strict;
 use warnings;
 
 use Carp qw(croak);
+use Data::Dumper;
 use File::Copy;
 use File::Copy::Recursive qw(dircopy);
+use File::Find;
 use File::Path qw(remove_tree);
 use File::Temp;
 use Getopt::Long qw(GetOptionsFromArray);
 Getopt::Long::Configure ("no_ignore_case", "pass_through");
 use Logging::Simple;
+use Module::Load;
 use Plugin::Simple default => 'Test::BrewBuild::Plugin::DefaultExec';
 use Test::BrewBuild::BrewCommands;
 use Test::BrewBuild::Dispatch;
@@ -467,6 +470,68 @@ sub options {
     setup() if $setup;
 
     return %opts;
+}
+sub revdep {
+    my ($self, %args) = @_;
+
+    delete $self->{args}{args};
+
+    my @revdeps = $self->revdeps;
+
+    print Dumper \@revdeps;
+    for (@revdeps) {
+
+        $args{plugin_arg} = $_;
+        my $bb = __PACKAGE__->new(%args);
+        $bb->run;
+    }
+}
+sub revdeps {
+    my $self = shift;
+
+    $log->_6('running --revdep');
+
+    load 'CPAN::ReverseDependencies';
+
+    my @modules;
+
+    find({
+            wanted => sub {
+                $log = $log->child('_module_find');
+                $log->_7("finding modules");
+                if (-f && $_ =~ /\.pm$/){
+                    push @modules, $_;
+                }
+            },
+            no_chdir => 1,
+        },
+        'lib/'
+    );
+
+    my $mod = $modules[0];
+
+    $log->_7("using '$mod' as the project we're working on");
+
+    $mod =~ s|lib/||;
+    $mod =~ s|/|-|g;
+    $mod =~ s|\.pm||;
+
+    $log->_7("working module translated to $mod");
+
+    my $rvdep = CPAN::ReverseDependencies->new;
+    my @revdeps = $rvdep->get_reverse_dependencies($mod);
+
+    if ($self->{args}{selftest}){
+        @revdeps = grep {$_ ne 'Test-BrewBuild'} @revdeps;
+    }
+
+    $log->_0("working on reverse dependencies: " . join ', ', @revdeps);
+
+    for (@revdeps){
+        s/-/::/g;
+    }
+
+    return @revdeps;
 }
 sub tester {
     my $self = shift;
