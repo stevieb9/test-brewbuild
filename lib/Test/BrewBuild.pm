@@ -31,6 +31,26 @@ sub new {
 
     return $self;
 }
+sub opts {
+    my ($self, $args) = @_;
+
+    my @valid_args = qw(
+        on o new n remove r revdep R plugin p args a debug d install i help h
+        N notest setup s legacy l selftest T listen L dispatch D tester_ip
+        tester_port t testers
+    );
+
+    if (@$args){
+        my @args = grep /^-/, @$args;
+        for my $arg (@args){
+            $arg =~ s/-//g;
+            if (! grep { $arg eq $_ } @valid_args){
+                return 1;
+            }
+        }
+    }
+    return 0;
+}
 sub brew_info {
     my $self = shift;
 
@@ -626,6 +646,10 @@ All unit tests are run against all installed instances.
 
 Returns a new C<Test::BrewBuild> object. See the documentation for the
 C<berrybrew> script to understand what the arguments are and do.
+
+=head2 args(\%args)
+
+Returns 0 if all arguments are valid, and 1 if not.
 
 =head2 plugin('Module::Name')
 

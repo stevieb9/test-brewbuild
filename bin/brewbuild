@@ -42,54 +42,7 @@ GetOptions(
     "help"          => \$help,
 );
 
-my @valid_args = qw(
-    on o new n remove r revdep R plugin p args a debug d install i help h
-    N notest setup s legacy l selftest T listen L dispatch D tester_ip
-    tester_port t testers
-);
-
-if (@ARGV){
-    my @args = grep /^-/, @ARGV;
-    for my $arg (@args){
-        $arg =~ s/-//g;
-        if (! grep { $arg eq $_ } @valid_args){
-            $help = 1;
-        }
-    }
-}
-if ($args{listen}){
-    delete $args{listen};
-    my $tester = Test::BrewBuild::Listen->new($bb_log);
-    $tester->listen($args{tester_ip}, $args{tester_port});
-    exit;
-}
-if ($args{dispatch}){
-    if (! $args{repo}){
-        croak "you must supply a repository link with --repo\n";
-    }
-
-    my $repo = $args{repo};
-    my $cmd = $args{dispatch};
-    my $testers = $args{testers};
-
-    my $dispatch = Test::BrewBuild::Dispatch->new($bb_log);
-    $dispatch->dispatch($cmd, $repo, $testers);
-    exit;
-}
-if ($^O =~ /MSWin/ && $args{on}){
-    warn "\nwe can't use --on with Windows... running on all\n\n";
-    delete $args{on};
-}
-
-if (@ARGV){
-    my @args = grep /^-/, @ARGV;
-    for my $arg (@args){
-        $arg =~ s/-//g;
-        if (! grep { $arg eq $_ } @valid_args){
-            $help = 1;
-        }
-    }
-}
+$help = Test::BrewBuild->opts(@ARGV) if @ARGV;
 
 if ($help){
     print <<EOF;
@@ -124,12 +77,32 @@ Special options:
 -T | --selftest Testing only: prevent recursive testing on Test::BrewBuild
 -d | --debug    0-7, sets logging verbosity, default is 0
 
-
-
 EOF
 exit;
 }
+if ($args{listen}){
+    delete $args{listen};
+    my $tester = Test::BrewBuild::Listen->new($bb_log);
+    $tester->listen($args{tester_ip}, $args{tester_port});
+    exit;
+}
+if ($args{dispatch}){
+    if (! $args{repo}){
+        croak "you must supply a repository link with --repo\n";
+    }
 
+    my $repo = $args{repo};
+    my $cmd = $args{dispatch};
+    my $testers = $args{testers};
+
+    my $dispatch = Test::BrewBuild::Dispatch->new($bb_log);
+    $dispatch->dispatch($cmd, $repo, $testers);
+    exit;
+}
+if ($^O =~ /MSWin/ && $args{on}){
+    warn "\nwe can't use --on with Windows... running on all\n\n";
+    delete $args{on};
+}
 if ($setup){
     print "\n";
     my @setup = <DATA>;
