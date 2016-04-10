@@ -6,6 +6,7 @@ use Carp qw(croak);
 use Config;
 use IO::Socket::INET;
 use Storable;
+use Test::BrewBuild;
 
 our $VERSION = '1.05';
 

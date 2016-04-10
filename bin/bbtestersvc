@@ -61,8 +61,6 @@ if ($svc_installed){
     sub running {
         my ($event, $context) = @_;
         if (SERVICE_RUNNING == Win32::Daemon::State()){
-            mkdir "c:/brewbuild" if ! -d "c:/brewbuild";
-            chdir "c:/brewbuild";
             my $tester = Test::BrewBuild::Listen->new;
             $tester->listen;
         }
