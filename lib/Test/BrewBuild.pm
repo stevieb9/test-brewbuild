@@ -4,6 +4,8 @@ use warnings;
 
 use Carp qw(croak);
 use File::Copy;
+use File::Copy::Recursive qw(dircopy);
+use File::Path qw(remove_tree);
 use File::Temp;
 use Getopt::Long qw(GetOptionsFromArray);
 Getopt::Long::Configure ("no_ignore_case", "pass_through");
@@ -285,6 +287,8 @@ sub results {
         }
     }
 
+    $self->_copy_logs;
+
     $log->_5(__PACKAGE__ ." run finished");
 
     if ($self->{args}{return}){
@@ -402,6 +406,7 @@ sub exec {
             close $wfh;
 
             $self->_dzil_shim($fname);
+            print "*** $self->{tempdir}\n";
             return `$brew exec perl $fname 2>$self->{tempdir}/stderr.bblog`;
             $self->_dzil_unshim if $self->{is_dzil};
         }
@@ -409,8 +414,13 @@ sub exec {
 }
 sub tempdir {
     my $self = shift;
-    $self->{tempdir} = $self->{args}{tempdir} if defined $self->{args}{tempdir};
-    return $self->{tempdir} || '';
+    return $self->{tempdir} if $self->{tempdir};
+
+    my $dir = File::Temp->newdir;
+    my $dir_name = $dir->dirname;
+    $self->{temp_handle} = $dir;
+    $self->{tempdir} = $dir_name;
+    return $self->{tempdir};
 }
 sub log {
     my $self = shift;
@@ -462,7 +472,6 @@ sub setup {
     print $_ for @setup;
     exit;
 }
-
 sub help {
      print <<EOF;
 
@@ -544,6 +553,11 @@ sub _create_log {
     }
 
     return $self->{log};
+}
+sub _copy_logs {
+    my $self = shift;
+    dircopy $self->{tempdir}, "bblog" if $self->{tempdir};
+    unlink 'bblog/stderr.bblog' if -e 'bblog/stderr.bblog';
 }
 sub _set_plugin {
     my $self = shift;

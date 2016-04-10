@@ -3,9 +3,7 @@ use warnings;
 use strict;
 
 use Carp qw(croak);
-use File::Copy::Recursive qw(dircopy);
 use File::Find;
-use File::Path qw(remove_tree);
 use File::Temp;
 use Module::Load;
 use Test::BrewBuild;
@@ -69,14 +67,6 @@ if (! grep { -x "$_/$brew_prog"} split /$sep/, $ENV{PATH}){
 
 $args{legacy} = defined $args{legacy} ? 1 : 0;
 
-# temp directory for error logs
-
-remove_tree 'bblog';
-my $dir = File::Temp->newdir;
-my $dir_name = $dir->dirname;
-
-$args{tempdir} = $dir_name;
-
 # revdep
 
 if ($args{revdep}){
@@ -133,14 +123,6 @@ else {
     $log->_7("default run");
     _exec_brew(%args);
 }
-
-# clean up the logs
-
-mkdir 'bblog';
-if (-e "$dir_name/stderr.bblog"){
-    unlink "$dir_name/stderr.bblog" or die $!;
-}
-dircopy $dir_name, 'bblog';
 
 sub _exec_brew {
     my $brew = Test::BrewBuild->new(%args);
