@@ -25,7 +25,7 @@ my $dir = 'Mock-Sub-1.06';
 
     chdir $dir;
     `brewbuild -r`;
-    my $ret = `brewbuild --install $ver --revdep -T`;
+    my $ret = `brewbuild --install $ver --revdep --selftest`;
     chdir '..';
 
     my @res = split /\n/, $ret;

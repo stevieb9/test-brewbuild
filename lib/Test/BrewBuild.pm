@@ -3,7 +3,6 @@ use strict;
 use warnings;
 
 use Carp qw(croak);
-use Data::Dumper;
 use File::Copy;
 use File::Copy::Recursive qw(dircopy);
 use File::Find;
@@ -478,9 +477,7 @@ sub revdep {
 
     my @revdeps = $self->revdeps;
 
-    print Dumper \@revdeps;
-    for (@revdeps) {
-
+    for (@revdeps){
         $args{plugin_arg} = $_;
         my $bb = __PACKAGE__->new(%args);
         $bb->run;
@@ -521,9 +518,7 @@ sub revdeps {
     my $rvdep = CPAN::ReverseDependencies->new;
     my @revdeps = $rvdep->get_reverse_dependencies($mod);
 
-    if ($self->{args}{selftest}){
-        @revdeps = grep {$_ ne 'Test-BrewBuild'} @revdeps;
-    }
+    @revdeps = grep {$_ ne 'Test-BrewBuild'} @revdeps;
 
     $log->_0("working on reverse dependencies: " . join ', ', @revdeps);
 

@@ -66,7 +66,9 @@ $args{legacy} = defined $args{legacy} ? 1 : 0;
 if ($args{revdep}){
     $log->_6('running --revdep');
 
-    $bb->revdep(%args);
+    my $brew = Test::BrewBuild->new(%args);
+    $brew->revdep(%args);
+    exit;
 }
 elsif (defined $args{args}){
     my %opts = %args;
