@@ -192,7 +192,12 @@ sub run {
     }
     else {
         if (! $self->{args}{notest}){
-            $self->results();
+            if ($self->{args}{revdep}){
+                $self->revdep;
+            }
+            else {
+                $self->results();
+            }
         }
     }
 }
