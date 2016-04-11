@@ -3,6 +3,9 @@ use strict;
 use warnings;
 
 use Carp qw(croak);
+
+use Data::Dumper;
+
 use File::Copy;
 use File::Copy::Recursive qw(dircopy);
 use File::Find;
@@ -193,18 +196,19 @@ sub run {
     else {
         if (! $self->{args}{notest}){
             if ($self->{args}{revdep}){
-                $self->revdep;
+                delete $self->{args}{revdep};
+                $self->revdep(%{ $self->{args} });
             }
             else {
-                $self->results();
+                $self->test;
             }
         }
     }
 }
-sub results {
+sub test {
     my $self = shift;
 
-    my $log = $log->child('results');
+    my $log = $log->child('test');
 
     local $SIG{__WARN__} = sub {};
     $log->_6("warnings trapped locally");
@@ -481,11 +485,23 @@ sub revdep {
 
     my @revdeps = $self->revdeps;
 
+    my @ret;
+
+    if ($self->{args}{return}){
+        my $rlist = "\nreverse dependencies: " . join ', ', @revdeps;
+        $rlist .= "\n\n";
+        push @ret, $rlist;
+    }
+
     for (@revdeps){
         $args{plugin_arg} = $_;
         my $bb = __PACKAGE__->new(%args);
-        $bb->run;
+        if ($self->{args}{return}){
+            push @ret, $bb->run;
+        }
+        $bb->run if ! $self->{args}{return};
     }
+    return \@ret if @ret;
 }
 sub revdeps {
     my $self = shift;
@@ -875,7 +891,7 @@ Uninstalls all currently installed perls, less the one you are currently
 Prepares the run and calls C<exec()> to run all tests against all installed
 perls.
 
-=head2 results
+=head2 test
 
 Only called by C<run()>. Processes and displayes test results.
 

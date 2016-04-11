@@ -118,8 +118,16 @@ sub dispatch {
 
         my $build = $remotes{$ip}{build};
 
-        print "$ip - $build->{platform}\n" .
-              "$build->{data}\n";
+        print "$ip - $build->{platform}\n";
+
+        if (ref $build->{data} eq 'ARRAY'){
+            print $_ for @{ $build->{data} };
+        }
+        else {
+            print "$build->{data}\n";
+
+        }
+
     }
 }
 1;

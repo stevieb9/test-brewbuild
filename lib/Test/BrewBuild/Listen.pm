@@ -4,6 +4,7 @@ use warnings;
 
 use Carp qw(croak);
 use Config;
+use Data::Dumper;
 use IO::Socket::INET;
 use Storable;
 use Test::BrewBuild;

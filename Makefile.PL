@@ -47,6 +47,7 @@ WriteMakefile(
     PREREQ_PM => {
         'App::cpanminus' => 0,
         'Archive::Extract' => 0,
+        'Capture::Tiny' => 0,
         'CPAN::ReverseDependencies' => 0,
         'File::Copy::Recursive' => 0,
         'Logging::Simple' => '0.07',
