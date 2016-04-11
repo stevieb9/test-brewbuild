@@ -410,7 +410,6 @@ sub exec {
             close $wfh;
 
             $self->_dzil_shim($fname);
-            print "*** $self->{tempdir}\n";
             return `$brew exec perl $fname 2>$self->{tempdir}/stderr.bblog`;
             $self->_dzil_unshim if $self->{is_dzil};
         }
