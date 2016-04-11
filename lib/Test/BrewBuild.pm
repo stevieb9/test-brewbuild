@@ -194,14 +194,12 @@ sub run {
         print "no perls installed... exiting" if $log->level;
     }
     else {
-        if (! $self->{args}{notest}){
-            if ($self->{args}{revdep}){
-                delete $self->{args}{revdep};
-                $self->revdep(%{ $self->{args} });
-            }
-            else {
-                $self->test;
-            }
+        if ($self->{args}{revdep}){
+            delete $self->{args}{revdep};
+            $self->revdep(%{ $self->{args} });
+        }
+        else {
+            $self->test;
         }
     }
 }
@@ -305,6 +303,7 @@ sub test {
     $log->_5(__PACKAGE__ ." run finished");
 
     if ($self->{args}{return}){
+        print "****ret\n";
         my $ret = "\n";
         $ret .= "$self->{args}{plugin_arg}\n" if $self->{args}{plugin_arg};
         $ret .= $_ for @pass;
@@ -495,13 +494,16 @@ sub revdep {
 
     for (@revdeps){
         $args{plugin_arg} = $_;
-        my $bb = __PACKAGE__->new(%args);
         if ($self->{args}{return}){
+            my $bb = __PACKAGE__->new(%args);
             push @ret, $bb->run;
         }
-        $bb->run if ! $self->{args}{return};
+        else {
+            $self->{args}{plugin_arg} = $_;
+            $self->run
+        }
     }
-    return \@ret if @ret;
+    return \@ret if $self->{args}{return};
 }
 sub revdeps {
     my $self = shift;
@@ -540,7 +542,7 @@ sub revdeps {
 
     @revdeps = grep {$_ ne 'Test-BrewBuild'} @revdeps;
 
-    $log->_0("working on reverse dependencies: " . join ', ', @revdeps);
+    $log->_0("working on reverse dependencies: " . join ', ', @revdeps) if $self->{args}{revdep};
 
     for (@revdeps){
         s/-/::/g;

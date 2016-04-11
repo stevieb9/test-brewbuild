@@ -26,6 +26,9 @@ my $dir = 'Mock-Sub-1.06';
     my $ret = `brewbuild --revdep -T`;
     chdir '..';
 
+    print $ret;
+    done_testing();
+    exit;
     my @res = split /\n/, $ret;
     @res = grep /\S/, @res;
 
