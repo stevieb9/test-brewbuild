@@ -21,8 +21,7 @@ BEGIN {
         perls_installed
         instance_remove
         instance_install
-        results
-        run
+        test run
         is_win
         exec
         brew_info
