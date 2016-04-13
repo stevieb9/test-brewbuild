@@ -99,7 +99,7 @@ sub install {
     my $self = shift;
 
     my $install_cmd = $self->is_win
-        ? '$self->{brew} install'
+        ? "$self->{brew} install"
         : 'perlbrew install --notest -j 4';
 
     $log->child('install')->_6("install cmd is: $install_cmd");

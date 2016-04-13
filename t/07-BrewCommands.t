@@ -15,7 +15,7 @@ is (ref $bc, 'Test::BrewBuild::BrewCommands', 'obj is ok');
 
 if ($im_on_windows){
 
-   is ($bc->brew, 'berrybrew', "win: brew() is ok");
+   like ($bc->brew, qr/berrybrew\.exe/, "win: brew() is ok");
 
    my $inst = '5.20.3_64       [installed]';
    my @inst = $bc->installed(0, $inst);
@@ -26,10 +26,10 @@ if ($im_on_windows){
    is ($avail[0], '5.22.1_32', "win: avail with info ok");
 
    my $inst_cmd = $bc->install;
-   is ($inst_cmd, 'berrybrew install', "win: install() ok");
+   like ($inst_cmd, qr/berrybrew\.exe install/, "win: install() ok");
 
    my $remove_cmd = $bc->remove;
-   is ($remove_cmd, 'berrybrew remove', "win: remove() ok");
+   like ($remove_cmd, qr/berrybrew\.exe remove/, "win: remove() ok");
 
    is ($bc->is_win, 1, "win: is win ok");
 }
