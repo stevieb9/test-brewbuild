@@ -1,13 +1,12 @@
 bin/bbtester
-bin/bbtestersvc
 bin/brewbuild
 Changes
 lib/Test/BrewBuild.pm
 lib/Test/BrewBuild/BrewCommands.pm
 lib/Test/BrewBuild/Dispatch.pm
-lib/Test/BrewBuild/Tester.pm
 lib/Test/BrewBuild/Plugin/DefaultExec.pm
 lib/Test/BrewBuild/Plugin/UnitTestPluginInst.pm
+lib/Test/BrewBuild/Tester.pm
 Makefile.PL
 MANIFEST			This list of files
 MANIFEST.SKIP
@@ -30,6 +29,8 @@ t/13-exec.t.norun
 t/14-using.t
 t/15-network.t.norun
 t/16-return.pl
+t/170-api_dispatch_with_revdep_pass.t
+t/175-api-dispatch-fail
 t/__clean.t
 t/base/115-level6.data
 t/base/115-level6_win.data

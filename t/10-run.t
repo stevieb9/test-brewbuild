@@ -61,7 +61,7 @@ else {
     $perls_available->return_value(qw(5.20.0 5.22.1 5.8.9));
     my $perls_installed = $mock->mock('Test::BrewBuild::perls_installed');
     $perls_installed->return_value(qw(5.20.0));
-    my $results = $mock->mock('Test::BrewBuild::results', return_value => 'done');
+    my $results = $mock->mock('Test::BrewBuild::test', return_value => 'done');
     { # default
         my $bb = Test::BrewBuild->new;
         my $ret = $bb->run;
