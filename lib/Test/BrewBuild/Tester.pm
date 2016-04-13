@@ -2,6 +2,7 @@ package Test::BrewBuild::Tester;
 use strict;
 use warnings;
 
+use Capture::Tiny qw(:all);
 use Carp qw(croak);
 use Config;
 use Data::Dumper;
@@ -114,11 +115,11 @@ sub _clone_repo {
 
     if ($repo =~ m!.*/(.*?)(?:\.git)*$!){
         if (! -d $1){
-            my $clone_ok = `git clone $repo`;
+            my $clone_output = capture_merged { `git clone $repo`; };
         }
         else {
             chdir $1;
-            `git pull`;
+            my $pull_output = capture_merged { `git pull`; };
             chdir '..';
         }
         return $1;
