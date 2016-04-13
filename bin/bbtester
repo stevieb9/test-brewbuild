@@ -77,9 +77,18 @@ if ($op eq 'start'){
         @args = qw(brewbuild -L);
     }
 
+    mkdir $work_dir or die "can't create $work_dir dir: $!" if ! -d $work_dir;
     chdir $work_dir or die "can't change to dir $work_dir: $!";
 
-    my $tester = Proc::Background->new($perl, @args);
+    my $tester;
+
+    if ($^O =~ /MSWin/){
+        $tester = Proc::Background->new($perl, @args);
+    }
+    else {
+        $tester = Proc::Background->new(@args);
+    }
+
     my $pid = $tester->pid;
 
     print "\nStarted the Test::BrewBuild test server at PID $pid on IP " .
