@@ -162,7 +162,7 @@ remote testers to dispatch to and follow. eg: C<10.1.1.5:7800>.
 
 By default, the testers run on all IPs and port TCP/7800.
 
-See L<Test::BrewBuild::Listen>.
+See L<Test::BrewBuild::Tester>.
 
 =head1 AUTHOR
 

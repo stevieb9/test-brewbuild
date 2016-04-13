@@ -5,7 +5,7 @@ Changes
 lib/Test/BrewBuild.pm
 lib/Test/BrewBuild/BrewCommands.pm
 lib/Test/BrewBuild/Dispatch.pm
-lib/Test/BrewBuild/Listen.pm
+lib/Test/BrewBuild/Tester.pm
 lib/Test/BrewBuild/Plugin/DefaultExec.pm
 lib/Test/BrewBuild/Plugin/UnitTestPluginInst.pm
 Makefile.PL

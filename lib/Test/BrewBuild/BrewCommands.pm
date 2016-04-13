@@ -17,18 +17,34 @@ sub new {
     $log = $self->{log};
     $log->_6("constructing new Test::BrewBuild::BrewCommands object");
 
+    $self->brew;
+
     return $self;
 }
 sub brew {
     my $self = shift;
-    my $brew = $self->is_win ? 'berrybrew' : 'perlbrew';
+
+    return $self->{brew} if $self->{brew};
+
+    my $brew;
+
+    if ($self->is_win){
+        my $exe_loc = `where berrybrew.exe`;
+        $brew = (split /\n/, $exe_loc)[0];
+    }
+    else {
+        $brew = 'perlbrew';
+    }
+
     $log->child('brew')->_6("*brew cmd is: $brew");
+    $self->{brew} = $brew;
+
     return $brew;
 }
 sub info {
     my $self = shift;
     return $self->is_win
-        ? `berrybrew available 2>nul`
+        ? `$self->{brew} available 2>nul`
         : `perlbrew available 2>/dev/null`;
 }
 sub installed {
@@ -83,7 +99,7 @@ sub install {
     my $self = shift;
 
     my $install_cmd = $self->is_win
-        ? 'berrybrew install'
+        ? '$self->{brew} install'
         : 'perlbrew install --notest -j 4';
 
     $log->child('install')->_6("install cmd is: $install_cmd");
@@ -94,7 +110,7 @@ sub remove {
     my $self = shift;
 
     my $remove_cmd = $self->is_win
-        ? 'berrybrew remove'
+        ? "$self->{brew} remove"
         : 'perlbrew uninstall';
 
     $log->child('remove')->_6("remove cmd is: $remove_cmd");

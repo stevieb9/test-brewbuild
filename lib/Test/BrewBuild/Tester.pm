@@ -1,4 +1,4 @@
-package Test::BrewBuild::Listen;
+package Test::BrewBuild::Tester;
 use strict;
 use warnings;
 
@@ -16,11 +16,13 @@ $| = 1;
 sub new {
     my $class = shift;
     my $log = shift;
-    my $self = bless {log => $log}, $class;
+    my $self = bless {}, $class;
+    $self->{log} = $log;
     return $self;
 }
 sub listen {
     my ($self, $ip, $port) = @_;
+    my $log = $self->{log};
 
     $ip = '0.0.0.0' if ! $ip;
     $port = '7800' if ! $port;
@@ -57,6 +59,8 @@ sub listen {
         $res->{cmd} = $cmd;
 
         my @args = split /\s+/, $cmd;
+
+
         if ($args[0] ne 'brewbuild'){
             die "only brewbuild is allowed as a command\n";
         }
@@ -110,11 +114,11 @@ sub _clone_repo {
 
     if ($repo =~ m!.*/(.*?)(?:\.git)*$!){
         if (! -d $1){
-            my $clone_ok = system("git clone $repo");
+            my $clone_ok = `git clone $repo`;
         }
         else {
             chdir $1;
-            system("git pull");
+            `git pull`;
             chdir '..';
         }
         return $1;
@@ -124,7 +128,7 @@ sub _clone_repo {
 
 =head1 NAME
 
-Test::BrewBuild::Listen - Daemonized testing service for dispatched test run
+Test::BrewBuild::Tester - Daemonized testing service for dispatched test run
 execution, Windows & Unix.
 
 =head1 DESCRIPTION
@@ -138,7 +142,7 @@ It is not designed for end-user use.
 
 =head2 new
 
-Returns a new Test::BrewBuild::Listen object.
+Returns a new Test::BrewBuild::Tester object.
 
 =head2 listen($ip, $port)
 

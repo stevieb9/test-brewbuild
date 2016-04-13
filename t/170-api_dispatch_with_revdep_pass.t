@@ -25,35 +25,24 @@ my $stdout = capture_stdout {
 };
 
 my @ret = split /\n/, $stdout;
-#@ret = grep {$_ !~ /^\s*$/} @ret;
+@ret = grep {$_ !~ /^\s*$/} @ret;
 
-is (@ret, 17, "return count is correct");
+print "$_\n" for @ret;
+is (@ret, 11, "return count is correct");
 
-is ($ret[0], '', "blank line");
+like ($ret[0], qr/127\.0\.0\.1 - /, "remote tester info");
+like ($ret[1], qr/reverse dependencies:/, "line has has revdep info");
 
-like ($ret[1], qr/127\.0\.0\.1 - /, "remote tester info");
+like ($ret[2], qr/.*?::.*?::.*?/, "Module name");
+like ($ret[3], qr/.*?:: PASS/, "PASS ok");
+like ($ret[4], qr/.*?:: PASS/, "PASS ok");
 
-is ($ret[2], '', "blank line");
-
-like ($ret[3], qr/reverse dependencies:/, "line has has revdep info");
-
-is ($ret[4], '', "blank line");
-is ($ret[5], '', "blank line");
-
-like ($ret[6], qr/.*?::.*?::.*?/, "Module name");
+like ($ret[5], qr/.*?::.*?::.*?/, "Module name");
+like ($ret[6], qr/.*?:: PASS/, "PASS ok");
 like ($ret[7], qr/.*?:: PASS/, "PASS ok");
-like ($ret[8], qr/.*?:: PASS/, "PASS ok");
 
-is ($ret[9], '', "blank line");
-
-like ($ret[10], qr/.*?::.*?::.*?/, "Module name");
-like ($ret[11], qr/.*?:: PASS/, "PASS ok");
-like ($ret[12], qr/.*?:: PASS/, "PASS ok");
-
-is ($ret[13], '', "blank line");
-
-like ($ret[14], qr/.*?::.*?::.*?/, "Module name");
-like ($ret[15], qr/.*?:: PASS/, "PASS ok");
-like ($ret[16], qr/.*?:: PASS/, "PASS ok");
+like ($ret[8], qr/.*?::.*?::.*?/, "Module name");
+like ($ret[9], qr/.*?:: PASS/, "PASS ok");
+like ($ret[10], qr/.*?:: PASS/, "PASS ok");
 
 done_testing();

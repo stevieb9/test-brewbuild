@@ -7,6 +7,8 @@ use Test::More;
 
 BEGIN {
     use_ok( 'Test::BrewBuild' ) || print "Bail out!\n";
+    use_ok( 'Test::BrewBuild::Tester' ) || print "Bail out!\n";
+    use_ok( 'Test::BrewBuild::Dispatch' ) || print "Bail out!\n";
     use_ok( 'Test::BrewBuild::BrewCommands' ) || print "Bail out!\n";
     use_ok( 'Test::BrewBuild::Plugin::DefaultExec' ) || print "Bail out!\n";
     use_ok( 'Test::BrewBuild::Plugin::UnitTestPluginInst' ) || print "Bail out!\n";

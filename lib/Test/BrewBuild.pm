@@ -18,7 +18,7 @@ use Module::Load;
 use Plugin::Simple default => 'Test::BrewBuild::Plugin::DefaultExec';
 use Test::BrewBuild::BrewCommands;
 use Test::BrewBuild::Dispatch;
-use Test::BrewBuild::Listen;
+use Test::BrewBuild::Tester;
 
 our $VERSION = '1.05';
 
@@ -173,7 +173,6 @@ sub run {
     $new = scalar @perls_available if $new < 0;
 
     my @perls_installed = $self->perls_installed($brew_info);
-
     $log->_4("installed perls: " . join ', ', @perls_installed);
 
     if ($self->{args}{remove}){
@@ -191,7 +190,6 @@ sub run {
 
     if (! $perls_installed[0]){
         $log->_0("no perls installed... exiting");
-        print "no perls installed... exiting" if $log->level;
     }
     else {
         if ($self->{args}{revdep}){
@@ -252,7 +250,7 @@ sub test {
             if (defined $tested_mod){
                 $tested_mod =~ s/::/-/g;
                 my $fail_log = "$self->{tempdir}/$tested_mod-$ver.bblog";
-                open my $wfh, '>', $fail_log or die $!;
+                open my $wfh, $fail_log, or die $!;
 
                 print $wfh $result;
 
@@ -303,7 +301,6 @@ sub test {
     $log->_5(__PACKAGE__ ." run finished");
 
     if ($self->{args}{return}){
-        print "****ret\n";
         my $ret = "\n";
         $ret .= "$self->{args}{plugin_arg}\n" if $self->{args}{plugin_arg};
         $ret .= $_ for @pass;
@@ -551,8 +548,9 @@ sub revdeps {
     return @revdeps;
 }
 sub tester {
-    my $self = shift;
-    my $tester = Test::BrewBuild::Listen->new;
+    my ($self, $log) = @_;
+    $log = $self->log if ! $log;
+    my $tester = Test::BrewBuild::Tester->new($log);
     return $tester;
 }
 sub dispatcher {

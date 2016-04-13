@@ -17,8 +17,6 @@ if (! grep { -x "$_/$brew" } split /$sep/, $ENV{PATH}){
     sleep 3;
 }
 
-my $daemon_module = $is_win ? 'Win32::Daemon' : 'Proc::Daemon';
-
 WriteMakefile(
     NAME             => 'Test::BrewBuild',
     AUTHOR           => q{Steve Bertrand <steveb@cpan.org>},
@@ -54,7 +52,7 @@ WriteMakefile(
         'Module::Load' => 0,   # corelist since 5.9.4
         'Parallel::ForkManager' => 0,
         'Plugin::Simple' => '0.06',
-        $daemon_module => 0,
+        'Proc::Background' => 0,
         'Test::BrewBuild::Plugin::TestAgainst' => '0.06',
         'version' => 0,
     },
