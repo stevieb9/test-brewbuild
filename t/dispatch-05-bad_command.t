@@ -5,6 +5,10 @@ use warnings;
 use Test::BrewBuild::Dispatch;
 use Test::More;
 
+if (! $ENV{BBDEV_TESTING}){
+    plan skip_all => "developer tests only";
+    exit;
+}
 my $d = Test::BrewBuild::Dispatch->new;
 
 $d->dispatch(
