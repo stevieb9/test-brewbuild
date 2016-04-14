@@ -2,14 +2,14 @@
 use strict;
 use warnings;
 
+use Capture::Tiny qw(capture_stdout);
+use Test::BrewBuild::Dispatch;
+use Test::More;
+
 if (! $ENV{BBDEV_TESTING}){
     plan skip_all => "developer tests only";
     exit;
 }
-
-use Capture::Tiny qw(capture_stdout);
-use Test::BrewBuild::Dispatch;
-use Test::More;
 
 my $d = Test::BrewBuild::Dispatch->new;
 
