@@ -207,6 +207,8 @@ sub run {
 sub test {
     my $self = shift;
 
+    exit if $self->{args}{notest};
+
     my $log = $log->child('test');
 
     local $SIG{__WARN__} = sub {};
