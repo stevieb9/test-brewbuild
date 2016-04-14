@@ -2,6 +2,11 @@
 use strict;
 use warnings;
 
+if (! $ENV{BBDEV_TESTING}){
+    plan skip_all => "developer tests only";
+    exit;
+}
+
 use Capture::Tiny qw(capture_stdout);
 use Test::BrewBuild::Dispatch;
 use Test::More;
