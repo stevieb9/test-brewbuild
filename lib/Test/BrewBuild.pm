@@ -133,7 +133,7 @@ sub instance_remove {
     my $log = $log->child('instance_remove');
 
     $log->_6("perls installed: " . join ', ', @perls_installed);
-    $log->_0("removing previous installs...");
+    $log->_4("removing previous installs...");
 
     my $remove_cmd = $bcmd->remove;
 
