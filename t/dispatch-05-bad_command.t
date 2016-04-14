@@ -9,10 +9,7 @@ my $d = Test::BrewBuild::Dispatch->new;
 
 $d->dispatch(
     'asdf',
-   'https://stevieb9@github.com/stevieb9/mock-sub',
-#    'https://stevieb9@github.com/stevieb9/test-fail',
-#    [qw(54.187.92.0:7800)],
-#    [qw(54.187.92.0:7800 127.0.0.1:7800)],
+    'https://stevieb9@github.com/stevieb9/mock-sub',
     [qw(127.0.0.1:7800)],
 );
 

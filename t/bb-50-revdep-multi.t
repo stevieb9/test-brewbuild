@@ -35,8 +35,8 @@ my $dir = 'Mock-Sub-1.06';
 
     if ($^O =~ /MSWin/){
         is (@res, 11, "proper result count");
-        like ($res[0], qr/working on/, "first like is the list of revdeps" );
-        like ($res[1], qr/- installing/, "line 2 is ok");
+        like ($res[0], qr/- installing/, "first line is installing");
+        like ($res[1], qr/working on/, "deps we're working on" );
         like ($res[2], qr/\w+::\w+/, "is a module name");
         like ($res[3], qr/:: \w+/, "is a valid result");
         like ($res[4], qr/:: \w+/, "is a valid result");
@@ -49,8 +49,8 @@ my $dir = 'Mock-Sub-1.06';
     }
     else {
         is (@res, 11, "proper result count");
-        like ($res[0], qr/working on/, "first line is the list of revdeps" );
-        like ($res[1], qr/- installing/, "line 2 ok");
+        like ($res[0], qr/- installing/, "installing...");
+        like ($res[1], qr/working on/, "deps we're operating on" );
         like ($res[2], qr/\w+::\w+/, "is a module name");
         like ($res[3], qr/:: \w+/, "is a valid result");
         like ($res[4], qr/:: \w+/, "is a valid result");
