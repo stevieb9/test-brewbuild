@@ -108,7 +108,7 @@ sub dispatch {
 
         for my $fail_file (keys %{ $remotes{$ip}{build}{files} }){
             my $content = $remotes{$ip}{build}{files}{$fail_file};
-            open my $wfh, '>', "bblog/$ip\_v$fail_file" or die $!;
+            open my $wfh, '>', "bblog/$ip\_$fail_file" or die $!;
             for (@$content){
                 print $wfh $_;
             }
