@@ -22,6 +22,9 @@ use Test::BrewBuild::Tester;
 
 our $VERSION = '1.05';
 
+BEGIN {
+   remove_tree 'bblog' or die "can't remove bblog/\n" if -d 'bblog';
+}
 my $log;
 my $bcmd;
 
@@ -250,7 +253,7 @@ sub test {
             if (defined $tested_mod){
                 $tested_mod =~ s/::/-/g;
                 my $fail_log = "$self->{tempdir}/$tested_mod-$ver.bblog";
-                open my $wfh, $fail_log, or die $!;
+                open my $wfh, '>', $fail_log, or die $!;
 
                 print $wfh $result;
 
@@ -478,6 +481,9 @@ sub revdep {
     my ($self, %args) = @_;
 
     delete $self->{args}{args};
+    delete $args{revdep};
+
+    $args{plugin} = 'Test::BrewBuild::Plugin::TestAgainst';
 
     my @revdeps = $self->revdeps;
 
@@ -496,8 +502,8 @@ sub revdep {
             push @ret, $bb->run;
         }
         else {
-            $self->{args}{plugin_arg} = $_;
-            $self->run
+            my $bb = __PACKAGE__->new(%args);
+            $bb->run;
         }
     }
     return \@ret if $self->{args}{return};
@@ -505,6 +511,7 @@ sub revdep {
 sub revdeps {
     my $self = shift;
 
+    my $log = $log->child('revdeps');
     $log->_6('running --revdep');
 
     load 'CPAN::ReverseDependencies';
@@ -513,7 +520,6 @@ sub revdeps {
 
     find({
             wanted => sub {
-                $log = $log->child('_module_find');
                 $log->_7("finding modules");
                 if (-f && $_ =~ /\.pm$/){
                     push @modules, $_;

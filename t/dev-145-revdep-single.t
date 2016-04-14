@@ -29,7 +29,9 @@ my $dir = 'Mock-Sub-1.06';
     my @res = split /\n/, $ret;
     @res = grep /\S/, @res;
 
-    is (@res, 7, "proper result count");
+    print "*$_\n" for @res;
+
+    is (@res, 6, "proper result count");
     like ($res[0], qr/working on/, "first like is the list of revdeps" );
     like ($res[1], qr/\w+::\w+/, "$res[1] is a module name");
     like ($res[2], qr/5.22.1 :: \w+/, "$res[2] is a valid result");
