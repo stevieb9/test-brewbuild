@@ -483,7 +483,15 @@ sub revdep {
     my ($self, %args) = @_;
 
     delete $self->{args}{args};
+
+    # these args should only be exercised on first call
+
     delete $args{revdep};
+
+    delete $self->{args}{delete};
+    delete $args{remove};
+    delete $args{install};
+    delete $args{new};
 
     $args{plugin} = 'Test::BrewBuild::Plugin::TestAgainst';
 
@@ -502,11 +510,13 @@ sub revdep {
         if ($self->{args}{return}){
             my $bb = __PACKAGE__->new(%args);
             push @ret, $bb->run;
+
         }
         else {
             my $bb = __PACKAGE__->new(%args);
             $bb->run;
         }
+
     }
     return \@ret if $self->{args}{return};
 }

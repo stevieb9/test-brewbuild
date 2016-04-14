@@ -15,7 +15,7 @@ my $d = Test::BrewBuild::Dispatch->new;
 
 my $stdout = capture_stdout {
     $d->dispatch(
-        'brewbuild -R',
+        'brewbuild -r -R',
         'https://stevieb9@github.com/stevieb9/mock-sub',
         #    'https://stevieb9@github.com/stevieb9/test-fail',
         #    [qw(54.187.92.0:7800)],
@@ -28,21 +28,18 @@ my @ret = split /\n/, $stdout;
 @ret = grep {$_ !~ /^\s*$/} @ret;
 
 print "$_\n" for @ret;
-is (@ret, 11, "return count is correct");
+is (@ret, 8, "return count is correct");
 
 like ($ret[0], qr/127\.0\.0\.1 - /, "remote tester info");
 like ($ret[1], qr/reverse dependencies:/, "line has has revdep info");
 
 like ($ret[2], qr/.*?::.*?::.*?/, "Module name");
 like ($ret[3], qr/.*?:: PASS/, "PASS ok");
-like ($ret[4], qr/.*?:: PASS/, "PASS ok");
 
-like ($ret[5], qr/.*?::.*?::.*?/, "Module name");
-like ($ret[6], qr/.*?:: PASS/, "PASS ok");
+like ($ret[4], qr/.*?::.*?::.*?/, "Module name");
+like ($ret[5], qr/.*?:: PASS/, "PASS ok");
+
+like ($ret[6], qr/.*?::.*?::.*?/, "Module name");
 like ($ret[7], qr/.*?:: PASS/, "PASS ok");
-
-like ($ret[8], qr/.*?::.*?::.*?/, "Module name");
-like ($ret[9], qr/.*?:: PASS/, "PASS ok");
-like ($ret[10], qr/.*?:: PASS/, "PASS ok");
 
 done_testing();
