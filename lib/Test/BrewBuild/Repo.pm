@@ -1,21 +1,51 @@
-package Test::BrewBuild::Dispatch;
+package Test::BrewBuild::Repo;
 use strict;
 use warnings;
 
 use Carp qw(croak);
-use Git::Repository;
+use Capture::Tiny qw(:all);
 
 our $VERSION = '1.05';
 
-$| = 1;
-
 sub new {
-    my $class = shift;
-    my $log = shift;
-    my $self = bless {log => $log}, $class;
-    return $self;
+    return bless {}, shift;
 }
+sub git {
+    my $self = shift;
+    my $cmd = $^O =~ /MSWin/
+        ? (split /\n/, `where git.exe`)[0]
+        : 'git';
+    return $cmd;
+}
+sub link {
+    my $self = shift;
+    my $git = $self->git;
+    return (split /\n/, `"$git" config --get remote.origin.url`)[0];
+}
+sub name {
+    my ($self, $repo) = @_;
+    if ($repo =~ m!.*/(.*?)(?:\.git)*$!){
+        return $1;
+    }
+}
+sub clone {
+    my ($self, $repo) = @_;
+    my $git = $self->git;
 
+    my $output = capture_merged {
+        `"$git" clone $repo`;
+    };
+    return $output;
+}
+sub pull {
+    my $self = shift;
+    my $git = $self->git;
+
+    my $output = capture_stdout {
+        `"$git" pull`;
+    };
+    return $output;
+}
 1;
 
 =head1 NAME

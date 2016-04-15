@@ -1,5 +1,6 @@
 bin/bbtester
 bin/brewbuild
+bin/repo.pl
 Changes
 lib/Test/BrewBuild.pm
 lib/Test/BrewBuild/BrewCommands.pm
