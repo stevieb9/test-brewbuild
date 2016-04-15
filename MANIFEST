@@ -1,6 +1,5 @@
 bin/bbtester
 bin/brewbuild
-bin/repo.pl
 Changes
 lib/Test/BrewBuild.pm
 lib/Test/BrewBuild/BrewCommands.pm
@@ -33,6 +32,7 @@ t/15-network.t.norun
 t/16-return.pl
 t/__clean.t
 t/api-05-Tester.t
+t/api-10-Repo.t
 t/base/115-level6.data
 t/base/115-level6_win.data
 t/base/115-level7.data

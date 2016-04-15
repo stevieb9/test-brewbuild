@@ -2,7 +2,6 @@ package Test::BrewBuild::Repo;
 use strict;
 use warnings;
 
-use Carp qw(croak);
 use Capture::Tiny qw(:all);
 
 our $VERSION = '1.05';
@@ -41,7 +40,7 @@ sub pull {
     my $self = shift;
     my $git = $self->git;
 
-    my $output = capture_stdout {
+    my $output = capture_merged {
         `"$git" pull`;
     };
     return $output;
@@ -62,6 +61,26 @@ Manages Git repositories, including gathering names, cloning, pulling etc.
 =head2 new
 
 Returns a new C<Test::BrewBuild::Repo> object.
+
+=head1 git
+
+Returns the C<git> command for the local platform.
+
+=head1 link
+
+Fetches and returns the full link to the master repository.
+
+=head1 name($link)
+
+Extracts the repo name from the full link path.
+
+=head1 clone($repo)
+
+Clones the repo into the current working directory.
+
+=head1 pull
+
+While in a repository directory, pull down any updates.
 
 =head1 AUTHOR
 
