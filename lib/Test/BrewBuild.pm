@@ -195,10 +195,10 @@ sub run {
     else {
         if ($self->{args}{revdep}){
             delete $self->{args}{revdep};
-            $self->revdep(%{ $self->{args} });
+            return $self->revdep(%{ $self->{args} });
         }
         else {
-            $self->test;
+            return $self->test;
         }
     }
 }
@@ -303,20 +303,12 @@ sub test {
 
     $log->_5(__PACKAGE__ ." run finished");
 
-    if ($self->{args}{return}){
-        my $ret = "\n";
-        $ret .= "$self->{args}{plugin_arg}\n" if $self->{args}{plugin_arg};
-        $ret .= $_ for @pass;
-        $ret .= $_ for @fail;
+    my $ret = "\n";
+    $ret .= "$self->{args}{plugin_arg}\n" if $self->{args}{plugin_arg};
+    $ret .= $_ for @pass;
+    $ret .= $_ for @fail;
 
-        return $ret;
-    }
-    else {
-        print "\n";
-        print "$self->{args}{plugin_arg}\n" if $self->{args}{plugin_arg};
-        print $_ for @pass;
-        print $_ for @fail;
-    }
+    return $ret;
 }
 sub exec {
     my $self = shift;
@@ -505,18 +497,10 @@ sub revdep {
 
     for (@revdeps){
         $args{plugin_arg} = $_;
-        if ($self->{args}{return}){
-            my $bb = __PACKAGE__->new(%args);
-            push @ret, $bb->run;
-
-        }
-        else {
-            my $bb = __PACKAGE__->new(%args);
-            $bb->run;
-        }
-
+        my $bb = __PACKAGE__->new(%args);
+        push @ret, $bb->run;
     }
-    return \@ret if $self->{args}{return};
+    return \@ret;
 }
 sub revdeps {
     my $self = shift;
