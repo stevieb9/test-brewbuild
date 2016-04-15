@@ -79,7 +79,6 @@ sub listen {
             my $repo_dir = $self->_clone_repo($repo);
             chdir $repo_dir;
 
-            push @args, '--return';
             {
                 my %opts = Test::BrewBuild->options(\@args);
                 my $bb = Test::BrewBuild->new(%opts);

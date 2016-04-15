@@ -451,7 +451,6 @@ sub options {
         "d|debug=i"     => \$opts{debug},
         "i|install=s@"  => \$opts{install},
         "N|notest"      => \$opts{notest},
-        "return"        => \$opts{return},
         "l|legacy"      => \$opts{legacy},
         "T|selftest"    => \$opts{selftest},
         "L|listen"      => \$opts{listen},
@@ -489,11 +488,9 @@ sub revdep {
 
     my @ret;
 
-    if ($self->{args}{return}){
-        my $rlist = "\nreverse dependencies: " . join ', ', @revdeps;
-        $rlist .= "\n\n";
-        push @ret, $rlist;
-    }
+    my $rlist = "\nreverse dependencies: " . join ', ', @revdeps;
+    $rlist .= "\n\n";
+    push @ret, $rlist;
 
     for (@revdeps){
         $args{plugin_arg} = $_;
@@ -585,10 +582,6 @@ Dispatching Server options (see perldoc brewbuild):
 -t | --testers  "IP:PORT" pairs of the remote testesrs
 -X | --repo     The git repository to clone and test out of
 
-API options:
-
---return        Return the results as a string as opposed to printing to STDOUT
-
 Help options:
 
 -s | --setup    Display test platform setup instructions
@@ -610,7 +603,7 @@ sub _validate_opts {
     my @valid_args = qw(
         on o new n remove r revdep R plugin p args a debug d install i help h
         N notest setup s legacy l selftest T listen L dispatch D tester-ip
-        tester-port t testers return
+        tester-port t testers
         );
 
     my $bad_opt = 0;
