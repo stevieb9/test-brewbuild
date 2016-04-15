@@ -23,23 +23,6 @@ sub new {
     $self->_pid_file;
     return $self;
 }
-sub stop {
-    my $self = shift;
-
-    if (! $self->status) {
-        print "\nTest::BrewBuild test server is not running...\n";
-        return;
-    }
-
-    my $pid_file = $self->_pid_file;
-
-    open my $fh, '<', $pid_file or die $!;
-    my $pid = <$fh>;
-    close $fh;
-    print "\nStopping the Test::BrewBuild test server at PID $pid...\n\n";
-    kill 'KILL', ($pid);
-    unlink $pid_file;
-}
 sub start {
     my $self = shift;
 
@@ -116,6 +99,23 @@ sub start {
             }
         }
     }
+}
+sub stop {
+    my $self = shift;
+
+    if (! $self->status) {
+        print "\nTest::BrewBuild test server is not running...\n";
+        return;
+    }
+
+    my $pid_file = $self->_pid_file;
+
+    open my $fh, '<', $pid_file or die $!;
+    my $pid = <$fh>;
+    close $fh;
+    print "\nStopping the Test::BrewBuild test server at PID $pid...\n\n";
+    kill 'KILL', ($pid);
+    unlink $pid_file;
 }
 sub status {
     my $self = shift;
