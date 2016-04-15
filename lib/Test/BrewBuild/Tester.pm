@@ -7,6 +7,7 @@ use Carp qw(croak);
 use Config;
 use Data::Dumper;
 use IO::Socket::INET;
+use Proc::Background;
 use Storable;
 use Test::BrewBuild;
 
