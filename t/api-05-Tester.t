@@ -6,6 +6,11 @@ use Capture::Tiny qw(capture_stdout);
 use Test::BrewBuild::Tester;
 use Test::More;
 
+if (! $ENV{BBDEV_TESTING}){
+    plan skip_all => "developer tests only";
+    exit;
+}
+
 my $mod = 'Test::BrewBuild::Tester';
 
 { # default
