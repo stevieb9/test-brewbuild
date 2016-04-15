@@ -48,6 +48,7 @@ WriteMakefile(
         'Capture::Tiny' => 0,
         'CPAN::ReverseDependencies' => 0,
         'File::Copy::Recursive' => 0,
+        'Git::Repository' => '1.318',
         'Logging::Simple' => '0.07',
         'Module::Load' => 0,   # corelist since 5.9.4
         'Parallel::ForkManager' => 0,
