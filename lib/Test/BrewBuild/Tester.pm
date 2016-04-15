@@ -61,14 +61,15 @@ sub listen {
 
         my @args = split /\s+/, $cmd;
 
-
         if ($args[0] ne 'brewbuild'){
-            die "only brewbuild is allowed as a command\n";
+            my $err = "error: only brewbuild is allowed as a command\n";
+            $dispatch->send($err);
+            next;
         }
         else{
             shift @args;
+            $dispatch->send('ok');
         }
-        $dispatch->send('ok');
 
         my $repo = '';
         $dispatch->recv($repo, 1024);

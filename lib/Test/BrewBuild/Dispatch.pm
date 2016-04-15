@@ -78,10 +78,14 @@ sub dispatch {
 
         $socket->send($cmd);
 
-        my $ok = '';
-        $socket->recv($ok, 1024);
+        my $check = '';
+        $socket->recv($check, 1024);
 
-        if ($ok eq 'ok'){
+        if ($check =~ /^error:/){
+            print $check;
+            kill '-9', $$;
+        }
+        if ($check eq 'ok'){
             $socket->send($repo);
             $return{$tester}{build} = Storable::fd_retrieve($socket);
         }
