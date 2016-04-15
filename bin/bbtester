@@ -93,21 +93,16 @@ L<https://github.com/stevieb9/p5-test-brewbuild/issues>
 
 =head1 SUPPORT
 
-You can find documentation for this script and module with the perldoc command.
+You can find documentation for this script and its associated module with the
+perldoc command.
 
     perldoc bbtester
-    perldoc brewbuild
-    perldoc Test::BrewBuild
+    perldoc Test::BrewBuild::Tester
 
 =head1 SEE ALSO
 
-Berrybrew for Windows:
-
-L<https://github.com/dnmfarrell/berrybrew>
-
-Perlbrew for Unixes:
-
-L<http://perlbrew.pl>
+    perldoc brewbuild
+    perldoc Test::BrewBuild
 
 =head1 LICENSE AND COPYRIGHT
 
