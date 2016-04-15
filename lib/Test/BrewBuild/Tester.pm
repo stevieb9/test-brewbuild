@@ -37,11 +37,19 @@ sub listen {
     );
     die "cannot create socket $!\n" unless $sock;
 
+    # working dir
+
+    if ($^O =~ /MSWin/){
+        mkdir "c:/brewbuild" if ! -d "c:/brewbuild";
+        chdir "c:/brewbuild";
+    }
+    else {
+        mkdir "$ENV{HOME}/brewbuild" if ! -d "$ENV{HOME}/brewbuild";
+        chdir "$ENV{HOME}/brewbuild";
+    }
+
     while (1){
-        if ($^O =~ /MSWin/){
-            mkdir "c:/brewbuild" if ! -d "c:/brewbuild";
-            chdir "c:/brewbuild";
-        }
+
 
         my $res = {
             platform => $Config{archname},

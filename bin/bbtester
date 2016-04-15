@@ -34,7 +34,7 @@ exit;
 
 my $pid_file = $^O =~ /MSWin/
     ? 'c:/brewbuild/brewbuild.pid'
-    : "$ENV{HOME}/brewbuild.pid";
+    : "$ENV{HOME}/brewbuild/brewbuild.pid";
 
 if ($op eq 'stop'){
     open my $fh, '<', $pid_file or die $!;
