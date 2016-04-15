@@ -3,8 +3,8 @@ use warnings;
 use strict;
 
 use Getopt::Long;
-
 use Proc::Background;
+use Test::BrewBuild::Tester;
 
 my $ip = '0.0.0.0';
 my $port = 7800;
@@ -32,89 +32,17 @@ EOF
 exit;
 }
 
-my $pid_file = $^O =~ /MSWin/
-    ? 'c:/brewbuild/brewbuild.pid'
-    : "$ENV{HOME}/brewbuild/brewbuild.pid";
+my $tester = Test::BrewBuild::Tester->new;
+
+$tester->ip($ip);
+$tester->port($port);
 
 if ($op eq 'stop'){
-    open my $fh, '<', $pid_file or die $!;
-    my $pid = <$fh>;
-    close $fh;
-    print "\nStopping the Test::BrewBuild test server at PID $pid...\n\n";
-    kill 'KILL', ($pid);
-    unlink $pid_file;
+    $tester->stop;
     exit;
 }
-
 if ($op eq 'start'){
-    if (-f $pid_file){
-        my $fh;
-        open $fh, '<', $pid_file or die $!;
-        my $existing_pid = <$fh>;
-        close $fh;
-
-        if ($existing_pid){
-            if (kill(0, $existing_pid)){
-                die "brewbuild listener is already running...\n";
-            }
-        }
-    }
-
-    my ($perl, @args, $work_dir);
-
-    if ($^O =~ /MSWin/){
-        $work_dir = 'c:/brewbuild';
-
-        $perl = (split /\n/, `where perl.exe`)[0];
-        my $brew = (split /\n/, `where brewbuild`)[0];
-
-        @args = ($brew, '-L');
-    }
-    else {
-        $work_dir = "$ENV{HOME}/brewbuild";
-
-        $perl = 'perl';
-        @args = qw(brewbuild -L);
-    }
-
-    mkdir $work_dir or die "can't create $work_dir dir: $!" if ! -d $work_dir;
-    chdir $work_dir or die "can't change to dir $work_dir: $!";
-
-    my $tester;
-
-    if ($^O =~ /MSWin/){
-        $tester = Proc::Background->new($perl, @args);
-    }
-    else {
-        $tester = Proc::Background->new(@args);
-    }
-
-    my $pid = $tester->pid;
-
-    print "\nStarted the Test::BrewBuild test server at PID $pid on IP " .
-      "address $ip and TCP port $port...\n\n";
-
-
-    open my $wfh, '>', $pid_file or die $!;
-    print $wfh $pid;
-    close $wfh;
-
-    # error check for brewbuild
-
-    if (-f $pid_file){
-        sleep 1;
-        my $fh;
-        open $fh, '<', $pid_file or die $!;
-        my $existing_pid = <$fh>;
-        close $fh;
-
-        if ($existing_pid){
-            if (! kill(0, $existing_pid)){
-                die "error! run brewbuild -L at the command line and " .
-                    "check for failure\n\n";
-            }
-        }
-    }
+    $tester->start;
 }
 
 =pod
@@ -125,8 +53,6 @@ bbtester - Remote Unix testing platform server daemon for L<Test::BrewBuild>'s
 L<brewbuild>.
 
 =head1 SYNOPSIS
-
-This script is for Unix use. Please use C<bbtestersvc> for Windows.
 
 Listen for incoming C<brewbuild> build requests on all IPs and port 7800 (TCP)
 

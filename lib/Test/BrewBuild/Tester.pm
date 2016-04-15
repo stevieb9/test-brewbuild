@@ -19,18 +19,116 @@ sub new {
     my $log = shift;
     my $self = bless {}, $class;
     $self->{log} = $log;
+    $self->_pid_file;
     return $self;
 }
+sub stop {
+    my $self = shift;
+
+    if (! $self->status) {
+        print "\nTest::BrewBuild test server is not running...\n";
+        return;
+    }
+
+    my $pid_file = $self->_pid_file;
+
+    open my $fh, '<', $pid_file or die $!;
+    my $pid = <$fh>;
+    close $fh;
+    print "\nStopping the Test::BrewBuild test server at PID $pid...\n\n";
+    kill 'KILL', ($pid);
+    unlink $pid_file;
+}
+sub start {
+    my $self = shift;
+
+    my $pid_file = $self->_pid_file;
+
+    if ($self->status){
+        my $fh;
+        open $fh, '<', $pid_file or die $!;
+        my $existing_pid = <$fh>;
+        close $fh;
+
+        if ($existing_pid){
+            if (kill(0, $existing_pid)){
+                die "\nTest::BrewBuild test server already running " .
+                    "on PID $existing_pid...\n";
+            }
+        }
+    }
+
+    my ($perl, @args, $work_dir);
+
+    if ($^O =~ /MSWin/){
+        $work_dir = 'c:/brewbuild';
+
+        $perl = (split /\n/, `where perl.exe`)[0];
+        my $brew = (split /\n/, `where brewbuild`)[0];
+
+        @args = ($brew, '-L');
+    }
+    else {
+        $work_dir = "$ENV{HOME}/brewbuild";
+
+        $perl = 'perl';
+        @args = qw(brewbuild -L);
+    }
+
+    mkdir $work_dir or die "can't create $work_dir dir: $!" if ! -d $work_dir;
+    chdir $work_dir or die "can't change to dir $work_dir: $!";
+
+    my $bg;
+
+    if ($^O =~ /MSWin/){
+        $bg = Proc::Background->new($perl, @args);
+    }
+    else {
+        $bg = Proc::Background->new(@args);
+    }
+
+    my $pid = $bg->pid;
+
+    my $ip = $self->ip;
+    my $port = $self->port;
+
+    print "\nStarted the Test::BrewBuild test server at PID $pid on IP " .
+      "address $ip and TCP port $port...\n\n";
+
+    open my $wfh, '>', $pid_file or die $!;
+    print $wfh $pid;
+    close $wfh;
+
+    # error check for brewbuild
+
+    if ($self->status){
+        sleep 1;
+        my $fh;
+        open $fh, '<', $pid_file or die $!;
+        my $existing_pid = <$fh>;
+        close $fh;
+
+        if ($existing_pid){
+            if (! kill(0, $existing_pid)){
+                die "error! run brewbuild -L at the command line and " .
+                    "check for failure\n\n";
+            }
+        }
+    }
+}
+sub status {
+    my $self = shift;
+    my $pid_file = $self->_pid_file;
+    my $status = -f $pid_file ? 1 : 0;
+    return $status;
+}
 sub listen {
-    my ($self, $ip, $port) = @_;
+    my $self = shift;
     my $log = $self->{log};
 
-    $ip = '0.0.0.0' if ! $ip;
-    $port = '7800' if ! $port;
-
     my $sock = new IO::Socket::INET (
-        LocalHost => $ip,
-        LocalPort => $port,
+        LocalHost => $self->ip,
+        LocalPort => $self->port,
         Proto => 'tcp',
         Listen => 5,
         Reuse => 1,
@@ -49,7 +147,6 @@ sub listen {
     }
 
     while (1){
-
 
         my $res = {
             platform => $Config{archname},
@@ -111,6 +208,18 @@ sub listen {
     }
     $sock->close();
 }
+sub ip {
+    my ($self, $ip) = @_;
+    return $self->{ip} if $self->{ip};
+    $ip = '0.0.0.0' if ! $ip;
+    $self->{ip} = $ip;
+}
+sub port {
+    my ($self, $port) = @_;
+    return $self->{port} if $self->{port};
+    $port = '7800' if ! defined $port;
+    $self->{port} = $port;
+}
 sub _clone_repo {
     my ($self, $repo) = @_;
 
@@ -132,6 +241,15 @@ sub _clone_repo {
         }
         return $1;
     }
+}
+sub _pid_file {
+    my $self = shift;
+
+    return $self->{pid_file} if defined $self->{pid_file};
+
+    $self->{pid_file} = $^O =~ /MSWin/
+        ? 'c:/brewbuild/brewbuild.pid'
+        : "$ENV{HOME}/brewbuild/brewbuild.pid";
 }
 1;
 
