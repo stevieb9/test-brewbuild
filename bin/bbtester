@@ -3,7 +3,6 @@ use warnings;
 use strict;
 
 use Getopt::Long;
-use Proc::Background;
 use Test::BrewBuild::Tester;
 
 my $ip = '0.0.0.0';
@@ -71,8 +70,8 @@ Stop the service from running
 This script is the listener end of the distributed C<Test::BrewBuild> testing
 environment.
 
-C<bbtester> daemonizes itself, and listens to incoming requests from a
-C<brewbuild> test dispatch server.
+C<bbtester> daemonizes a L<Test::BrewBuild::Tester> object, and listens for
+incoming build requests from a test dispatcher.
 
 We then run the appropriate commands, and return the results to the dispatcher
 for processing.
