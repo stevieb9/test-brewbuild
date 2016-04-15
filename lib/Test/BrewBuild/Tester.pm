@@ -256,14 +256,12 @@ sub _pid_file {
 =head1 NAME
 
 Test::BrewBuild::Tester - Daemonized testing service for dispatched test run
-execution, Windows & Unix.
+execution, for Windows & Unix.
 
 =head1 DESCRIPTION
 
-This is the helper module for the L<bbtester> daemon/service that listens for
-incoming L<brewbuild> dispatcher remote build requests.
-
-It is not designed for end-user use.
+Builds and puts into the background a L<Test::BrewBuild> remote tester listening
+service.
 
 =head1 METHODS
 
@@ -271,10 +269,37 @@ It is not designed for end-user use.
 
 Returns a new Test::BrewBuild::Tester object.
 
-=head2 listen($ip, $port)
+=head2 start
 
-Sets the IP and TCP ports up to listen on. By default, we listen on all IPs and
-TCP port 7800.
+Starts the tester, and puts it into the background.
+
+=head2 stop
+
+Stops the tester and all of its processes.
+
+=head2 status
+
+Returns 1 if there's a tester currently running, and 0 if not.
+
+=head2 ip($ip)
+
+Default listening IP address is C<0.0.0.0> ie. all currently bound IPs. Send in
+an alternate IP address to listen on a specific one.
+
+Returns the currently used IP.
+
+=head2 port($port)
+
+Default port is 7800. Send in an alternate to listen on it instead.
+
+Returns the port currently being used.
+
+=head2 listen
+
+This is the actual service that listens for and processes requests.
+
+By default, listens on all IP addresses bound to all network interfaces, on port
+7800.
 
 =head1 AUTHOR
 
