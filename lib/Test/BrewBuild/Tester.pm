@@ -56,7 +56,7 @@ sub start {
         $work_dir = "$ENV{HOME}/brewbuild";
 
         $perl = 'perl';
-        @args = qw(brewbuild -L);
+        @args = qw(bbtester --fg);
     }
 
     mkdir $work_dir or die "can't create $work_dir dir: $!" if ! -d $work_dir;

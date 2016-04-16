@@ -76,6 +76,11 @@ Stop the service from running
 
     bbtester stop
 
+Run the tester in the foreground for testing/debugging/troubleshooting
+purposes.
+
+    bbtester --fg [--ip 0.0.0.0] [--port 7800]
+
 =head1 DESCRIPTION
 
 This script is the listener end of the distributed C<Test::BrewBuild> testing

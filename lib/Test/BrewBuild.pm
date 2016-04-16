@@ -9,8 +9,6 @@ use File::Copy::Recursive qw(dircopy);
 use File::Find;
 use File::Path qw(remove_tree);
 use File::Temp;
-use Getopt::Long qw(GetOptionsFromArray);
-Getopt::Long::Configure ("no_ignore_case", "pass_through");
 use Logging::Simple;
 use Module::Load;
 use Plugin::Simple default => 'Test::BrewBuild::Plugin::DefaultExec';
@@ -434,38 +432,7 @@ sub is_win {
     my $is_win = ($^O =~ /Win/) ? 1 : 0;
     return $is_win;
 }
-sub options {
-    my ($self, $args) = @_;
-    my (%opts, $help, $setup);
 
-    _validate_opts($args);
-
-    GetOptionsFromArray(
-        $args,
-        "on=s@"         => \$opts{on},
-        "n|new=i"       => \$opts{new},
-        "r|remove"      => \$opts{remove},
-        "R|revdep"      => \$opts{revdep},
-        "plugin=s"      => \$opts{plugin},
-        "a|args=s@"     => \$opts{args},
-        "d|debug=i"     => \$opts{debug},
-        "i|install=s@"  => \$opts{install},
-        "N|notest"      => \$opts{notest},
-        "l|legacy"      => \$opts{legacy},
-        "T|selftest"    => \$opts{selftest},
-        "L|listen"      => \$opts{listen},
-        "s|setup"       => \$setup,
-        "t|testers=s@"  => \$opts{testers},
-        "tester-ip=s"   => \$opts{tester_ip},
-        "tester-port=i" => \$opts{tester_port},
-        "h|help"        => \$help,
-    );
-
-    help() if $help;
-    setup() if $setup;
-
-    return %opts;
-}
 sub revdep {
     my ($self, %args) = @_;
 
