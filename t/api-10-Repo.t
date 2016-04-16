@@ -26,12 +26,12 @@ mkdir $wdir or die $! if ! -d $wdir;
     my $r = $mod->new;
     my $link = $r->link;
 
-    is (
+    like (
         $link,
-        "https://github.com/stevieb9/p5-test-brewbuild.git",
+        qr{github.com/stevieb9/p5-test-brewbuild},
         "link is correct",
     );
-}
+
 { # clone & name & pull
 
     my $r = $mod->new;

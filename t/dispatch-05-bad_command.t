@@ -11,7 +11,7 @@ if (! $ENV{BBDEV_TESTING}){
     plan skip_all => "developer tests only";
     exit;
 }
-my $t = Test::BrewBuild::Tester;
+my $t = Test::BrewBuild::Tester->new;
 $t->start;
 
 my $d = Test::BrewBuild::Dispatch->new;
