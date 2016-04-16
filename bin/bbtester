@@ -7,16 +7,23 @@ use Test::BrewBuild::Tester;
 
 my $ip = '0.0.0.0';
 my $port = 7800;
+my $foreground = 0;
 my $help;
 
-if (@ARGV && $ARGV[0] !~ /(?:start|stop)/ || ! @ARGV){
+if (@ARGV && $ARGV[0] !~ /(?:start|stop|--fg|-f)/ || ! @ARGV){
     $help = 1;
 }
-my $op = shift @ARGV;
+
+my $op = '';
+
+if ($ARGV[0] !~ /(?:--fg|-f)/){
+    $op = shift @ARGV;
+}
 
 GetOptions(
     "ip=s"   => \$ip,
     "port=i" => \$port,
+    "fg"     => \$foreground,
     "help"   => \$help,
 );
 
@@ -26,6 +33,8 @@ Usage:
 
 bbtester start [--ip 0.0.0.0] [--port 7800]]
 bbtester stop
+
+bbtester --fg [--ip 0.0.0.0] [--port 7800]
 
 EOF
 exit;
@@ -43,7 +52,9 @@ if ($op eq 'stop'){
 if ($op eq 'start'){
     $tester->start;
 }
-
+if ($foreground){
+    $tester->listen;
+}
 =pod
 
 =head1 NAME
