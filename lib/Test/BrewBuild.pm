@@ -536,8 +536,6 @@ sub revdeps {
 
     @revdeps = grep {$_ ne 'Test-BrewBuild'} @revdeps;
 
-    $log->_0("working on reverse dependencies: " . join ', ', @revdeps);
-
     for (@revdeps){
         s/-/::/g;
     }

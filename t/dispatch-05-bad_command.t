@@ -4,12 +4,16 @@ use warnings;
 
 use Capture::Tiny qw(capture_stdout);
 use Test::BrewBuild::Dispatch;
+use Test::BrewBuild::Tester;
 use Test::More;
 
 if (! $ENV{BBDEV_TESTING}){
     plan skip_all => "developer tests only";
     exit;
 }
+my $t = Test::BrewBuild::Tester;
+$t->start;
+
 my $d = Test::BrewBuild::Dispatch->new;
 
 my $warn = capture_stdout {
@@ -20,6 +24,8 @@ my $warn = capture_stdout {
     );
 
 };
+
+$t->stop;
 
 like ($warn, qr/error: only brewbuild/, "bad command dies");
 
