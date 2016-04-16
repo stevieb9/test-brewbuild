@@ -189,8 +189,8 @@ sub listen {
                 $git->pull;
             }
             else {
-                $repo->clone($repo);
-                chdir $repo->name($repo);
+                $git->clone($repo);
+                chdir $git->name($repo);
             }
             {
                 my %opts = Test::BrewBuild->options(\@args);

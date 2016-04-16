@@ -1,0 +1,102 @@
+#!/usr/bin/perl
+use warnings;
+use strict;
+
+use Getopt::Long;
+use Test::BrewBuild::Dispatch;
+
+my %args;
+my $help;
+
+GetOptions(
+    "cmd=s"      => \$args{cmd},
+    "testers=s@" => \$args{testers},
+    "repo=s"     => \$args{repo},
+    "help"       => \$help,
+);
+
+if ($help){
+    print <<'EOF';
+Usage: 
+
+bbdispatch -t 127.0.0.1:7800 -r https://github.com/user/repo
+
+EOF
+exit;
+}
+
+$args{cmd} = 'brewbuild' if ! $args{cmd};
+
+my $dispatcher = Test::BrewBuild::Dispatch->new;
+
+$dispatcher->dispatch(%args);
+
+=pod
+
+=head1 NAME
+
+bbdispatch - Dispatch L<Test::BrewBuild> builds to remote test servers.
+
+=head1 SYNOPSIS
+
+Dispatch a default C<brewbuild> test run on the two listed remote servers,
+using the repository you're currently working in:
+
+    bbdispatch -t 10.0.0.1:7800 -t 10.0.0.2:9999
+
+Dispatch a custom command to a single remote tester:
+
+    bbdispatch -c "brewbuild -R" -t 10.0.0.1:7800
+
+Have the remote testers test a specified repository:
+
+    bbdispatch -r https://github.com/user/repo-name -t 10.0.0.1:7800
+
+=head1 DESCRIPTION
+
+This script dispatches C<brewbuild> build sets to pre-configured
+L<Test::BrewBuild::Tester> test servers.
+
+=head1 AUTHOR
+
+Steve Bertrand, C<< <steveb at cpan.org> >>
+
+=head1 CONTRIBUTING
+
+Any and all feedback and help is appreciated. A Pull Request is the preferred
+method of receiving changes (L<https://github.com/stevieb9/p5-test-brewbuild>),
+but regular patches through the bug tracker, or even just email discussions are
+welcomed.
+
+=head1 BUGS
+
+L<https://github.com/stevieb9/p5-test-brewbuild/issues>
+
+=head1 SUPPORT
+
+You can find documentation for this script and its associated module with the
+perldoc command.
+
+    perldoc bbdispatch
+    perldoc Test::BrewBuild::Dispatch
+
+=head1 SEE ALSO
+
+    perldoc brewbuild
+    perldoc Test::BrewBuild
+
+    perldoc bbtester
+    perldoc Test::BrewBuild::Tester
+
+=head1 LICENSE AND COPYRIGHT
+
+Copyright 2016 Steve Bertrand.
+
+This program is free software; you can redistribute it and/or modify it
+under the terms of either: the GNU General Public License as published
+by the Free Software Foundation; or the Artistic License.
+
+See L<http://dev.perl.org/licenses/> for more information.
+
+=cut
+

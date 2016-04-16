@@ -4,7 +4,9 @@ use warnings;
 
 use Capture::Tiny qw(capture_stdout);
 use Test::BrewBuild::Dispatch;
+use Test::BrewBuild::Git;
 use Test::BrewBuild::Tester;
+
 use Test::More;
 
 if (! $ENV{BBDEV_TESTING}){

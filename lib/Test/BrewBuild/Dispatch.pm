@@ -95,7 +95,7 @@ sub dispatch {
 
             if (! $repo){
                 my $git = Test::BrewBuild::Git->new;
-                my $repo_link = $git->link;
+                $repo_link = $git->link;
             }
             else {
                 $repo_link = $repo;

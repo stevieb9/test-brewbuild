@@ -24,7 +24,7 @@ WriteMakefile(
     ABSTRACT_FROM    => 'lib/Test/BrewBuild.pm',
     LICENSE          => 'perl_5',
     PL_FILES         => {},
-    EXE_FILES        => [ map "bin/$_", qw(brewbuild bbtester) ],
+    EXE_FILES        => [ map "bin/$_", qw(brewbuild bbtester bbdispatch) ],
     MIN_PERL_VERSION => 5.008,
     META_MERGE => {
         'meta-spec' => { version => 2 },

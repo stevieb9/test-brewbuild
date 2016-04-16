@@ -19,14 +19,6 @@ if ($args{listen}){
     $tester->listen($args{tester_ip}, $args{tester_port});
     exit;
 }
-if ($args{dispatch}){
-    my $cmd = $args{dispatch};
-    my $testers = $args{testers};
-
-    my $dispatcher = $bb->dispatcher;
-    $dispatcher->dispatch(cmd => $cmd, testers => $testers);
-    exit;
-}
 if ($is_win && $args{on}){
     warn "\nwe can't use --on with Windows... running on all\n\n";
     delete $args{on};
@@ -196,9 +188,7 @@ For Windows, you'll need to install Berrybrew (see L<SEE ALSO> for details).
 For Unix, you'll need Perlbrew.
 
 It allows you to remove and reinstall on each test run, install random versions
-of perl, install specific versions, and even dispatch out to remote testers.
-For this, see
-<a href="https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbtester">bbtester</a>.
+of perl and install specific versions.
 
 All unit tests are run against all installed C<perl> instances, unless
 otherwise specified.
@@ -238,10 +228,6 @@ Do not run tests. Allows you to --remove and --install without testing
 
 Operate on perls < 5.8.x. The default plugins won't work with this flag set if
 a lower version is installed
-
-=head2 --dispatch, -D
-
-Push test runs out to remote tester servers. See L<SEE ALSO>
 
 =head2 --listen, -L
 
@@ -355,9 +341,9 @@ Documentation for the remote testing service script, and its API:
     perldoc bbtester
     perldoc Test::BrewBuild::Tester
 
-Documentation for running in Dispatch mode can be found by searching for
-C<Dispatching Server options> in C<brewbuild -h>, and the dispatch API here:
+Documentation for the test dispatching script and its API:
 
+    perldoc bbdispatch
     perldoc Test::BrewBuild::Dispatch
 
 =head1 SEE ALSO

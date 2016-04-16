@@ -454,7 +454,6 @@ sub options {
         "l|legacy"      => \$opts{legacy},
         "T|selftest"    => \$opts{selftest},
         "L|listen"      => \$opts{listen},
-        "D|dispatch=s"  => \$opts{dispatch},
         "s|setup"       => \$setup,
         "t|testers=s@"  => \$opts{testers},
         "tester-ip=s"   => \$opts{tester_ip},
@@ -541,17 +540,6 @@ sub revdeps {
 
     return @revdeps;
 }
-sub tester {
-    my ($self, $log) = @_;
-    $log = $self->log if ! $log;
-    my $tester = Test::BrewBuild::Tester->new($log);
-    return $tester;
-}
-sub dispatcher {
-    my $self = shift;
-    my $dispatcher = Test::BrewBuild::Dispatch->new;
-    return $dispatcher;
-}
 sub setup {
     print "\n";
     my @setup = <DATA>;
@@ -573,11 +561,6 @@ Local usage options:
 -N | --notest   Do not run tests. Allows you to --remove and --install without testing
 -l | --legacy   Operate on perls < 5.8.x. The default plugins won't work with this flag set if a lower version is installed
 
-Dispatching Server options (see perldoc brewbuild):
-
--D | --dispatch The brewbuild command string to dispatch to the remote testing servers, and enable the dispatcher
--t | --testers  "IP:PORT" pairs of the remote testesrs
-
 Help options:
 
 -s | --setup    Display test platform setup instructions
@@ -598,7 +581,7 @@ sub _validate_opts {
 
     my @valid_args = qw(
         on o new n remove r revdep R plugin p args a debug d install i help h
-        N notest setup s legacy l selftest T listen L dispatch D tester-ip
+        N notest setup s legacy l selftest T listen L
         tester-port t testers
         );
 

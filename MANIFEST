@@ -4,9 +4,9 @@ Changes
 lib/Test/BrewBuild.pm
 lib/Test/BrewBuild/BrewCommands.pm
 lib/Test/BrewBuild/Dispatch.pm
+lib/Test/BrewBuild/Git.pm
 lib/Test/BrewBuild/Plugin/DefaultExec.pm
 lib/Test/BrewBuild/Plugin/UnitTestPluginInst.pm
-lib/Test/BrewBuild/Git.pm
 lib/Test/BrewBuild/Tester.pm
 Makefile.PL
 MANIFEST			This list of files
@@ -58,6 +58,7 @@ t/dispatch-10-revdep_pass.t
 t/dispatch-11-revdep_pass.t
 t/dispatch-15-fail.t
 t/dispatch-15-revdep_fail.t
+t/dispatch-20-autofind_repo.t
 t/manifest.t
 t/modules/bb-522.zip
 t/modules/bb-fail.zip
