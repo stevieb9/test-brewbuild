@@ -31,7 +31,7 @@ mkdir $wdir or die $! if ! -d $wdir;
         qr{github.com/stevieb9/p5-test-brewbuild},
         "link is correct",
     );
-
+}
 { # clone & name & pull
 
     my $r = $mod->new;
