@@ -5,7 +5,6 @@ use warnings;
 use Capture::Tiny qw(:all);
 use Carp qw(croak);
 use Config;
-use Data::Dumper;
 use IO::Socket::INET;
 use Proc::Background;
 use Storable;
@@ -37,7 +36,7 @@ sub start {
         if ($existing_pid){
             if (kill(0, $existing_pid)){
                 die "\nTest::BrewBuild test server already running " .
-                    "on PID $existing_pid...\n";
+                    "on PID $existing_pid...\n\n";
             }
         }
     }
@@ -94,7 +93,7 @@ sub start {
 
         if ($existing_pid){
             if (! kill(0, $existing_pid)){
-                die "error! run brewbuild -L at the command line and " .
+                die "\nerror! run brewbuild -L at the command line and " .
                     "check for failure\n\n";
             }
         }
@@ -104,7 +103,7 @@ sub stop {
     my $self = shift;
 
     if (! $self->status) {
-        print "\nTest::BrewBuild test server is not running...\n";
+        print "\nTest::BrewBuild test server is not running...\n\n";
         return;
     }
 
@@ -114,7 +113,7 @@ sub stop {
     my $pid = <$fh>;
     close $fh;
     print "\nStopping the Test::BrewBuild test server at PID $pid...\n\n";
-    kill 'KILL', ($pid);
+    kill 'KILL', $pid;
     unlink $pid_file;
 }
 sub status {
@@ -168,7 +167,7 @@ sub listen {
         my @args = split /\s+/, $cmd;
 
         if ($args[0] ne 'brewbuild'){
-            my $err = "error: only brewbuild is allowed as a command\n";
+            my $err = "error: only brewbuild is allowed as a command\n\n";
             $dispatch->send($err);
             next;
         }
@@ -204,7 +203,6 @@ sub listen {
             }
             Storable::nstore_fd($res, $dispatch);
             chdir '..';
-
         }
     }
     $sock->close();
@@ -261,14 +259,14 @@ execution, for Windows & Unix.
 
 =head1 DESCRIPTION
 
-Builds and puts into the background a L<Test::BrewBuild> remote tester listening
-service.
+Builds and puts into the background a L<Test::BrewBuild> remote tester
+listening service.
 
 =head1 METHODS
 
 =head2 new
 
-Returns a new Test::BrewBuild::Tester object.
+Returns a new C<Test::BrewBuild::Tester> object.
 
 =head2 start
 
@@ -291,7 +289,7 @@ Returns the currently used IP.
 
 =head2 port($port)
 
-Default port is 7800. Send in an alternate to listen on it instead.
+Default port is C<7800>. Send in an alternate to listen on it instead.
 
 Returns the port currently being used.
 
@@ -299,8 +297,8 @@ Returns the port currently being used.
 
 This is the actual service that listens for and processes requests.
 
-By default, listens on all IP addresses bound to all network interfaces, on port
-7800.
+By default, listens on all IP addresses bound to all network interfaces, on
+port C<7800>.
 
 =head1 AUTHOR
 

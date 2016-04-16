@@ -137,32 +137,35 @@ Returns a new Test::BrewBuild::BrewCommands object.
 
 =head2 brew
 
-Returns 'perlbrew' if on Unix, and 'berrybrew' if on Windows.
+Returns C<perlbrew> if on Unix, and the full executable path for
+C<berrybrew.exe> if on Windows.
 
 =head2 info
 
-Returns the string result of *brew available.
+Returns the string result of C<*brew available>.
 
 =head2 installed($info)
 
-Takes the output of '*brew available' in a string form. Returns the currently
+Takes the output of C<*brew available> in a string form. Returns the currently
 installed versions, formatted in a platform specific manner.
 
 =head2 available($legacy, $info)
 
-Similar to C<installed()>, but returns all perls available.
+Similar to C<installed()>, but returns all perls available. If C<$legacy> is
+false, we'll only return C<perl> versions C<5.8.0+>.
 
 =head2 using($info)
 
-Returns the current version of perl we're using.
+Returns the current version of perl we're using. $info is the output from
+C<info()>.
 
 =head2 install
 
-Returns the current OS's specific *brew install command.
+Returns the current OS's specific C<*brew install> command.
 
 =head2 remove
 
-Returns the current OS's specific *brew remove command.
+Returns the current OS's specific C<*brew remove> command.
 
 =head2 is_win
 

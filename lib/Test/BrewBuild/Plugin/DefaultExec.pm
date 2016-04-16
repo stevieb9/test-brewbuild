@@ -39,12 +39,12 @@ Test::BrewBuild::Plugin::DefaultExec - The default 'exec' command plugin.
 
 To use, if you've actually installed your plugin:
 
-    berrybrew --plugin My::ExecPlugin
+    brewbuild --plugin My::ExecPlugin
 
 If you have it in a local directory (ie. not installed) (note the path can be
 relative):
 
-    berrybrew --plugin /path/to/ExecPlugin.pm
+    brewbuild --plugin /path/to/ExecPlugin.pm
 
 Send in arguments to your plugin. The C<--args, -a> flag sets an array. For
 each argument, C<brewbuild> is called once, passing in the next element of the
@@ -59,7 +59,7 @@ this one with the same subroutine, and in the C<__DATA__> section, include the
 code you need executed by C<*brew exec>.
 
 The first argument you will receive is the C<Logging::Simple> log object of
-the core C<Test::BrewBuild>. You can ignore this, or create a child and log
+the core L<Test::BrewBuild>. You can ignore this, or create a child and log
 throughout your plugin.
 
 =head1 AUTHOR

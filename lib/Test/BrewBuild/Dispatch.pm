@@ -143,17 +143,16 @@ servers.
 
 =head1 DESCRIPTION
 
-This is the helper module for the remote dispatching system of
-L<Test::BrewBuild>, and shouldn't be used directly.
+This is the remote dispatching system of L<Test::BrewBuild>.
 
-It dispatches out test runs for remote test servers to perform, then processes
-the results returned from those testers.
+It dispatches out test runs to L<Test::BrewBuild::Tester> remote test servers
+to perform, then processes the results returned from those testers.
 
 =head1 METHODS
 
 =head2 new
 
-Returns a new Test::BrewBuild::Dispatch object.
+Returns a new C<Test::BrewBuild::Dispatch> object.
 
 =head2 dispatch($cmd, $repo, $params)
 
@@ -164,9 +163,10 @@ C<$repo> is the git repository to base the testing on.
 C<$params> is optional, and contains an array reference of IP/Port pairs for
 remote testers to dispatch to and follow. eg: C<10.1.1.5:7800>.
 
-By default, the testers run on all IPs and port TCP/7800.
+By default, the testers run on all IPs and port C<TCP/7800>.
 
-See L<Test::BrewBuild::Tester>.
+See L<Test::BrewBuild::Tester> for more details on the testers that the
+dispatcher dispatches to.
 
 =head1 AUTHOR
 

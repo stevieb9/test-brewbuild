@@ -68,7 +68,8 @@ Returns the C<git> command for the local platform.
 
 =head1 link
 
-Fetches and returns the full link to the master repository.
+Fetches and returns the full link to the master repository. This is the link
+you used to originally clone the repo.
 
 =head1 name($link)
 
