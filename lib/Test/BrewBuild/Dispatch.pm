@@ -6,6 +6,7 @@ use Carp qw(croak);
 use IO::Socket::INET;
 use Parallel::ForkManager;
 use Storable;
+use Test::BrewBuild::Git;
 
 our $VERSION = '1.05';
 
@@ -18,23 +19,27 @@ sub new {
     return $self;
 }
 sub dispatch {
-    my ($self, $cmd, $repo, $params) = @_;
+    my ($self, %params) = @_;
+
+    my $cmd = $params{cmd};
+    my $repo = $params{repo};
+    my $testers = $params{testers};
 
     #my $log = $self->{log}->child('Dispatch::dispatch');
     my %remotes;
 
-    if (!$params->[0]) {
+    if (! $testers->[0]){
         my $conf = Config::Tiny->read( "$ENV{HOME}/.brewbuild.conf" );
         for (keys %{ $conf->{remotes} }) {
             $remotes{$_} = $conf->{remotes}{$_};
         }
-        if (!$conf) {
+        if (!$conf){
             croak "dispatch requires clients sent in or config file which " .
                   "isn't found\n";
         }
     }
     else {
-        for (@$params) {
+        for (@$testers){
             $remotes{(split /:/, $_)[0]}{port} = (split /:/, $_)[1];
         }
     }
@@ -86,7 +91,16 @@ sub dispatch {
             kill '-9', $$;
         }
         if ($check eq 'ok'){
-            $socket->send($repo);
+            my $repo_link;
+
+            if (! $repo){
+                my $git = Test::BrewBuild::Git->new;
+                my $repo_link = $git->link;
+            }
+            else {
+                $repo_link = $repo;
+            }
+            $socket->send($repo_link);
             $return{$tester}{build} = Storable::fd_retrieve($socket);
         }
         else {
@@ -154,14 +168,17 @@ to perform, then processes the results returned from those testers.
 
 Returns a new C<Test::BrewBuild::Dispatch> object.
 
-=head2 dispatch($cmd, $repo, $params)
+=head2 dispatch(cmd => '', repo => '', testers => ['', ''])
 
-C<$cmd> is the C<brewbuild> command string that will be executed.
+C<cmd> is the C<brewbuild> command string that will be executed.
 
-C<$repo> is the git repository to base the testing on.
+C<repo> is the name of the repo to test against, and is optional.
+If not supplied, we'll attempt to get a repo name from the local working
+directory you're working in.
 
-C<$params> is optional, and contains an array reference of IP/Port pairs for
-remote testers to dispatch to and follow. eg: C<10.1.1.5:7800>.
+C<testers> is manadory unless you've set up a config file, and contains an
+array reference of IP/Port pairs for remote testers to dispatch to and follow.
+eg: C<[qw(10.1.1.5:7800 172.16.5.5:9999)]>.
 
 By default, the testers run on all IPs and port C<TCP/7800>.
 

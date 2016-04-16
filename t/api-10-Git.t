@@ -4,7 +4,7 @@ use warnings;
 
 use Cwd;
 use File::Path qw(remove_tree);
-use Test::BrewBuild::Repo;
+use Test::BrewBuild::Git;
 use Test::More;
 
 if (! $ENV{BBDEV_TESTING}){
@@ -12,19 +12,19 @@ if (! $ENV{BBDEV_TESTING}){
     exit;
 }
 
-my $mod = 'Test::BrewBuild::Repo';
+my $mod = 'Test::BrewBuild::Git';
 my $wdir = "t/repo";
 my $cwd = getcwd();
 
 mkdir $wdir or die $! if ! -d $wdir;
 
 { #new
-    my $r = $mod->new;
-    is (ref $r, $mod, "obj is a $mod");
+    my $git = $mod->new;
+    is (ref $git, $mod, "obj is a $mod");
 }
 { # link
-    my $r = $mod->new;
-    my $link = $r->link;
+    my $git = $mod->new;
+    my $link = $git->link;
 
     like (
         $link,
@@ -34,20 +34,20 @@ mkdir $wdir or die $! if ! -d $wdir;
 }
 { # clone & name & pull
 
-    my $r = $mod->new;
-    my $link = $r->link;
-    my $name = $r->name($link);
+    my $git = $mod->new;
+    my $link = $git->link;
+    my $name = $git->name($link);
 
     chdir $wdir or die $!;
 
     is ($name, 'p5-test-brewbuild', "name of repo dir is ok");
 
-    my $ret = $r->clone($link);
+    my $ret = $git->clone($link);
     like ($ret, qr/Cloning into/, "clone() ok");
     is (-d $name, 1, "repo dir created ok via clone");
 
     chdir $name or die $!;
-    $ret = $r->pull;
+    $ret = $git->pull;
     print $ret;
 }
 

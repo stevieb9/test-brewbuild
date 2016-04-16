@@ -18,11 +18,10 @@ my $d = Test::BrewBuild::Dispatch->new;
 
 my $warn = capture_stdout {
     $d->dispatch(
-        'asdf',
-        'https://stevieb9@github.com/stevieb9/mock-sub',
-        [ qw(127.0.0.1:7800) ],
+        cmd => 'asdf',
+        repo => 'https://stevieb9@github.com/stevieb9/mock-sub',
+        testers => [ qw(127.0.0.1:7800) ],
     );
-
 };
 
 $t->stop;

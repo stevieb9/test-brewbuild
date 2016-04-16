@@ -455,7 +455,6 @@ sub options {
         "T|selftest"    => \$opts{selftest},
         "L|listen"      => \$opts{listen},
         "D|dispatch=s"  => \$opts{dispatch},
-        "X|repo=s"      => \$opts{repo},
         "s|setup"       => \$setup,
         "t|testers=s@"  => \$opts{testers},
         "tester-ip=s"   => \$opts{tester_ip},
@@ -578,7 +577,6 @@ Dispatching Server options (see perldoc brewbuild):
 
 -D | --dispatch The brewbuild command string to dispatch to the remote testing servers, and enable the dispatcher
 -t | --testers  "IP:PORT" pairs of the remote testesrs
--X | --repo     The git repository to clone and test out of
 
 Help options:
 

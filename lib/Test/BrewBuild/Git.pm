@@ -1,4 +1,4 @@
-package Test::BrewBuild::Repo;
+package Test::BrewBuild::Git;
 use strict;
 use warnings;
 
@@ -49,8 +49,22 @@ sub pull {
 
 =head1 NAME
 
-Test::BrewBuild::Repo - Git repository manager for the L<Test::BrewBuild> test
+Test::BrewBuild::Git - Git repository manager for the L<Test::BrewBuild> test
 platform system.
+
+=head1 SYNOPSIS
+
+    use Test::BrewBuild::Git;
+
+    my $git = Test::BrewBuild::Git->new;
+
+    my $repo_link = $git->link;
+
+    my $repo_name = $git->name($link);
+
+    $git->clone($repo_link);
+
+    $git->pull;
 
 =head1 DESCRIPTION
 
@@ -60,7 +74,7 @@ Manages Git repositories, including gathering names, cloning, pulling etc.
 
 =head2 new
 
-Returns a new C<Test::BrewBuild::Repo> object.
+Returns a new C<Test::BrewBuild::Git> object.
 
 =head1 git
 

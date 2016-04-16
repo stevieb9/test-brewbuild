@@ -9,6 +9,7 @@ use IO::Socket::INET;
 use Proc::Background;
 use Storable;
 use Test::BrewBuild;
+use Test::BrewBuild::Git;
 
 our $VERSION = '1.05';
 
@@ -181,9 +182,16 @@ sub listen {
         $res->{repo} = $repo;
 
         if ($repo){
-            my $repo_dir = $self->_clone_repo($repo);
-            chdir $repo_dir;
+            my $git = Test::BrewBuild::Git->new;
 
+            if (-d $git->name($repo)){
+                chdir $git->name($repo) or die $!;
+                $git->pull;
+            }
+            else {
+                $repo->clone($repo);
+                chdir $repo->name($repo);
+            }
             {
                 my %opts = Test::BrewBuild->options(\@args);
                 my $bb = Test::BrewBuild->new(%opts);
@@ -218,28 +226,6 @@ sub port {
     return $self->{port} if $self->{port};
     $port = '7800' if ! defined $port;
     $self->{port} = $port;
-}
-sub _clone_repo {
-    my ($self, $repo) = @_;
-
-    my $sep = $^O =~ /MSWin/ ? ';' : ':';
-    my $git = $^O =~ /MSWin/ ? 'git.exe' : 'git';
-
-    if (!grep { -x "$_/$git"} split /$sep/, $ENV{PATH}) {
-        croak "$git not found\n";
-    }
-
-    if ($repo =~ m!.*/(.*?)(?:\.git)*$!){
-        if (! -d $1){
-            my $clone_output = capture_merged { `git clone $repo`; };
-        }
-        else {
-            chdir $1;
-            my $pull_output = capture_merged { `git pull`; };
-            chdir '..';
-        }
-        return $1;
-    }
 }
 sub _pid_file {
     my $self = shift;

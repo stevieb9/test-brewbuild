@@ -20,16 +20,11 @@ if ($args{listen}){
     exit;
 }
 if ($args{dispatch}){
-    if (! $args{repo}){
-        croak "you must supply a repository link with --repo\n";
-    }
-
-    my $repo = $args{repo};
     my $cmd = $args{dispatch};
     my $testers = $args{testers};
 
     my $dispatcher = $bb->dispatcher;
-    $dispatcher->dispatch($cmd, $repo, $testers);
+    $dispatcher->dispatch(cmd => $cmd, testers => $testers);
     exit;
 }
 if ($is_win && $args{on}){

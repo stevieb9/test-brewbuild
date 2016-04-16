@@ -19,9 +19,9 @@ $t->start;
 
 my $stdout = capture_stdout {
     $d->dispatch(
-        'brewbuild',
-        'https://stevieb9@github.com/stevieb9/test-fail',
-        [ qw(127.0.0.1:7800) ],
+        cmd => 'brewbuild',
+        repo => 'https://stevieb9@github.com/stevieb9/test-fail',
+        testers => [ qw(127.0.0.1:7800) ],
     )
 };
 

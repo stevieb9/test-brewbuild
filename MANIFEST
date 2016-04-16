@@ -6,7 +6,7 @@ lib/Test/BrewBuild/BrewCommands.pm
 lib/Test/BrewBuild/Dispatch.pm
 lib/Test/BrewBuild/Plugin/DefaultExec.pm
 lib/Test/BrewBuild/Plugin/UnitTestPluginInst.pm
-lib/Test/BrewBuild/Repo.pm
+lib/Test/BrewBuild/Git.pm
 lib/Test/BrewBuild/Tester.pm
 Makefile.PL
 MANIFEST			This list of files
@@ -32,7 +32,7 @@ t/15-network.t.norun
 t/16-return.pl
 t/__clean.t
 t/api-05-Tester.t
-t/api-10-Repo.t
+t/api-10-Git.t
 t/base/115-level6.data
 t/base/115-level6_win.data
 t/base/115-level7.data
