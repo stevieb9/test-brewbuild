@@ -108,7 +108,7 @@ sub _exec_brew {
 
 =head1 NAME
 
-brewbuild - Automate module and reverse-dependency testing, on Windows and Unix.
+brewbuild - Automate module and reverse-dependency testing, on Windows and Unix
 
 =head1 SYNOPSIS
 
@@ -135,7 +135,7 @@ stored in C<bblog/revdep-module-name.version.bblog>
 
     # output, in my Mock::Sub repo directory
 
-    - working on reverse dependencies: Test-BrewBuild, File-Edit-Portable,
+    reverse dependencies: Test-BrewBuild, File-Edit-Portable,
       Devel-Examine-Subs, Devel-Trace-Subs
 
     Test::BrewBuild
@@ -201,10 +201,12 @@ For Windows, you'll need to install Berrybrew (see L<SEE ALSO> for details).
 For Unix, you'll need Perlbrew.
 
 It allows you to remove and reinstall on each test run, install random versions
-of perl, or install specific versions.
+of perl, install specific versions, and even dispatch out to remote testers.
+For this, see
+<a href="https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbtester">bbtester</a>.
 
-All unit tests are run against all installed instances, unless otherwise
-specified.
+All unit tests are run against all installed C<perl> instances, unless
+otherwise specified.
 
 =head1 USAGE
 
@@ -230,19 +232,25 @@ Remove all installed perls (less the current one)
 
 =head2 --install, -i  
 
-Number portion of an available perl version according to "*brew available". Multiple versions can be sent in at once
+Number portion of an available perl version according to "*brew available".
+Multiple versions can be sent in at once
 
-=head2 --return
-
-Return the results in string form, as opposed to printing them
-
-=head2 --notest, -N   
+=head2 --notest, -N
 
 Do not run tests. Allows you to --remove and --install without testing
 
 =head2 --legacy, -l
 
-Operate on perls < 5.8.x. The default plugins won't work with this flag set if a lower version is installed
+Operate on perls < 5.8.x. The default plugins won't work with this flag set if
+a lower version is installed
+
+=head2 --dispatch, -D
+
+Push test runs out to remote tester servers. See L<SEE ALSO>
+
+=head2 --listen, -L
+
+Start a test server in the foreground. See L<SEE ALSO>.
 
 =head2 --plugin, -p   
 
@@ -262,11 +270,11 @@ Display test platform setup instructions
 
 =head2 --help, -h     
 
-Print this help message, and exit
+Print out help contents
 
 =head1 TEST PLATFORM CONFIGURATION
 
-Test::BrewBuild test platform configuration guide
+C<Test::BrewBuild> test platform configuration guide
 
 =head2 UNIX
 
@@ -347,6 +355,16 @@ You can find documentation for this script and module with the perldoc command.
     perldoc brewbuild
     perldoc Test::BrewBuild
 
+Documentation for the remote testing service script, and its API:
+
+    perldoc bbtester
+    perldoc Test::BrewBuild::Tester
+
+Documentation for running in Dispatch mode can be found by searching for
+C<Dispatching Server options> in C<brewbuild -h>, and the dispatch API here:
+
+    perldoc Test::BrewBuild::Dispatch
+
 =head1 SEE ALSO
 
 Berrybrew for Windows:
@@ -356,6 +374,22 @@ L<https://github.com/dnmfarrell/berrybrew>
 Perlbrew for Unixes:
 
 L<http://perlbrew.pl>
+
+Remote testing server:
+
+<a href="https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbtester>bbtester</a>
+
+Remote testing server API:
+
+L<Test::BrewBuild::Tester>
+
+Dispatching to remote testers:
+
+See C<brewbuild -h>, in the C<Dispatching Server options> section.
+
+Dispatcher API:
+
+L<Test::BrewBuild::Dispatch>
 
 =head1 LICENSE AND COPYRIGHT
 

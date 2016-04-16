@@ -50,7 +50,7 @@ my $dir = 'Mock-Sub-1.06';
     else {
         is (@res, 11, "proper result count");
         like ($res[0], qr/- installing/, "installing...");
-        like ($res[1], qr/working on/, "deps we're operating on" );
+        like ($res[1], qr/reverse dependencies/, "deps we're operating on" );
         like ($res[2], qr/\w+::\w+/, "is a module name");
         like ($res[3], qr/:: \w+/, "is a valid result");
         like ($res[4], qr/:: \w+/, "is a valid result");

@@ -48,12 +48,12 @@ if ($op eq 'start'){
 
 =head1 NAME
 
-bbtester - Remote Unix testing platform server daemon for L<Test::BrewBuild>'s
-L<brewbuild>.
+bbtester - Remote Windows/Unix testing platform server daemon for
+L<Test::BrewBuild>
 
 =head1 SYNOPSIS
 
-Listen for incoming C<brewbuild> build requests on all IPs and port 7800 (TCP)
+Listen for incoming build requests on all IPs and port 7800 (TCP)
 
     bbtester start
 
@@ -103,6 +103,8 @@ perldoc command.
 
     perldoc brewbuild
     perldoc Test::BrewBuild
+
+    perldoc Test::BrewBuild::Dispatch
 
 =head1 LICENSE AND COPYRIGHT
 
