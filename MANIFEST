@@ -1,3 +1,4 @@
+bin/bbdispatch
 bin/bbtester
 bin/brewbuild
 Changes
@@ -59,6 +60,8 @@ t/dispatch-11-revdep_pass.t
 t/dispatch-15-fail.t
 t/dispatch-15-revdep_fail.t
 t/dispatch-20-autofind_repo.t
+t/dispatch-20-autofind_repo.t.norun
+t/dispatch-25-default_port.t
 t/manifest.t
 t/modules/bb-522.zip
 t/modules/bb-fail.zip

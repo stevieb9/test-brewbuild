@@ -242,7 +242,7 @@ sub test {
 
     my $failed = 0;
 
-    my $results = $self->exec;
+    my $results = $self->_exec;
 
     $log->_7("\n*****\n$results\n*****");
 
@@ -338,7 +338,10 @@ sub test {
 
     return $ret;
 }
-sub exec {
+sub _exec {
+
+    # called only by test()
+
     my $self = shift;
 
     my $log = $log->child('exec');
@@ -803,14 +806,14 @@ All unit tests are run against all installed instances.
 
     $bb->instance_remove;
 
-    # install a specific version (uses 'version' param, or 'new'. If 'new'
-    # is set to a positive integer, we'll randomly install that many instances)
+Install a specific version (uses 'version' param, or 'new'. If 'new' is set to
+a positive integer, we'll randomly install that many instances)
 
     $bb->instance_install;
 
-    # execute across all perl instances, and dump the output
+Run the actual tests
 
-    $bb->run;
+    $bb->test;
 
 =head1 METHODS
 
@@ -855,19 +858,13 @@ is set to a positive integer, will install that many random versions of perl.
 Uninstalls all currently installed perls, less the one you are currently
 'switch'ed or 'use'd to.
 
-=head2 run
-
-Prepares the run and calls C<exec()> to run all tests against all installed
-perls.
-
 =head2 test
 
-Only called by C<run()>. Processes and displayes test results.
+Processes and returns the test results as a string scalar.
 
-=head2 exec
+=head2 run
 
-Generates the test executable in a format ready to run against all installed
-perls, and processes it against C<*brew exec>.
+Automation method only. This method shouldn't be used in normal scenarios.
 
 =head2 is_win
 
