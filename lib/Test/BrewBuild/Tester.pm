@@ -48,9 +48,9 @@ sub start {
         $work_dir = 'c:/brewbuild';
 
         $perl = (split /\n/, `where perl.exe`)[0];
-        my $brew = (split /\n/, `where brewbuild`)[0];
+        my $brew = (split /\n/, `where bbtester`)[0];
 
-        @args = ($brew, '-L');
+        @args = ($brew, '--fg');
     }
     else {
         $work_dir = "$ENV{HOME}/brewbuild";
@@ -83,7 +83,7 @@ sub start {
     print $wfh $pid;
     close $wfh;
 
-    # error check for brewbuild
+    # error check for bbtester
 
     if ($self->status){
         sleep 1;
@@ -94,7 +94,7 @@ sub start {
 
         if ($existing_pid){
             if (! kill(0, $existing_pid)){
-                die "\nerror! run brewbuild -L at the command line and " .
+                die "\nerror! run bbtester --fg at the command line and " .
                     "check for failure\n\n";
             }
         }

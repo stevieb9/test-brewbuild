@@ -3,36 +3,19 @@ use warnings;
 use strict;
 
 use Carp qw(croak);
-use Getopt::Long qw(GetOptionsFromArray);
-Getopt::Long::Configure ("no_ignore_case", "pass_through");
 use Test::BrewBuild;
 
 our $VERSION = '1.05';
 
-my (%args, $help, $setup);
-
-GetOptions(
-    "on=s@"         => \$args{on},
-    "n|new=i"       => \$args{new},
-    "r|remove"      => \$args{remove},
-    "R|revdep"      => \$args{revdep},
-    "plugin=s"      => \$args{plugin},
-    "a|args=s@"     => \$args{args},
-    "d|debug=i"     => \$args{debug},
-    "i|install=s@"  => \$args{install},
-    "N|notest"      => \$args{notest},
-    "l|legacy"      => \$args{legacy},
-    "T|selftest"    => \$args{selftest},
-    "s|setup"       => \$setup,
-    "h|help"        => \$help,
-);
-
-help() if $help;
-setup() if $setup;
-
 my $bb = Test::BrewBuild->new;
 my $bb_log = $bb->log;
 my $log = $bb_log->child('brewbuild');
+
+# we let BrewBuild manage the argument list so that the other scripts can
+# simply pass in the args directly and use the API instead of wrapping around
+# this script
+
+my %args = $bb->options(\@ARGV) if @ARGV;
 
 my $is_win = $bb->is_win;
 
