@@ -87,7 +87,7 @@ sub perls_available {
 
     my $log = $log->child('perls_available');
 
-    my @perls_available = $bcmd->available($self->{args}{legacy}, $brew_info);
+    my @perls_available = $bcmd->available($self->legacy, $brew_info);
 
     $log->_6("perls available: " . join ', ', @perls_available);
 
@@ -99,49 +99,65 @@ sub perls_installed {
     my $log = $log->child('perls_installed');
     $log->_6("checking perls installed");
 
-    return $bcmd->installed($self->{args}{legacy}, $brew_info);
+    return $bcmd->installed($self->legacy, $brew_info);
 }
 sub instance_install {
-    my ($self, $new, $perls_available, $perls_installed) = @_;
+    my ($self, $install) = @_;
 
     my $log = $log->child('instance_install');
 
-    my $install_cmd = $bcmd->install;
+    my $brew_info = $self->brew_info;
 
+    my @perls_available = $self->perls_available($brew_info);
+    my @perls_installed = $self->perls_installed($brew_info);
     my @new_installs;
 
-    if ($self->{args}{install}->[0]){
-        for my $version (@{ $self->{args}{install} }){
+    if (ref $install eq 'ARRAY'){
+        for my $version (@$install){
             $version = "perl-$version" if ! $self->is_win && $version !~ /perl/;
-            if (grep { $version eq $_ } @{ $perls_installed }){
+            if (grep { $version eq $_ } @perls_installed){
                 $log->_6("$version is already installed... skipping");
                 next;
             }
             push @new_installs, $version;
         }
     }
-    else {
-        if ($new){
+    elsif ($install) {
 
-            $log->_5("looking to install $new perl instance(s)");
+        $log->_5("looking to install $install perl instance(s)");
 
-            while ($new > 0){
 
-                my $candidate = $perls_available->[rand @{ $perls_available }];
+        while ($install > 0){
 
-                if (grep { $_ eq $candidate } @{ $perls_installed }) {
-                    $log->_6( "$candidate already installed... skipping" );
-                    next;
-                }
+            my $candidate = $perls_available[rand @perls_available];
 
-                push @new_installs, $candidate;
-                $new--;
+            if (grep { $_ eq $candidate } @perls_installed) {
+                $log->_6( "$candidate already installed... skipping" );
+                next;
             }
+
+            push @new_installs, $candidate;
+            $install--;
+        }
+    }
+    elsif ($install == -1) {
+
+        $log->_5("installing all available perls");
+
+
+        for my $perl (@perls_available){
+            if (grep { $_ eq $perl } @perls_installed) {
+                $log->_6( "$perl already installed... skipping" );
+                next;
+            }
+            push @new_installs, $perl;
         }
     }
 
     if (@new_installs){
         $log->_4("preparing to install..." . join ', ', @new_installs);
+
+        my $install_cmd = $bcmd->install;
 
         for my $ver (@new_installs){
             $log->_0("installing $ver...");
@@ -154,9 +170,11 @@ sub instance_install {
     }
 }
 sub instance_remove {
-    my ($self, @perls_installed) = @_;
+    my $self = shift;
 
     my $log = $log->child('instance_remove');
+
+    my @perls_installed = $self->perls_installed($self->brew_info);
 
     $log->_6("perls installed: " . join ', ', @perls_installed);
     $log->_0("removing previous installs...");
@@ -186,49 +204,6 @@ sub instance_remove {
     }
 
     $log->_4("removal of existing perl installs complete...");
-}
-sub run {
-    my $self = shift;
-
-    my $new = defined $self->{args}{new} ? $self->{args}{new} : 0;
-
-    my $log = $log->child('run');
-    $log->_5("commencing run()");
-
-    my $brew_info = $self->brew_info;
-
-    my @perls_available = $self->perls_available($brew_info);
-
-    $new = scalar @perls_available if $new < 0;
-
-    my @perls_installed = $self->perls_installed($brew_info);
-    $log->_4("installed perls: " . join ', ', @perls_installed);
-
-    if ($self->{args}{remove}){
-        $self->instance_remove(@perls_installed);
-
-    }
-
-    if ($new || $self->{args}{install}) {
-        $self->instance_install($new, \@perls_available, \@perls_installed);
-    }
-
-    # refetch installed in case we have installed a new instance
-
-    @perls_installed = $self->perls_installed($self->brew_info);
-
-    if (! $perls_installed[0]){
-        $log->_0("no perls installed... exiting");
-    }
-    else {
-        if ($self->{args}{revdep}){
-            delete $self->{args}{revdep};
-            return $self->revdep(%{ $self->{args} });
-        }
-        else {
-            return $self->test;
-        }
-    }
 }
 sub test {
     my $self = shift;
@@ -539,6 +514,15 @@ sub revdeps {
     }
 
     return @revdeps;
+}
+sub legacy {
+    my ($self, $legacy) = @_;
+    if (! defined $legacy && defined $self->{args}{legacy}){
+        return $self->{args}{legacy};
+
+    }
+    $self->{args}{legacy} = defined $legacy ? $legacy : 0;
+    return $self->{args}{legacy};
 }
 sub setup {
     print "\n";

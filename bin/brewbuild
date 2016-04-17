@@ -42,10 +42,22 @@ if (! grep { -x "$_/$brew_prog"} split /$sep/, $ENV{PATH}){
          "See $brew_link\n\n";
     exit;
 }
-
 # legacy perls in use?
 
-$args{legacy} = defined $args{legacy} ? 1 : 0;
+$bb->legacy($args{legacy});
+
+# remove
+
+$bb->instance_remove if $args{remove};
+
+# install
+
+$bb->instance_install($args{new}) if defined $args{new};
+$bb->instance_install($args{install}) if $args{install};
+
+exit if $args{notest};
+
+
 
 # revdep
 
@@ -53,7 +65,7 @@ if ($args{revdep}){
     $log->_6('running --revdep');
 
     my $brew = Test::BrewBuild->new(%args);
-    print $_ for @{ $brew->run(%args) };
+    print $_ for @{ $brew->revdep(%args) };
     exit;
 }
 elsif (defined $args{args}){
@@ -65,7 +77,7 @@ elsif (defined $args{args}){
 
     for (@{ $args{args} }) {
         $args{plugin_arg} = $_;
-        print _exec_brew( %args );
+        print $bb->test;
     }
 
     delete $args{new};
@@ -73,22 +85,7 @@ elsif (defined $args{args}){
 }
 else {
     $log->_7("default run");
-    print _exec_brew(%args);
-}
-
-sub _exec_brew {
-    my $brew = Test::BrewBuild->new(%args);
-
-    $log = $log->child('_exec_brew');
-
-    my @opts;
-    for (keys %args){
-        push @opts, "$_ => $args{$_}" if defined $args{$_};
-    }
-
-    $log->_6("executing Test::BrewBuild run() with args: " . join ', ', @opts);
-
-    return $brew->run;
+    print $bb->test;
 }
 
 =pod
