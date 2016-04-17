@@ -57,15 +57,12 @@ $bb->instance_install($args{install}) if $args{install};
 
 exit if $args{notest};
 
-
-
 # revdep
 
 if ($args{revdep}){
     $log->_6('running --revdep');
 
-    my $brew = Test::BrewBuild->new(%args);
-    print $_ for @{ $brew->revdep(%args) };
+    print $_ for @{ $bb->revdep(%args) };
     exit;
 }
 elsif (defined $args{args}){
@@ -185,7 +182,7 @@ How many random versions of perl to install (-1 to install all).
 
 =head2 --remove, -r
 
-Remove all installed perls (less the current one).
+Remove all installed perls (less the currently used one).
 
 =head2 --install, -i  
 

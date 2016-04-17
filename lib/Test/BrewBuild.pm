@@ -468,7 +468,7 @@ sub revdep {
     for (@revdeps){
         $args{plugin_arg} = $_;
         my $bb = __PACKAGE__->new(%args);
-        push @ret, $bb->run;
+        push @ret, $bb->test;
     }
     return \@ret;
 }
