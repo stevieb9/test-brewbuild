@@ -195,7 +195,9 @@ sub listen {
             {
                 my %opts = Test::BrewBuild->options(\@args);
                 my $bb = Test::BrewBuild->new(%opts);
-                $res->{data} = $bb->run;
+                $bb->instance_remove if $opts{remove};
+                $bb->instance_install($opts{install}) if $opts{install};
+                $res->{data} = $bb->revdep(%opts);
             }
 
             if (-d 'bblog'){
