@@ -40,7 +40,12 @@ sub dispatch {
     }
     else {
         for (@$testers){
-            $remotes{(split /:/, $_)[0]}{port} = (split /:/, $_)[1];
+            if (/:/){
+                $remotes{(split /:/, $_)[0]}{port} = (split /:/, $_)[1];
+            }
+            else {
+                $remotes{$_}{port} = 7800;
+            }
         }
     }
 
@@ -178,7 +183,8 @@ directory you're working in.
 
 C<testers> is manadory unless you've set up a config file, and contains an
 array reference of IP/Port pairs for remote testers to dispatch to and follow.
-eg: C<[qw(10.1.1.5:7800 172.16.5.5:9999)]>.
+eg: C<[qw(10.1.1.5 172.16.5.5:9999)]>. If the port portion of the tester is
+omitted, we'll default to C<7800>.
 
 By default, the testers run on all IPs and port C<TCP/7800>.
 
