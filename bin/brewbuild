@@ -7,15 +7,16 @@ use Test::BrewBuild;
 
 our $VERSION = '1.05';
 
-my $bb = Test::BrewBuild->new;
-my $bb_log = $bb->log;
-my $log = $bb_log->child('brewbuild');
 
 # we let BrewBuild manage the argument list so that the other scripts can
 # simply pass in the args directly and use the API instead of wrapping around
 # this script
 
-my %args = $bb->options(\@ARGV) if @ARGV;
+my %args = Test::BrewBuild->options(\@ARGV) if @ARGV;
+
+my $bb = Test::BrewBuild->new(%args);
+my $bb_log = $bb->log;
+my $log = $bb_log->child('brewbuild');
 
 my $is_win = $bb->is_win;
 
