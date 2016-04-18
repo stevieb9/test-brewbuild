@@ -145,6 +145,7 @@ sub dispatch {
         my $build = $remotes{$ip}{build};
 
         $return .= "$ip - $build->{platform}\n";
+        $return .= "$build->{log}" if $build->{log};
 
         if (ref $build->{data} eq 'ARRAY'){
             $return .= $_ for @{ $build->{data} };

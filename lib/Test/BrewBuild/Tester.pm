@@ -2,10 +2,11 @@ package Test::BrewBuild::Tester;
 use strict;
 use warnings;
 
-use Capture::Tiny qw(:all);
 use Carp qw(croak);
 use Config;
+use Cwd qw(getcwd);
 use IO::Socket::INET;
+use Logging::Simple;
 use Proc::Background;
 use Storable;
 use Test::BrewBuild;
@@ -15,17 +16,31 @@ our $VERSION = '1.05';
 
 $| = 1;
 
+my $log;
+
 sub new {
-    my $class = shift;
-    my $log = shift;
+    my ($class, %args) = @_;
     my $self = bless {}, $class;
-    $self->{log} = $log;
+
+    $log = Logging::Simple->new(level => 0, name => 'Tester');
+    $log->file(\$self->{log});
+
+    if (defined $args{debug}){
+        $log->level($args{debug}) if defined $args{debug};
+        $self->{debug} = $args{debug};
+
+    }
+
+    my $log = $log->child('new');
+    $log->_5("instantiating new Test::BrewBuild::Tester object");
+
     $self->_pid_file;
     return $self;
 }
 sub start {
     my $self = shift;
 
+    my $log = $log->child("start");
     my $pid_file = $self->_pid_file;
 
     if ($self->status){
@@ -36,6 +51,7 @@ sub start {
 
         if ($existing_pid){
             if (kill(0, $existing_pid)){
+                $log->_0("tester is already running at PID $existing_pid");
                 die "\nTest::BrewBuild test server already running " .
                     "on PID $existing_pid...\n\n";
             }
@@ -47,20 +63,33 @@ sub start {
     if ($^O =~ /MSWin/){
         $work_dir = 'c:/brewbuild';
 
-        $perl = (split /\n/, `where perl.exe`)[0];
-        my $brew = (split /\n/, `where bbtester`)[0];
+        $log->_6("on Windows, using work dir $work_dir");
 
-        @args = ($brew, '--fg');
+        $perl = (split /\n/, `where perl.exe`)[0];
+        my $t = (split /\n/, `where bbtester`)[0];
+
+        $log->_6("using command: $perl $t --fg");
+
+        @args = ($t, '--fg');
     }
     else {
         $work_dir = "$ENV{HOME}/brewbuild";
 
+        $log->_6("on Unix, using work dir $work_dir");
+
         $perl = 'perl';
         @args = qw(bbtester --fg);
+
+        $log->_6("using command: bbtester --fg");
+    }
+
+    if (defined $self->{debug}){
+        push @args, ('--debug', $self->{debug});
     }
 
     mkdir $work_dir or die "can't create $work_dir dir: $!" if ! -d $work_dir;
     chdir $work_dir or die "can't change to dir $work_dir: $!";
+    $log->_7("chdir to: ".getcwd());
 
     my $bg;
 
@@ -75,6 +104,8 @@ sub start {
 
     my $ip = $self->ip;
     my $port = $self->port;
+
+    $log->_5("Started the BB test server at PID $pid on IP $ip and port $port");
 
     print "\nStarted the Test::BrewBuild test server at PID $pid on IP " .
       "address $ip and TCP port $port...\n\n";
@@ -94,6 +125,9 @@ sub start {
 
         if ($existing_pid){
             if (! kill(0, $existing_pid)){
+                $log->_0("error! run bbtester --fg at the CLI and check for " .
+                         "failure"
+                );
                 die "\nerror! run bbtester --fg at the command line and " .
                     "check for failure\n\n";
             }
@@ -103,7 +137,12 @@ sub start {
 sub stop {
     my $self = shift;
 
+    my $log = $log->child("stop");
+
+    $log->_5("attempting to stop the tester service");
+
     if (! $self->status) {
+        $log->_5("Test::BrewBuild test server is not running");
         print "\nTest::BrewBuild test server is not running...\n\n";
         return;
     }
@@ -113,19 +152,22 @@ sub stop {
     open my $fh, '<', $pid_file or die $!;
     my $pid = <$fh>;
     close $fh;
+    $log->_5("Stopping the BB test server at PID $pid");
     print "\nStopping the Test::BrewBuild test server at PID $pid...\n\n";
     kill 'KILL', $pid;
     unlink $pid_file;
 }
 sub status {
     my $self = shift;
+    my $log = $log->child("status");
     my $pid_file = $self->_pid_file;
     my $status = -f $pid_file ? 1 : 0;
+    $log->_6("test server status: $status");
     return $status;
 }
 sub listen {
     my $self = shift;
-    my $log = $self->{log};
+    my $log = $log->child("listen");
 
     my $sock = new IO::Socket::INET (
         LocalHost => $self->ip,
@@ -136,15 +178,27 @@ sub listen {
     );
     die "cannot create socket $!\n" unless $sock;
 
+    $log->_6("successfully created network socket on IP $self->{ip} and port " .
+             "$self->{port}"
+    );
+
     # working dir
 
+    my $work_dir;
+
     if ($^O =~ /MSWin/){
-        mkdir "c:/brewbuild" if ! -d "c:/brewbuild";
-        chdir "c:/brewbuild";
+        $work_dir = "c:/brewbuild";
+        mkdir $work_dir if ! -d $work_dir;
+        chdir $work_dir;
+        $log->_7("on Windows, work dir is: $work_dir");
+        $log->_7("chdir to work dir: ".getcwd());
     }
     else {
-        mkdir "$ENV{HOME}/brewbuild" if ! -d "$ENV{HOME}/brewbuild";
-        chdir "$ENV{HOME}/brewbuild";
+        $work_dir = "$ENV{HOME}/brewbuild";
+        mkdir $work_dir if ! -d $work_dir;
+        chdir $work_dir;
+        $log->_7("on Windows, work dir is: $work_dir");
+        $log->_7("chdir to work dir: ".getcwd());
     }
 
     while (1){
@@ -153,27 +207,39 @@ sub listen {
             platform => $Config{archname},
         };
 
+        $log->_7("platform: $res->{platform}");
+
         my $dispatch = $sock->accept;
+
+        $log->_7("now accepting incoming connections");
 
         # ack
         my $ack;
         $dispatch->recv($ack, 1024);
 
+        $log->_7("received ack: $ack");
+
         $dispatch->send($ack);
+
+        $log->_7("returned ack: $ack");
 
         my $cmd;
         $dispatch->recv($cmd, 1024);
         $res->{cmd} = $cmd;
 
+        $log->_7("received cmd: $res->{cmd}");
+
         my @args = split /\s+/, $cmd;
 
         if ($args[0] ne 'brewbuild'){
-            my $err = "error: only brewbuild is allowed as a command\n\n";
+            my $err = "error: only 'brewbuild' is allowed as a command\n\n";
+            $log->_0($err);
             $dispatch->send($err);
             next;
         }
         else{
             shift @args;
+            $log->_7("sending 'ok'");
             $dispatch->send('ok');
         }
 
@@ -181,19 +247,31 @@ sub listen {
         $dispatch->recv($repo, 1024);
         $res->{repo} = $repo;
 
+        $log->_7("received repo: $repo");
+
         if ($repo){
             my $git = Test::BrewBuild::Git->new;
 
             if (-d $git->name($repo)){
+                $log->_7("repo '".$git->name($repo)."' exists, pulling");
                 chdir $git->name($repo) or die $!;
+                $log->_7("chdir to: ".getcwd());
                 $git->pull;
             }
             else {
                 $git->clone($repo);
+                $log->_7("repo doesn't exist... cloning");
                 chdir $git->name($repo);
+                $log->_7("chdir to: ".getcwd());
             }
             {
                 my %opts = Test::BrewBuild->options(\@args);
+                my $opt_str;
+                for (keys %opts){
+                    $opt_str .= "$_ => $opts{$_}\n" if defined $opts{$_};
+                }
+                $log->_5("commencing test run with args: $opt_str") if $opt_str;
+
                 my $bb = Test::BrewBuild->new(%opts);
                 $bb->instance_remove if $opts{remove};
                 $bb->instance_install($opts{install}) if $opts{install};
@@ -207,7 +285,9 @@ sub listen {
 
             if (-d 'bblog'){
                 chdir 'bblog';
+                $log->_7("chdir to: ".getcwd());
                 my @entries = glob '*';
+                $log->_5("fail files: " . join ', ', @entries);
                 for (@entries){
                     next if ! -f || ! /\.bblog/;
                     open my $fh, '<', $_ or die $!;
@@ -215,7 +295,10 @@ sub listen {
                     close $fh;
                 }
                 chdir '..';
+                $log->_7("chdir to: ".getcwd());
             }
+            $log->_5("storing and sending results back to dispatcher");
+            $res->{log} = $self->{log};
             Storable::nstore_fd($res, $dispatch);
             chdir '..';
         }
