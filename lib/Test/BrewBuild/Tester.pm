@@ -5,6 +5,7 @@ use warnings;
 use Carp qw(croak);
 use Config;
 use Cwd qw(getcwd);
+use File::Path qw(remove_tree);
 use IO::Socket::INET;
 use Logging::Simple;
 use Proc::Background;
@@ -298,8 +299,9 @@ sub listen {
                 chdir 'bblog';
                 $log->_7("chdir to: ".getcwd());
                 my @entries = glob '*';
-                $log->_5("fail files: " . join ', ', @entries);
+                $log->_5("log files: " . join ', ', @entries);
                 for (@entries){
+                    $log->_7("processing log file: " .getcwd() ."/$_");
                     next if ! -f || ! /\.bblog/;
                     open my $fh, '<', $_ or die $!;
                     @{ $res->{files}{$_} } = <$fh>;
@@ -307,6 +309,9 @@ sub listen {
                 }
                 chdir '..';
                 $log->_7("chdir to: ".getcwd());
+
+                $log->_7("removing log dir: " . getcwd() . "/bblog");
+                remove_tree 'bblog' or die $!;
             }
             $log->_5("storing and sending results back to dispatcher");
             $res->{log} = $self->{log};

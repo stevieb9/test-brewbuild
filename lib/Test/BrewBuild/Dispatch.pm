@@ -3,7 +3,9 @@ use strict;
 use warnings;
 
 use Carp qw(croak);
+use Cwd qw(getcwd);
 use IO::Socket::INET;
+use Logging::Simple;
 use Parallel::ForkManager;
 use Storable;
 use Test::BrewBuild::Git;
@@ -24,7 +26,6 @@ sub new {
     if (defined $args{debug}){
         $log->level($args{debug}) if defined $args{debug};
         $self->{debug} = $args{debug};
-
     }
 
     my $log = $log->child('new');
@@ -172,12 +173,15 @@ sub dispatch {
             delete $remotes{$ip};
             next;
         }
-        # FAIL file generation
 
-        for my $fail_file (keys %{ $remotes{$ip}{build}{files} }){
-            my $content = $remotes{$ip}{build}{files}{$fail_file};
-            $log->_7("writing out log: bblog/$ip\_$fail_file");
-            open my $wfh, '>', "bblog/$ip\_$fail_file" or die $!;
+        # build log file generation
+
+        for my $build_log (keys %{ $remotes{$ip}{build}{files} }){
+            $log->_7("generating build log: $build_log");
+
+            my $content = $remotes{$ip}{build}{files}{$build_log};
+            $log->_7("writing out log: " . getcwd() . "/bblog/$ip\_$build_log");
+            open my $wfh, '>', "bblog/$ip\_$build_log" or die $!;
             for (@$content){
                 print $wfh $_;
             }

@@ -85,13 +85,13 @@ purposes.
 
     bbtester --fg [--ip 0.0.0.0] [--port 7800]
 
-Enable debug logging (add to the above arguments.
+Enable debug logging. By default, log entries get returned with the results.
 
     bbtester [...] -d 0-7
 
-Send the logs to STDOUT directly.
+Send the logs to STDOUT directly. Only useful in foreground mode.
 
-    bbtester [...] --stdout
+    bbtester --fg [...] -d 0-7 --stdout
 
 =head1 DESCRIPTION
 

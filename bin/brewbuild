@@ -194,6 +194,11 @@ Multiple versions can be sent in at once.
 
 Do not run tests. Allows you to --remove and --install without testing.
 
+=head2 --save, -S
+
+By default, we save logs of C<FAIL> result logs in C<workdir/bblog>. With this
+flag, we'll save both the C<FAIL> logs along with all the C<PASS> logs as well.
+
 =head2 --legacy, -l
 
 Operate on perls less than 5.8.x. The default plugins won't work with this flag

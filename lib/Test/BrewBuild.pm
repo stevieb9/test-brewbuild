@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 use Carp qw(croak);
-
+use Cwd qw(getcwd);
 use File::Copy;
 use File::Copy::Recursive qw(dircopy);
 use File::Find;
@@ -21,7 +21,6 @@ use Test::BrewBuild::Tester;
 our $VERSION = '1.05';
 
 BEGIN {
-   remove_tree 'bblog' or die "can't remove bblog/\n" if -d 'bblog';
 }
 my $log;
 my $bcmd;
@@ -60,6 +59,7 @@ sub options {
         "d|debug=i"     => \$opts{debug},
         "i|install=s@"  => \$opts{install},
         "N|notest"      => \$opts{notest},
+        "S|save"        => \$opts{save_reports},
         "l|legacy"      => \$opts{legacy},
         "T|selftest"    => \$opts{selftest},
         "s|setup"       => \$setup,
@@ -278,62 +278,17 @@ sub test {
         if ($result =~ /Successfully tested / && $result !~ /FAIL/){
             $log->_6("$ver PASSED...");
             $res = 'PASS';
+
             push @pass, "$ver :: $res\n";
+            $self->_save_reports($ver, $res, $result);
         }
         else {
             $log->_6("$ver FAILED...");
             $res = 'FAIL';
             $failed = 1;
+
             push @fail, "$ver :: $res\n";
-
-            my $tested_mod = $self->{args}{plugin_arg};
-
-            if (defined $tested_mod){
-                $tested_mod =~ s/::/-/g;
-                my $fail_log = "$self->{tempdir}/$tested_mod-$ver.bblog";
-                open my $wfh, '>', $fail_log, or die $!;
-
-                print $wfh $result;
-
-                if (! $self->is_win){
-                    my %errors = $self->_process_stderr;
-
-                    if (defined $errors{0}){
-                        print $wfh "\nCPANM ERROR LOG\n";
-                        print $wfh "===============\n";
-                        print $wfh $errors{0};
-                    }
-                    else {
-                        for (keys %errors){
-                            if (version->parse($_) == version->parse($ver)){
-                                print $wfh "\nCPANM ERROR LOG\n";
-                                print $wfh "===============\n";
-                                print $wfh $errors{$_};
-                            }
-                        }
-                    }
-                }
-                close $wfh;
-                $self->_attach_build_log($fail_log);
-            }
-            else {
-                my $fail_log = "$self->{tempdir}/$ver.bblog";
-                open my $wfh, '>', $fail_log or die $!;
-                print $wfh $result;
-
-                if (! $self->is_win){
-                    my %errors = $self->_process_stderr;
-                    for (keys %errors){
-                        if (version->parse($_) == version->parse($ver)){
-                            print $wfh "\nCPANM ERROR LOG\n";
-                            print $wfh "===============\n";
-                            print $wfh $errors{$_};
-                        }
-                    }
-                }
-                close $wfh;
-                $self->_attach_build_log($fail_log) if ! $self->is_win;
-            }
+            $self->_save_reports($ver, $res, $result);
         }
     }
 
@@ -686,6 +641,60 @@ sub _process_stderr {
         return %error_map;
     }
 }
+sub _save_reports {
+    my ($self, $ver, $status, $result) = @_;
+
+    return if ! $self->{args}{save_reports};
+
+    my $tested_mod = $self->{args}{plugin_arg};
+
+    if (defined $tested_mod){
+        $tested_mod =~ s/::/-/g;
+        my $report = "$self->{tempdir}/$tested_mod-$ver-$status.bblog";
+        open my $wfh, '>', $report, or die $!;
+
+        print $wfh $result;
+
+        if (! $self->is_win){
+            my %errors = $self->_process_stderr;
+
+            if (defined $errors{0}){
+                print $wfh "\nCPANM ERROR LOG\n";
+                print $wfh "===============\n";
+                print $wfh $errors{0};
+            }
+            else {
+                for (keys %errors){
+                    if (version->parse($_) == version->parse($ver)){
+                        print $wfh "\nCPANM ERROR LOG\n";
+                        print $wfh "===============\n";
+                        print $wfh $errors{$_};
+                    }
+                }
+            }
+        }
+        close $wfh;
+        $self->_attach_build_log($report);
+    }
+    else {
+        my $report = "$self->{tempdir}/$ver-$status.bblog";
+        open my $wfh, '>', $report or die $!;
+        print $wfh $result;
+
+        if (! $self->is_win){
+            my %errors = $self->_process_stderr;
+            for (keys %errors){
+                if (version->parse($_) == version->parse($ver)){
+                    print $wfh "\nCPANM ERROR LOG\n";
+                    print $wfh "===============\n";
+                    print $wfh $errors{$_};
+                }
+            }
+        }
+        close $wfh;
+        $self->_attach_build_log($report) if ! $self->is_win;
+    }
+}
 sub _set_plugin {
     my $self = shift;
     my $log = $log->child('_set_plugin');
@@ -706,7 +715,7 @@ sub _validate_opts {
     my @valid_args = qw(
         on o new n remove r revdep R plugin p args a debug d install i help h
         N notest setup s legacy l selftest T listen L
-        tester-port t testers
+        tester-port t testers S save
         );
 
     my $bad_opt = 0;
