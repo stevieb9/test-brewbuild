@@ -35,6 +35,7 @@ sub new {
     $log->_5("instantiating new Test::BrewBuild::Tester object");
 
     $self->_pid_file;
+
     return $self;
 }
 sub start {

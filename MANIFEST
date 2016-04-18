@@ -25,7 +25,6 @@ t/06-log.t
 t/07-BrewCommands.t
 t/08-instance_remove.t
 t/09-instance_install.t
-t/10-run.t
 t/12-TestPluginInst.t
 t/14-using.t
 t/16-return.pl
@@ -54,13 +53,12 @@ t/bb-55-notest.t
 t/bb-60-revdep-multi-fail.t
 t/bb-65-dzil.t
 t/dispatch-05-bad_command.t
-t/dispatch-10-revdep_pass.t
 t/dispatch-11-revdep_pass.t
 t/dispatch-15-fail.t
-t/dispatch-15-revdep_fail.t
-t/dispatch-20-autofind_repo.t
 t/dispatch-20-autofind_repo.t.norun
 t/dispatch-25-default_port.t
+t/dispatch-30-Tester_log.t
+t/dispatch-35-Dispatch_log.t
 t/manifest.t
 t/modules/bb-522.zip
 t/modules/bb-fail.zip

@@ -12,10 +12,24 @@ our $VERSION = '1.05';
 
 $| = 1;
 
+my $log;
+
 sub new {
-    my $class = shift;
-    my $log = shift;
-    my $self = bless {log => $log}, $class;
+    my ($class, %args) = @_;
+
+    my $self = bless {}, $class;
+
+    $log = Logging::Simple->new(level => 0, name => 'Dispatch');
+
+    if (defined $args{debug}){
+        $log->level($args{debug}) if defined $args{debug};
+        $self->{debug} = $args{debug};
+
+    }
+
+    my $log = $log->child('new');
+    $log->_5("instantiating new Test::BrewBuild::Dispatch object");
+
     return $self;
 }
 sub dispatch {
@@ -25,27 +39,37 @@ sub dispatch {
     my $repo = $params{repo};
     my $testers = $params{testers};
 
-    #my $log = $self->{log}->child('Dispatch::dispatch');
+    my $log = $log->child('dispatch');
+
     my %remotes;
 
     if (! $testers->[0]){
+        $log->_6("no --testers passed in, attempting to read config file");
+
         my $conf = Config::Tiny->read( "$ENV{HOME}/.brewbuild.conf" );
         for (keys %{ $conf->{remotes} }) {
             $remotes{$_} = $conf->{remotes}{$_};
         }
         if (!$conf){
+            $log->_0("no --testers and no conf file, croaking");
             croak "dispatch requires clients sent in or config file which " .
                   "isn't found\n";
         }
     }
     else {
-        for (@$testers){
-            if (/:/){
-                $remotes{(split /:/, $_)[0]}{port} = (split /:/, $_)[1];
+        $log->_7("working on testers: " . join ', ', @$testers);
+
+        for my $tester (@$testers){
+            my ($host, $port);
+            if ($tester =~ /:/){
+                ($host, $port) = split /:/, $tester;
             }
             else {
-                $remotes{$_}{port} = 7800;
+                $host = $tester;
+                $port = 7800;
             }
+            $remotes{$host}{port} = $port;
+            $log->_5("configured $host with port $port");
         }
     }
 
@@ -57,12 +81,14 @@ sub dispatch {
         sub {
             my (undef, undef, undef, undef, undef, $tester_data) = @_;
             map {$remotes{$_} = $tester_data->{$_}} keys %$tester_data;
+            $log->_5("tester: " . (keys %$tester_data)[0] ." finished");
         }
-
     );
 
     CLIENTS:
     for my $tester (keys %remotes){
+        $log->_7("spinning up tester: $tester");
+
         $pm->start and next CLIENTS;
 
         my %return;
@@ -77,22 +103,31 @@ sub dispatch {
                 "$remotes{$tester}{port} $!\n";
         }
 
+        $log->_7("tester $tester socket created ok");
+
         # syn
         $socket->send($tester);
+        $log->_7("syn \"$tester\" sent");
 
         # ack
         my $ack;
         $socket->recv($ack, 1024);
+        $log->_7("ack \"$ack\" received");
 
-        die "comm discrepancy: expected $tester, got $ack\n" if $ack ne $tester;
+        if ($ack ne $tester){
+            $log->_0("comm error: syn \"$tester\" doesn't match ack \"$ack\"");
+            die "comm discrepancy: expected $tester, got $ack\n";
+        }
 
         $socket->send($cmd);
+        $log->_7("sent command: $cmd");
 
         my $check = '';
         $socket->recv($check, 1024);
+        $log->_7("received \"$check\"");
 
         if ($check =~ /^error:/){
-            print $check;
+            $log->_0("received an error: $check... killing all procs");
             kill '-9', $$;
         }
         if ($check eq 'ok'){
@@ -101,14 +136,17 @@ sub dispatch {
             if (! $repo){
                 my $git = Test::BrewBuild::Git->new;
                 $repo_link = $git->link;
+                $log->_5("repo not sent in, set to: $repo_link via Git");
             }
             else {
                 $repo_link = $repo;
+                $log->_5("repo set to: $repo_link");
             }
             $socket->send($repo_link);
             $return{$tester}{build} = Storable::fd_retrieve($socket);
         }
         else {
+            $log->_5("deleted tester: $remotes{$tester}... incomplete session");
             delete $remotes{$tester};
         }
         $socket->close();
@@ -119,7 +157,10 @@ sub dispatch {
 
     # process the results
 
-    mkdir 'bblog' if ! -d 'bblog';
+    if (! -d 'bblog'){
+        mkdir 'bblog' or die $!;
+        $log->_7("created log dir: bblog");
+    }
 
     # init the return string
 
@@ -127,6 +168,7 @@ sub dispatch {
 
     for my $ip (keys %remotes){
         if (! defined $remotes{$ip}{build}){
+            $log->_5("tester: $ip didn't supply results... deleting");
             delete $remotes{$ip};
             next;
         }
@@ -134,6 +176,7 @@ sub dispatch {
 
         for my $fail_file (keys %{ $remotes{$ip}{build}{files} }){
             my $content = $remotes{$ip}{build}{files}{$fail_file};
+            $log->_7("writing out log: bblog/$ip\_$fail_file");
             open my $wfh, '>', "bblog/$ip\_$fail_file" or die $!;
             for (@$content){
                 print $wfh $_;
@@ -154,6 +197,7 @@ sub dispatch {
             $return .= "$build->{data}\n";
         }
     }
+    $log->_7("returning results...");
     return $return;
 }
 1;

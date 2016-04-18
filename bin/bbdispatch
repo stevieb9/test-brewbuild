@@ -12,6 +12,7 @@ GetOptions(
     "cmd=s"      => \$args{cmd},
     "testers=s@" => \$args{testers},
     "repo=s"     => \$args{repo},
+    "debug=s"    => \$args{debug},
     "help"       => \$help,
 );
 
@@ -19,7 +20,7 @@ if ($help){
     print <<'EOF';
 Usage: 
 
-bbdispatch -t 127.0.0.1:7800 -r https://github.com/user/repo
+bbdispatch -t 127.0.0.1:7800 [-r https://github.com/user/repo] [-d 0-7]
 
 EOF
 exit;
@@ -27,7 +28,7 @@ exit;
 
 $args{cmd} = 'brewbuild' if ! $args{cmd};
 
-my $dispatcher = Test::BrewBuild::Dispatch->new;
+my $dispatcher = Test::BrewBuild::Dispatch->new(debug => $args{debug});
 
 my $return = $dispatcher->dispatch(%args);
 
@@ -53,6 +54,10 @@ Dispatch a custom command to a single remote tester:
 Have the remote testers test a specified repository:
 
     bbdispatch -r https://github.com/user/repo-name -t 10.0.0.1:7800
+
+Add debugging to any other command string:
+
+    bbdispatch [...] -d 0-7
 
 =head1 DESCRIPTION
 
