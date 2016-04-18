@@ -28,6 +28,8 @@ sub new {
         $self->{debug} = $args{debug};
     }
 
+    $self->{forks} = defined $args{forks} ? $args{forks} : 4;
+
     my $log = $log->child('new');
     $log->_5("instantiating new Test::BrewBuild::Dispatch object");
 
@@ -76,7 +78,7 @@ sub dispatch {
 
     # spin up the comms
 
-    my $pm = Parallel::ForkManager->new(4);
+    my $pm = Parallel::ForkManager->new($self->{forks});
 
     $pm->run_on_finish(
         sub {

@@ -13,6 +13,7 @@ GetOptions(
     "testers=s@" => \$args{testers},
     "repo=s"     => \$args{repo},
     "debug=s"    => \$args{debug},
+    "forks=i"    => \$args{forks},
     "help"       => \$help,
 );
 
@@ -28,7 +29,10 @@ exit;
 
 $args{cmd} = 'brewbuild' if ! $args{cmd};
 
-my $dispatcher = Test::BrewBuild::Dispatch->new(debug => $args{debug});
+my $dispatcher = Test::BrewBuild::Dispatch->new(
+    debug => $args{debug},
+    forks => $args{forks},
+);
 
 my $return = $dispatcher->dispatch(%args);
 
@@ -58,6 +62,10 @@ Have the remote testers test a specified repository:
 Add debugging to any other command string:
 
     bbdispatch [...] -d 0-7
+
+Set maximum number of concurrent testers to communicate with (default is 4):
+
+    bbdispatch [...] -f 8
 
 =head1 DESCRIPTION
 
