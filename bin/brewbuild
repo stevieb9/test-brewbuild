@@ -7,7 +7,6 @@ use Test::BrewBuild;
 
 our $VERSION = '1.05';
 
-
 # we let BrewBuild manage the argument list so that the other scripts can
 # simply pass in the args directly and use the API instead of wrapping around
 # this script

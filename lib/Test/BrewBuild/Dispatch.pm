@@ -3,11 +3,13 @@ use strict;
 use warnings;
 
 use Carp qw(croak);
+use Config::Tiny;
 use Cwd qw(getcwd);
 use IO::Socket::INET;
 use Logging::Simple;
 use Parallel::ForkManager;
 use Storable;
+use Test::BrewBuild;
 use Test::BrewBuild::Git;
 
 our $VERSION = '1.05';
@@ -33,31 +35,25 @@ sub new {
     my $log = $log->child('new');
     $log->_5("instantiating new Test::BrewBuild::Dispatch object");
 
+    $self->_config;
+
     return $self;
 }
 sub dispatch {
     my ($self, %params) = @_;
 
-    my $cmd = $params{cmd};
-    my $repo = $params{repo};
-    my $testers = $params{testers};
+    my $cmd = $params{cmd} || $self->{cmd};
+    my $repo = $params{repo} || $self->{repo};
+    my $testers = $params{testers} || $self->{testers};
 
     my $log = $log->child('dispatch');
 
     my %remotes;
 
     if (! $testers->[0]){
-        $log->_6("no --testers passed in, attempting to read config file");
-
-        my $conf = Config::Tiny->read( "$ENV{HOME}/.brewbuild.conf" );
-        for (keys %{ $conf->{remotes} }) {
-            $remotes{$_} = $conf->{remotes}{$_};
-        }
-        if (!$conf){
-            $log->_0("no --testers and no conf file, croaking");
-            croak "dispatch requires clients sent in or config file which " .
-                  "isn't found\n";
-        }
+        $log->_6("no --testers passed in, attempting to read config file, croaking");
+        croak "dispatch requires clients sent in or config file which " .
+              "isn't found\n";
     }
     else {
         $log->_7("working on testers: " . join ', ', @$testers);
@@ -84,7 +80,8 @@ sub dispatch {
         sub {
             my (undef, undef, undef, undef, undef, $tester_data) = @_;
             map {$remotes{$_} = $tester_data->{$_}} keys %$tester_data;
-            $log->_5("tester: " . (keys %$tester_data)[0] ." finished");
+            $log->_5("tester: " . (keys %$tester_data)[0] ." finished")
+              if keys %$tester_data;
         }
     );
 
@@ -210,6 +207,21 @@ sub dispatch {
     }
     $log->_7("returning results...");
     return $return;
+}
+sub _config {
+    my $self = shift;
+
+     my $conf_file = Test::BrewBuild->config_file;
+
+    if (-f $conf_file){
+        my $conf = Config::Tiny->read($conf_file)->{dispatch};
+        if ($conf->{testers}){
+            $conf->{testers} =~ s/\s+//;
+            $self->{testers} = [ split /,/, $conf->{testers} ];
+        }
+        $self->{repo} = $conf->{repo} if $conf->{repo};
+        $self->{cmd} = $conf->{cmd} if $conf->{cmd};
+    }
 }
 1;
 

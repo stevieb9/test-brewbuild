@@ -71,6 +71,15 @@ sub options {
 
     return %opts;
 }
+sub config_file {
+    shift;
+    if (is_win()){
+        return "$ENV{HOMEPATH}/brewbuild/brewbuild.conf";
+    }
+    else {
+        return "$ENV{HOME}/brewbuild/brewbuild.conf";
+    }
+}
 sub is_win {
     my $is_win = ($^O =~ /Win/) ? 1 : 0;
     return $is_win;
