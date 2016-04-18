@@ -13,6 +13,7 @@ Makefile.PL
 MANIFEST			This list of files
 MANIFEST.SKIP
 README
+samples/dispatch.pl
 setup/unix_setup.txt
 setup/windows_setup.txt
 t/00-load.t
@@ -57,8 +58,11 @@ t/dispatch-11-revdep_pass.t
 t/dispatch-15-fail.t
 t/dispatch-20-autofind_repo.t.norun
 t/dispatch-25-default_port.t
-t/dispatch-30-Tester_log.t
-t/dispatch-35-Dispatch_log.t
+t/dispatch-40-notest.t
+t/log-05-revdep_global_full_verbose.t
+t/log-10-revdep_save_log_files.t
+t/log-15-Tester_log.t
+t/log-20-Dispatch_log.t
 t/manifest.t
 t/modules/bb-522.zip
 t/modules/bb-fail.zip
@@ -68,3 +72,4 @@ t/modules/mock-sub-bad.zip
 t/modules/mock-sub.tgz
 t/pod-coverage.t
 t/pod.t
+verbose.txt

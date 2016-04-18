@@ -31,7 +31,6 @@ sub new {
     if (defined $args{debug}){
         $log->level($args{debug}) if defined $args{debug};
         $self->{debug} = $args{debug};
-
     }
 
     my $log = $log->child('new');
@@ -315,6 +314,7 @@ sub listen {
             }
             $log->_5("storing and sending results back to dispatcher");
             $res->{log} = $self->{log};
+
             Storable::nstore_fd($res, $dispatch);
             chdir '..';
         }

@@ -143,6 +143,11 @@ sub dispatch {
                 $repo_link = $repo;
                 $log->_5("repo set to: $repo_link");
             }
+
+            if (! $repo_link){
+                $log->_0("repo not found, croaking");
+                croak "\nno repository found, can't continue\n";
+            }
             $socket->send($repo_link);
             $return{$tester}{build} = Storable::fd_retrieve($socket);
         }
@@ -224,7 +229,7 @@ to perform, then processes the results returned from those testers.
 
 Returns a new C<Test::BrewBuild::Dispatch> object.
 
-=head2 dispatch(cmd => '', repo => '', testers => ['', ''])
+=head2 dispatch(cmd => '', repo => '', testers => ['', ''], debug => 0-7)
 
 C<cmd> is the C<brewbuild> command string that will be executed.
 
@@ -238,6 +243,8 @@ eg: C<[qw(10.1.1.5 172.16.5.5:9999)]>. If the port portion of the tester is
 omitted, we'll default to C<7800>.
 
 By default, the testers run on all IPs and port C<TCP/7800>.
+
+C<debug> optional, set to a level between 0 and 7.
 
 See L<Test::BrewBuild::Tester> for more details on the testers that the
 dispatcher dispatches to.
