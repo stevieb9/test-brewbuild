@@ -120,7 +120,10 @@ sub dispatch {
     # process the results
 
     mkdir 'bblog' if ! -d 'bblog';
-    print "\n";
+
+    # init the return string
+
+    my $return = "\n";
 
     for my $ip (keys %remotes){
         if (! defined $remotes{$ip}{build}){
@@ -137,21 +140,20 @@ sub dispatch {
             }
         }
 
-        # dump out the info
+        # build the return string
 
         my $build = $remotes{$ip}{build};
 
-        print "$ip - $build->{platform}\n";
+        $return .= "$ip - $build->{platform}\n";
 
         if (ref $build->{data} eq 'ARRAY'){
-            print $_ for @{ $build->{data} };
+            $return .= $_ for @{ $build->{data} };
         }
         else {
-            print "$build->{data}\n";
-
+            $return .= "$build->{data}\n";
         }
-
     }
+    return $return;
 }
 1;
 

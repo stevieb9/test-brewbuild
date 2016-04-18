@@ -29,7 +29,9 @@ $args{cmd} = 'brewbuild' if ! $args{cmd};
 
 my $dispatcher = Test::BrewBuild::Dispatch->new;
 
-$dispatcher->dispatch(%args);
+my $return = $dispatcher->dispatch(%args);
+
+print $return;
 
 =pod
 

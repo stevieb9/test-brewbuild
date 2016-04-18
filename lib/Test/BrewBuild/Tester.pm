@@ -197,7 +197,12 @@ sub listen {
                 my $bb = Test::BrewBuild->new(%opts);
                 $bb->instance_remove if $opts{remove};
                 $bb->instance_install($opts{install}) if $opts{install};
-                $res->{data} = $bb->revdep(%opts);
+                if ($opts{revdep}){
+                    $res->{data} = $bb->revdep(%opts);
+                }
+                else {
+                    $res->{data} = $bb->test;
+                }
             }
 
             if (-d 'bblog'){
