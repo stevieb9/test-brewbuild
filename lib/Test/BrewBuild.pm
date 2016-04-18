@@ -71,6 +71,10 @@ sub options {
 
     return %opts;
 }
+sub is_win {
+    my $is_win = ($^O =~ /Win/) ? 1 : 0;
+    return $is_win;
+}
 sub brew_info {
     my $self = shift;
 
@@ -205,6 +209,37 @@ sub instance_remove {
 
     $log->_4("removal of existing perl installs complete...");
 }
+sub revdep {
+    my ($self, %args) = @_;
+
+    delete $self->{args}{args};
+
+    # these args should only be exercised on first call
+
+    delete $args{revdep};
+
+    delete $self->{args}{delete};
+    delete $args{remove};
+    delete $args{install};
+    delete $args{new};
+
+    $args{plugin} = 'Test::BrewBuild::Plugin::TestAgainst';
+
+    my @revdeps = $self->revdeps;
+
+    my @ret;
+
+    my $rlist = "\nreverse dependencies: " . join ', ', @revdeps;
+    $rlist .= "\n\n";
+    push @ret, $rlist;
+
+    for (@revdeps){
+        $args{plugin_arg} = $_;
+        my $bb = __PACKAGE__->new(%args);
+        push @ret, $bb->test;
+    }
+    return \@ret;
+}
 sub test {
     my $self = shift;
 
@@ -313,6 +348,157 @@ sub test {
 
     return $ret;
 }
+sub tempdir {
+    my $self = shift;
+    return $self->{tempdir} if $self->{tempdir};
+
+    my $dir = File::Temp->newdir;
+    my $dir_name = $dir->dirname;
+    $self->{temp_handle} = $dir;
+    $self->{tempdir} = $dir_name;
+    return $self->{tempdir};
+}
+sub log {
+    my $self = shift;
+    $self->{log}->_6(ref($self) ." class/obj retrieving a log object");
+    return $self->{log};
+}
+sub revdeps {
+    my $self = shift;
+
+    my $log = $log->child('revdeps');
+    $log->_6('running --revdep');
+
+    load 'CPAN::ReverseDependencies';
+
+    my @modules;
+
+    find({
+            wanted => sub {
+                $log->_7("finding modules");
+                if (-f && $_ =~ /\.pm$/){
+                    push @modules, $_;
+                }
+            },
+            no_chdir => 1,
+        },
+        'lib/'
+    );
+
+    my $mod = $modules[0];
+
+    $log->_7("using '$mod' as the project we're working on");
+
+    $mod =~ s|lib/||;
+    $mod =~ s|/|-|g;
+    $mod =~ s|\.pm||;
+
+    $log->_7("working module translated to $mod");
+
+    my $rvdep = CPAN::ReverseDependencies->new;
+    my @revdeps = $rvdep->get_reverse_dependencies($mod);
+
+    @revdeps = grep {$_ ne 'Test-BrewBuild'} @revdeps;
+
+    for (@revdeps){
+        s/-/::/g;
+    }
+
+    return @revdeps;
+}
+sub legacy {
+    my ($self, $legacy) = @_;
+    if (! defined $legacy && defined $self->{args}{legacy}){
+        return $self->{args}{legacy};
+
+    }
+    $self->{args}{legacy} = defined $legacy ? $legacy : 0;
+    return $self->{args}{legacy};
+}
+sub setup {
+    print "\n";
+    my @setup = <DATA>;
+    print $_ for @setup;
+    exit;
+}
+sub help {
+     print <<EOF;
+
+Usage: brewbuild [OPTIONS]
+
+Local usage options:
+
+-o | --on       Perl version number to run against (can be supplied multiple times). Can not be used on Windows
+-R | --revdep   Run tests, install, then run tests on all CPAN reverse dependency modules
+-n | --new      How many random versions of perl to install (-1 to install all)
+-r | --remove   Remove all installed perls (less the current one)
+-i | --install  Number portion of an available perl version according to "*brew available". Multiple versions can be sent in at once
+-N | --notest   Do not run tests. Allows you to --remove and --install without testing
+-l | --legacy   Operate on perls < 5.8.x. The default plugins won't work with this flag set if a lower version is installed
+
+Help options:
+
+-s | --setup    Display test platform setup instructions
+-h | --help     Print this help message
+
+Special options:
+
+-p | --plugin   Module name of the exec command plugin to use
+-a | --args     List of args to pass into the plugin (one arg per loop)
+-T | --selftest Testing only: prevent recursive testing on Test::BrewBuild
+-d | --debug    0-7, sets logging verbosity, default is 0
+
+EOF
+exit;
+}
+sub _attach_build_log {
+    my ($self, $bblog) = @_;
+
+    my $bbfile;
+    {
+        local $/ = undef;
+        open my $bblog_fh, '<', $bblog or die $!;
+        $bbfile = <$bblog_fh>;
+        close $bblog_fh;
+    }
+
+    if ($bbfile =~ m|failed.*?See\s+(.*?)\s+for details|){
+        my $build_log = $1;
+        open my $bblog_wfh, '>>', $bblog or die $!;
+        print $bblog_wfh "\n\nCPANM BUILD LOG\n";
+        print $bblog_wfh "===============\n";
+
+        open my $build_log_fh, '<', $build_log or die $!;
+
+        while (<$build_log_fh>){
+            print $bblog_wfh $_;
+        }
+        close $bblog_wfh;
+    }
+}
+sub _copy_logs {
+    my $self = shift;
+    dircopy $self->{tempdir}, "bblog" if $self->{tempdir};
+    unlink 'bblog/stderr.bblog' if -e 'bblog/stderr.bblog';
+}
+sub _create_log {
+    my ($self, $level) = @_;
+
+    $self->{log} = Logging::Simple->new(
+        name  => 'Test::BrewBuild',
+        level => defined $level ? $level : 0,
+    );
+
+    $self->{log}->_6("in _create_log()");
+
+    if ($self->{log}->level < 6){
+        $self->{log}->display(0);
+        $self->{log}->custom_display("-");
+        $self->{log}->_5("set log level to " . defined $level ? $level : 0);
+    }
+
+    return $self->{log};
+}
 sub _exec {
 
     # called only by test()
@@ -329,7 +515,7 @@ sub _exec {
             $self->{args}{plugin_arg}
         );
     }
-    
+
     my @exec_cmd = $self->{exec_plugin}->(
         __PACKAGE__,
         $self->log,
@@ -421,266 +607,6 @@ sub _exec {
         }
     }
 }
-sub tempdir {
-    my $self = shift;
-    return $self->{tempdir} if $self->{tempdir};
-
-    my $dir = File::Temp->newdir;
-    my $dir_name = $dir->dirname;
-    $self->{temp_handle} = $dir;
-    $self->{tempdir} = $dir_name;
-    return $self->{tempdir};
-}
-sub log {
-    my $self = shift;
-    $self->{log}->_6(ref($self) ." class/obj retrieving a log object");
-    return $self->{log};
-}
-sub is_win {
-    my $is_win = ($^O =~ /Win/) ? 1 : 0;
-    return $is_win;
-}
-
-sub revdep {
-    my ($self, %args) = @_;
-
-    delete $self->{args}{args};
-
-    # these args should only be exercised on first call
-
-    delete $args{revdep};
-
-    delete $self->{args}{delete};
-    delete $args{remove};
-    delete $args{install};
-    delete $args{new};
-
-    $args{plugin} = 'Test::BrewBuild::Plugin::TestAgainst';
-
-    my @revdeps = $self->revdeps;
-
-    my @ret;
-
-    my $rlist = "\nreverse dependencies: " . join ', ', @revdeps;
-    $rlist .= "\n\n";
-    push @ret, $rlist;
-
-    for (@revdeps){
-        $args{plugin_arg} = $_;
-        my $bb = __PACKAGE__->new(%args);
-        push @ret, $bb->test;
-    }
-    return \@ret;
-}
-sub revdeps {
-    my $self = shift;
-
-    my $log = $log->child('revdeps');
-    $log->_6('running --revdep');
-
-    load 'CPAN::ReverseDependencies';
-
-    my @modules;
-
-    find({
-            wanted => sub {
-                $log->_7("finding modules");
-                if (-f && $_ =~ /\.pm$/){
-                    push @modules, $_;
-                }
-            },
-            no_chdir => 1,
-        },
-        'lib/'
-    );
-
-    my $mod = $modules[0];
-
-    $log->_7("using '$mod' as the project we're working on");
-
-    $mod =~ s|lib/||;
-    $mod =~ s|/|-|g;
-    $mod =~ s|\.pm||;
-
-    $log->_7("working module translated to $mod");
-
-    my $rvdep = CPAN::ReverseDependencies->new;
-    my @revdeps = $rvdep->get_reverse_dependencies($mod);
-
-    @revdeps = grep {$_ ne 'Test-BrewBuild'} @revdeps;
-
-    for (@revdeps){
-        s/-/::/g;
-    }
-
-    return @revdeps;
-}
-sub legacy {
-    my ($self, $legacy) = @_;
-    if (! defined $legacy && defined $self->{args}{legacy}){
-        return $self->{args}{legacy};
-
-    }
-    $self->{args}{legacy} = defined $legacy ? $legacy : 0;
-    return $self->{args}{legacy};
-}
-sub setup {
-    print "\n";
-    my @setup = <DATA>;
-    print $_ for @setup;
-    exit;
-}
-sub help {
-     print <<EOF;
-
-Usage: brewbuild [OPTIONS]
-
-Local usage options:
-
--o | --on       Perl version number to run against (can be supplied multiple times). Can not be used on Windows
--R | --revdep   Run tests, install, then run tests on all CPAN reverse dependency modules
--n | --new      How many random versions of perl to install (-1 to install all)
--r | --remove   Remove all installed perls (less the current one)
--i | --install  Number portion of an available perl version according to "*brew available". Multiple versions can be sent in at once
--N | --notest   Do not run tests. Allows you to --remove and --install without testing
--l | --legacy   Operate on perls < 5.8.x. The default plugins won't work with this flag set if a lower version is installed
-
-Help options:
-
--s | --setup    Display test platform setup instructions
--h | --help     Print this help message
-
-Special options:
-
--p | --plugin   Module name of the exec command plugin to use
--a | --args     List of args to pass into the plugin (one arg per loop)
--T | --selftest Testing only: prevent recursive testing on Test::BrewBuild
--d | --debug    0-7, sets logging verbosity, default is 0
-
-EOF
-exit;
-}
-sub _validate_opts {
-    my $args = shift;
-
-    my @valid_args = qw(
-        on o new n remove r revdep R plugin p args a debug d install i help h
-        N notest setup s legacy l selftest T listen L
-        tester-port t testers
-        );
-
-    my $bad_opt = 0;
-
-    if (@$args) {
-        my @args = grep /^-/, @$args;
-        for my $arg (@args) {
-            $arg =~ s/^-{1,2}//g;
-            if (!grep { $arg eq $_ } @valid_args) {
-                $bad_opt = 1;
-                last;
-            }
-        }
-    }
-
-    help() if $bad_opt;
-}
-sub _create_log {
-    my ($self, $level) = @_;
-
-    $self->{log} = Logging::Simple->new(
-        name  => 'Test::BrewBuild',
-        level => defined $level ? $level : 0,
-    );
-
-    $self->{log}->_6("in _create_log()");
-
-    if ($self->{log}->level < 6){
-        $self->{log}->display(0);
-        $self->{log}->custom_display("-");
-        $self->{log}->_5("set log level to " . defined $level ? $level : 0);
-    }
-
-    return $self->{log};
-}
-sub _copy_logs {
-    my $self = shift;
-    dircopy $self->{tempdir}, "bblog" if $self->{tempdir};
-    unlink 'bblog/stderr.bblog' if -e 'bblog/stderr.bblog';
-}
-sub _set_plugin {
-    my $self = shift;
-    my $log = $log->child('_set_plugin');
-    my $plugin = $self->{args}{plugin} ? $self->{args}{plugin} : $ENV{TBB_PLUGIN};
-
-    $log->_5("plugin param set to: " . defined $plugin ? $plugin : 'default');
-
-    $plugin = $self->plugins($plugin, can => ['brewbuild_exec']);
-
-    my $exec_plugin_sub = $plugin .'::brewbuild_exec';
-    $self->{exec_plugin} = \&$exec_plugin_sub;
-
-    $log->_4("successfully loaded $plugin plugin");
-}
-sub _process_stderr {
-    my $self = shift;
-    
-    my $errlog = "$self->{tempdir}/stderr.bblog";
-
-    if (-e $errlog){
-        open my $errlog_fh, '<', $errlog or die $!;
-    
-        my $error_contents;
-        {
-            local $/ = undef;
-            $error_contents = <$errlog_fh>;
-        }
-        close $errlog_fh;
-
-        my @errors = $error_contents =~ /
-                cpanm\s+\(App::cpanminus\)
-                .*?
-                (?=(?:cpanm\s+\(App::cpanminus\)|$))
-            /xgs;
-
-        my %error_map;
-
-        for (@errors){
-            if (/cpanm.*?perl\s(5\.\d+)\s/){
-                $error_map{$1} = $_;
-            }
-        }
-        
-        if (! keys %error_map){
-            $error_map{0} = $error_contents;
-        }
-        return %error_map;
-    }
-}
-sub _attach_build_log {
-    my ($self, $bblog) = @_;
-
-    my $bbfile;
-    {
-        local $/ = undef;
-        open my $bblog_fh, '<', $bblog or die $!;
-        $bbfile = <$bblog_fh>;
-        close $bblog_fh;
-    }
-    
-    if ($bbfile =~ m|failed.*?See\s+(.*?)\s+for details|){
-        my $build_log = $1;
-        open my $bblog_wfh, '>>', $bblog or die $!;
-        print $bblog_wfh "\n\nCPANM BUILD LOG\n";
-        print $bblog_wfh "===============\n";
-
-        open my $build_log_fh, '<', $build_log or die $!;
-
-        while (<$build_log_fh>){
-            print $bblog_wfh $_;
-        }
-        close $bblog_wfh;
-    }
-}
 sub _dzil_shim {
     my ($self, $cmd_file) = @_;
 
@@ -725,6 +651,80 @@ sub _dzil_unshim {
     $self->{is_dzil} = 0;
     chdir '..';
 }
+sub _process_stderr {
+    my $self = shift;
+    
+    my $errlog = "$self->{tempdir}/stderr.bblog";
+
+    if (-e $errlog){
+        open my $errlog_fh, '<', $errlog or die $!;
+    
+        my $error_contents;
+        {
+            local $/ = undef;
+            $error_contents = <$errlog_fh>;
+        }
+        close $errlog_fh;
+
+        my @errors = $error_contents =~ /
+                cpanm\s+\(App::cpanminus\)
+                .*?
+                (?=(?:cpanm\s+\(App::cpanminus\)|$))
+            /xgs;
+
+        my %error_map;
+
+        for (@errors){
+            if (/cpanm.*?perl\s(5\.\d+)\s/){
+                $error_map{$1} = $_;
+            }
+        }
+        
+        if (! keys %error_map){
+            $error_map{0} = $error_contents;
+        }
+        return %error_map;
+    }
+}
+sub _set_plugin {
+    my $self = shift;
+    my $log = $log->child('_set_plugin');
+    my $plugin = $self->{args}{plugin} ? $self->{args}{plugin} : $ENV{TBB_PLUGIN};
+
+    $log->_5("plugin param set to: " . defined $plugin ? $plugin : 'default');
+
+    $plugin = $self->plugins($plugin, can => ['brewbuild_exec']);
+
+    my $exec_plugin_sub = $plugin .'::brewbuild_exec';
+    $self->{exec_plugin} = \&$exec_plugin_sub;
+
+    $log->_4("successfully loaded $plugin plugin");
+}
+sub _validate_opts {
+    my $args = shift;
+
+    my @valid_args = qw(
+        on o new n remove r revdep R plugin p args a debug d install i help h
+        N notest setup s legacy l selftest T listen L
+        tester-port t testers
+        );
+
+    my $bad_opt = 0;
+
+    if (@$args) {
+        my @args = grep /^-/, @$args;
+        for my $arg (@args) {
+            $arg =~ s/^-{1,2}//g;
+            if (!grep { $arg eq $_ } @valid_args) {
+                $bad_opt = 1;
+                last;
+            }
+        }
+    }
+
+    help() if $bad_opt;
+}
+
 1;
 
 =head1 NAME
