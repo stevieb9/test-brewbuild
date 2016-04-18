@@ -23,7 +23,6 @@ my $ret = $d->dispatch(
 );
 $t->stop;
 
-print $ret;
 my @ret = split /\n/, $ret;
 
 ok (@ret > 3, "line count ok");

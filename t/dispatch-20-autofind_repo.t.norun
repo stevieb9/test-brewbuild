@@ -2,7 +2,6 @@
 use strict;
 use warnings;
 
-use Capture::Tiny qw(capture_stdout);
 use Cwd qw(getcwd);
 use File::Path qw(remove_tree);
 use Test::BrewBuild::Dispatch;
@@ -31,16 +30,14 @@ chdir 'test-fail';
 
 $t->start;
 
-my $stdout = capture_stdout {
-    $d->dispatch(
-        cmd => 'brewbuild',
-        testers => [ qw(127.0.0.1:7800) ],
-    )
-};
+my $ret = $d->dispatch(
+    cmd => 'brewbuild',
+    testers => [ qw(127.0.0.1:7800) ],
+);
 
 $t->stop;
 
-my @ret = split /\n/, $stdout;
+my @ret = split /\n/, $ret;
 
 ok (@ret > 3, "line count ok");
 is ($ret[0], '', "blank line");
