@@ -22,8 +22,10 @@ sub new {
     my ($class, %args) = @_;
     my $self = bless {}, $class;
 
+    my $log_to_stdout = defined $args{stdout} ? $args{stdout} : 0;
+
     $log = Logging::Simple->new(level => 0, name => 'Tester');
-    $log->file(\$self->{log});
+    $log->file(\$self->{log}) if ! $log_to_stdout;
 
     if (defined $args{debug}){
         $log->level($args{debug}) if defined $args{debug};
@@ -276,6 +278,14 @@ sub listen {
                 my $bb = Test::BrewBuild->new(%opts);
                 $bb->instance_remove if $opts{remove};
                 $bb->instance_install($opts{install}) if $opts{install};
+
+                if ($opts{notest}){
+                    $log->_5("no tests run due to --notest flag set");
+                    $log->_5("storing and sending results back to dispatcher");
+                    $res->{log} = $self->{log};
+                    Storable::nstore_fd($res, $dispatch);
+                    next;
+                }
                 if ($opts{revdep}){
                     $res->{data} = $bb->revdep(%opts);
                 }

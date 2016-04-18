@@ -8,6 +8,7 @@ use Test::BrewBuild::Tester;
 my $ip = '0.0.0.0';
 my $port = 7800;
 my $foreground = 0;
+my $stdout = 0;
 my $debug;
 my $help;
 
@@ -25,6 +26,7 @@ GetOptions(
     "ip=s"    => \$ip,
     "port=i"  => \$port,
     "fg"      => \$foreground,
+    "stdout"  => \$stdout,
     "debug=s" => \$debug,
     "help"    => \$help,
 );
@@ -42,7 +44,7 @@ EOF
 exit;
 }
 
-my $tester = Test::BrewBuild::Tester->new(debug => $debug);
+my $tester = Test::BrewBuild::Tester->new(debug => $debug, stdout => $stdout);
 
 $tester->ip($ip);
 $tester->port($port);
@@ -86,6 +88,10 @@ purposes.
 Enable debug logging (add to the above arguments.
 
     bbtester [...] -d 0-7
+
+Send the logs to STDOUT directly.
+
+    bbtester [...] --stdout
 
 =head1 DESCRIPTION
 
