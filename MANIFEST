@@ -32,6 +32,7 @@ t/16-return.pl
 t/__clean.t
 t/api-05-Tester.t
 t/api-10-Git.t
+t/api-15-Dispatch_forks.t
 t/api-BrewBuild-legacy.t
 t/base/115-level6.data
 t/base/115-level6_win.data
