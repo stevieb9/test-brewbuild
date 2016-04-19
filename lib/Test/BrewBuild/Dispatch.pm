@@ -12,7 +12,7 @@ use Storable;
 use Test::BrewBuild;
 use Test::BrewBuild::Git;
 
-our $VERSION = '1.05';
+our $VERSION = '1.05_01';
 
 $| = 1;
 
@@ -232,7 +232,7 @@ sub _config {
 
 =head1 NAME
 
-Test::BrewBuild::Dispatch - Dispatch C<brewbuild> testing to remote test
+Test::BrewBuild::Dispatch - Dispatch C<Test::BrewBuild> test runs to remote test
 servers.
 
 =head1 DESCRIPTION

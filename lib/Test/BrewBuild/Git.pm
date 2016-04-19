@@ -4,7 +4,7 @@ use warnings;
 
 use Capture::Tiny qw(:all);
 
-our $VERSION = '1.05';
+our $VERSION = '1.05_01';
 
 sub new {
     return bless {}, shift;
@@ -49,7 +49,7 @@ sub pull {
 
 =head1 NAME
 
-Test::BrewBuild::Git - Git repository manager for the L<Test::BrewBuild> test
+Test::BrewBuild::Git - Git repository manager for the C<Test::BrewBuild> test
 platform system.
 
 =head1 SYNOPSIS
@@ -82,8 +82,8 @@ Returns the C<git> command for the local platform.
 
 =head1 link
 
-Fetches and returns the full link to the master repository. This is the link
-you used to originally clone the repo.
+Fetches and returns the full link to the master repository from your current
+working directory. This is the link you used to originally clone the repo.
 
 =head1 name($link)
 

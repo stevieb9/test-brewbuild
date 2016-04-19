@@ -4,7 +4,7 @@ use warnings;
 
 use version;
 
-our $VERSION = '1.04';
+our $VERSION = '1.05_01';
 
 my $log;
 
@@ -127,7 +127,7 @@ sub is_win {
 =head1 NAME
 
 Test::BrewBuild::BrewCommands - Provides Windows/Unix *brew command
-translations.
+translations for Test::BrewBuild
 
 =head1 METHODS
 
@@ -149,15 +149,15 @@ Returns the string result of C<*brew available>.
 Takes the output of C<*brew available> in a string form. Returns the currently
 installed versions, formatted in a platform specific manner.
 
-=head2 available($legacy, $info)
-
-Similar to C<installed()>, but returns all perls available. If C<$legacy> is
-false, we'll only return C<perl> versions C<5.8.0+>.
-
 =head2 using($info)
 
 Returns the current version of perl we're using. $info is the output from
 C<info()>.
+
+=head2 available($legacy, $info)
+
+Similar to C<installed()>, but returns all perls available. If C<$legacy> is
+false, we'll only return C<perl> versions C<5.8.0+>.
 
 =head2 install
 

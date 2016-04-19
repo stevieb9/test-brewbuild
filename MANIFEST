@@ -2,6 +2,7 @@ bin/bbdispatch
 bin/bbtester
 bin/brewbuild
 Changes
+conf/brewbuild.conf-dist
 lib/Test/BrewBuild.pm
 lib/Test/BrewBuild/BrewCommands.pm
 lib/Test/BrewBuild/Dispatch.pm
@@ -13,7 +14,6 @@ Makefile.PL
 MANIFEST			This list of files
 MANIFEST.SKIP
 README
-samples/dispatch.pl
 setup/unix_setup.txt
 setup/windows_setup.txt
 t/00-load.t
@@ -28,7 +28,6 @@ t/08-instance_remove.t
 t/09-instance_install.t
 t/12-TestPluginInst.t
 t/14-using.t
-t/16-return.pl
 t/__clean.t
 t/api-05-Tester.t
 t/api-10-Git.t
@@ -54,12 +53,16 @@ t/bb-50-revdep-multi.t
 t/bb-55-notest.t
 t/bb-60-revdep-multi-fail.t
 t/bb-65-dzil.t
+t/conf/brewbuild.conf
+t/conf/brewbuild_no_tester.conf
 t/dispatch-05-bad_command.t
 t/dispatch-11-revdep_pass.t
 t/dispatch-15-fail.t
 t/dispatch-20-autofind_repo.t.norun
+t/dispatch-25-conf_file.t
 t/dispatch-25-default_port.t
 t/dispatch-40-notest.t
+t/dispatch-45-config.t
 t/log-05-revdep_global_full_verbose.t
 t/log-10-revdep_save_log_files.t
 t/log-15-Tester_log.t
@@ -73,4 +76,4 @@ t/modules/mock-sub-bad.zip
 t/modules/mock-sub.tgz
 t/pod-coverage.t
 t/pod.t
-verbose.txt
+t/tester-05-config.t

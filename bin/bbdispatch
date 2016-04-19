@@ -5,6 +5,8 @@ use strict;
 use Getopt::Long;
 use Test::BrewBuild::Dispatch;
 
+our $VERSION = '1.05_01';
+
 my %args;
 my $help;
 
@@ -42,7 +44,7 @@ print $return;
 
 =head1 NAME
 
-bbdispatch - Dispatch L<Test::BrewBuild> builds to remote test servers.
+bbdispatch - Dispatch C<Test::BrewBuild> builds to remote test servers.
 
 =head1 SYNOPSIS
 

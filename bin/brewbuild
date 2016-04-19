@@ -5,7 +5,7 @@ use strict;
 use Carp qw(croak);
 use Test::BrewBuild;
 
-our $VERSION = '1.05';
+our $VERSION = '1.05_01';
 
 # we let BrewBuild manage the argument list so that the other scripts can
 # simply pass in the args directly and use the API instead of wrapping around
@@ -90,6 +90,22 @@ else {
 =head1 NAME
 
 brewbuild - Automate module and reverse-dependency testing, on Windows and Unix
+
+=head1 NOTE
+
+This is the first devel release that includes the entire remote
+dispatching/tester server distributed testing environment. Things can and will
+change in the next couple of weeks.
+
+For running remote tester servers, see
+L<bbtester|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbtester>
+for the script and L<Test::BrewBuild::Tester> for its API.
+
+For the dispatcher service that distributes test runs to the remote testers, see
+L<bbdispatch|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbdispatch>
+for the script, and L<Test::BrewBuild::Dispatch> for the API.
+
+The API for this script can be found at L<Test::BrewBuild>.
 
 =head1 SYNOPSIS
 
@@ -195,8 +211,9 @@ Do not run tests. Allows you to --remove and --install without testing.
 
 =head2 --save, -S
 
-By default, we save logs of C<FAIL> result logs in C<workdir/bblog>. With this
-flag, we'll save both the C<FAIL> logs along with all the C<PASS> logs as well.
+By default, we save logs of C<FAIL> result logs into the C<bblog> directory.
+With this flag, we'll save both the C<FAIL> logs along with all the C<PASS> logs
+as well.
 
 =head2 --legacy, -l
 

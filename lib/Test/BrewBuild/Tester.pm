@@ -13,7 +13,7 @@ use Storable;
 use Test::BrewBuild;
 use Test::BrewBuild::Git;
 
-our $VERSION = '1.05';
+our $VERSION = '1.05_01';
 
 $| = 1;
 
@@ -399,11 +399,15 @@ Returns 1 if there's a tester currently running, and 0 if not.
 Default listening IP address is C<0.0.0.0> ie. all currently bound IPs. Send in
 an alternate IP address to listen on a specific one.
 
+This will override any IP information in the configuration file, if present.
+
 Returns the currently used IP.
 
 =head2 port($port)
 
 Default port is C<7800>. Send in an alternate to listen on it instead.
+
+This will override any port information in the configuration file, if present.
 
 Returns the port currently being used.
 

@@ -6,6 +6,8 @@ use Getopt::Long;
 use Test::BrewBuild;
 use Test::BrewBuild::Tester;
 
+our $VERSION = '1.05_01';
+
 my $ip;
 my $port;
 my $foreground = 0;
@@ -68,7 +70,7 @@ if ($foreground){
 =head1 NAME
 
 bbtester - Remote Windows/Unix testing platform server daemon for
-L<Test::BrewBuild>
+C<Test::BrewBuild>
 
 =head1 SYNOPSIS
 

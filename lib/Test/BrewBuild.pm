@@ -754,16 +754,11 @@ versions (Windows and Unix).
 
 =for html
 <a href="http://travis-ci.org/stevieb9/p5-test-brewbuild"><img src="https://secure.travis-ci.org/stevieb9/p5-test-brewbuild.png"/>
-<a href='https://coveralls.io/github/stevieb9/p5-test-brewbuild?branch=master'><img src='https://coveralls.io/repos/stevieb9/p5-test-brewbuild/badge.svg?branch=master&service=github' alt='Coverage Status' /></a>
-
 
 =head1 DESCRIPTION
 
 This module is the backend for the C<brewbuild> script that is accompanied by
-this module. For almost all cases, you should be using that script instead of
-using this module directly (so go read that documentation for real use cases),
-as this module is just a helper for the installed script, and isn't designed
-for end-user use.
+this module.
 
 It provides you the ability to perform your unit tests across all of your
 Perlbrew (Unix) or Berrybrew (Windows) Perl instances.
@@ -776,31 +771,11 @@ of perl, or install specific versions.
 
 All unit tests are run against all installed instances.
 
-
-
 =head1 SYNOPSIS
 
     use Test::BrewBuild;
 
-    # default settings
-
-    my %args = (
-        on          => undef,
-        revdep      => undef,
-        new         => undef,
-        remove      => undef,
-        install     => undef,
-        notest      => undef,
-        legacy      => undef,
-        plugin      => undef,
-        plugin_arg  => undef, # derived from ``args''
-        selftest    => undef,
-        debug       => undef,
-        setup       => undef,
-        help        => undef,
-    );
-
-    my $bb = Test::BrewBuild->new(%args);
+    my $bb = Test::BrewBuild->new;
 
     my @perls_available = $bb->perls_available;
     my @perls_installed = $bb->perls_installed;
@@ -810,12 +785,11 @@ All unit tests are run against all installed instances.
 
     $bb->instance_remove;
 
-Install a specific version (uses 'version' param, or 'new'. If 'new' is set to
-a positive integer, we'll randomly install that many instances)
+    # find and test against all the current module's reverse CPAN dependencies
 
-    $bb->instance_install;
+    $bb->revdep;
 
-Run the actual tests
+    # run standard tests
 
     $bb->test;
 
@@ -824,11 +798,20 @@ Run the actual tests
 =head2 new(%args)
 
 Returns a new C<Test::BrewBuild> object. See the documentation for the
-C<berrybrew> script to understand what the arguments are and do.
+L<brewbuild|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/brewbuild>
+script to understand what the arguments are and do.
 
-=head2 args(\%args)
+=head2 options(\%args)
 
-Returns 0 if all arguments are valid, and 1 if not.
+Takes a hash reference of the command-line argument list, and converts it into
+a hash of the translated parameter names with their values.
+
+Returns the converted hash for passing back into C<new()>.
+
+=head2 config_file
+
+Returns a string that contains the path/filename of the configuration file, if
+available.
 
 =head2 plugin('Module::Name')
 
@@ -841,6 +824,11 @@ writing new plugins).
 Note that you can send in a custom plugin C<*.pm> filename to plugin as opposed
 to a module name if the module isn't installed. If the file isn't in the
 current working directory, send in the relative or full path.
+
+=head2 brew_info
+
+Helper method, returns the appropriate *brew calls relative to the platform
+we're working on.
 
 =head2 perls_available
 
@@ -866,18 +854,34 @@ Uninstalls all currently installed perls, less the one you are currently
 
 Processes and returns the test results as a string scalar.
 
-=head2 run
+=head2 revdeps
 
-Automation method only. This method shouldn't be used in normal scenarios.
+Returns a list of the reverse dependencies (according to CPAN) that the module
+you're working on in the current working directory have.
+
+=head2 revdep
+
+Loops over all of the current module's reverse dependencies, and executes
+C<test()> on each one at a time. This helps you confirm whether your new build
+won't break your downstream users' modules.
+
+=head2 legacy
+
+By default, we don't install perl versions less than v5.8.0. Pass in a true
+value to override this default.
+
+=head2 setup
+
+Prints out detailed information on setting up a testing environment, on Windows
+or Unix.
+
+=head2 help
+
+Displays the command line usage information.
 
 =head2 is_win
 
 Helper method, returns true if the current OS is Windows, false if not.
-
-=head2 brew_info
-
-Helper method, returns the appropriate *brew calls relative to the platform
-we're working on.
 
 =head2 log
 
