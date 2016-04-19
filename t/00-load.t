@@ -64,4 +64,16 @@ BEGIN {
         can_ok($mod, $_);
     }
 }
+{ # config file copied?
+    my $work_dir;
+
+    if ($^O =~ /MSWin/){
+        $work_dir = "$ENV{HOMEPATH}/brewbuild";
+    }
+    else {
+        $work_dir = "$ENV{HOME}/brewbuild";
+    }
+
+    is (-f "$work_dir/brewbuild.conf-dist", 1, "dist conf file installed ok");
+}
 done_testing();

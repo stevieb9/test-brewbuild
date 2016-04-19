@@ -1,7 +1,9 @@
 use 5.008;
 use strict;
 use warnings;
+
 use ExtUtils::MakeMaker;
+use File::Copy;
 
 my $is_win = $^O =~ /MSWin/ ? 1 : 0;
 my $brew = $is_win ? 'berrybrew.exe' : 'perlbrew';
@@ -16,6 +18,16 @@ if (! grep { -x "$_/$brew" } split /$sep/, $ENV{PATH}){
              "You can fetch and install '$brew' here: $brew_link\n\n";
     sleep 3;
 }
+
+my $work_dir;
+
+if ($is_win){
+    $work_dir = "$ENV{HOMEPATH}/brewbuild";
+}
+else {
+    $work_dir = "$ENV{HOME}/brewbuild";
+}
+copy "conf/brewbuild.conf-dist", $work_dir or die $!;
 
 WriteMakefile(
     NAME             => 'Test::BrewBuild',

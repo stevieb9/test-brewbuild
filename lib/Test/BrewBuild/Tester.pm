@@ -65,7 +65,7 @@ sub start {
     my ($perl, @args, $work_dir);
 
     if ($^O =~ /MSWin/){
-        $work_dir = 'c:/brewbuild';
+        $work_dir = "$ENV{HOMEPATH}/brewbuild";
 
         $log->_6("on Windows, using work dir $work_dir");
 
@@ -191,7 +191,7 @@ sub listen {
     my $work_dir;
 
     if ($^O =~ /MSWin/){
-        $work_dir = "c:/brewbuild";
+        $work_dir = "$ENV{HOMEPATH}/brewbuild";
         mkdir $work_dir if ! -d $work_dir;
         chdir $work_dir;
         $log->_7("on Windows, work dir is: $work_dir");
@@ -361,7 +361,7 @@ sub _pid_file {
     return $self->{pid_file} if defined $self->{pid_file};
 
     $self->{pid_file} = $^O =~ /MSWin/
-        ? 'c:/brewbuild/brewbuild.pid'
+        ? "$ENV{HOMEPATH}/brewbuild/brewbuild.pid"
         : "$ENV{HOME}/brewbuild/brewbuild.pid";
 }
 1;
