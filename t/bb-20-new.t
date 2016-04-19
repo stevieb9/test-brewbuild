@@ -21,21 +21,20 @@ if (! $ENV{BBDEV_TESTING}){
 
     `brewbuild -r`;
     `brewbuild --new 1`;
-    my $ret = `brewbuild -n 2`;
+    my $ret = `brewbuild -n 1`;
 
     chdir '..';
 
     my @res = split /\n/, $ret;
     @res = grep /\S/, @res;
 
-    is (@res, 6, "--new 1 & -n 2 combined results in ok output");
+    is (@res, 5, "--new 1 & -n 1 combined results in ok output");
 
     like ($res[0], qr/- installing /, "$res[0] installing ok");
     like ($res[1], qr/- installing /, "$res[1] installing ok");
     like ($res[2], qr/5\.\d{1,2}\.\d :: PASS/, "PASS run ok");
     like ($res[3], qr/5\.\d{1,2}\.\d :: PASS/, "PASS run ok");
     like ($res[4], qr/5\.\d{1,2}\.\d :: PASS/, "PASS run ok");
-    like ($res[5], qr/5\.\d{1,2}\.\d :: PASS/, "PASS run ok");
 
     remove_tree('BB-Pass');
     is (-d 'BB-Pass', undef, "--new pass dir removed ok");

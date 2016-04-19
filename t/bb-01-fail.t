@@ -27,9 +27,9 @@ if (! $ENV{BBDEV_TESTING}){
 
     is ( $res[1], "5.22.1 :: FAIL", "FAIL ok" );
 
-    is (-e 'bblog/5.22.1.bblog', 1, "fail log for 5.22.1 created ok");
+    is (-e 'bblog/5.22.1-FAIL.bblog', 1, "fail log for 5.22.1 created ok");
 
-    open my $log, '<', 'bblog/5.22.1.bblog' or die $!;
+    open my $log, '<', 'bblog/5.22.1-FAIL.bblog' or die $!;
     my @entries = <$log>;
     chomp @entries;
     close $log;

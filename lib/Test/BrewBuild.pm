@@ -655,7 +655,9 @@ sub _process_stderr {
 sub _save_reports {
     my ($self, $ver, $status, $result) = @_;
 
-    return if ! $self->{args}{save_reports};
+    if ($status ne 'FAIL' && ! $self->{args}{save_reports}){
+        return;
+    }
 
     my $tested_mod = $self->{args}{plugin_arg};
 
