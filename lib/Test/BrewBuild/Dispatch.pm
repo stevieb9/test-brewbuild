@@ -51,7 +51,9 @@ sub dispatch {
     my %remotes;
 
     if (! $testers->[0]){
-        $log->_6("no --testers passed in, attempting to read config file, croaking");
+        $log->_6("no --testers passed in, and failed to fetch testers from " .
+                 "config file, croaking"
+        );
         croak "dispatch requires clients sent in or config file which " .
               "isn't found\n";
     }
@@ -119,6 +121,9 @@ sub dispatch {
             die "comm discrepancy: expected $tester, got $ack\n";
         }
 
+        if (! $cmd){
+            $log->_6("no command specified, Tester default will ensue");
+        }
         $socket->send($cmd);
         $log->_7("sent command: $cmd");
 

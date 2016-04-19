@@ -1,0 +1,6 @@
+[dispatch]
+testers = 127.0.0.1, 10.1.1.1:9999
+repo = https://github.com/user/my-repo
+cmd = brewbuild -R -S -d 7
+[tester]
+

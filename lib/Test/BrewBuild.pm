@@ -74,9 +74,11 @@ sub options {
 sub config_file {
     shift;
     if (is_win()){
+        return $ENV{BB_CONF} if $ENV{BB_CONF};
         return "$ENV{HOMEPATH}/brewbuild/brewbuild.conf";
     }
     else {
+        return $ENV{BB_CONF} if $ENV{BB_CONF};
         return "$ENV{HOME}/brewbuild/brewbuild.conf";
     }
 }
