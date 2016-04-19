@@ -72,6 +72,40 @@ Set maximum number of concurrent testers to communicate with (default is 4):
 This script dispatches C<brewbuild> build sets to pre-configured
 L<Test::BrewBuild::Tester> test servers.
 
+=head1 COMMAND LINE OPTIONS
+
+=head2 -t, --testers
+
+A list of testers to dispatch to. Can be sent in multiple times. Format of the
+testers is C<IP:Port>. If C<Port> is ommitted, we'll default to C<7800>.
+
+Testers can also be configured within the config file. Testers set on the CLI
+will override those.
+
+=head2 -c, --cmd
+
+By default, the testers will simply run C<brewbuild>. You can send in any
+C<brewbuild> commands here, so long as the first argument is C<brewbuild>
+liters.
+
+This option will override anything in the configuration file.
+
+=head2 -r, --repo
+
+By default, if a repository isn't specified in the config file, we'll attempt
+to locate the repository information from the current working directory.
+
+Set this to the repo link to override both.
+
+=head2 -d, --debug
+
+Set to 0-7 to enable debug logging.
+
+=head2 -f, --forks
+
+By default, we maintain four (4) testers concurrently. You can change this by
+sending in an inteter with this option.
+
 =head1 AUTHOR
 
 Steve Bertrand, C<< <steveb at cpan.org> >>
