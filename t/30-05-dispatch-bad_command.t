@@ -16,7 +16,7 @@ $t->start;
 
 my $d = Test::BrewBuild::Dispatch->new;
 
-my $warn = capture_stdout {
+my $stdout = capture_stdout {
     $d->dispatch(
         cmd => 'asdf',
         repo => 'https://stevieb9@github.com/stevieb9/mock-sub',
@@ -26,6 +26,6 @@ my $warn = capture_stdout {
 
 $t->stop;
 
-like ($warn, qr/error: only brewbuild/, "bad command dies");
+like ($stdout, qr/error: only 'brewbuild'/, "bad command dies");
 
 done_testing();
