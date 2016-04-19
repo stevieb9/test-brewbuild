@@ -749,11 +749,29 @@ sub _validate_opts {
 
 =head1 NAME
 
-Test::BrewBuild - Perl/Berry brew unit testing automation across installed perl
-versions (Windows and Unix).
+Test::BrewBuild - Perl/Berry brew unit testing automation, with remote tester
+dispatching capabilities.
 
 =for html
 <a href="http://travis-ci.org/stevieb9/p5-test-brewbuild"><img src="https://secure.travis-ci.org/stevieb9/p5-test-brewbuild.png"/>
+
+=head1 NOTE
+
+This is the first devel release that includes the entire remote
+dispatching/tester server distributed testing environment. Things can and will
+change in the next couple of weeks, and there are a lot of edge cases that don't
+have tests yet (so things may not work completely as expected yet).
+
+The documentation for the bundled script that does the testing can be found at
+L<brewbuild|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/brewbuild>.
+
+For running remote tester servers, see
+L<bbtester|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbtester>
+for the script and L<Test::BrewBuild::Tester> for its API.
+
+For the dispatcher service that distributes test runs to the remote testers, see
+L<bbdispatch|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbdispatch>
+for the script, and L<Test::BrewBuild::Dispatch> for the API.
 
 =head1 DESCRIPTION
 
