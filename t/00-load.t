@@ -64,7 +64,8 @@ BEGIN {
         can_ok($mod, $_);
     }
 }
-{ # config file copied?
+if ($ENV{BBDEV_TESTING}){
+    # config file copied?
     my $work_dir;
 
     if ($^O =~ /MSWin/){
