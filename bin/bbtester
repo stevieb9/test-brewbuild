@@ -74,7 +74,8 @@ C<Test::BrewBuild>
 
 =head1 SYNOPSIS
 
-Listen for incoming build requests on all IPs and port 7800 (TCP)
+Start the listener in the background, listening on the default IP
+0.0.0.0 and port 7800 (TCP)
 
     bbtester start
 
