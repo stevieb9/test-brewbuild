@@ -211,7 +211,7 @@ Multiple versions can be sent in at once.
 
 =head2 -N, --notest
 
-Do not run tests. Allows you to --remove and --install without testing.
+Do not run tests. Allows you to C<--remove> and C<--install> without testing.
 
 =head2 -S, --save
 
@@ -226,7 +226,8 @@ set if a lower version is installed.
 
 =head2 -p, --plugin
 
-Optional module name of the exec command plugin to use.
+Optional module name of the exec command plugin to use. You can also specify a
+file name if the module is not installed.
 
 =head2 -a, --args
 
@@ -242,7 +243,7 @@ Display test platform setup instructions.
 
 =head2 -h, --help
 
-Print out help contents.
+Print out the command line usage information.
 
 =head1 TEST PLATFORM CONFIGURATION
 
@@ -264,7 +265,7 @@ Install and switch to your base perl instance, and install C<Test::BrewBuild>:
 
 =head2 WINDOWS
 
-Note that the key here is that your %PATH% must be free and clear of anything
+Note that the key is that your C<%PATH%> must be free and clear of anything
 Perl. That means that if you're using an existing box with Strawberry or
 ActiveState installed, you *must* remove all traces of them in the PATH
 environment variable for ``brewbuild'' to work correctly.

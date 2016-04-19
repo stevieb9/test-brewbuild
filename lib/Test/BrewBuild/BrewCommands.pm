@@ -151,7 +151,7 @@ installed versions, formatted in a platform specific manner.
 
 =head2 using($info)
 
-Returns the current version of perl we're using. $info is the output from
+Returns the current version of perl we're using. C<$info> is the output from
 C<info()>.
 
 =head2 available($legacy, $info)

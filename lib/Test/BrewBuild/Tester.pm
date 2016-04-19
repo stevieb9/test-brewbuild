@@ -186,8 +186,6 @@ sub listen {
              "$self->{port}"
     );
 
-    # working dir
-
     my $work_dir;
 
     if ($^O =~ /MSWin/){
