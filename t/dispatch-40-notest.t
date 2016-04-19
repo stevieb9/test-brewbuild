@@ -12,12 +12,17 @@ if (! $ENV{BBDEV_TESTING}){
 }
 
 my $d = Test::BrewBuild::Dispatch->new;
+my $t = Test::BrewBuild::Tester->new;
+
+$t->start;
 
 my $ret = $d->dispatch(
     cmd => 'brewbuild -N',
     repo => 'https://stevieb9@github.com/stevieb9/test-fail',
     testers => [ qw(127.0.0.1:7800) ],
 );
+
+$t->stop;
 
 my @ret = split /\n/, $ret;
 

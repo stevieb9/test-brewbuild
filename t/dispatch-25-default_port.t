@@ -3,7 +3,6 @@ use strict;
 use warnings;
 
 use Test::BrewBuild::Dispatch;
-use Test::BrewBuild::Git;
 use Test::BrewBuild::Tester;
 
 use Test::More;
