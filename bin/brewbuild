@@ -91,12 +91,16 @@ else {
 
 brewbuild - Automate module and reverse-dependency testing, on Windows and Unix
 
-=head1 NOTE
+=head1 NOTICE
 
 This is the first devel release that includes the entire remote
 dispatching/tester server distributed testing environment. Things can and will
 change in the next couple of weeks, and there are a lot of edge cases that don't
-have tests yet (so things may not work completely as expected yet).
+have tests yet (so things may not work completely as expected yet). Once I've got
+a list of requirements sorted, the POD nice and clean, installation confirmed 
+fully working and more testing done, I'll be bumping the version to 2.00
+
+The module containing the API for this script can be found at L<Test::BrewBuild>.
 
 For running remote tester servers, see
 L<bbtester|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbtester>
@@ -106,7 +110,6 @@ For the dispatcher service that distributes test runs to the remote testers, see
 L<bbdispatch|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbdispatch>
 for the script, and L<Test::BrewBuild::Dispatch> for the API.
 
-The API for this script can be found at L<Test::BrewBuild>.
 
 =head1 SYNOPSIS
 

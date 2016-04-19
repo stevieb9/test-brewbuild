@@ -18,7 +18,7 @@ use Test::BrewBuild::BrewCommands;
 use Test::BrewBuild::Dispatch;
 use Test::BrewBuild::Tester;
 
-our $VERSION = '1.05';
+our $VERSION = '1.05_01';
 
 BEGIN {
 }
@@ -757,12 +757,14 @@ dispatching capabilities.
 =for html
 <a href="http://travis-ci.org/stevieb9/p5-test-brewbuild"><img src="https://secure.travis-ci.org/stevieb9/p5-test-brewbuild.png"/>
 
-=head1 NOTE
+=head1 NOTICE
 
 This is the first devel release that includes the entire remote
 dispatching/tester server distributed testing environment. Things can and will
 change in the next couple of weeks, and there are a lot of edge cases that don't
-have tests yet (so things may not work completely as expected yet).
+have tests yet (so things may not work completely as expected yet). Once I've got
+a list of requirements sorted, the POD nice and clean, installation confirmed 
+fully working and more testing done, I'll be bumping the version to 2.00
 
 The documentation for the bundled script that does the testing can be found at
 L<brewbuild|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/brewbuild>.

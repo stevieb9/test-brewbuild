@@ -27,6 +27,9 @@ if ($is_win){
 else {
     $work_dir = "$ENV{HOME}/brewbuild";
 }
+if (! -d $work_dir){
+    mkdir $work_dir or die $!;
+}
 copy "conf/brewbuild.conf-dist", $work_dir or die $!;
 
 WriteMakefile(

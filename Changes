@@ -1,5 +1,18 @@
 Revision history for Test-BrewBuild
 
+1.05_01 2016-04-19
+        - we can now distribute test builds to remote Test::BrewBuild test
+          servers
+        - bbdispatch and bbtester scripts added, which handle the test
+          distribution network/systems
+        - Dispatch.pm and Tester.pm modules, containing the APIs for the
+          distribution setup
+        - we no longer now print anything out by default; everything is
+          returned, and its up to end-user to handle
+        - major debug logging improvements
+        - significant code cleanup and tests implemented
+        - added/improved upon the flags for the ``brewbuild'' script
+
 1.05    2016-04-04
         - we're now Dist::Zilla compliant and tested (closes #33)
         - added _dzil_shim() and _dzil_unshim() for Dist::Zilla distributions

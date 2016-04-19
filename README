@@ -1,7 +1,29 @@
 NAME
 
     brewbuild - Automate module and reverse-dependency testing, on Windows
-    and Unix.
+    and Unix
+
+NOTICE
+
+    This is the first devel release that includes the entire remote
+    dispatching/tester server distributed testing environment. Things can
+    and will change in the next couple of weeks, and there are a lot of
+    edge cases that don't have tests yet (so things may not work completely
+    as expected yet). Once I've got a list of requirements sorted, the POD
+    nice and clean, installation confirmed fully working and more testing
+    done, I'll be bumping the version to 2.00
+
+    The module containing the API for this script can be found at
+    Test::BrewBuild.
+
+    For running remote tester servers, see bbtester
+    <https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbtester> for
+    the script and Test::BrewBuild::Tester for its API.
+
+    For the dispatcher service that distributes test runs to the remote
+    testers, see bbdispatch
+    <https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbdispatch>
+    for the script, and Test::BrewBuild::Dispatch for the API.
 
 SYNOPSIS
 
@@ -28,7 +50,7 @@ SYNOPSIS
     
         # output, in my Mock::Sub repo directory
     
-        - working on reverse dependencies: Test-BrewBuild, File-Edit-Portable,
+        reverse dependencies: Test-BrewBuild, File-Edit-Portable,
           Devel-Examine-Subs, Devel-Trace-Subs
     
         Test::BrewBuild
@@ -51,33 +73,6 @@ SYNOPSIS
 
         brewbuild -h
 
-    Run on specific versions only (Unix)
-
-        brewbuild -o 5.20.3 -o 5.8.9
-
-    Install three new instances of perl, randomly
-
-        brewbuild -n 3
-
-    Remove all perl instances (less the currently used one), install two
-    new random versions, and run tests against all installed perls
-
-        brewbuild -r -n 2
-
-    Install all available perl versions, and run tests against all of them
-
-        brewbuild -n -1
-
-    Install a specific version and run tests on all instances (include just
-    the number portion of the version per "perlbrew available" or
-    "berrybrew available"
-
-        brewbuild -i 5.20.3
-
-    ...multiple versions can be passed in at once
-
-        brewbuild -i 5.20.3 -i 5.14.4 -i 5.23.5
-
     Display test platform setup instructions for Unix and Windows
 
         brewbuild --setup
@@ -95,9 +90,9 @@ DESCRIPTION
     details). For Unix, you'll need Perlbrew.
 
     It allows you to remove and reinstall on each test run, install random
-    versions of perl, or install specific versions.
+    versions of perl and install specific versions.
 
-    All unit tests are run against all installed instances, unless
+    All unit tests are run against all installed perl instances, unless
     otherwise specified.
 
 USAGE
@@ -105,62 +100,65 @@ USAGE
  --on, -o
 
     Perl version number to run against (can be supplied multiple times).
-    Can not be used on Windows
+    Can not be used on Windows at this time.
 
  --revdep, -R
 
     Run tests, install, then run tests on all CPAN reverse dependency
-    modules
+    modules.
 
  --debug, -d
 
-    0-7, sets logging verbosity, default is 0
+    0-7, sets logging verbosity, default is 0.
 
  --new, -n
 
-    How many random versions of perl to install (-1 to install all)
+    How many random versions of perl to install (-1 to install all).
 
  --remove, -r
 
-    Remove all installed perls (less the current one)
+    Remove all installed perls (less the currently used one).
 
  --install, -i
 
-    Number portion of an available perl version according to "*brew
-    available". Multiple versions can be sent in at once
-
- --return
-
-    Return the results in string form, as opposed to printing them
+    Number portion of an available perl version according to *brew
+    available. Multiple versions can be sent in at once.
 
  --notest, -N
 
-    Do not run tests. Allows you to --remove and --install without testing
+    Do not run tests. Allows you to --remove and --install without testing.
+
+ --save, -S
+
+    By default, we save logs of FAIL result logs into the bblog directory.
+    With this flag, we'll save both the FAIL logs along with all the PASS
+    logs as well.
 
  --legacy, -l
 
-    Operate on perls < 5.8.x. The default plugins won't work with this flag
-    set if a lower version is installed
+    Operate on perls less than 5.8.x. The default plugins won't work with
+    this flag set if a lower version is installed.
 
  --plugin, -p
 
-    Optional module name of the exec command plugin to use
+    Optional module name of the exec command plugin to use.
 
  --args, -a
 
-    List of args to pass into the plugin (one arg per loop)
+    List of args to pass into the plugin (one arg per loop).
 
  --selftest, -T
 
-    Test::BrewBuild development testing only. Prevents recursive test loops
+    Test::BrewBuild development testing only. Prevents recursive test
+    loops.
 
  --setup, -s
 
-    Display test platform setup instructions
+    Display test platform setup instructions.
 
  --help, -h
 
-    Print this help message, and exit
+    Print out help contents.
 
 TEST PLATFORM CONFIGURATION
 
@@ -249,6 +247,16 @@ SUPPORT
         perldoc brewbuild
         perldoc Test::BrewBuild
 
+    Documentation for the remote testing service script, and its API:
+
+        perldoc bbtester
+        perldoc Test::BrewBuild::Tester
+
+    Documentation for the test dispatching script and its API:
+
+        perldoc bbdispatch
+        perldoc Test::BrewBuild::Dispatch
+
 SEE ALSO
 
     Berrybrew for Windows:
@@ -258,6 +266,23 @@ SEE ALSO
     Perlbrew for Unixes:
 
     http://perlbrew.pl
+
+    Remote testing server:
+
+    <a
+    href="https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbtester>bbtester</a>
+
+    Remote testing server API:
+
+    Test::BrewBuild::Tester
+
+    Dispatching to remote testers:
+
+    See brewbuild -h, in the Dispatching Server options section.
+
+    Dispatcher API:
+
+    Test::BrewBuild::Dispatch
 
 LICENSE AND COPYRIGHT
 

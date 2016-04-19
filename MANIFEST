@@ -59,7 +59,6 @@ t/dispatch-05-bad_command.t
 t/dispatch-11-revdep_pass.t
 t/dispatch-15-fail.t
 t/dispatch-20-autofind_repo.t.norun
-t/dispatch-25-conf_file.t
 t/dispatch-25-default_port.t
 t/dispatch-40-notest.t
 t/dispatch-45-config.t
