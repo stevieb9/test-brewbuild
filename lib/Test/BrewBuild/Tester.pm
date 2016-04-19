@@ -36,6 +36,7 @@ sub new {
     my $log = $log->child('new');
     $log->_5("instantiating new Test::BrewBuild::Tester object");
 
+    $self->_config;
     $self->_pid_file;
 
     return $self;
@@ -323,15 +324,36 @@ sub listen {
 }
 sub ip {
     my ($self, $ip) = @_;
+
     return $self->{ip} if $self->{ip};
+
+    if (! $ip && $self->{conf}{ip}){
+        $ip = $self->{conf}{ip};
+    }
     $ip = '0.0.0.0' if ! $ip;
     $self->{ip} = $ip;
 }
 sub port {
     my ($self, $port) = @_;
+
     return $self->{port} if $self->{port};
+
+    if (! $port && $self->{conf}{port}){
+        $port = $self->{conf}{port};
+    }
     $port = '7800' if ! defined $port;
     $self->{port} = $port;
+}
+sub _config {
+    my $self = shift;
+
+    my $conf_file = Test::BrewBuild->config_file;
+
+    if (-f $conf_file){
+        my $conf = Config::Tiny->read($conf_file)->{tester};
+        $self->{conf}{ip} = $conf->{ip};
+        $self->{conf}{port} = $conf->{port};
+    }
 }
 sub _pid_file {
     my $self = shift;

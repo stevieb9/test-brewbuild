@@ -3,10 +3,11 @@ use warnings;
 use strict;
 
 use Getopt::Long;
+use Test::BrewBuild;
 use Test::BrewBuild::Tester;
 
-my $ip = '0.0.0.0';
-my $port = 7800;
+my $ip;
+my $port;
 my $foreground = 0;
 my $stdout = 0;
 my $debug;
