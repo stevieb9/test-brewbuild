@@ -39,13 +39,16 @@ Usage:
 bbtester start [--ip 0.0.0.0] [--port 7800]] [--debug 0-7]
 bbtester stop
 
-bbtester --fg [--ip 0.0.0.0] [--port 7800] [--debug 0-7]
+bbtester --fg [--ip 0.0.0.0] [--port 7800] [--debug 0-7] [--stdout]
 
 EOF
 exit;
 }
 
-my $tester = Test::BrewBuild::Tester->new(debug => $debug, stdout => $stdout);
+my $tester = Test::BrewBuild::Tester->new(
+    debug => $debug,
+    stdout => $stdout
+);
 
 $tester->ip($ip);
 $tester->port($port);
@@ -84,7 +87,7 @@ Stop the service from running
 Run the tester in the foreground for testing/debugging/troubleshooting
 purposes.
 
-    bbtester --fg [--ip 0.0.0.0] [--port 7800]
+    bbtester --fg
 
 Enable debug logging. By default, log entries get returned with the results.
 
@@ -104,6 +107,46 @@ incoming build requests from a test dispatcher.
 
 We then run the appropriate commands, and return the results to the dispatcher
 for processing.
+
+=head1 COMMAND LINE OPTIONS
+
+=head2 start
+
+Starts the tester and puts it into the background. Conflicts with C<--fg>.
+
+=head2 stop
+
+Stops the tester.
+
+=head2 -i, --ip
+
+Set the IP address to listen on. If not set, will check for one in the config
+file, and if still not found, will default to C<0.0.0.0>, ie. all IPs bound
+on the system.
+
+=head2 -p, --port
+
+Same as IP, if not sent in, we'll check the config file, and then default to
+C<7800>.
+
+=head2 -f, --fg
+
+Instead of using C<start> which puts the service into the background, this
+option will run the tester in the foreground.
+
+=head2 -d, --debug
+
+Pass this option an integer from 0-7, and we'll enable that level of debugging.
+
+If the tester is put into the background with C<start>, or the C<--stdout>
+option isn't used with the C<--fg> option, we'll return the debug results with
+the test results.
+
+=head2 -s, --stdout
+
+When using C<--fg> to run the tester in the foreground, use this flag to display
+debug information live time on C<STDOUT>, as opposed to having it collected and
+returned.
 
 =head1 AUTHOR
 
