@@ -1,5 +1,7 @@
 Revision history for Test-BrewBuild
 
+1.05_02 xxx
+
 1.05_01 2016-04-19
         - we can now distribute test builds to remote Test::BrewBuild test
           servers
