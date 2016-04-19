@@ -95,7 +95,8 @@ brewbuild - Automate module and reverse-dependency testing, on Windows and Unix
 
 This is the first devel release that includes the entire remote
 dispatching/tester server distributed testing environment. Things can and will
-change in the next couple of weeks.
+change in the next couple of weeks, and there are a lot of edge cases that don't
+have tests yet (so things may not work completely as expected yet).
 
 For running remote tester servers, see
 L<bbtester|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbtester>

@@ -32,8 +32,8 @@ copy "conf/brewbuild.conf-dist", $work_dir or die $!;
 WriteMakefile(
     NAME             => 'Test::BrewBuild',
     AUTHOR           => q{Steve Bertrand <steveb@cpan.org>},
-    VERSION_FROM     => 'lib/Test/BrewBuild.pm',
-    ABSTRACT_FROM    => 'lib/Test/BrewBuild.pm',
+    VERSION_FROM     => 'bin/brewbuild',
+    ABSTRACT_FROM    => 'bin/brewbuild/Test/BrewBuild.pm',
     LICENSE          => 'perl_5',
     PL_FILES         => {},
     EXE_FILES        => [ map "bin/$_", qw(brewbuild bbtester bbdispatch) ],
