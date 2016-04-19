@@ -754,9 +754,6 @@ sub _validate_opts {
 Test::BrewBuild - Perl/Berry brew unit testing automation, with remote tester
 dispatching capabilities.
 
-=for html
-<a href="http://travis-ci.org/stevieb9/p5-test-brewbuild"><img src="https://secure.travis-ci.org/stevieb9/p5-test-brewbuild.png"/>
-
 =head1 NOTICE
 
 This is the first devel release that includes the entire remote
@@ -807,13 +804,21 @@ All unit tests are run against all installed instances.
 
     $bb->instance_remove;
 
+    # install four new random versions of perl
+
+    $bb->instance_install(4);
+
+    # install two specific versions
+
+    $bb->instance_install(['5.10.1', '5.20.3']);
+
     # find and test against all the current module's reverse CPAN dependencies
 
     $bb->revdep;
 
-    # run standard tests
+    # run the unit tests of the current module only
 
-    $bb->test;
+     $bb->test;
 
 =head1 METHODS
 
@@ -823,10 +828,56 @@ Returns a new C<Test::BrewBuild> object. See the documentation for the
 L<brewbuild|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/brewbuild>
 script to understand what the arguments are and do.
 
+=head2 brew_info
+
+Returns in string form the full output of C<*brew available>.
+
+=head2 perls_available
+
+Returns an array containing all perls available, whether already installed or
+not.
+
+=head2 perls_installed
+
+Returns an array of the names of all perls currently installed under your 
+C<*brew> setup.
+
+=head2 instance_install
+
+If an integer is sent in, we'll install that many random versions of perl. You
+can also send in an array reference, where each element is a version of perl,
+and we'll install those instead.
+
+=head2 instance_remove
+
+Uninstalls all currently installed perls, less the one you are currently
+C<switch>ed or C<use>d to.
+
+=head2 test
+
+Processes and returns the test results as a string scalar of the distribution
+located in the current working directory.
+
+=head2 revdeps
+
+Returns a list of the reverse dependencies (according to CPAN) that the module
+you're working on in the current working directory have.
+
+=head2 revdep
+
+Loops over all of the current module's reverse dependencies, and executes
+C<test()> on each one at a time. This helps you confirm whether your new build
+won't break your downstream users' modules.
+
+=head2 legacy
+
+By default, we don't install perl versions less than v5.8.0. Pass in a true
+value to override this default.
+
 =head2 options(\%args)
 
 Takes a hash reference of the command-line argument list, and converts it into
-a hash of the translated parameter names with their values.
+a hash of the translated C<Test::BrewBuild> parameters along with their values.
 
 Returns the converted hash for passing back into C<new()>.
 
@@ -847,72 +898,27 @@ Note that you can send in a custom plugin C<*.pm> filename to plugin as opposed
 to a module name if the module isn't installed. If the file isn't in the
 current working directory, send in the relative or full path.
 
-=head2 brew_info
-
-Helper method, returns the appropriate *brew calls relative to the platform
-we're working on.
-
-=head2 perls_available
-
-Returns an array containing all perls available, whether already installed or
-not.
-
-=head2 perls_installed
-
-Returns an array of the names of all perls currently installed under your *brew
-setup.
-
-=head2 instance_install
-
-If 'install' param is set, will install that specific version. If 'new' param
-is set to a positive integer, will install that many random versions of perl.
-
-=head2 instance_remove
-
-Uninstalls all currently installed perls, less the one you are currently
-'switch'ed or 'use'd to.
-
-=head2 test
-
-Processes and returns the test results as a string scalar.
-
-=head2 revdeps
-
-Returns a list of the reverse dependencies (according to CPAN) that the module
-you're working on in the current working directory have.
-
-=head2 revdep
-
-Loops over all of the current module's reverse dependencies, and executes
-C<test()> on each one at a time. This helps you confirm whether your new build
-won't break your downstream users' modules.
-
-=head2 legacy
-
-By default, we don't install perl versions less than v5.8.0. Pass in a true
-value to override this default.
-
-=head2 setup
-
-Prints out detailed information on setting up a testing environment, on Windows
-or Unix.
-
-=head2 help
-
-Displays the command line usage information.
-
 =head2 is_win
 
 Helper method, returns true if the current OS is Windows, false if not.
 
 =head2 log
 
-Developer method, returns an instance of the packages log object for creating
-child log objects.
+Returns an instance of the packages log object for creating child log objects.
 
 =head2 tempdir
 
-Sets up the object with a temporary directory that will be removed after run.
+Sets up the object with a temporary directory used for test logs, that will be 
+removed after the run.
+
+=head2 setup
+
+Prints out detailed information on setting up a testing environment, on Windows
+and Unix.
+
+=head2 help
+
+Displays the C<brewbuild> command line usage information.
 
 =head1 AUTHOR
 

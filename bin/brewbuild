@@ -183,64 +183,64 @@ otherwise specified.
 
 =head1 USAGE
 
-=head2 --on, -o
+=head2 -o, --on
 
 Perl version number to run against (can be supplied multiple times). Can not be
 used on Windows at this time.
 
-=head2 --revdep, -R   
+=head2 -R, --revdep
 
 Run tests, install, then run tests on all CPAN reverse dependency modules.
 
-=head2 --debug, -d
+=head2 -d, --debug
 
 0-7, sets logging verbosity, default is 0.
 
-=head2 --new, -n      
+=head2 -n, --new
 
 How many random versions of perl to install (-1 to install all).
 
-=head2 --remove, -r
+=head2 -r, --remove
 
 Remove all installed perls (less the currently used one).
 
-=head2 --install, -i  
+=head2 -i, --install
 
 Number portion of an available perl version according to C<*brew available>.
 Multiple versions can be sent in at once.
 
-=head2 --notest, -N
+=head2 -N, --notest
 
 Do not run tests. Allows you to --remove and --install without testing.
 
-=head2 --save, -S
+=head2 -S, --save
 
 By default, we save logs of C<FAIL> result logs into the C<bblog> directory.
 With this flag, we'll save both the C<FAIL> logs along with all the C<PASS> logs
 as well.
 
-=head2 --legacy, -l
+=head2 -l, --legacy
 
 Operate on perls less than 5.8.x. The default plugins won't work with this flag
 set if a lower version is installed.
 
-=head2 --plugin, -p
+=head2 -p, --plugin
 
 Optional module name of the exec command plugin to use.
 
-=head2 --args, -a     
+=head2 -a, --args
 
 List of args to pass into the plugin (one arg per loop).
 
-=head2 --selftest, -T
+=head2 -T, --selftest
 
 C<Test::BrewBuild> development testing only. Prevents recursive test loops.
 
-=head2 --setup, -s    
+=head2 -s, --setup
 
 Display test platform setup instructions.
 
-=head2 --help, -h     
+=head2 -h, --help
 
 Print out help contents.
 
@@ -349,7 +349,7 @@ L<http://perlbrew.pl>
 
 Remote testing server:
 
-<a href="https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbtester>bbtester</a>
+<a href="https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbtester">bbtester</a>
 
 Remote testing server API:
 
