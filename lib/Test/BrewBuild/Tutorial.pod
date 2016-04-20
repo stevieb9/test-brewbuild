@@ -142,6 +142,18 @@ it all in one location:
 
     print $return;
 
+=head1 QUICK START
+
+Quick start basic example, with one remote tester.
+
+Tester 10.1.1.1:
+
+    bbtester start
+
+Dispatcher:
+
+    bbdispatch -t 10.1.1.1
+
 =head1 SEE ALSO
 
 Details on the configuration file: L<Test::BrewBuild::brewbuild.conf>.
