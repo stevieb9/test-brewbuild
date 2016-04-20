@@ -1,0 +1,56 @@
+=head1 NAME
+
+brewbuild.conf - Optional configuration file for the C<Test::BrewBuild>
+build system.
+
+=head1 DESCRIPTION
+
+By default, an example C<brewbuild.conf-dist> configuration file is copied into
+C<~/brewbuild> directory upon installation.
+
+To use a configuration file, copy the C<brewbuild.conf-dist> file to
+C<brewbuild.conf> within the same directory, and edit it accordingly.
+
+Command line arguments will override whatever configuration you have in the
+config file.
+
+=head1 SECTIONS
+
+=head2 [dispatch]
+
+Configuration for the dispatcher, L<Test::BrewBuild::Dispatch>.
+
+=head3 testers
+
+A comma delimited list of test servers to dispatch to. Example:
+
+    testers = 127.0.0.1, 10.5.5.5:9999
+
+=head3 cmd
+
+The C<brewbuild> command string you want to use as default. Example:
+
+    cmd = brewbuild -r -R -d 7
+
+=head3 repo
+
+The repo to default to. If not specified here or at the command-line, we'll
+default to looking for a repository in your current working directory. Example:
+
+    repo = https://github.com/stevieb9/pt-test-brewbuild
+
+=head2 [tester]
+
+Configuration for the tester L<Test::BrewBuild::Tester>.
+
+=head3 ip
+
+Specify the IP address you want your tester to listen on. Example:
+
+    ip = 127.0.0.1
+
+=head3 port
+
+Which port should your tester listen on? Example:
+
+    port = 9999
