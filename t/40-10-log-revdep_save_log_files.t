@@ -16,7 +16,7 @@ if (! $ENV{BBDEV_TESTING}){
 # clean out log dir
 
 if ($^O =~ /MSWin/){
-    my @logs = glob 'c:/brewbuild/bblog/*';
+    my @logs = glob "$ENV{HOMEPATH}/bblog/*";
     for (@logs){
         unlink $_ or die $!;
     }
@@ -42,7 +42,7 @@ $d->dispatch(
 $t->stop;
 
 if ($^O =~ /MSWin/){
-    my @logs = glob 'c:/brewbuild/bblog/*';
+    my @logs = glob "$ENV{HOMEPATH}/brewbuild/bblog/*";
     is (@logs, 3, "got proper log file count");
     for (@logs){
         like ($_, qr/127\.0\.0\.1_.*-5\.22\.1-PASS\.bblog/, "log $_ ok");

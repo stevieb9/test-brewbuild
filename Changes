@@ -1,6 +1,6 @@
 Revision history for Test-BrewBuild
 
-1.05_02 xxx
+1.05_02 2016-04-20
         - we now set up a log file within Tester for BrewBuild if Tester is
           logging, but not to STDOUT
         - added a POD document for the config file
