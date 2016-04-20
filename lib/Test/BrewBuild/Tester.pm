@@ -23,10 +23,10 @@ sub new {
     my ($class, %args) = @_;
     my $self = bless {}, $class;
 
-    my $log_to_stdout = defined $args{stdout} ? $args{stdout} : 0;
+    $self->{log_to_stdout} = defined $args{stdout} ? $args{stdout} : 0;
 
     $log = Logging::Simple->new(level => 0, name => 'Tester');
-    $log->file(\$self->{log}) if ! $log_to_stdout;
+    $log->file(\$self->{log}) if ! $self->{log_to_stdout};
 
     if (defined $args{debug}){
         $log->level($args{debug}) if defined $args{debug};
@@ -275,6 +275,7 @@ sub listen {
                 $log->_5("commencing test run with args: $opt_str") if $opt_str;
 
                 my $bb = Test::BrewBuild->new(%opts);
+                $bb->log()->file(\$self->{log}) if ! $self->{log_to_stdout};
                 $bb->instance_remove if $opts{remove};
                 $bb->instance_install($opts{install}) if $opts{install};
 

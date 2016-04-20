@@ -247,6 +247,7 @@ sub revdep {
     for (@revdeps){
         $args{plugin_arg} = $_;
         my $bb = __PACKAGE__->new(%args);
+        $bb->log()->file($self->log()->file());
         push @ret, $bb->test;
     }
     return \@ret;
@@ -255,9 +256,7 @@ sub test {
     my $self = shift;
 
     exit if $self->{args}{notest};
-
     my $log = $log->child('test');
-
     local $SIG{__WARN__} = sub {};
     $log->_6("warnings trapped locally");
 
@@ -326,8 +325,8 @@ sub tempdir {
 }
 sub log {
     my $self = shift;
-    $self->{log}->_6(ref($self) ." class/obj retrieving a log object");
-    return $self->{log};
+    $self->{log}->_6(ref($self) ." class/obj accessing the log object");
+    $self->{log};
 }
 sub revdeps {
     my $self = shift;

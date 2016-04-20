@@ -14,9 +14,6 @@ if (! $ENV{BBDEV_TESTING}){
     exit;
 }
 
-
-
-
 my $ret;
 
 my $stdout = capture_merged {
@@ -26,14 +23,13 @@ my $stdout = capture_merged {
     $t->start;
 
     $ret = $d->dispatch(
-        cmd => 'brewbuild -r -R -d 7',
-        repo => 'https://stevieb9@github.com/stevieb9/mock-sub',
-        testers => [qw(127.0.0.1:7800)],
+        cmd     => 'brewbuild -r -d 7',
+        repo    => 'https://stevieb9@github.com/stevieb9/mock-sub',
+        testers => [ qw(127.0.0.1:7800) ],
     );
 
     $t->stop;
 };
-
 
 $ret .= $stdout;
 
@@ -42,7 +38,6 @@ like ($ret, qr/Dispatch\.dispatch/, "dispatch dispatch() represented");
 like ($ret, qr/Test::BrewBuild\]/, "BB rep");
 like ($ret, qr/Test::BrewBuild\.Test::BrewBuild::BrewCommands\]/, "BBCMD rep");
 like ($ret, qr/Test::BrewBuild\.Test::BrewBuild::BrewCommands\.brew/, "BBCMD brew rep");
-like ($ret, qr/Test::BrewBuild\.revdeps/, "revdeps rep");
 like ($ret, qr/Tester\.new/, "Tester new() rep");
 like ($ret, qr/Tester\.listen/, "Tester listen() rep");
 like ($ret, qr/Dispatch\.dispatch/, "Dispatch rep");
