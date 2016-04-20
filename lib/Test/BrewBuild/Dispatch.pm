@@ -12,7 +12,7 @@ use Storable;
 use Test::BrewBuild;
 use Test::BrewBuild::Git;
 
-our $VERSION = '1.05_02';
+our $VERSION = '1.05_03';
 
 $| = 1;
 

@@ -18,7 +18,7 @@ use Test::BrewBuild::BrewCommands;
 use Test::BrewBuild::Dispatch;
 use Test::BrewBuild::Tester;
 
-our $VERSION = '1.05_02';
+our $VERSION = '1.05_03';
 
 BEGIN {
 }
