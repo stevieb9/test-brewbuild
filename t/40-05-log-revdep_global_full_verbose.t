@@ -14,9 +14,6 @@ if (! $ENV{BBDEV_TESTING}){
     exit;
 }
 
-
-
-
 my $ret;
 
 my $stdout = capture_merged {
@@ -34,8 +31,10 @@ my $stdout = capture_merged {
     $t->stop;
 };
 
-
 $ret .= $stdout;
+
+open my $fh, '>', "log.txt" or die $!;
+print $fh $ret;
 
 like ($ret, qr/Dispatch\.new/, "dispatch new() represented");
 like ($ret, qr/Dispatch\.dispatch/, "dispatch dispatch() represented");
