@@ -76,24 +76,24 @@ Manages Git repositories, including gathering names, cloning, pulling etc.
 
 Returns a new C<Test::BrewBuild::Git> object.
 
-=head1 git
+=head2 git
 
 Returns the C<git> command for the local platform.
 
-=head1 link
+=head2 link
 
 Fetches and returns the full link to the master repository from your current
 working directory. This is the link you used to originally clone the repo.
 
-=head1 name($link)
+=head2 name($link)
 
 Extracts the repo name from the full link path.
 
-=head1 clone($repo)
+=head2 clone($repo)
 
 Clones the repo into the current working directory.
 
-=head1 pull
+=head2 pull
 
 While in a repository directory, pull down any updates.
 

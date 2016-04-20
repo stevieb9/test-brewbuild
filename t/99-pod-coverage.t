@@ -23,7 +23,7 @@ plan skip_all => "Pod::Coverage $min_pc required for testing POD coverage"
 
 pod_coverage_ok('Test::BrewBuild');
 pod_coverage_ok('Test::BrewBuild::BrewCommands');
-pod_coverage_ok('Test::BrewBuild::git');
+pod_coverage_ok('Test::BrewBuild::Git');
 pod_coverage_ok('Test::BrewBuild::Dispatch');
 pod_coverage_ok('Test::BrewBuild::Tester');
 
