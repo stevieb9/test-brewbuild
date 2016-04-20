@@ -3,7 +3,8 @@ Revision history for Test-BrewBuild
 1.05_02 xxx
         - we now set up a log file within Tester for BrewBuild if Tester is
           logging, but not to STDOUT
-
+        - added a POD document for the config file
+        - created a Tutorial for the distributed testing environment setup
 
 1.05_01 2016-04-19
         - we can now distribute test builds to remote Test::BrewBuild test
