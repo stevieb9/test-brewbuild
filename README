@@ -97,68 +97,69 @@ DESCRIPTION
 
 USAGE
 
- --on, -o
+ -o, --on
 
     Perl version number to run against (can be supplied multiple times).
     Can not be used on Windows at this time.
 
- --revdep, -R
+ -R, --revdep
 
     Run tests, install, then run tests on all CPAN reverse dependency
     modules.
 
- --debug, -d
+ -d, --debug
 
     0-7, sets logging verbosity, default is 0.
 
- --new, -n
+ -n, --new
 
     How many random versions of perl to install (-1 to install all).
 
- --remove, -r
+ -r, --remove
 
     Remove all installed perls (less the currently used one).
 
- --install, -i
+ -i, --install
 
     Number portion of an available perl version according to *brew
     available. Multiple versions can be sent in at once.
 
- --notest, -N
+ -N, --notest
 
     Do not run tests. Allows you to --remove and --install without testing.
 
- --save, -S
+ -S, --save
 
     By default, we save logs of FAIL result logs into the bblog directory.
     With this flag, we'll save both the FAIL logs along with all the PASS
     logs as well.
 
- --legacy, -l
+ -l, --legacy
 
     Operate on perls less than 5.8.x. The default plugins won't work with
     this flag set if a lower version is installed.
 
- --plugin, -p
+ -p, --plugin
 
-    Optional module name of the exec command plugin to use.
+    Optional module name of the exec command plugin to use. You can also
+    specify a file name if the module is not installed.
 
- --args, -a
+ -a, --args
 
     List of args to pass into the plugin (one arg per loop).
 
- --selftest, -T
+ -T, --selftest
 
     Test::BrewBuild development testing only. Prevents recursive test
     loops.
 
- --setup, -s
+ -s, --setup
 
     Display test platform setup instructions.
 
- --help, -h
+ -h, --help
 
-    Print out help contents.
+    Print out the command line usage information.
 
 TEST PLATFORM CONFIGURATION
 
@@ -181,7 +182,7 @@ TEST PLATFORM CONFIGURATION
 
  WINDOWS
 
-    Note that the key here is that your %PATH% must be free and clear of
+    Note that the key is that your %PATH% must be free and clear of
     anything Perl. That means that if you're using an existing box with
     Strawberry or ActiveState installed, you *must* remove all traces of
     them in the PATH environment variable for ``brewbuild'' to work
@@ -270,7 +271,7 @@ SEE ALSO
     Remote testing server:
 
     <a
-    href="https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbtester>bbtester</a>
+    href="https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbtester">bbtester</a>
 
     Remote testing server API:
 

@@ -1,8 +1,7 @@
 Revision history for Test-BrewBuild
 
-1.05_03 xxx
+2.00    2016-04-21
         - added T::BB::workdir() as a common source for workdir retrieval
-        - numerous issue fixes
         - major POD updates
 
 1.05_02 2016-04-20

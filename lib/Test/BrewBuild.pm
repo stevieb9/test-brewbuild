@@ -18,7 +18,7 @@ use Test::BrewBuild::BrewCommands;
 use Test::BrewBuild::Dispatch;
 use Test::BrewBuild::Tester;
 
-our $VERSION = '1.05_03';
+our $VERSION = '2.00';
 
 BEGIN {
 }
@@ -758,26 +758,6 @@ sub _validate_opts {
 
 Test::BrewBuild - Perl/Berry brew unit testing automation, with remote tester
 dispatching capabilities.
-
-=head1 NOTICE
-
-This is the first devel release that includes the entire remote
-dispatching/tester server distributed testing environment. Things can and will
-change in the next couple of weeks, and there are a lot of edge cases that don't
-have tests yet (so things may not work completely as expected yet). Once I've got
-a list of requirements sorted, the POD nice and clean, installation confirmed 
-fully working and more testing done, I'll be bumping the version to 2.00
-
-The documentation for the bundled script that does the testing can be found at
-L<brewbuild|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/brewbuild>.
-
-For running remote tester servers, see
-L<bbtester|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbtester>
-for the script and L<Test::BrewBuild::Tester> for its API.
-
-For the dispatcher service that distributes test runs to the remote testers, see
-L<bbdispatch|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbdispatch>
-for the script, and L<Test::BrewBuild::Dispatch> for the API.
 
 =head1 DESCRIPTION
 

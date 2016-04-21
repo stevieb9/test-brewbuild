@@ -30,6 +30,7 @@ t/00-40-instance_remove.t
 t/00-45-instance_install.t
 t/00-50-TestPluginInst.t
 t/00-55-using.t
+t/00-60-workdir.t
 t/10-05-api-Tester.t
 t/10-10-api-Git.t
 t/10-15-api-Dispatch_forks.t
