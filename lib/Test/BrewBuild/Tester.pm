@@ -241,9 +241,9 @@ sub listen {
             my $git = Test::BrewBuild::Git->new;
 
             if (-d $git->name($repo)){
-                $log->_7("repo '".$git->name($repo)."' exists, pulling");
                 chdir $git->name($repo) or die $!;
                 $log->_7("chdir to: ".getcwd());
+                $log->_7("repo '".$git->name($repo)."' exists, pulling");
                 $git->pull;
             }
             else {
@@ -252,32 +252,35 @@ sub listen {
                 chdir $git->name($repo);
                 $log->_7("chdir to: ".getcwd());
             }
-            {
-                my %opts = Test::BrewBuild->options(\@args);
-                my $opt_str;
-                for (keys %opts){
-                    $opt_str .= "$_ => $opts{$_}\n" if defined $opts{$_};
-                }
-                $log->_5("commencing test run with args: $opt_str") if $opt_str;
 
-                my $bb = Test::BrewBuild->new(%opts);
-                $bb->log()->file(\$self->{log}) if ! $self->{log_to_stdout};
-                $bb->instance_remove if $opts{remove};
-                $bb->instance_install($opts{install}) if $opts{install};
+            my %opts = Test::BrewBuild->options(\@args);
+            my $opt_str;
 
-                if ($opts{notest}){
-                    $log->_5("no tests run due to --notest flag set");
-                    $log->_5("storing and sending results back to dispatcher");
-                    $res->{log} = $self->{log};
-                    Storable::nstore_fd($res, $dispatch);
-                    next;
-                }
-                if ($opts{revdep}){
-                    $res->{data} = $bb->revdep(%opts);
-                }
-                else {
-                    $res->{data} = $bb->test;
-                }
+            for (keys %opts){
+                $opt_str .= "$_ => $opts{$_}\n" if defined $opts{$_};
+            }
+            $log->_5("commencing test run with args: $opt_str") if $opt_str;
+            $log->_5("commencing default brewbuild run with no args");
+
+            my $bb = Test::BrewBuild->new(%opts);
+            $bb->log()->file(\$self->{log}) if ! $self->{log_to_stdout};
+            $bb->instance_remove if $opts{remove};
+            $bb->instance_install($opts{install}) if $opts{install};
+
+            if ($opts{notest}){
+                $log->_5("no tests run due to --notest flag set");
+                $log->_5("storing and sending results back to dispatcher");
+                $res->{log} = $self->{log};
+                Storable::nstore_fd($res, $dispatch);
+                next;
+            }
+            if ($opts{revdep}){
+                $log->_6("revdep enabled");
+                $res->{data} = $bb->revdep(%opts);
+            }
+            else {
+                $log->_7("executing test()");
+                $res->{data} = $bb->test;
             }
 
             if (-d 'bblog'){

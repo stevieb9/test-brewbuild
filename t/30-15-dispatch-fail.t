@@ -21,6 +21,7 @@ my $ret = $d->dispatch(
     repo => 'https://stevieb9@github.com/stevieb9/test-fail',
     testers => [ qw(127.0.0.1:7800) ],
 );
+
 $t->stop;
 
 my @ret = split /\n/, $ret;

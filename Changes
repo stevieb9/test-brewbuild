@@ -1,5 +1,10 @@
 Revision history for Test-BrewBuild
 
+1.05_03 xxx
+        - added T::BB::workdir() as a common source for workdir retrieval
+        - numerous issue fixes
+        - major POD updates
+
 1.05_02 2016-04-20
         - we now set up a log file within Tester for BrewBuild if Tester is
           logging, but not to STDOUT

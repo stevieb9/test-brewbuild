@@ -76,96 +76,7 @@ sub dispatch {
 
     # spin up the comms
 
-    my $pm = Parallel::ForkManager->new($self->{forks});
-
-    $pm->run_on_finish(
-        sub {
-            my (undef, undef, undef, undef, undef, $tester_data) = @_;
-            map {$remotes{$_} = $tester_data->{$_}} keys %$tester_data;
-            $log->_5("tester: " . (keys %$tester_data)[0] ." finished")
-              if keys %$tester_data;
-        }
-    );
-
-    CLIENTS:
-    for my $tester (keys %remotes){
-        $log->_7("spinning up tester: $tester");
-
-        $pm->start and next CLIENTS;
-
-        my %return;
-
-        my $socket = new IO::Socket::INET (
-            PeerHost => $tester,
-            PeerPort => $remotes{$tester}{port},
-            Proto => 'tcp',
-        );
-        if (! $socket){
-            die "can't connect to remote $tester on port " .
-                "$remotes{$tester}{port} $!\n";
-        }
-
-        $log->_7("tester $tester socket created ok");
-
-        # syn
-        $socket->send($tester);
-        $log->_7("syn \"$tester\" sent");
-
-        # ack
-        my $ack;
-        $socket->recv($ack, 1024);
-        $log->_7("ack \"$ack\" received");
-
-        if ($ack ne $tester){
-            $log->_0("comm error: syn \"$tester\" doesn't match ack \"$ack\"");
-            die "comm discrepancy: expected $tester, got $ack\n";
-        }
-
-        if (! $cmd){
-            $log->_6("no command specified, Tester default will ensue");
-        }
-        $socket->send($cmd);
-        $log->_7("sent command: $cmd");
-
-        my $check = '';
-        $socket->recv($check, 1024);
-        $log->_7("received \"$check\"");
-
-        if ($check =~ /^error:/){
-            $log->_0("received an error: $check... killing all procs");
-            kill '-9', $$;
-        }
-        if ($check eq 'ok'){
-            my $repo_link;
-
-            if (! $repo){
-                my $git = Test::BrewBuild::Git->new;
-                $repo_link = $git->link;
-                $log->_5("repo not sent in, set to: $repo_link via Git");
-            }
-            else {
-                $repo_link = $repo;
-                $log->_5("repo set to: $repo_link");
-            }
-
-            if (! $repo_link){
-                $log->_0("repo not found, croaking");
-                croak "\nno repository found, can't continue\n";
-            }
-            $socket->send($repo_link);
-            $return{$tester}{build} = Storable::fd_retrieve($socket);
-        }
-        else {
-            $log->_5("deleted tester: $remotes{$tester}... incomplete session");
-            delete $remotes{$tester};
-        }
-        $socket->close();
-        $pm->finish(0, \%return);
-    }
-
-    $pm->wait_all_children;
-
-    # process the results
+    %remotes = $self->_fork(\%remotes, $cmd, $repo);
 
     if (! -d 'bblog'){
         mkdir 'bblog' or die $!;
@@ -229,6 +140,104 @@ sub _config {
         $self->{repo} = $conf->{repo} if $conf->{repo};
         $self->{cmd} = $conf->{cmd} if $conf->{cmd};
     }
+}
+sub _fork {
+    # handles the tester communications
+
+    my ($self, $remotes, $cmd, $repo) = @_;
+
+    my $log = $log->child('_fork');
+
+    my $pm = Parallel::ForkManager->new($self->{forks});
+
+    $pm->run_on_finish(
+        sub {
+            my (undef, undef, undef, undef, undef, $tester_data) = @_;
+            map {$remotes->{$_} = $tester_data->{$_}} keys %$tester_data;
+            $log->_5("tester: " . (keys %$tester_data)[0] ." finished")
+              if keys %$tester_data;
+        }
+    );
+
+    CLIENTS:
+    for my $tester (keys %$remotes){
+        $log->_7("spinning up tester: $tester");
+
+        $pm->start and next CLIENTS;
+
+        my %return;
+
+        my $socket = new IO::Socket::INET (
+            PeerHost => $tester,
+            PeerPort => $remotes->{$tester}{port},
+            Proto => 'tcp',
+        );
+        if (! $socket){
+            die "can't connect to remote $tester on port " .
+                "$remotes->{$tester}{port} $!\n";
+        }
+
+        $log->_7("tester $tester socket created ok");
+
+        # syn
+        $socket->send($tester);
+        $log->_7("syn \"$tester\" sent");
+
+        # ack
+        my $ack;
+        $socket->recv($ack, 1024);
+        $log->_7("ack \"$ack\" received");
+
+        if ($ack ne $tester){
+            $log->_0("comm error: syn \"$tester\" doesn't match ack \"$ack\"");
+            die "comm discrepancy: expected $tester, got $ack\n";
+        }
+
+        if (! $cmd){
+            $log->_6("no command specified, Tester default will ensue");
+        }
+        $socket->send($cmd);
+        $log->_7("sent command: $cmd");
+
+        my $check = '';
+        $socket->recv($check, 1024);
+        $log->_7("received \"$check\"");
+
+        if ($check =~ /^error:/){
+            $log->_0("received an error: $check... killing all procs");
+            kill '-9', $$;
+        }
+        if ($check eq 'ok'){
+            my $repo_link;
+
+            if (! $repo){
+                my $git = Test::BrewBuild::Git->new;
+                $repo_link = $git->link;
+                $log->_5("repo not sent in, set to: $repo_link via Git");
+            }
+            else {
+                $repo_link = $repo;
+                $log->_5("repo set to: $repo_link");
+            }
+
+            if (! $repo_link){
+                $log->_0("repo not found, croaking");
+                croak "\nno repository found, can't continue\n";
+            }
+            $socket->send($repo_link);
+            $return{$tester}{build} = Storable::fd_retrieve($socket);
+        }
+        else {
+            $log->_5("deleted tester: $remotes->{$tester}... incomplete session");
+            delete $remotes->{$tester};
+        }
+        $socket->close();
+        $pm->finish(0, \%return);
+    }
+
+    $pm->wait_all_children;
+
+    return %$remotes;
 }
 1;
 
