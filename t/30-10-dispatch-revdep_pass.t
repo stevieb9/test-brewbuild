@@ -16,15 +16,15 @@ if (! $ENV{BBDEV_TESTING}){
 my $t = Test::BrewBuild::Tester->new;
 my $d = Test::BrewBuild::Dispatch->new;
 
-#$t->start;
+$t->start;
 
 my $ret = $d->dispatch(
-    cmd => 'brewbuild -r -R -d 7',
+    cmd => 'brewbuild -r -R',
     repo => 'https://stevieb9@github.com/stevieb9/mock-sub',
     testers => [qw(127.0.0.1:7800)],
 );
 
-#$t->stop;
+$t->stop;
 
 my @ret = split /\n/, $ret;
 @ret = grep {$_ !~ /^\s*$/} @ret;
@@ -44,6 +44,5 @@ like ($ret[6], qr/.*?:: PASS/, "PASS ok");
 
 like ($ret[7], qr/.*?::.*?::.*?/, "Module name");
 like ($ret[8], qr/.*?:: PASS/, "PASS ok");
-
 
 done_testing();
