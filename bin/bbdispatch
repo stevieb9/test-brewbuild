@@ -139,6 +139,8 @@ perldoc command.
     perldoc bbtester
     perldoc Test::BrewBuild::Tester
 
+    perldoc Test::BrewBuild::brewbuild.conf
+
 =head1 LICENSE AND COPYRIGHT
 
 Copyright 2016 Steve Bertrand.

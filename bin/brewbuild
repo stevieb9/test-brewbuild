@@ -19,18 +19,10 @@ my $log = $bb_log->child('brewbuild');
 
 my $is_win = $bb->is_win;
 
-if ($is_win && $args{on}){
-    warn "\nwe can't use --on with Windows... running on all\n\n";
-    delete $args{on};
-}
-if (! -d 't/' && ! $args{notest}){
-    croak "\nthere's no 't/' directory, nothing to test. Exiting...\n";
-}
-
 # configure output for if *brew isn't installed
 
 my $brew_prog = $is_win ? 'berrybrew.exe' : 'perlbrew';
-my $brew_link = $is_win 
+my $brew_link = $is_win
     ? 'https://github.com/dnmfarrell/berrybrew'
     : 'http://perlbrew.pl';
 my $sep = $is_win ? ';' : ':';
@@ -42,6 +34,15 @@ if (! grep { -x "$_/$brew_prog"} split /$sep/, $ENV{PATH}){
          "See $brew_link\n\n";
     exit;
 }
+
+if ($is_win && $args{on}){
+    warn "\nwe can't use --on with Windows... running on all\n\n";
+    delete $args{on};
+}
+if (! -d 't/' && ! $args{notest}){
+    croak "\nthere's no 't/' directory, nothing to test. Exiting...\n";
+}
+
 # legacy perls in use?
 
 $bb->legacy($args{legacy});

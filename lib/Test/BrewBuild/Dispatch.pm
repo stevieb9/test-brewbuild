@@ -214,6 +214,8 @@ sub dispatch {
     return $return;
 }
 sub _config {
+    # slurp in config file elements
+
     my $self = shift;
 
      my $conf_file = Test::BrewBuild->config_file;

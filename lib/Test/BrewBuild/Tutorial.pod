@@ -138,15 +138,15 @@ Using the L<Test::BrewBuild::Dispatch> API, you can enclose all debug output and
 return values into one scalar variable, and either dump it to a file or examine
 it all in one location:
 
-    use Capture::Tiny qw(capture_merged);
+    use Capture::Tiny qw(capture_stdout);
     use Test::BrewBuild::Dispatch;
 
     my $return;
 
-    my $stdout = capture_merged {
+    my $stdout = capture_stdout {
         my $d = Test::BrewBuild::Dispatch->new(debug => 7);
 
-        $ret = $d->dispatch(
+        $return = $d->dispatch(
             cmd     => 'brewbuild -d 7',
             repo    => 'https://stevieb9@github.com/stevieb9/mock-sub',
             testers => [ qw(10.1.1.1) ],

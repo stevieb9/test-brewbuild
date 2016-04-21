@@ -344,6 +344,8 @@ sub port {
     $self->{port} = $port;
 }
 sub _config {
+    # bring in config file elements
+
     my $self = shift;
 
     my $conf_file = Test::BrewBuild->config_file;
@@ -355,6 +357,8 @@ sub _config {
     }
 }
 sub _pid_file {
+    # fetch the PID file location
+
     my $self = shift;
 
     return $self->{pid_file} if defined $self->{pid_file};

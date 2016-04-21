@@ -179,7 +179,10 @@ perldoc command.
     perldoc brewbuild
     perldoc Test::BrewBuild
 
+    perldoc bbdispatch
     perldoc Test::BrewBuild::Dispatch
+
+    perldoc Test::BrewBuild::brewbuild.conf
 
 =head1 LICENSE AND COPYRIGHT
 

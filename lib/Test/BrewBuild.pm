@@ -88,32 +88,22 @@ sub is_win {
 }
 sub brew_info {
     my $self = shift;
-
     my $log = $log->child('brew_info');
-
     my $brew_info = $bcmd->info;
-
     $log->_6("brew info set to:\n$brew_info") if $brew_info;
-
     return $brew_info;
 }
 sub perls_available {
     my ($self, $brew_info) = @_;
-
     my $log = $log->child('perls_available');
-
     my @perls_available = $bcmd->available($self->legacy, $brew_info);
-
     $log->_6("perls available: " . join ', ', @perls_available);
-
     return @perls_available;
 }
 sub perls_installed {
     my ($self, $brew_info) = @_;
-
     my $log = $log->child('perls_installed');
     $log->_6("checking perls installed");
-
     return $bcmd->installed($self->legacy, $brew_info);
 }
 sub instance_install {
@@ -138,12 +128,9 @@ sub instance_install {
         }
     }
     elsif ($install) {
-
         $log->_5("looking to install $install perl instance(s)");
 
-
         while ($install > 0){
-
             my $candidate = $perls_available[rand @perls_available];
 
             if (grep { $_ eq $candidate } @perls_installed) {
@@ -156,9 +143,7 @@ sub instance_install {
         }
     }
     elsif ($install == -1) {
-
         $log->_5("installing all available perls");
-
 
         for my $perl (@perls_available){
             if (grep { $_ eq $perl } @perls_installed) {
@@ -225,10 +210,9 @@ sub revdep {
 
     delete $self->{args}{args};
 
-    # these args should only be exercised on first call
+    # these args aren't sent through to test()
 
     delete $args{revdep};
-
     delete $self->{args}{delete};
     delete $args{remove};
     delete $args{install};
@@ -256,6 +240,7 @@ sub test {
     my $self = shift;
 
     exit if $self->{args}{notest};
+
     my $log = $log->child('test');
     local $SIG{__WARN__} = sub {};
     $log->_6("warnings trapped locally");
@@ -417,6 +402,8 @@ EOF
 exit;
 }
 sub _attach_build_log {
+    # attach the cpanm logs to the PASS/FAIL logs
+
     my ($self, $bblog) = @_;
 
     my $bbfile;
@@ -442,11 +429,15 @@ sub _attach_build_log {
     }
 }
 sub _copy_logs {
+    # copy the log files out of the temp dir
+
     my $self = shift;
     dircopy $self->{tempdir}, "bblog" if $self->{tempdir};
     unlink 'bblog/stderr.bblog' if -e 'bblog/stderr.bblog';
 }
 sub _create_log {
+    # set up the log object
+
     my ($self, $level) = @_;
 
     $self->{log} = Logging::Simple->new(
@@ -465,8 +456,7 @@ sub _create_log {
     return $self->{log};
 }
 sub _exec {
-
-    # called only by test()
+    # perform the actual *brew build commands (called by test())
 
     my $self = shift;
 
@@ -516,7 +506,7 @@ sub _exec {
 
         if ($bcmd->is_win){
 
-            # all of this shit because berrybrew doesn't get the path right
+            # all of this because berrybrew doesn't get the path right
             # when calling ``berrybrew exec perl ...''
 
             my %res_hash;
@@ -573,12 +563,13 @@ sub _exec {
     }
 }
 sub _dzil_shim {
+    # shim for working on Dist::Zilla modules
+
     my ($self, $cmd_file) = @_;
 
     # return early if possible
 
     return if -e 'Build.PL' || -e 'Makefile.PL';
-
     return if ! -e 'dist.ini';
 
     my $path_sep = $self->is_win ? ';' : ':';
@@ -612,11 +603,14 @@ sub _dzil_shim {
     chdir $dir;
 }
 sub _dzil_unshim {
+    # unshim after doing dzil work
     my $self = shift;
     $self->{is_dzil} = 0;
     chdir '..';
 }
 sub _process_stderr {
+    # compile data written to STDERR
+
     my $self = shift;
     
     my $errlog = "$self->{tempdir}/stderr.bblog";
@@ -652,6 +646,8 @@ sub _process_stderr {
     }
 }
 sub _save_reports {
+    # save FAIL and optionally PASS report logs
+
     my ($self, $ver, $status, $result) = @_;
 
     if ($status ne 'FAIL' && ! $self->{args}{save_reports}){
@@ -708,6 +704,8 @@ sub _save_reports {
     }
 }
 sub _set_plugin {
+    # import the exec plugin
+
     my $self = shift;
     my $log = $log->child('_set_plugin');
     my $plugin = $self->{args}{plugin} ? $self->{args}{plugin} : $ENV{TBB_PLUGIN};
@@ -722,6 +720,8 @@ sub _set_plugin {
     $log->_4("successfully loaded $plugin plugin");
 }
 sub _validate_opts {
+    # validate command line arguments
+
     my $args = shift;
 
     my @valid_args = qw(
