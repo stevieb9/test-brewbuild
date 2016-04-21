@@ -308,6 +308,12 @@ sub tempdir {
     $self->{tempdir} = $dir_name;
     return $self->{tempdir};
 }
+sub workdir {
+    my $self = shift;
+    return is_win()
+        ? "$ENV{HOMEPATH}/brewbuild"
+        : "$ENV{HOME}/brewbuild";
+}
 sub log {
     my $self = shift;
     $self->{log}->_6(ref($self) ." class/obj accessing the log object");
@@ -909,6 +915,10 @@ Returns an instance of the packages log object for creating child log objects.
 
 Sets up the object with a temporary directory used for test logs, that will be 
 removed after the run.
+
+=head2 workdir
+
+Returns the brewbuild working directory.
 
 =head2 setup
 

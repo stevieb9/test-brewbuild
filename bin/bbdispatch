@@ -74,6 +74,10 @@ Set maximum number of concurrent testers to communicate with (default is 4):
 This script dispatches C<brewbuild> build sets to pre-configured
 L<Test::BrewBuild::Tester> test servers.
 
+By default, we try to look up the repository information from your current
+working directory. If it can't be found, you must supply it on the command line
+or within the configuration file.
+
 =head1 COMMAND LINE OPTIONS
 
 =head2 -t, --testers

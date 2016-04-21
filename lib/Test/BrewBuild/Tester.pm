@@ -62,11 +62,10 @@ sub start {
         }
     }
 
-    my ($perl, @args, $work_dir);
+    my ($perl, @args);
+    my $work_dir = Test::BrewBuild->workdir;
 
     if ($^O =~ /MSWin/){
-        $work_dir = "$ENV{HOMEPATH}/brewbuild";
-
         $log->_6("on Windows, using work dir $work_dir");
 
         $perl = (split /\n/, `where perl.exe`)[0];
@@ -77,8 +76,6 @@ sub start {
         @args = ($t, '--fg');
     }
     else {
-        $work_dir = "$ENV{HOME}/brewbuild";
-
         $log->_6("on Unix, using work dir $work_dir");
 
         $perl = 'perl';
@@ -186,22 +183,11 @@ sub listen {
              "$self->{port}"
     );
 
-    my $work_dir;
-
-    if ($^O =~ /MSWin/){
-        $work_dir = "$ENV{HOMEPATH}/brewbuild";
-        mkdir $work_dir if ! -d $work_dir;
-        chdir $work_dir;
-        $log->_7("on Windows, work dir is: $work_dir");
-        $log->_7("chdir to work dir: ".getcwd());
-    }
-    else {
-        $work_dir = "$ENV{HOME}/brewbuild";
-        mkdir $work_dir if ! -d $work_dir;
-        chdir $work_dir;
-        $log->_7("on Windows, work dir is: $work_dir");
-        $log->_7("chdir to work dir: ".getcwd());
-    }
+    my $work_dir = Test::BrewBuild->workdir;
+    mkdir $work_dir if ! -d $work_dir;
+    chdir $work_dir;
+    $log->_7("work dir is: $work_dir");
+    $log->_7("chdir to work dir: ".getcwd());
 
     while (1){
 
@@ -358,14 +344,9 @@ sub _config {
 }
 sub _pid_file {
     # fetch the PID file location
-
     my $self = shift;
-
     return $self->{pid_file} if defined $self->{pid_file};
-
-    $self->{pid_file} = $^O =~ /MSWin/
-        ? "$ENV{HOMEPATH}/brewbuild/brewbuild.pid"
-        : "$ENV{HOME}/brewbuild/brewbuild.pid";
+    $self->{pid_file} = Test::BrewBuild->workdir . '/brewbuild.pid';
 }
 1;
 
@@ -378,6 +359,8 @@ execution, for Windows & Unix.
 
 Builds and puts into the background a L<Test::BrewBuild> remote tester
 listening service.
+
+Note that by default, the working directory is C<~/brewbuild> on all platforms.
 
 =head1 METHODS
 

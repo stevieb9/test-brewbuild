@@ -244,6 +244,10 @@ This is the remote dispatching system of L<Test::BrewBuild>.
 It dispatches out test runs to L<Test::BrewBuild::Tester> remote test servers
 to perform, then processes the results returned from those testers.
 
+By default, we try to look up the repository information from your current
+working directory. If it can't be found, you must supply it on the command line
+or within the configuration file.
+
 =head1 METHODS
 
 =head2 new

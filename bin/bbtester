@@ -111,6 +111,8 @@ incoming build requests from a test dispatcher.
 We then run the appropriate commands, and return the results to the dispatcher
 for processing.
 
+The default working directory for a Tester is C<~/brewbuild> on all platforms.
+
 =head1 COMMAND LINE OPTIONS
 
 =head2 start
