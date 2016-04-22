@@ -1,13 +1,16 @@
 Revision history for Test-BrewBuild
 
-2.02    xxx
+2.02    2016-04-22
         - fixed issue in T::BB::Tester where we weren't checking for the 'new'
           param, hence we weren't doing install if 'new' was set
         - added brief SYNOPSIS in Dispatch
         - fixed issue in Tester where the log scalar wasn't being reset after a
-          run
-        - corrected issues preventing the -i and -n flags weren't working on
-          remote testers
+          run (we also now shutdown() the socket after a finished run)
+        - corrected issues preventing the -i and -n flags from working correctly
+          on remote testers
+        - dzil dists now get a authordeps run by default, logging organized
+          (closes #104)
+        -
 
 2.01    2016-04-22
         - no functional changes
