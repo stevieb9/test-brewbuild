@@ -4,7 +4,7 @@ use warnings;
 
 use Capture::Tiny qw(:all);
 
-our $VERSION = '2.00';
+our $VERSION = '2.01';
 
 sub new {
     return bless {}, shift;
