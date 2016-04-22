@@ -57,6 +57,8 @@ t/30-20-dispatch-autofind_repo.t.norun
 t/30-25-dispatch-default_port.t
 t/30-30-dispatch-notest.t
 t/30-35-dispatch-confit.g
+t/30-40-dispatch-install.t
+t/30-45-dispatch-new.t
 t/40-05-log-revdep_global_full_verbose.t
 t/40-10-log-revdep_save_log_files.t
 t/40-15-log-Tester.t

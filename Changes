@@ -4,7 +4,10 @@ Revision history for Test-BrewBuild
         - fixed issue in T::BB::Tester where we weren't checking for the 'new'
           param, hence we weren't doing install if 'new' was set
         - added brief SYNOPSIS in Dispatch
-        -
+        - fixed issue in Tester where the log scalar wasn't being reset after a
+          run
+        - corrected issues preventing the -i and -n flags weren't working on
+          remote testers
 
 2.01    2016-04-22
         - no functional changes
