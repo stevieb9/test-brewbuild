@@ -6,8 +6,8 @@ Revision history for Test-BrewBuild
         - added brief SYNOPSIS in Dispatch
         - fixed issue in Tester where the log scalar wasn't being reset after a
           run (we also now shutdown() the socket after a finished run)
-        - corrected issues preventing the -i and -n flags from working correctly
-          on remote testers
+        - corrected issues preventing the brewbuild -i and -n flags from working
+          correctly on remote testers
         - dzil dists now get a authordeps run by default, logging organized
           (closes #104)
 
