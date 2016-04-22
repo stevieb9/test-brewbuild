@@ -311,6 +311,9 @@ sub listen {
 
             Storable::nstore_fd($res, $dispatch);
             chdir '..';
+
+            $self->{log} = '';
+            shutdown($dispatch, 1);
         }
     }
     $sock->close();
