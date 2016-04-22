@@ -1,5 +1,9 @@
 Revision history for Test-BrewBuild
 
+2.02    xxx
+        - fixed issue in T::BB::Tester where we weren't checking for the 'new'
+          param, hence we weren't doing install if 'new' was set
+
 2.01    2016-04-22
         - no functional changes
         - POD updates/fixes

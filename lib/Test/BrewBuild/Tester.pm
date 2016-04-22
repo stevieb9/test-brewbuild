@@ -265,7 +265,12 @@ sub listen {
             my $bb = Test::BrewBuild->new(%opts);
             $bb->log()->file(\$self->{log}) if ! $self->{log_to_stdout};
             $bb->instance_remove if $opts{remove};
-            $bb->instance_install($opts{install}) if $opts{install};
+            if ($opts{install}){
+                $bb->instance_install($opts{install});
+            }
+            elsif ($opts{new}){
+                $bb->instance_install($opts{new});
+            }
 
             if ($opts{notest}){
                 $log->_5("no tests run due to --notest flag set");

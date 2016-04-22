@@ -246,6 +246,20 @@ sub _fork {
 Test::BrewBuild::Dispatch - Dispatch C<Test::BrewBuild> test runs to remote test
 servers.
 
+=head1 SYNOPSIS
+
+    use Test::BrewBuild::Dispatch;
+
+    my $d = Test::BrewBuild::Dispatch->new;
+
+    my $return = $d->dispatch(
+        cmd => 'brewbuild -r -R',
+        testers => [qw(127.0.0.1 10.1.1.1:9999)],
+        repo => 'https://github.com/user/repo',
+    );
+
+    print $return;
+
 =head1 DESCRIPTION
 
 This is the remote dispatching system of L<Test::BrewBuild>.
