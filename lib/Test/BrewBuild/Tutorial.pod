@@ -10,6 +10,10 @@ and how to dispatch build requests to them.
 
 =head1 BEFORE YOU BEGIN
 
+At this time, there is no security around the network portions of this suite.
+To mitigate, you can use IP filters, SSH tunnels etc. Although there is
+primitive command checking, it's just that; primitive. Be careful.
+
 Read through the
 L<brewbuild|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/brewbuild> 
 documentation so you know how the actual tester works. Documentation for the

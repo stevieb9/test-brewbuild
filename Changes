@@ -10,7 +10,6 @@ Revision history for Test-BrewBuild
           on remote testers
         - dzil dists now get a authordeps run by default, logging organized
           (closes #104)
-        -
 
 2.01    2016-04-22
         - no functional changes

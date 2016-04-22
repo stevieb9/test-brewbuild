@@ -16,7 +16,7 @@ if (! $ENV{BBDEV_TESTING}){
 # clean out log dir
 
 if ($^O =~ /MSWin/){
-    my @logs = glob "$ENV{HOMEPATH}/bblog/*";
+    my @logs = glob "$ENV{HOMEPATH}/brewbuild/bblog/*";
     for (@logs){
         unlink $_ or die $!;
     }

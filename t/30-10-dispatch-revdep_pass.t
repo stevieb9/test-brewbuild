@@ -34,18 +34,18 @@ print "$_\n" for @ret;
 if ($^O =~ /MSWin/){
     is (@ret, 9, "return count is correct");
 
-    like ($ret[0], qr/removing/, "removing installs");
-    like ($ret[1], qr/127\.0\.0\.1 - /, "remote tester info");
+    like ($ret[0], qr/127\.0\.0\.1 - /, "remote tester info");
+    like ($ret[1], qr/removing/, "removing installs");
     like ($ret[2], qr/reverse dependencies:/, "line has has revdep info");
 
     like ($ret[3], qr/.*?::.*?::.*?/, "Module name");
     like ($ret[4], qr/.*?:: PASS/, "PASS ok");
 
-    like ($ret[6], qr/.*?::.*?::.*?/, "Module name");
-    like ($ret[7], qr/.*?:: PASS/, "PASS ok");
+    like ($ret[5], qr/.*?::.*?::.*?/, "Module name");
+    like ($ret[6], qr/.*?:: PASS/, "PASS ok");
 
-    like ($ret[8], qr/.*?::.*?::.*?/, "Module name");
-    like ($ret[9], qr/.*?:: PASS/, "PASS ok");
+    like ($ret[7], qr/.*?::.*?::.*?/, "Module name");
+    like ($ret[8], qr/.*?:: PASS/, "PASS ok");
 }
 else {
     is (@ret, 9, "return count is correct");
