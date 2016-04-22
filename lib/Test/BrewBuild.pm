@@ -490,7 +490,6 @@ sub _exec {
     if ($self->{args}{on}){
         my $vers = join ',', @{ $self->{args}{on} };
         $log->_5("versions to run on: $vers");
-        $log->_5("exec'ing: $brew exec --with $vers " . join ', ', @exec_cmd);
 
         my $wfh = File::Temp->new(UNLINK => 1);
         my $fname = $wfh->filename;
@@ -504,11 +503,11 @@ sub _exec {
         close $wfh;
 
         $self->_dzil_shim($fname);
+        $log->_5("exec'ing: $brew exec --with $vers " . join ', ', @exec_cmd);
         return `$brew exec --with $vers perl $fname 2>$self->{tempdir}/stderr.bblog`;
         $self->_dzil_unshim if $self->{is_dzil};
     }
     else {
-        $log->_5("exec'ing: $brew exec:\n". join ', ', @exec_cmd);
 
         if ($bcmd->is_win){
 
@@ -520,6 +519,7 @@ sub _exec {
             $self->_dzil_shim;
 
             for (@exec_cmd){
+                $log->_5("exec'ing: $brew exec:\n". join ', ', @exec_cmd);
                 my $res = `$brew exec $_`;
 
                 my @results = $res =~ /
@@ -578,11 +578,14 @@ sub _dzil_shim {
     return if -e 'Build.PL' || -e 'Makefile.PL';
     return if ! -e 'dist.ini';
 
+    my $log = $log->child('_dzil_shim');
+    $log->_5("dzil dist... loading the shim");
+
     my $path_sep = $self->is_win ? ';' : ':';
 
     if (! grep {-x "$_/dzil"} split /$path_sep/, $ENV{PATH} ){
-        croak "this appears to be a Dist::Zilla module, but the dzil binary " .
-              "can't be found\n";
+        $log->fatal("this appears to be a Dist::Zilla module, but the dzil binary " .
+              "can't be found\n");
     }
 
     $self->{is_dzil} = 1;
@@ -601,18 +604,29 @@ sub _dzil_shim {
         last if $dist && $version;
     }
 
+    $log->_7("running dzil commands: 'dzil authordeps --missing | cpanm', " .
+             "'dzil build'"
+     );
+
+    `dzil authordeps --missing | cpanm`;
     `dzil clean`;
     `dzil build`;
 
     my $dir = "$dist-$version";
     copy $cmd_file, $dir if defined $cmd_file;
     chdir $dir;
+    $log->_7("entered $dir directory");
 }
 sub _dzil_unshim {
     # unshim after doing dzil work
+
+    my $log = $log->child('_dzil_unshim');
+    $log->_5("removing dzil shim");
+
     my $self = shift;
     $self->{is_dzil} = 0;
     chdir '..';
+    $log->_7("changed to '..' dir");
 }
 sub _process_stderr {
     # compile data written to STDERR
