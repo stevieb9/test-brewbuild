@@ -20,8 +20,6 @@ use Test::BrewBuild::Tester;
 
 our $VERSION = '2.01';
 
-BEGIN {
-}
 my $log;
 my $bcmd;
 
@@ -764,8 +762,15 @@ dispatching capabilities.
 This module is the backend for the C<brewbuild> script that is accompanied by
 this module.
 
-It provides you the ability to perform your unit tests across all of your
-Perlbrew (Unix) or Berrybrew (Windows) Perl instances.
+For end-user use, see L<brewbuild|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/brewbuild>.
+You can also read the network test dispatcher C<bbdispatch> documentation
+L<here|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbdispatch>, the
+remote test listener C<bbtester> docs
+L<here|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbtester>, or
+browse through the L<Test::BrewBuild::Tutorial> for network testing.
+
+This module provides you the ability to perform your unit tests across all of
+your Perlbrew (Unix) or Berrybrew (Windows) Perl instances.
 
 For Windows, you'll need to install Berrybrew (see L<SEE ALSO> for details).
 For Unix, you'll need Perlbrew.
@@ -803,7 +808,7 @@ All unit tests are run against all installed instances.
 
     # run the unit tests of the current module only
 
-     $bb->test;
+    $bb->test;
 
 =head1 METHODS
 

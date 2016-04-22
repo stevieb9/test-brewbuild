@@ -1,229 +1,170 @@
 NAME
 
-    brewbuild - Automate module and reverse-dependency testing, on Windows
-    and Unix
-
-NOTICE
-
-    This is the first devel release that includes the entire remote
-    dispatching/tester server distributed testing environment. Things can
-    and will change in the next couple of weeks, and there are a lot of
-    edge cases that don't have tests yet (so things may not work completely
-    as expected yet). Once I've got a list of requirements sorted, the POD
-    nice and clean, installation confirmed fully working and more testing
-    done, I'll be bumping the version to 2.00
-
-    The module containing the API for this script can be found at
-    Test::BrewBuild.
-
-    For running remote tester servers, see bbtester
-    <https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbtester> for
-    the script and Test::BrewBuild::Tester for its API.
-
-    For the dispatcher service that distributes test runs to the remote
-    testers, see bbdispatch
-    <https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbdispatch>
-    for the script, and Test::BrewBuild::Dispatch for the API.
-
-SYNOPSIS
-
-    You must be in the root directory of the distribution you want to test.
-
-    Run all unit tests against all installed instances with no other
-    action. Upon a FAIL, a log file will be generated in the current
-    working directory named bblog/version.bblog
-
-        brewbuild
-    
-        # output
-    
-        5.8.9 :: PASS
-        5.20.3 :: FAIL
-        5.22.1 :: PASS
-
-    Run tests on the local working copy of the current module, then run all
-    tests of all reverse dependencies of this module (as reported by CPAN),
-    to ensure the down river modules will work with your new build. In this
-    case, FAILs are stored in bblog/revdep-module-name.version.bblog
-
-        brewbuild -R
-    
-        # output, in my Mock::Sub repo directory
-    
-        reverse dependencies: Test-BrewBuild, File-Edit-Portable,
-          Devel-Examine-Subs, Devel-Trace-Subs
-    
-        Test::BrewBuild
-        5.18.4 :: FAIL
-        5.22.1 :: PASS
-    
-        File::Edit::Portable
-        5.18.4 :: PASS
-        5.22.1 :: PASS
-    
-        Devel::Examine::Subs
-        5.18.4 :: PASS
-        5.22.1 :: PASS
-    
-        Devel::Trace::Subs
-        5.18.4 :: PASS
-        5.22.1 :: PASS
-
-    Print usage information
-
-        brewbuild -h
-
-    Display test platform setup instructions for Unix and Windows
-
-        brewbuild --setup
+    Test::BrewBuild - Perl/Berry brew unit testing automation, with remote
+    tester dispatching capabilities.
 
 DESCRIPTION
 
-    This brewbuild script installed by the Test::Brewbuild module allows
-    you to perform your unit tests seamlessly across all of your Perlbrew
-    (Unix) or Berrybrew (Windows) Perl instances, as well as test all of
-    your down-river CPAN modules that rely on your module against the
-    locally updated version, with support for ExtUtils::MakeMaker,
-    Module::Build and Dist::Zilla distributions.
+    This module is the backend for the brewbuild script that is accompanied
+    by this module.
+
+    For end-user use, see brewbuild
+    <https://metacpan.org/pod/distribution/Test-BrewBuild/bin/brewbuild>.
+    You can also read the network test dispatcher bbdispatch documentation
+    here
+    <https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbdispatch>,
+    the remote test listener bbtester docs here
+    <https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbtester>, or
+    browse through the Test::BrewBuild::Tutorial for network testing.
+
+    This module provides you the ability to perform your unit tests across
+    all of your Perlbrew (Unix) or Berrybrew (Windows) Perl instances.
 
     For Windows, you'll need to install Berrybrew (see "SEE ALSO" for
     details). For Unix, you'll need Perlbrew.
 
     It allows you to remove and reinstall on each test run, install random
-    versions of perl and install specific versions.
+    versions of perl, or install specific versions.
 
-    All unit tests are run against all installed perl instances, unless
-    otherwise specified.
+    All unit tests are run against all installed instances.
 
-USAGE
+SYNOPSIS
 
- -o, --on
+        use Test::BrewBuild;
+    
+        my $bb = Test::BrewBuild->new;
+    
+        my @perls_available = $bb->perls_available;
+        my @perls_installed = $bb->perls_installed;
+    
+        # remove all currently installed instances of perl, less the one you're
+        # using
+    
+        $bb->instance_remove;
+    
+        # install four new random versions of perl
+    
+        $bb->instance_install(4);
+    
+        # install two specific versions
+    
+        $bb->instance_install(['5.10.1', '5.20.3']);
+    
+        # find and test against all the current module's reverse CPAN dependencies
+    
+        $bb->revdep;
+    
+        # run the unit tests of the current module only
+    
+        $bb->test;
 
-    Perl version number to run against (can be supplied multiple times).
-    Can not be used on Windows at this time.
+METHODS
 
- -R, --revdep
+ new(%args)
 
-    Run tests, install, then run tests on all CPAN reverse dependency
-    modules.
+    Returns a new Test::BrewBuild object. See the documentation for the
+    brewbuild
+    <https://metacpan.org/pod/distribution/Test-BrewBuild/bin/brewbuild>
+    script to understand what the arguments are and do.
 
- -d, --debug
+ brew_info
 
-    0-7, sets logging verbosity, default is 0.
+    Returns in string form the full output of *brew available.
 
- -n, --new
+ perls_available
 
-    How many random versions of perl to install (-1 to install all).
+    Returns an array containing all perls available, whether already
+    installed or not.
 
- -r, --remove
+ perls_installed
 
-    Remove all installed perls (less the currently used one).
+    Returns an array of the names of all perls currently installed under
+    your *brew setup.
 
- -i, --install
+ instance_install
 
-    Number portion of an available perl version according to *brew
-    available. Multiple versions can be sent in at once.
+    If an integer is sent in, we'll install that many random versions of
+    perl. You can also send in an array reference, where each element is a
+    version of perl, and we'll install those instead.
 
- -N, --notest
+ instance_remove
 
-    Do not run tests. Allows you to --remove and --install without testing.
+    Uninstalls all currently installed perls, less the one you are
+    currently switched or used to.
 
- -S, --save
+ test
 
-    By default, we save logs of FAIL result logs into the bblog directory.
-    With this flag, we'll save both the FAIL logs along with all the PASS
-    logs as well.
+    Processes and returns the test results as a string scalar of the
+    distribution located in the current working directory.
 
- -l, --legacy
+ revdeps
 
-    Operate on perls less than 5.8.x. The default plugins won't work with
-    this flag set if a lower version is installed.
+    Returns a list of the reverse dependencies (according to CPAN) that the
+    module you're working on in the current working directory have.
 
- -p, --plugin
+ revdep
 
-    Optional module name of the exec command plugin to use. You can also
-    specify a file name if the module is not installed.
+    Loops over all of the current module's reverse dependencies, and
+    executes test() on each one at a time. This helps you confirm whether
+    your new build won't break your downstream users' modules.
 
- -a, --args
+ legacy
 
-    List of args to pass into the plugin (one arg per loop).
+    By default, we don't install perl versions less than v5.8.0. Pass in a
+    true value to override this default.
 
- -T, --selftest
+ options(\%args)
 
-    Test::BrewBuild development testing only. Prevents recursive test
-    loops.
+    Takes a hash reference of the command-line argument list, and converts
+    it into a hash of the translated Test::BrewBuild parameters along with
+    their values.
 
- -s, --setup
+    Returns the converted hash for passing back into new().
 
-    Display test platform setup instructions.
+ config_file
 
- -h, --help
+    Returns a string that contains the path/filename of the configuration
+    file, if available.
 
-    Print out the command line usage information.
+ plugin('Module::Name')
 
-TEST PLATFORM CONFIGURATION
+    Fetches and installs a custom plugin which contains the code that
+    perlbrew/berrybrew exec will execute. If not used or the module
+    specified can't be located (or it contains errors), we fall back to the
+    default bundled Test::BrewBuild::Plugin::DefaultExec (which is the
+    canonical example for writing new plugins).
 
-    Test::BrewBuild test platform configuration guide
+    Note that you can send in a custom plugin *.pm filename to plugin as
+    opposed to a module name if the module isn't installed. If the file
+    isn't in the current working directory, send in the relative or full
+    path.
 
- UNIX
+ is_win
 
-    Install perlbrew and related requirements:
+    Helper method, returns true if the current OS is Windows, false if not.
 
-        cpanm App::perlbrew
-        perlbrew install-patchperl
-        perlbrew install-cpanm
+ log
 
-    Install and switch to your base perl instance, and install
-    Test::BrewBuild:
+    Returns an instance of the packages log object for creating child log
+    objects.
 
-        perlbrew install 5.22.1
-        perlbrew switch 5.22.1
-        cpanm Test::BrewBuild
+ tempdir
 
- WINDOWS
+    Sets up the object with a temporary directory used for test logs, that
+    will be removed after the run.
 
-    Note that the key is that your %PATH% must be free and clear of
-    anything Perl. That means that if you're using an existing box with
-    Strawberry or ActiveState installed, you *must* remove all traces of
-    them in the PATH environment variable for ``brewbuild'' to work
-    correctly.
+ workdir
 
-    Easiest way to guarantee a working environment is using a clean-slate
-    Windows server with nothing on it. For a Windows test platform, I
-    mainly used an Amazon AWS t2.small server.
+    Returns the brewbuild working directory.
 
-    Download/install git for Windows:
+ setup
 
-        https://git-scm.com/download/win
+    Prints out detailed information on setting up a testing environment, on
+    Windows and Unix.
 
-    Create a repository directory, and enter it:
+ help
 
-        mkdir c:\repos
-        cd c:\repos
-
-    Clone and configure berrybrew
-
-        git clone https://github.com/dnmfarrell/berrybrew
-        cd berrybrew
-        bin\berrybrew.exe config (type 'y' when asked to install in PATH)
-
-    Close the current CMD window and open a new one to update env vars
-
-    Check available perls, and install one that'll become your core base
-    install
-
-        berrybrew available
-        berrybrew install 5.22.1_64
-        berrybrew switch 5.22.1_64
-        close CMD window, and open new one
-
-    Make sure it took
-
-        perl -v
-
-    Install Test::BrewBuild
-
-        cpanm Test::BrewBuild
+    Displays the brewbuild command line usage information.
 
 AUTHOR
 
@@ -242,21 +183,12 @@ BUGS
 
 SUPPORT
 
-    You can find documentation for this script and module with the perldoc
-    command.
+    You can find documentation for this module and its accompanying script
+    with the perldoc command:
 
-        perldoc brewbuild
         perldoc Test::BrewBuild
-
-    Documentation for the remote testing service script, and its API:
-
-        perldoc bbtester
-        perldoc Test::BrewBuild::Tester
-
-    Documentation for the test dispatching script and its API:
-
-        perldoc bbdispatch
-        perldoc Test::BrewBuild::Dispatch
+    
+        perldoc brewbuild
 
 SEE ALSO
 
@@ -267,23 +199,6 @@ SEE ALSO
     Perlbrew for Unixes:
 
     http://perlbrew.pl
-
-    Remote testing server:
-
-    <a
-    href="https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbtester">bbtester</a>
-
-    Remote testing server API:
-
-    Test::BrewBuild::Tester
-
-    Dispatching to remote testers:
-
-    See brewbuild -h, in the Dispatching Server options section.
-
-    Dispatcher API:
-
-    Test::BrewBuild::Dispatch
 
 LICENSE AND COPYRIGHT
 

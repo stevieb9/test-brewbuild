@@ -12,16 +12,12 @@ and how to dispatch build requests to them.
 
 Read through the
 L<brewbuild|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/brewbuild> 
-documentation so you know how the actual tester works.
+documentation so you know how the actual tester works. Documentation for the
+scripts used in this tutorial can be found in L<SEE ALSO>.
 
-You'll need:
-
-<ul>
-<li>Git, on both the dispatcher and all testers</li>
-<li>to be using an Administrative user (Windows only)</li>
-<li>your module accessible via a Git repository</li>
-<li>the dispatch and all tester servers configured, see L<SERVER CONFIGURATION>
-</ul>
+You'll need Git on both the dispatcher and all testers, to be using an
+Administrative user (Windows only), your module accessible via a Git repository,
+and the dispatch and all tester servers configured, see L<SERVER CONFIGURATION>.
 
 =head1 SERVER CONFIGURATION
 
@@ -170,14 +166,18 @@ Dispatcher:
     bbdispatch -t 10.1.1.1
 
 =head1 SEE ALSO
-
-Details on the configuration file: L<Test::BrewBuild::brewbuild.conf>.
+Details on the L<configuration file|https://metacpan.org/pod/distribution/Test-BrewBuild/lib/Test/BrewBuild/brewbuild.conf.pod>.
 
 Dispatch script usage information:
 L<bbdispatch|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbdispatch>.
 
 Tester script usage information:
 L<bbtester|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbtester>.
+
+BrewBuild script usage information:
+L<brewbuild|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/brewbuild>.
+
+
 
 
 

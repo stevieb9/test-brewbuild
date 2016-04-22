@@ -270,6 +270,11 @@ Clone and configure berrybrew
     cd berrybrew
     bin\berrybrew.exe config (type 'y' when asked to install in PATH)
 
+Note: I have forked and hacked C<berrybrew> with a few changes which makes it
+play nicer with C<brewbuild> (and adds the C<--with> feature for C<exec>) if
+you're interested. My changes haven't been merged yet, so you can fetch it from
+L<here|https://github.com/stevieb9/berrybrew>.
+
 Close the current CMD window and open a new one to update env vars
 
 Check available perls, and install one that'll become your core base install
