@@ -118,6 +118,8 @@ sub instance_install {
     if (ref $install eq 'ARRAY'){
         for my $version (@$install){
             $version = "perl-$version" if ! $self->is_win && $version !~ /perl/;
+            $version .= '_64' if $self->is_win && $version !~ /_/;
+
             if (grep { $version eq $_ } @perls_installed){
                 $log->_6("$version is already installed... skipping");
                 next;
