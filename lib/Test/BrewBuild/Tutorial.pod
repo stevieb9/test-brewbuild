@@ -81,15 +81,15 @@ By default, we dispatch the most basic build, by sending C<brewbuild> as the
 test command. The following will dispatch a build to all three testers we
 configured above, and then wait for them to return the results.
 
-    bbdispatch -t 127.0.0.1, 172.16.1.1:9999, 10.1.1.1
+    bbdispatch -t 127.0.0.1 -t 172.16.1.1:9999 -t 10.1.1.1
 
 To specify a different command string:
 
-    bbdispatch -c brewbuild -r -R -d 7 -t 127.0.0.1, 172.16.1.1:9999, 10.1.1.1
+    bbdispatch -c "brewbuild -r -R -d 7" -t 127.0.0.1 -t 172.16.1.1:9999 -t 10.1.1.1
 
 To specify a different repository:
 
-    bbdispatch -r https://github.com/user/repo -t 127.0.0.1, 172.16.1.1:9999, 10.1.1.1
+    bbdispatch -r https://github.com/user/repo -t 127.0.0.1 -t 172.16.1.1:9999 -t 10.1.1.1
 
 =head2 CONFIGURATION FILE RUN
 
@@ -132,7 +132,7 @@ dispatcher with debug flags enabled. These debug results will be either included
 in the tester's return, or printed to its C<STDOUT>, depending on how you're
 debugging the tester:
 
-    bbdispatch [...] -c brewbuild -d 7
+    bbdispatch [...] -c "brewbuild -d 7"
 
 Using the L<Test::BrewBuild::Dispatch> API, you can enclose all debug output and
 return values into one scalar variable, and either dump it to a file or examine
@@ -170,6 +170,7 @@ Dispatcher:
     bbdispatch -t 10.1.1.1
 
 =head1 SEE ALSO
+
 Details on the L<configuration file|https://metacpan.org/pod/distribution/Test-BrewBuild/lib/Test/BrewBuild/brewbuild.conf.pod>.
 
 Dispatch script usage information:
