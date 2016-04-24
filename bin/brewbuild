@@ -181,16 +181,23 @@ Run tests, install, then run tests on all CPAN reverse dependency modules.
 
 =head2 -n, --new
 
-How many random versions of perl to install (-1 to install all).
-
-=head2 -r, --remove
-
-Remove all installed perls (less the currently used one).
+How many random versions of perl to install (-1 to install all). On Windows,
+we'll default to installing 64-bit versions only. See the C<--install> flag if
+you'd like to install 32-bit versions.
 
 =head2 -i, --install
 
 Number portion of an available perl version according to C<*brew available>.
 Multiple versions can be sent in at once.
+
+On Windows, by default, we install only 64-bit versions. You can append the
+C<_32> or C<_64> suffixes as displayed by C<berrybrew available> to override
+the default. If you're dispatching to both Unix and Windows systems, we'll strip
+this suffix on the Unix systems before performing any actions.
+
+=head2 -r, --remove
+
+Remove all installed perls (less the currently used one).
 
 =head2 -N, --notest
 

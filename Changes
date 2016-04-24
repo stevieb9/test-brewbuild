@@ -5,6 +5,9 @@ Revision history for Test-BrewBuild
           on MSWin, as on pre 2k3, 'where' didn't exist (closes #117)
         - moved setting the brewbuild command default from bbdispatch to
           Dispatch (closes #118)
+        - On MSWin, we now accept the _32/_64 prefixes in --install, otherwise
+          we'll default to 64-bit. This suffix will be stripped on Unix systems
+          if dispatching to both Unix and Windows systems (closes #114)
 
 2.02    2016-04-22
         - fixed issue in T::BB::Tester where we weren't checking for the 'new'
