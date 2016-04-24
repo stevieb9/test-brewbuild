@@ -39,9 +39,6 @@ if ($is_win && $args{on}){
     warn "\nwe can't use --on with Windows... running on all\n\n";
     delete $args{on};
 }
-if (! -d 't/' && ! $args{notest}){
-    croak "\nthere's no 't/' directory, nothing to test. Exiting...\n";
-}
 
 # legacy perls in use?
 
@@ -55,6 +52,11 @@ $bb->instance_remove if $args{remove};
 
 $bb->instance_install($args{new}) if defined $args{new};
 $bb->instance_install($args{install}) if $args{install};
+
+if (! -d 't/' && ! $args{notest}){
+    $log->_0("\nthere's no 't/' directory, setting ``--notest''...\n");
+    $args{notest} = 1;
+}
 
 exit if $args{notest};
 

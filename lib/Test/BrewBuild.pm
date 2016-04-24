@@ -92,27 +92,25 @@ sub brew_info {
     return $brew_info;
 }
 sub perls_available {
-    my ($self, $brew_info) = @_;
+    my $self = shift;
     my $log = $log->child('perls_available');
-    my @perls_available = $bcmd->available($self->legacy, $brew_info);
+    my @perls_available = $bcmd->available($self->legacy, $self->brew_info);
     $log->_6("perls available: " . join ', ', @perls_available);
     return @perls_available;
 }
 sub perls_installed {
-    my ($self, $brew_info) = @_;
+    my $self = shift;
     my $log = $log->child('perls_installed');
     $log->_6("checking perls installed");
-    return $bcmd->installed($self->legacy, $brew_info);
+    return $bcmd->installed($self->legacy, $self->brew_info);
 }
 sub instance_install {
     my ($self, $install) = @_;
 
     my $log = $log->child('instance_install');
 
-    my $brew_info = $self->brew_info;
-
-    my @perls_available = $self->perls_available($brew_info);
-    my @perls_installed = $self->perls_installed($brew_info);
+    my @perls_available = $self->perls_available;
+    my @perls_installed = $self->perls_installed;
     my @new_installs;
 
     if (ref $install eq 'ARRAY'){
@@ -174,7 +172,7 @@ sub instance_remove {
 
     my $log = $log->child('instance_remove');
 
-    my @perls_installed = $self->perls_installed($self->brew_info);
+    my @perls_installed = $self->perls_installed;
 
     $log->_6("perls installed: " . join ', ', @perls_installed);
     $log->_0("removing previous installs...");
@@ -185,7 +183,7 @@ sub instance_remove {
 
     for my $installed_perl (@perls_installed){
 
-        my $using = $bcmd->using( $self->brew_info );
+        my $using = $bcmd->using($self->brew_info);
 
         if ($using eq $installed_perl) {
             $log->_5( "not removing version we're using: $using" );
