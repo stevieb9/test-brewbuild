@@ -20,7 +20,7 @@ setup/unix_setup.txt
 setup/windows_setup.txt
 t/00-00-load.t
 t/10-00-api-BB_plugins.t
-t/10-05-BB_brew_info.t
+t/10-05-api-BB_brew_info.t
 t/10-10-api-BB_perls_avaliable.t
 t/10-15-api-BB_is_win.t
 t/10-20-api-BB_perls_installed.t
