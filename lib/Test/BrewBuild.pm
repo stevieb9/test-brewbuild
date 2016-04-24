@@ -119,11 +119,14 @@ sub instance_install {
 
             if ($self->is_win){
                 if ($version !~ /_/){
+                    $log->_7("MSWin: no bit suffix supplied");
                     if (! grep {$_ =~ /$version/} @perls_available){
                         $version .= '_64';
+                        $log->_7("MSWin: default to available 64-bit $version");
                     }
                     else {
                         $version .= '_32';
+                        $log->_7("MSWin: no 64-bit version... using $version");
                     }
                 }
 
