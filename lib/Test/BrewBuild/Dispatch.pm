@@ -119,6 +119,7 @@ sub dispatch {
             $return .= $_ for @{ $build->{data} };
         }
         else {
+            $build->{data} = '' if ! $build->{data};
             $return .= "$build->{data}\n";
         }
     }
