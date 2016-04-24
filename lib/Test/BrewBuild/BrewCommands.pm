@@ -29,8 +29,12 @@ sub brew {
     my $brew;
 
     if ($self->is_win){
-        my $exe_loc = `where berrybrew.exe`;
-        $brew = (split /\n/, $exe_loc)[0];
+        for (split /;/, $ENV{PATH}){
+            if (-x "$_/berrybrew.exe"){
+                $brew = "$_/berrybrew.exe";
+                last;
+            }
+        }
     }
     else {
         $brew = 'perlbrew';

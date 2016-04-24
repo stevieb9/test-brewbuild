@@ -11,9 +11,19 @@ sub new {
 }
 sub git {
     my $self = shift;
-    my $cmd = $^O =~ /MSWin/
-        ? (split /\n/, `where git.exe`)[0]
-        : 'git';
+    my $cmd;
+
+    if ($^O =~ /MSWin/){
+        for (split /;/, $ENV{PATH}){
+            if (-x "$_/git.exe"){
+                $cmd = "$_/git.exe";
+                last;
+            }
+        }
+    }
+    else {
+        $cmd = 'git';
+    }
     return $cmd;
 }
 sub link {

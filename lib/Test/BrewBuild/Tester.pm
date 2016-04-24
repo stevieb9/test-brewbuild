@@ -68,9 +68,20 @@ sub start {
     if ($^O =~ /MSWin/){
         $log->_6("on Windows, using work dir $work_dir");
 
-        $perl = (split /\n/, `where perl.exe`)[0];
-        my $t = (split /\n/, `where bbtester`)[0];
+        my ($perl, $t);
 
+        for (split /;/, $ENV{PATH}){
+            if (-x "$_/perl.exe"){
+                $perl = "$_/perl.exe";
+                last;
+            }
+        }
+        for (split /;/, $ENV{PATH}){
+            if (-e "$_/bbtester"){
+                $t = "$_/bbtester";
+                last;
+            }
+        }
         $log->_6("using command: $perl $t --fg");
 
         @args = ($t, '--fg');
