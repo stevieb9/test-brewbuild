@@ -10,7 +10,7 @@ Revision history for Test-BrewBuild
           if dispatching to both Unix and Windows systems (closes #114)
         - removed prerequisite of needing to be an Administrator user on Windows
           from the Tutorial (closes #119)
-        - fixed a series of incorrect logging messages
+        - fixed a series of out-of-order debug logging messages
 
 2.02    2016-04-22
         - fixed issue in T::BB::Tester where we weren't checking for the 'new'
