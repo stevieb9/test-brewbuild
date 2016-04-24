@@ -43,6 +43,7 @@ sub dispatch {
     my ($self, %params) = @_;
 
     my $cmd = $params{cmd} || $self->{cmd};
+    $cmd = 'brewbuild' if ! $cmd;
     my $repo = $params{repo} || $self->{repo};
     my $testers = $params{testers} || $self->{testers};
 

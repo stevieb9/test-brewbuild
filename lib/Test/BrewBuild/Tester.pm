@@ -68,7 +68,7 @@ sub start {
     if ($^O =~ /MSWin/){
         $log->_6("on Windows, using work dir $work_dir");
 
-        my ($perl, $t);
+        my $t;
 
         for (split /;/, $ENV{PATH}){
             if (-x "$_/perl.exe"){

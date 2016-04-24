@@ -1,8 +1,10 @@
 Revision history for Test-BrewBuild
 
 2.03    xxx
-        - changed to searching path for binaries as opposed to using ``where''
+        - changed to searching %PATH% for binaries as opposed to using ``where''
           on MSWin, as on pre 2k3, 'where' didn't exist (closes #117)
+        - moved setting the brewbuild command default from bbdispatch to
+          Dispatch (closes #118)
 
 2.02    2016-04-22
         - fixed issue in T::BB::Tester where we weren't checking for the 'new'

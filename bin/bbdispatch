@@ -29,8 +29,6 @@ EOF
 exit;
 }
 
-$args{cmd} = 'brewbuild' if ! $args{cmd};
-
 my $dispatcher = Test::BrewBuild::Dispatch->new(
     debug => $args{debug},
     forks => $args{forks},
