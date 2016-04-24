@@ -1,16 +1,16 @@
 Revision history for Test-BrewBuild
 
 2.03    xxx
-        - changed to searching %PATH% for binaries as opposed to using ``where''
+        - changed to searching %PATH% for binaries as opposed to using 'where'
           on MSWin, as on pre 2k3, 'where' didn't exist (closes #117)
         - moved setting the brewbuild command default from bbdispatch to
           Dispatch (closes #118)
-        - On MSWin, we now accept the _32/_64 prefixes in --install, otherwise
+        - On MSWin, we now accept the _32/_64 suffixes in --install, otherwise
           we'll default to 64-bit. This suffix will be stripped on Unix systems
-          if dispatching to both Unix and Windows systems (closes #114)
-        - removed prerequisite of needing to be an Administrator user on Windows
+          if dispatching to both Unix and Windows testers (closes #114)
+        - removed prerequisite of needing to be an Administrator user on MSWin
           from the Tutorial (closes #119)
-        - fixed a series of out-of-order debug logging messages
+        - fixed a series of out-of-order debug logging message entries
 
 2.02    2016-04-22
         - fixed issue in T::BB::Tester where we weren't checking for the 'new'
@@ -18,7 +18,7 @@ Revision history for Test-BrewBuild
         - added brief SYNOPSIS in Dispatch
         - fixed issue in Tester where the log scalar wasn't being reset after a
           run (we also now shutdown() the socket after a finished run)
-        - corrected issues preventing the brewbuild -i and -n flags from working
+        - correct issues preventing the brewbuild -i and -n flags from working
           correctly on remote testers
         - dzil dists now get a authordeps run by default, logging organized
           (closes #104)
