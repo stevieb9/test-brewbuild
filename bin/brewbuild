@@ -182,8 +182,9 @@ Run tests, install, then run tests on all CPAN reverse dependency modules.
 =head2 -n, --new
 
 How many random versions of perl to install (-1 to install all). On Windows,
-we'll default to installing 64-bit versions only. See the C<--install> flag if
-you'd like to install 32-bit versions.
+we'll default to installing 64-bit versions only, if a 64 bit perl is available
+for the version desired. See the C<--install> flag if you'd like to install
+32-bit versions, where both versions are present.
 
 =head2 -i, --install
 

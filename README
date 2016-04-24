@@ -87,6 +87,16 @@ METHODS
     perl. You can also send in an array reference, where each element is a
     version of perl, and we'll install those instead.
 
+    On Windows, where you want to install specific perls, we'll default to
+    installing 64-bit versions only, if a 64 bit perl is available for the
+    version desired and you haven't added the _64/_32 suffix per berrybrew
+    available.
+
+    Simply add the _32 suffix if you want to install it specifically. Note
+    that if you're dispatching to Unix and Windows servers, the Unix
+    systems will remove this invalid portion of the version prior to
+    processing further.
+
  instance_remove
 
     Uninstalls all currently installed perls, less the one you are

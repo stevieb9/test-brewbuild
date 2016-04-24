@@ -116,7 +116,19 @@ sub instance_install {
     if (ref $install eq 'ARRAY'){
         for my $version (@$install){
             $version = "perl-$version" if ! $self->is_win && $version !~ /perl/;
-            $version .= '_64' if $self->is_win && $version !~ /_/;
+
+            if ($self->is_win){
+                if ($version !~ /_/){
+                    if (! grep {$_ =~ /$version/} @perls_available){
+                        $version .= '_64';
+                    }
+                    else {
+                        $version .= '_32';
+                    }
+                }
+
+            }
+            $version =~ s/_.*$// if ! $self->is_win;
 
             if (grep { $version eq $_ } @perls_installed){
                 $log->_6("$version is already installed... skipping");
@@ -851,6 +863,14 @@ C<*brew> setup.
 If an integer is sent in, we'll install that many random versions of perl. You
 can also send in an array reference, where each element is a version of perl,
 and we'll install those instead.
+
+On Windows, where you want to install specific perls, we'll default to
+installing 64-bit versions only, if a 64 bit perl is available for the version
+desired and you haven't added the C<_64/_32> suffix per C<berrybrew available>.
+
+Simply add the C<_32> suffix if you want to install it specifically. Note that
+if you're dispatching to Unix and Windows servers, the Unix systems will remove
+this invalid portion of the version prior to processing further.
 
 =head2 instance_remove
 
