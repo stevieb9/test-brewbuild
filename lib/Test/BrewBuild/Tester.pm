@@ -270,8 +270,12 @@ sub listen {
             for (keys %opts){
                 $opt_str .= "$_ => $opts{$_}\n" if defined $opts{$_};
             }
-            $log->_5("commencing test run with args: $opt_str") if $opt_str;
-            $log->_5("commencing default brewbuild run with no args");
+            if ($opt_str){
+                $log->_5("commencing test run with args: $opt_str");
+            }
+            else {
+                $log->_5("commencing default brewbuild run with no args");
+            }
 
             my $bb = Test::BrewBuild->new(%opts);
             $bb->log()->file(\$self->{log}) if ! $self->{log_to_stdout};
