@@ -8,6 +8,8 @@ Revision history for Test-BrewBuild
         - On MSWin, we now accept the _32/_64 prefixes in --install, otherwise
           we'll default to 64-bit. This suffix will be stripped on Unix systems
           if dispatching to both Unix and Windows systems (closes #114)
+        - removed prerequisite of needing to be an Administrator user on Windows
+          from the Tutorial (closes #119)
 
 2.02    2016-04-22
         - fixed issue in T::BB::Tester where we weren't checking for the 'new'

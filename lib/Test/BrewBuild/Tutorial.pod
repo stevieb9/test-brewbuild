@@ -19,9 +19,9 @@ L<brewbuild|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/brewbuild>
 documentation so you know how the actual tester works. Documentation for the
 scripts used in this tutorial can be found in L<SEE ALSO>.
 
-You'll need Git on both the dispatcher and all testers, to be using an
-Administrative user (Windows only), your module accessible via a Git repository,
-and the dispatch and all tester servers configured, see L<SERVER CONFIGURATION>.
+You'll need Git on both the dispatcher and all testers, your module accessible
+via a Git repository, and the dispatch and all tester servers configured, see
+L<SERVER CONFIGURATION>.
 
 =head1 SERVER CONFIGURATION
 
