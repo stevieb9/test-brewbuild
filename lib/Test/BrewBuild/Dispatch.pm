@@ -223,7 +223,7 @@ sub _fork {
             }
 
             if (! $repo_link){
-                $log->_0("repo not found, croaking");
+                $log->_0("repo '$repo_link' not found, croaking");
                 croak "\nno repository found, can't continue\n";
             }
             $socket->send($repo_link);

@@ -77,6 +77,10 @@ public-facing IP addresses, so we'll specify just the local loopback:
 
 =head2 COMMAND LINE BASIC RUN
 
+C<brewbuild> itself can send in test run to remotes in an extremely basic way,
+but we're going to focus on C<bbdispatch> here which allows for far more complex
+cases.
+
 By default, we dispatch the most basic build, by sending C<brewbuild> as the
 test command. The following will dispatch a build to all three testers we
 configured above, and then wait for them to return the results.
@@ -166,6 +170,9 @@ Quick start basic example, with one remote tester.
 Tester 10.1.1.1:
 
     bbtester start
+
+brewbuild:
+    brewbuild -D -t 10.1.1.1
 
 Dispatcher:
 

@@ -35,6 +35,15 @@ if (! grep { -x "$_/$brew_prog"} split /$sep/, $ENV{PATH}){
     exit;
 }
 
+if ($args{dispatch}){
+    my @testers = @{ $args{testers} };
+    my $dispatch = Test::BrewBuild::Dispatch->new;
+    my $return = $dispatch->dispatch(
+        testers => \@testers,
+    );
+    print $return;
+    exit;
+}
 if ($is_win && $args{on}){
     warn "\nwe can't use --on with Windows... running on all\n\n";
     delete $args{on};
@@ -138,6 +147,10 @@ stored in C<bblog/revdep-module-name.version.bblog>
     5.18.4 :: PASS
     5.22.1 :: PASS
 
+Send a basic test run to remote testers
+
+    brewbuild -D -t localhost -t 10.1.1.1 -t 172.16.5.5:9999
+
 Print usage information
 
     brewbuild -h
@@ -154,6 +167,8 @@ Berrybrew (Windows) Perl instances, as well as test all of your down-river CPAN
 modules that rely on your module against the locally updated version, with
 support for L<ExtUtils::MakeMaker>, L<Module::Build> and L<Dist::Zilla>
 distributions.
+
+It also allows you to dispatch basic test runs to remote testing servers.
 
 For Windows, you'll need to install Berrybrew (see L<SEE ALSO> for details).
 For Unix, you'll need Perlbrew.
@@ -199,6 +214,21 @@ this suffix on the Unix systems before performing any actions.
 =head2 -r, --remove
 
 Remove all installed perls (less the currently used one).
+
+=head2 -D, --dispatch
+
+Sends a basic test run to remote C<Test::BrewBuild> test servers, which are
+specified with the C<-t|--tester> flag. We'll get the repository inforation out
+of your current working directory, and simply run C<brewbuild> with no arguments
+on the testers (all other flags are removed if C<-D> is used).
+
+For more expansive dispatching functionality, see
+L<bbdispatch|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbdispatch>.
+
+=head2 -t, --tester
+
+Used only with the C<-D> flag, specify a tester for the dispatcher to dispatch
+to, in the form C<host_or_ip[:port]>.
 
 =head2 -N, --notest
 

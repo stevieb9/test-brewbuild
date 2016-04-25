@@ -60,6 +60,8 @@ sub options {
         "S|save"        => \$opts{save_reports},
         "l|legacy"      => \$opts{legacy},
         "T|selftest"    => \$opts{selftest},
+        "D|dispatch"    => \$opts{dispatch},
+        "t|tester=s@"   => \$opts{testers},
         "s|setup"       => \$setup,
         "h|help"        => \$help,
     );
@@ -404,6 +406,11 @@ Local usage options:
 -i | --install  Number portion of an available perl version according to "*brew available". Multiple versions can be sent in at once
 -N | --notest   Do not run tests. Allows you to --remove and --install without testing
 -l | --legacy   Operate on perls < 5.8.x. The default plugins won't work with this flag set if a lower version is installed
+
+Network dispatching options:
+
+-D | --dispatch Dispatch a basic run to remote testers
+-t | --tester   Testers to dispatch to. Can be supplied multiple times. Format: "host[:port]"
 
 Help options:
 
@@ -759,9 +766,8 @@ sub _validate_opts {
 
     my @valid_args = qw(
         on o new n remove r revdep R plugin p args a debug d install i help h
-        N notest setup s legacy l selftest T listen L
-        tester-port t testers S save
-        );
+        N notest setup s legacy l selftest T t testers S save D dispatch
+    );
 
     my $bad_opt = 0;
 

@@ -11,6 +11,8 @@ Revision history for Test-BrewBuild
         - removed prerequisite of needing to be an Administrator user on MSWin
           from the Tutorial (closes #119)
         - fixed a series of out-of-order debug logging message entries
+        - brewbuild can now dispatch the most basic of testing to remotes via
+          the -D and -t flags (closes #122)
 
 2.02    2016-04-22
         - fixed issue in T::BB::Tester where we weren't checking for the 'new'
