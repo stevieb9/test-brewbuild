@@ -111,7 +111,7 @@ sub instance_install {
 
     # timeout an install after...
 
-    $timeout = $timeout || 120;
+    $timeout = $timeout || 300;
 
     my $log = $log->child('instance_install');
 
@@ -906,7 +906,7 @@ can also send in an array reference, where each element is a version of perl,
 and we'll install those instead.
 
 You can send a second parameter, an integer for a time out. On each install,
-we'll bail if it takes longer than this time. Default is 120 seconds. If you're
+we'll bail if it takes longer than this time. Default is 300 seconds. If you're
 on a fast machine, you should probably lower this value.
 
 On Windows, where you want to install specific perls, we'll default to

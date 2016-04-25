@@ -14,7 +14,7 @@ Revision history for Test-BrewBuild
         - removed prerequisite of needing to be an Administrator user on MSWin
           from the Tutorial (closes #119)
         - fixed a series of out-of-order debug logging message entries
-        - added a timeout param to instance_install(), default 120 secs. If an
+        - added a timeout param to instance_install(), default 300 secs. If an
           install takes longer than this, it'll roll out the changes and log an
           entry of the problem (closes #110)
 
