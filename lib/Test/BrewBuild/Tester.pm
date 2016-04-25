@@ -202,15 +202,29 @@ sub listen {
 
     while (1){
 
+        my $dispatch = $sock->accept;
+        
+        # shutdown if not an allowed host
+
+        my $remote_host = $dispatch->peerhost;
+
+        print "*$_*\n" for $self->allowed;
+        if ($self->firewall){
+            print "**here!!*\n";
+            my @allowed = $self->allowed;
+            if (! grep {$remote_host eq $_} @allowed){
+                shutdown $dispatch, 2;
+            }
+        }
+
+        $log->_7("now accepting incoming connections");
+        
         my $res = {
             platform => $Config{archname},
         };
 
         $log->_7("platform: $res->{platform}");
 
-        my $dispatch = $sock->accept;
-
-        $log->_7("now accepting incoming connections");
 
         # ack
         my $ack;
@@ -354,6 +368,22 @@ sub port {
     }
     $port = '7800' if ! defined $port;
     $self->{port} = $port;
+}
+sub allowed {
+    my ($self, $allowed) = @_;
+    $self->{allowed} = $allowed if $allowed->[0];
+    if ($self->{allowed}->[0]){
+        $self->firewall(1);
+        return @{ $self->{allowed} };
+    }
+    else {
+        return 0;
+    }
+}
+sub firewall {
+    my ($self, $state) = @_;
+    $self->{firewall} = $state if defined $state;
+    return $self->{firewall};
 }
 sub _config {
     # bring in config file elements
