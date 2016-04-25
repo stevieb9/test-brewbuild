@@ -65,7 +65,7 @@ if ($^O =~ /MSWin/) {
     close $fh;
     @base = grep /\S/, @base;
 
-    ok (@res > 20, "--devel 6 proper line count");
+    ok (@res > 16, "--devel 6 proper line count");
 
     remove_tree('BB-Pass');
     is (-d 'BB-Pass', undef, "--devel 6 dir removed ok");
