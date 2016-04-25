@@ -107,7 +107,11 @@ sub perls_installed {
     return $bcmd->installed($self->legacy, $self->brew_info);
 }
 sub instance_install {
-    my ($self, $install) = @_;
+    my ($self, $install, $timeout) = @_;
+
+    # timeout an install after...
+
+    $timeout = $timeout || 120;
 
     my $log = $log->child('instance_install');
 
@@ -134,6 +138,11 @@ sub instance_install {
 
             }
             $version =~ s/_.*$// if ! $self->is_win;
+
+            if (! grep { $version eq $_ } @perls_available){
+                $log->_0("$version is not a valid perl version");
+                next;
+            }
 
             if (grep { $version eq $_ } @perls_installed){
                 $log->_6("$version is already installed... skipping");
@@ -174,47 +183,70 @@ sub instance_install {
 
         my $install_cmd = $bcmd->install;
 
-        for my $ver (@new_installs){
-            $log->_0("installing $ver...");
-            $log->_5("...using cmd: $install_cmd");
-            `$install_cmd $ver`;
+        for my $ver (@new_installs) {
+            $log->_0( "installing $ver..." );
+            $log->_5( "...using cmd: $install_cmd" );
+            eval {
+                local $SIG{ALRM} = sub {
+                    die "$ver failed to install... skipping"
+                };
+                alarm $timeout;
+                `$install_cmd $ver`;
+                alarm 0;
+            };
+            if ($@){
+                $log->_0($@);
+                $self->instance_remove($ver);
+                next;
+            }
         }
     }
     else {
-        $log->_5("using existing versions only");
+        $log->_5("using existing versions only, nothing to install");
     }
 }
 sub instance_remove {
-    my $self = shift;
+    my ($self, $version) = @_;
 
     my $log = $log->child('instance_remove');
 
     my @perls_installed = $self->perls_installed;
 
     $log->_6("perls installed: " . join ', ', @perls_installed);
-    $log->_0("removing previous installs...");
 
     my $remove_cmd = $bcmd->remove;
 
     $log->_4( "using '$remove_cmd' remove command" );
 
-    for my $installed_perl (@perls_installed){
-
-        my $using = $bcmd->using($self->brew_info);
-
-        if ($using eq $installed_perl) {
-            $log->_5( "not removing version we're using: $using" );
-            next;
-        }
-
-        $log->_5( "exec'ing $remove_cmd $installed_perl" );
-
-        if ($bcmd->is_win) {
-            `$remove_cmd $installed_perl 2>nul`;
+    if ($version){
+        $log->_5("$version supplied, removing...");
+        if ($self->is_win){
+            `$remove_cmd $version 2`
         }
         else {
-            `$remove_cmd $installed_perl 2>/dev/null`;
+            `$remove_cmd $version 2>/dev/null`;
+        }
+    }
+    else {
+        $log->_0("removing previous installs...");
 
+        for my $installed_perl (@perls_installed){
+
+            my $using = $bcmd->using($self->brew_info);
+
+            if ($using eq $installed_perl) {
+                $log->_5( "not removing version we're using: $using" );
+                next;
+            }
+
+            $log->_5( "exec'ing $remove_cmd $installed_perl" );
+
+            if ($bcmd->is_win) {
+                `$remove_cmd $installed_perl 2>nul`;
+            }
+            else {
+                `$remove_cmd $installed_perl 2>/dev/null`;
+            }
         }
     }
 
@@ -872,6 +904,9 @@ C<*brew> setup.
 If an integer is sent in, we'll install that many random versions of perl. You
 can also send in an array reference, where each element is a version of perl,
 and we'll install those instead.
+
+You can send a second parameter, an integer for a time out. On each install,
+we'll bail if it takes longer than this time. Default is 120 seconds.
 
 On Windows, where you want to install specific perls, we'll default to
 installing 64-bit versions only, if a 64 bit perl is available for the version

@@ -13,6 +13,9 @@ Revision history for Test-BrewBuild
         - fixed a series of out-of-order debug logging message entries
         - brewbuild can now dispatch the most basic of testing to remotes via
           the -D and -t flags (closes #122)
+        - added a timeout param to instance_install(), default 120 secs. If an
+          install takes longer than this, it'll roll out the changes and log an
+          entry of the problem (closes #110)
 
 2.02    2016-04-22
         - fixed issue in T::BB::Tester where we weren't checking for the 'new'
