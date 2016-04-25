@@ -906,7 +906,8 @@ can also send in an array reference, where each element is a version of perl,
 and we'll install those instead.
 
 You can send a second parameter, an integer for a time out. On each install,
-we'll bail if it takes longer than this time. Default is 120 seconds.
+we'll bail if it takes longer than this time. Default is 120 seconds. If you're
+on a fast machine, you should probably lower this value.
 
 On Windows, where you want to install specific perls, we'll default to
 installing 64-bit versions only, if a 64 bit perl is available for the version

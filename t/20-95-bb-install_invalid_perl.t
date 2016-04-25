@@ -11,7 +11,11 @@ if (! $ENV{BBDEV_TESTING}){
 
 my $ret = `brewbuild -N -i 5.99.99`;
 
-like ($ret, qr/is not a valid perl version/, "we log and next if a perl is invalid");
+like (
+    $ret,
+    qr/is not a valid perl version/,
+    "we log and next if a perl is invalid"
+);
 
 done_testing();
 

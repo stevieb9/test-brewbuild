@@ -35,6 +35,7 @@ t/10-60-api-Git.t
 t/10-65-api-Dispatch_forks.t
 t/10-70-api-BB_legacy.t
 t/10-75-api-Tester.t
+t/10-80-api-BB_install_timeout.t
 t/20-05-bb-pass.t
 t/20-10-bb-fail.t
 t/20-15-bb-install.t
@@ -52,6 +53,8 @@ t/20-70-bb-new.t
 t/20-75-bb-notest.t
 t/20-80-bb-notest_after_inst_rem.t
 t/20-85-bb-bit_suffix_after_version.t
+t/20-90-bb-basic_dispatch.t
+t/20-95-bb-install_invalid_perl.t
 t/30-05-dispatch-bad_command.t
 t/30-10-dispatch-revdep_pass.t
 t/30-15-dispatch-fail.t

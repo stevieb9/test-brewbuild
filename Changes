@@ -1,6 +1,9 @@
 Revision history for Test-BrewBuild
 
-2.03    xxx
+2.03    2016-04-25
+        - brewbuild can now dispatch the most basic of testing to remotes via
+          the -D and -t flags. For more advanced remote testing, use bbdispatch
+          (closes #122)
         - changed to searching %PATH% for binaries as opposed to using 'where'
           on MSWin, as on pre 2k3, 'where' didn't exist (closes #117)
         - moved setting the brewbuild command default from bbdispatch to
@@ -11,8 +14,6 @@ Revision history for Test-BrewBuild
         - removed prerequisite of needing to be an Administrator user on MSWin
           from the Tutorial (closes #119)
         - fixed a series of out-of-order debug logging message entries
-        - brewbuild can now dispatch the most basic of testing to remotes via
-          the -D and -t flags (closes #122)
         - added a timeout param to instance_install(), default 120 secs. If an
           install takes longer than this, it'll roll out the changes and log an
           entry of the problem (closes #110)
