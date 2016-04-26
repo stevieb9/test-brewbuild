@@ -53,6 +53,7 @@ t/20-70-bb-new.t
 t/20-75-bb-notest.t
 t/20-80-bb-notest_after_inst_rem.t
 t/20-85-bb-bit_suffix_after_version.t
+t/20-90-api-BB_dup_rand_installs.t
 t/20-90-bb-basic_dispatch.t
 t/20-95-bb-install_invalid_perl.t
 t/30-05-dispatch-bad_command.t
@@ -64,6 +65,7 @@ t/30-30-dispatch-notest.t
 t/30-35-dispatch-confit.g
 t/30-40-dispatch-install.t
 t/30-45-dispatch-new.t
+t/30-50-dispatch-invalid_bb_args.t
 t/40-05-log-revdep_global_full_verbose.t
 t/40-10-log-revdep_save_log_files.t
 t/40-15-log-Tester.t

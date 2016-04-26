@@ -3,6 +3,8 @@ Revision history for Test-BrewBuild
 2.04    xxx
         - Results from MSWin now properly show the _bit suffix for the perl used
           in test results (closes #124)
+        - instance_install() when installing randomly doesn't attempt duplicate
+          versions any longer (fixes #123)
 
 2.03    2016-04-26
         - brewbuild can now dispatch the most basic of testing to remotes via

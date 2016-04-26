@@ -153,8 +153,13 @@ sub instance_install {
     elsif ($install) {
         $log->_5("looking to install $install perl instance(s)");
 
+        my %avail = map {$_ => 1} @perls_available;
+
         while ($install > 0){
-            my $candidate = $perls_available[rand @perls_available];
+            last if ! keys %avail;
+
+            my $candidate = (keys %avail)[rand keys %avail];
+            delete $avail{$candidate};
 
             if (grep { $_ eq $candidate } @perls_installed) {
                 $log->_6( "$candidate already installed... skipping" );
