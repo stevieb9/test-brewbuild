@@ -36,6 +36,7 @@ sub new {
     my $log = $log->child('new');
     $log->_5("instantiating new Test::BrewBuild::Tester object");
 
+    $self->allowed($args{allowed});
     $self->_config;
     $self->_pid_file;
 
@@ -82,9 +83,9 @@ sub start {
                 last;
             }
         }
-        $log->_6("using command: $perl $t --fg");
-
         @args = ($t, '--fg');
+
+        $log->_6("using command: $perl $t --fg");
     }
     else {
         $log->_6("on Unix, using work dir $work_dir");
@@ -97,6 +98,12 @@ sub start {
 
     if (defined $self->{debug}){
         push @args, ('--debug', $self->{debug});
+        $log->_6("appended --debug to args");
+    }
+    if (1){
+        my @allowed = $self->allowed;
+        push @args, "-a $_" for @allowed;
+        $log->_6("appended allowed hosts: " . join ',', @allowed);
     }
 
     mkdir $work_dir or die "can't create $work_dir dir: $!" if ! -d $work_dir;
@@ -178,7 +185,7 @@ sub status {
     return $status;
 }
 sub listen {
-    my $self = shift;
+    my ($self) = @_;
     my $log = $log->child("listen");
 
     my $sock = new IO::Socket::INET (
@@ -208,12 +215,15 @@ sub listen {
 
         my $remote_host = $dispatch->peerhost;
 
-        print "*$_*\n" for $self->allowed;
+        $log->_7("firewall status: " . $self->firewall);
+
         if ($self->firewall){
-            print "**here!!*\n";
             my @allowed = $self->allowed;
+            $log->_6("allowing IPs: " .join ',', @allowed);
+
             if (! grep {$remote_host eq $_} @allowed){
                 shutdown $dispatch, 2;
+                next;
             }
         }
 
@@ -383,7 +393,7 @@ sub allowed {
 sub firewall {
     my ($self, $state) = @_;
     $self->{firewall} = $state if defined $state;
-    return $self->{firewall};
+    return $self->{firewall} || 0;
 }
 sub _config {
     # bring in config file elements

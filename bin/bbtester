@@ -10,6 +10,7 @@ our $VERSION = '2.03';
 
 my $ip;
 my $port;
+my $allowed;
 my $foreground = 0;
 my $stdout = 0;
 my $debug;
@@ -26,19 +27,20 @@ if ($ARGV[0] !~ /(?:--fg|-f)/){
 }
 
 GetOptions(
-    "ip=s"    => \$ip,
-    "port=i"  => \$port,
-    "fg"      => \$foreground,
-    "stdout"  => \$stdout,
-    "debug=s" => \$debug,
-    "help"    => \$help,
+    "ip=s"       => \$ip,
+    "port=i"     => \$port,
+    "allowed=s@" => \$allowed,
+    "fg"         => \$foreground,
+    "stdout"     => \$stdout,
+    "debug=s"    => \$debug,
+    "help"       => \$help,
 );
 
 if ($help){
     print <<'EOF';
 Usage: 
 
-bbtester start [--ip 0.0.0.0] [--port 7800]] [--debug 0-7]
+bbtester start [--ip 0.0.0.0] [--port 7800]] [--allowed 127.0.0.1] [--debug 0-7]
 bbtester stop
 
 bbtester --fg [--ip 0.0.0.0] [--port 7800] [--debug 0-7] [--stdout]
@@ -49,11 +51,13 @@ exit;
 
 my $tester = Test::BrewBuild::Tester->new(
     debug => $debug,
-    stdout => $stdout
+    stdout => $stdout,
 );
 
 $tester->ip($ip);
 $tester->port($port);
+$tester->allowed($allowed);
+$tester->firewall(1);
 
 if ($op eq 'stop'){
     $tester->stop;
