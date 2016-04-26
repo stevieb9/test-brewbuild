@@ -11,8 +11,9 @@ and how to dispatch build requests to them.
 =head1 BEFORE YOU BEGIN
 
 At this time, there is no security around the network portions of this suite.
-To mitigate, you can use IP filters, SSH tunnels etc. Although there is
-primitive command checking, it's just that; primitive. Be careful.
+To mitigate, you can use IP filters, SSH tunnels etc. We do however do a
+reasonably good job of ensuring the commands executed on the testers have been
+verified.
 
 Read through the
 L<brewbuild|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/brewbuild> 
@@ -94,6 +95,39 @@ To specify a different command string:
 To specify a different repository:
 
     bbdispatch -r https://github.com/user/repo -t 127.0.0.1 -t 172.16.1.1:9999 -t 10.1.1.1
+
+Example output of a basic run where I'm in a git repository directory:
+
+    bbdispatch -t localhost -t 192.168.252.90 -t 192.168.252.96 -t 192.168.252.95
+
+    192.168.252.95 - x86_64-linux
+
+    5.22.1 :: PASS
+
+    192.168.252.90 - MSWin32-x64-multi-thread
+
+    5.18.4 :: PASS
+    5.22.1 :: PASS
+
+    localhost - MSWin32-x64-multi-thread
+
+    5.22.1 :: FAIL
+
+    192.168.252.96 - amd64-freebsd
+
+    5.22.1 :: PASS
+    5.23.7 :: PASS
+    5.8.9 :: FAIL
+    5.10.1 :: FAIL
+    5.18.4 :: FAIL
+
+All FAIL log files are stored locally when dispatching to identify the issues:
+
+    192.168.252.96_5.10.1-FAIL.bblog
+    192.168.252.96_5.18.4-FAIL.bblog
+    192.168.252.96_5.8.9-FAIL.bblog
+    localhost_5.22.1-FAIL.bblog
+
 
 =head2 CONFIGURATION FILE RUN
 

@@ -67,6 +67,41 @@ Set maximum number of concurrent testers to communicate with (default is 4):
 
     bbdispatch [...] -f 8
 
+Example output of a basic run where I'm in a git repository directory:
+
+    bbdispatch -t localhost -t 192.168.252.90 -t 192.168.252.96 -t 192.168.252.95
+
+    192.168.252.95 - x86_64-linux
+
+    5.22.1 :: PASS
+
+    192.168.252.90 - MSWin32-x64-multi-thread
+
+    5.18.4 :: PASS
+    5.22.1 :: PASS
+
+    localhost - MSWin32-x64-multi-thread
+
+    5.22.1 :: FAIL
+
+    192.168.252.96 - amd64-freebsd
+
+    5.22.1 :: PASS
+    5.23.7 :: PASS
+    5.8.9 :: FAIL
+    5.10.1 :: FAIL
+    5.18.4 :: FAIL
+
+All FAIL log files are stored locally when dispatching to identify the issues.
+If I'm letting BrewBuild determine the repository, the files will be stored in
+C<./bblog>. If a repo is specified, they'll be put into
+C<~/brewbuild/repo/bblog>.
+
+    192.168.252.96_5.10.1-FAIL.bblog
+    192.168.252.96_5.18.4-FAIL.bblog
+    192.168.252.96_5.8.9-FAIL.bblog
+    localhost_5.22.1-FAIL.bblog
+
 =head1 DESCRIPTION
 
 This script dispatches C<brewbuild> build sets to pre-configured

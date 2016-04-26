@@ -156,9 +156,38 @@ stored in C<bblog/revdep-module-name.version.bblog>
     5.18.4 :: PASS
     5.22.1 :: PASS
 
-Send a basic test run to remote testers
+Send a basic test run to remote testers (see C<bbdispatch> for more complex
+dispatching):
 
-    brewbuild -D -t localhost -t 10.1.1.1 -t 172.16.5.5:9999
+    brewbuild -D -t localhost -t 192.168.252.90 -t 192.168.252.96 -t 192.168.252.95
+
+    192.168.252.95 - x86_64-linux
+
+    5.22.1 :: PASS
+
+    192.168.252.90 - MSWin32-x64-multi-thread
+
+    5.18.4 :: PASS
+    5.22.1 :: PASS
+
+    localhost - MSWin32-x64-multi-thread
+
+    5.22.1 :: FAIL
+
+    192.168.252.96 - amd64-freebsd
+
+    5.22.1 :: PASS
+    5.23.7 :: PASS
+    5.8.9 :: FAIL
+    5.10.1 :: FAIL
+    5.18.4 :: FAIL
+
+All FAIL log files are stored locally when dispatching to identify the issues:
+
+    192.168.252.96_5.10.1-FAIL.bblog
+    192.168.252.96_5.18.4-FAIL.bblog
+    192.168.252.96_5.8.9-FAIL.bblog
+    localhost_5.22.1-FAIL.bblog
 
 Print usage information
 

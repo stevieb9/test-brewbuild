@@ -88,7 +88,7 @@ METHODS
     version of perl, and we'll install those instead.
 
     You can send a second parameter, an integer for a time out. On each
-    install, we'll bail if it takes longer than this time. Default is 120
+    install, we'll bail if it takes longer than this time. Default is 300
     seconds. If you're on a fast machine, you should probably lower this
     value.
 
@@ -135,6 +135,9 @@ METHODS
     their values.
 
     Returns the converted hash for passing back into new().
+
+    If an invalid argument is included, we'll set $args{error} = 1;. It is
+    up to the caller to look for and process an error handling routine.
 
  config_file
 
