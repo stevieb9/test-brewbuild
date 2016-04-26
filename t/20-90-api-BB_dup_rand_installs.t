@@ -19,6 +19,8 @@ my $bb = Test::BrewBuild->new(notest => 1);
 my $stdout = capture_stdout {
     $bb->instance_install(10);
 };
+$inst->unmock;
+$rem->unmock;
 
 my @ret = split /\n/, $stdout;
 chomp @ret;
