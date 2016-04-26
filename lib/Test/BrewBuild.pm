@@ -310,7 +310,7 @@ sub test {
     for my $result (@ver_results){
         my $ver;
 
-        if ($result =~ /^([Pp]erl-\d\.\d+\.\d+)/){
+        if ($result =~ /^([Pp]erl-\d\.\d+\.\d+(_\d{2})?)/){
             $ver = $1;
             $ver =~ s/[Pp]erl-//;
         }
