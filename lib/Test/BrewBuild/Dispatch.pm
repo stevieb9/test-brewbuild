@@ -165,6 +165,8 @@ sub _fork {
     for my $tester (keys %$remotes){
         $log->_7("spinning up tester: $tester");
 
+        my $log = $log->child($tester);
+
         $pm->start and next CLIENTS;
 
         my %return;
