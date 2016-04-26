@@ -120,16 +120,6 @@ my $mod = 'Test::BrewBuild::Tester';
         "stopping works",
     );
 }
-{ # allowed
-    my $t = $mod->new;
-
-    is ($t->allowed, undef, "default allowed list is undefined");
-    $t->allowed([qw(127.0.0.1 10.1.1.1)]);
-
-    for my $ip (qw(127.0.0.1 10.1.1.1)){
-        is ((grep {$ip eq $_} $t->allowed), 1, "$ip is in allowed");
-    }
-}
 
 done_testing();
 
