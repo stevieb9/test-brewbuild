@@ -36,27 +36,29 @@ select $stdout;
 
 if ($^O =~ /MSWin/) {
     { # default install
-        my $bb = Test::BrewBuild->new(debug => 7);
+        my $bb = Test::BrewBuild->new;
         my $ok = eval {
-            $bb->instance_install(1, [qw(5.18.4_64 5.16.3_64)], [qw(5.18.4_64)]);
+            $bb->instance_install([qw(5.18.4_64 5.16.3_64)], [qw(5.18.4_64)]);
             1;
         };
         is ($inst_cmd->called, 1, "win: BrewCommands::install() called");
         is ($ok, 1, "win: instance_install() ok");
+
+        $inst_cmd->reset;
     }
     { # version install
-        my $bb = Test::BrewBuild->new(debug => 7, version => ['5.18.4_64']);
+        my $bb = Test::BrewBuild->new;
         my $ok = eval {
-            $bb->instance_install(0, [qw(5.18.4_64 5.18.4_32)], [qw(5.18.4_32)]);
+            $bb->instance_install([qw(5.18.4_64 5.18.4_32)], [qw(5.18.4_32)]);
             1;
         };
         is ($inst_cmd->called, 1, "win: BrewCommands::install() called w/ ver");
         is ($ok, 1, "win: instance_install() with version ok");
     }
     { # no @new_installs
-        my $bb = Test::BrewBuild->new(debug => 7);
+        my $bb = Test::BrewBuild->new;
         my $ok = eval {
-            $bb->instance_install(0, [qw(5.18.4_64 5.18.4_32)], [qw(5.18.4_32)]);
+            $bb->instance_install([qw(5.18.4_64 5.18.4_32)], [qw(5.18.4_32)]);
             1;
         };
         is ($inst_cmd->called, 1, "win: BrewCommands::install() called w/ no new vers");
@@ -65,27 +67,27 @@ if ($^O =~ /MSWin/) {
 }
 else {
     { # default install
-        my $bb = Test::BrewBuild->new(debug => 7);
+        my $bb = Test::BrewBuild->new;
         my $ok = eval {
-            $bb->instance_install(2, [qw(5.8.9 5.20.0 5.20.0)], [qw(5.20.0)] );
+            $bb->instance_install([qw(5.8.9 5.20.0 5.20.0)], [qw(5.20.0)] );
             1;
         };
         is ( $inst_cmd->called, 1, "nix: BrewCommands::install() called" );
         is ( $ok, 1, "nix: instance_install() ok" );
     }
     { # version install
-        my $bb = Test::BrewBuild->new(debug => 7, version => ['5.20.0', '5.22.1']);
+        my $bb = Test::BrewBuild->new;
         my $ok = eval {
-            $bb->instance_install(0, [qw(5.18.4 5.20.0)], [qw(5.20.0)]);
+            $bb->instance_install([qw(5.18.4 5.20.0)], [qw(5.20.0)]);
             1;
         };
         is ($inst_cmd->called, 1, "nix: BrewCommands::install() called w/ ver");
         is ($ok, 1, "nix: instance_install() with version ok");
     }
      { # no @new_installs
-        my $bb = Test::BrewBuild->new(debug => 7);
+        my $bb = Test::BrewBuild->new;
         my $ok = eval {
-            $bb->instance_install(0, [qw(5.18.4_64 5.18.4_32)], [qw(5.18.4_32)]);
+            $bb->instance_install([qw(5.18.4_64 5.18.4_32)], [qw(5.18.4_32)]);
             1;
         };
         is ($inst_cmd->called, 1, "nix: BrewCommands::install() called w/ no new vers");
