@@ -44,7 +44,7 @@ sub options {
     my ($self, $args) = @_;
     my (%opts, $help, $setup);
 
-    _validate_opts($args);
+    my $bad_opt = _validate_opts($args);
 
     GetOptionsFromArray(
         $args,
@@ -66,8 +66,7 @@ sub options {
         "h|help"        => \$help,
     );
 
-    help() if $help;
-    setup() if $setup;
+    $opts{error} = 1 if $bad_opt;
 
     return %opts;
 }
@@ -457,7 +456,7 @@ Special options:
 -d | --debug    0-7, sets logging verbosity, default is 0
 
 EOF
-exit;
+return 1;
 }
 sub _attach_build_log {
     # attach the cpanm logs to the PASS/FAIL logs
@@ -813,8 +812,7 @@ sub _validate_opts {
             }
         }
     }
-
-    help() if $bad_opt;
+    return $bad_opt;
 }
 
 1;
@@ -949,6 +947,9 @@ Takes a hash reference of the command-line argument list, and converts it into
 a hash of the translated C<Test::BrewBuild> parameters along with their values.
 
 Returns the converted hash for passing back into C<new()>.
+
+If an invalid argument is included, we'll set C<$args{error} = 1;>. It is up to
+the caller to look for and process an error handling routine.
 
 =head2 config_file
 

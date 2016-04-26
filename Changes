@@ -17,6 +17,9 @@ Revision history for Test-BrewBuild
         - added a timeout param to instance_install(), default 300 secs. If an
           install takes longer than this, it'll roll out the changes and log an
           entry of the problem (closes #110)
+        - enhanced the argument handling for brewbuild to be much more
+          resilient and specific to help prevent executing rogue commands on
+          the remote testers (closes #66)
 
 2.02    2016-04-22
         - fixed issue in T::BB::Tester where we weren't checking for the 'new'

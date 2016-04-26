@@ -227,7 +227,17 @@ sub _fork {
                 croak "\nno repository found, can't continue\n";
             }
             $socket->send($repo_link);
-            $return{$tester}{build} = Storable::fd_retrieve($socket);
+
+            eval {
+                $return{$tester}{build} = Storable::fd_retrieve($socket);
+            };
+
+            if ($@){
+                $log->_0("errors occurred... check your command line " .
+                         "string for invalid args. You sent in: $cmd"
+                );
+                exit;
+            }
         }
         else {
             $log->_5("deleted tester: $remotes->{$tester}... incomplete session");

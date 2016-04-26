@@ -13,6 +13,15 @@ our $VERSION = '2.03';
 
 my %args = Test::BrewBuild->options(\@ARGV) if @ARGV;
 
+if (defined $args{error}){
+    Test::BrewBuild->help;
+    exit;
+}
+if ($args{setup}){
+    Test::BrewBuild->setup;
+    exit;
+}
+
 my $bb = Test::BrewBuild->new(%args);
 my $bb_log = $bb->log;
 my $log = $bb_log->child('brewbuild');

@@ -231,7 +231,8 @@ sub listen {
         my @args = split /\s+/, $cmd;
 
         if ($args[0] ne 'brewbuild'){
-            my $err = "error: only 'brewbuild' is allowed as a command\n\n";
+            my $err = "error: only 'brewbuild' is allowed as a command. ";
+            $err .= "you sent in: " . join ' ', @args;
             $log->_0($err);
             $dispatch->send($err);
             next;
@@ -265,6 +266,14 @@ sub listen {
             }
 
             my %opts = Test::BrewBuild->options(\@args);
+
+            if (defined $opts{error}){
+                my $err = "invalid arguments sent to brewbuild: ";
+                $err .= join ', ', @args;
+                $log->_0($err);
+                $dispatch->send($err);
+                next;
+            }
             my $opt_str;
 
             for (keys %opts){
