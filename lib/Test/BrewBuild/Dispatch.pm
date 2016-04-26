@@ -230,11 +230,12 @@ sub _fork {
             }
             $socket->send($repo_link);
 
-            eval {
+            my $ok = eval {
                 $return{$tester}{build} = Storable::fd_retrieve($socket);
+                1;
             };
 
-            if ($@){
+            if (! $ok){
                 $log->_0("errors occurred... check your command line " .
                          "string for invalid args. You sent in: $cmd"
                 );
