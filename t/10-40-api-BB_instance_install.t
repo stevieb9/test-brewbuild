@@ -2,6 +2,7 @@
 use strict;
 use warnings;
 
+use Capture::Tiny qw(capture_stdout);
 use Mock::Sub;
 use Test::BrewBuild;
 use Test::More;
@@ -9,6 +10,25 @@ use Test::More;
 my $mock = Mock::Sub->new;
 my $inst_cmd = $mock->mock('Test::BrewBuild::BrewCommands::install');
 $inst_cmd->return_value('echo "install"');
+
+{ # rand dups
+
+    my $bb = Test::BrewBuild->new(notest => 1);
+
+    my $stdout = capture_stdout {
+        $bb->instance_install(10);
+    };
+
+    my @ret = split /\n/, $stdout;
+    chomp @ret;
+
+    my %count;
+    map {$count{$_}++} @ret;
+
+    for (keys %count){
+        is ($count{$_}, 1, "$_ installed only once");
+    }
+}
 
 my $out;
 open my $stdout, '>', \$out or die $!;
@@ -72,6 +92,7 @@ else {
         is ($ok, 1, "nix: instance_install() does nothing if nothing to install");
     }
 }
+
 
 for ($mock->mocked_objects){
     $_->unmock;
