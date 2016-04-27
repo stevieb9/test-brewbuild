@@ -134,7 +134,6 @@ sub instance_install {
                         $log->_7("MSWin: no 64-bit version... using $version");
                     }
                 }
-
             }
             $version =~ s/_.*$// if ! $self->is_win;
 

@@ -92,10 +92,10 @@ sub available {
 
     my @avail = $self->is_win
         ? $info =~ /(\d\.\d+\.\d+_\d+)/g
-        : $info =~ /(perl-\d\.\d+\.\d+)/g;
+        : $info =~ /(perl-\d\.\d+\.\d+(?:-RC\d+)?)/g;
 
     if (! $legacy){
-        @avail = grep { /^(?:perl-)?\d\.(\d+)/; $1 > 8 } @avail;
+        @avail = grep { /^(?:perl-)?5\.(\d+)/; $1 > 8 } @avail;
     }
     return @avail;
 }
