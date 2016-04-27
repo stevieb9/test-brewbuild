@@ -7,11 +7,6 @@ use Mock::Sub;
 use Test::BrewBuild;
 use Test::More;
 
-if (! $ENV{BBDEV_TESTING}){
-    plan skip_all => "developer tests only";
-    exit;
-}
-
 my $mock = Mock::Sub->new;
 my $inst_cmd = $mock->mock('Test::BrewBuild::BrewCommands::install');
 $inst_cmd->return_value('echo');
@@ -24,7 +19,6 @@ $inst_cmd->return_value('echo');
     my $stdout = capture_stdout {
             $bb->instance_install( 10 );
         };
-    is ( $inst_cmd->called, 1, "BC install() called" );
 
     my @ret = split /\n/, $stdout;
     chomp @ret;
