@@ -346,7 +346,7 @@ sub test {
     $ret .= "$self->{args}{plugin_arg}\n" if $self->{args}{plugin_arg};
     $ret .= $_ for @pass;
     $ret .= $_ for @fail;
-    $ret .= "\n";
+    $ret .= "\n\n";
 
     return $ret;
 }

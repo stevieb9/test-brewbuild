@@ -414,7 +414,7 @@ L<http://perlbrew.pl>
 
 Remote testing server:
 
-<a href="https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbtester">bbtester</a>
+L<brewbuild|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbtester>
 
 Remote testing server API:
 
