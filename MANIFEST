@@ -36,6 +36,7 @@ t/10-65-api-Dispatch_forks.t
 t/10-70-api-BB_legacy.t
 t/10-75-api-Tester.t
 t/10-80-api-BB_install_timeout.t
+t/10-85-api-BB_inst_rand_dups.t
 t/20-05-bb-pass.t
 t/20-10-bb-fail.t
 t/20-15-bb-install.t

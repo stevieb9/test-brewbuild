@@ -9,15 +9,17 @@ use Test::More;
 
 my $mock = Mock::Sub->new;
 my $inst_cmd = $mock->mock('Test::BrewBuild::BrewCommands::install');
-$inst_cmd->return_value('');
+$inst_cmd->return_value('echo');
 
-{ # rand dups
+{
+    # rand dups
 
-    my $bb = Test::BrewBuild->new(notest => 1);
+    my $bb = Test::BrewBuild->new( notest => 1 );
 
     my $stdout = capture_stdout {
-        $bb->instance_install(10);
-    };
+            $bb->instance_install( 10 );
+        };
+    is ( $inst_cmd->called, 1, "BC install() called" );
 
     my @ret = split /\n/, $stdout;
     chomp @ret;
@@ -25,8 +27,8 @@ $inst_cmd->return_value('');
     my %count;
     map {$count{$_}++} @ret;
 
-    for (keys %count){
-        is ($count{$_}, 1, "$_ installed only once");
+    for (keys %count) {
+        is ( $count{$_}, 1, "$_ installed only once" );
     }
 
     $inst_cmd->reset;
