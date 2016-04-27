@@ -28,6 +28,8 @@ $inst_cmd->return_value('echo "install"');
     for (keys %count){
         is ($count{$_}, 1, "$_ installed only once");
     }
+
+    $inst_cmd->reset;
 }
 
 my $out;
@@ -69,7 +71,7 @@ else {
     { # default install
         my $bb = Test::BrewBuild->new;
         my $ok = eval {
-            $bb->instance_install([qw(5.8.9 5.20.0 5.20.0)], [qw(5.20.0)] );
+            $bb->instance_install(1);
             1;
         };
         is ( $inst_cmd->called, 1, "nix: BrewCommands::install() called" );
