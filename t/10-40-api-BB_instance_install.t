@@ -11,27 +11,6 @@ my $mock = Mock::Sub->new;
 my $inst_cmd = $mock->mock('Test::BrewBuild::BrewCommands::install');
 $inst_cmd->return_value('echo "install"');
 
-{ # rand dups
-
-    my $bb = Test::BrewBuild->new(notest => 1);
-
-    my $stdout = capture_stdout {
-        $bb->instance_install(10);
-    };
-
-    my @ret = split /\n/, $stdout;
-    chomp @ret;
-
-    my %count;
-    map {$count{$_}++} @ret;
-
-    for (keys %count){
-        is ($count{$_}, 1, "$_ installed only once");
-    }
-
-    $inst_cmd->reset;
-}
-
 my $out;
 open my $stdout, '>', \$out or die $!;
 select $stdout;
