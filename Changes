@@ -5,8 +5,10 @@ Revision history for Test-BrewBuild
           in test results (closes #124)
         - instance_install() when installing randomly doesn't attempt duplicate
           versions any longer (fixes #123)
+        - cleaned up formatting of revdep returned output (closes #126)
         - on Unix, we now include Release Candidate perl instances when using
           random install (closes #127)
+        - various log entry cleanup (closes #112)
 
 2.03    2016-04-26
         - brewbuild can now dispatch the most basic of testing to remotes via
