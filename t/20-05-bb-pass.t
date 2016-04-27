@@ -27,7 +27,7 @@ if (! $ENV{BBDEV_TESTING}){
     print "*$_*\n" for @res;
     is (@res, 2, "proper result count");
 
-    is ( $res[1], "5.22.1 :: PASS", "PASS ok" );
+    like ( $res[1], qr/5.22.1.*? :: PASS/, "PASS ok" );
 
     remove_tree('BB-Pass');
     is (-d 'BB-Pass', undef, "pass dir removed ok");

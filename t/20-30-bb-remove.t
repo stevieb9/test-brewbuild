@@ -35,7 +35,7 @@ if (! $ENV{BBDEV_TESTING}){
         "$res[0] ok with --remove",
     );
 
-    is ( $res[1], "5.22.1 :: PASS", "$res[1] ok" );
+    like ( $res[1], qr/5.22.1.*? :: PASS/, "$res[1] ok" );
 
     remove_tree('BB-Pass');
     is (-d 'BB-Pass', undef, "pass dir removed ok");

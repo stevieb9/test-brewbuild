@@ -32,8 +32,8 @@ if (! $ENV{BBDEV_TESTING}){
 
     if ($^O =~ /MSWin/){
         is (@res, 3, "pass and fail simultaneously has proper count");
-        is ($res[1], '5.10.1 :: PASS', "PASS ok");
-        is ($res[2], '5.22.1 :: FAIL', "FAIL ok");
+        is ($res[1], '5.10.1_32 :: PASS', "PASS ok");
+        is ($res[2], '5.22.1_64 :: FAIL', "FAIL ok");
     }
     else {
         is (@res, 3, "pass and fail simultaneously has proper count");

@@ -25,11 +25,18 @@ if (! $ENV{BBDEV_TESTING}){
 
     is (@res, 2, "got proper result count");
 
-    is ( $res[1], "5.22.1 :: FAIL", "FAIL ok" );
+    like ( $res[1], qr/5.22.1.*? :: FAIL/, "FAIL ok" );
 
-    is (-e 'bblog/5.22.1-FAIL.bblog', 1, "fail log for 5.22.1 created ok");
 
-    open my $log, '<', 'bblog/5.22.1-FAIL.bblog' or die $!;
+    my $log;
+    if ($^O =~ /MSWin/){
+        is (-e 'bblog/5.22.1_64-FAIL.bblog', 1, "fail log for 5.22.1 created ok");
+        open $log, '<', 'bblog/5.22.1_64-FAIL.bblog' or die $!;
+    }
+    else {
+        is (-e 'bblog/5.22.1-FAIL.bblog', 1, "fail log for 5.22.1 created ok");
+        open $log, '<', 'bblog/5.22.1-FAIL.bblog' or die $!;
+    }
     my @entries = <$log>;
     chomp @entries;
     close $log;

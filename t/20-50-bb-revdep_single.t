@@ -34,11 +34,11 @@ my $dir = 'Mock-Sub-1.06';
     is (@res, 7, "proper result count");
     like ($res[0], qr/reverse dependencies/, "first like is the list of revdeps" );
     like ($res[1], qr/\w+::\w+/, "$res[1] is a module name");
-    like ($res[2], qr/5.22.1 :: \w+/, "$res[2] is a valid result");
+    like ($res[2], qr/5.22.1.*? :: \w+/, "$res[2] is a valid result");
     like ($res[3], qr/\w+::\w+/, "$res[3] is a module name");
-    like ($res[4], qr/5.22.1 :: \w+/, "$res[4] is a valid result");
+    like ($res[4], qr/5.22.1.*? :: \w+/, "$res[4] is a valid result");
     like ($res[5], qr/\w+::\w+/, "$res[5] is a module name");
-    like ($res[6], qr/5.22.1 :: \w+/, "$res[6] is a valid result");
+    like ($res[6], qr/5.22.1.*? :: \w+/, "$res[6] is a valid result");
 
     remove_tree($dir);
     is (-d $dir, undef, "$dir removed ok");
