@@ -176,6 +176,10 @@ Using the L<Test::BrewBuild::Dispatch> API, you can enclose all debug output and
 return values into one scalar variable, and either dump it to a file or examine
 it all in one location:
 
+    use Capture::Tiny qw(capture_stdout);
+    use Test::BrewBuild::Dispatch;
+    use Test::BrewBuild::Tester;
+
     my $return;
 
     my $stdout = capture_stdout {
@@ -206,6 +210,7 @@ Tester 10.1.1.1:
     bbtester start
 
 brewbuild:
+
     brewbuild -D -t 10.1.1.1
 
 Dispatcher:
