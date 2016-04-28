@@ -73,6 +73,7 @@ t/40-15-log-Tester.t
 t/40-20-log-Dispatch.t
 t/40-25-log-test_global_full_verbose.t
 t/50-05-tester-config.t
+t/50-10-brewbuild-config.t
 t/99-manifest.t
 t/99-pod-coverage.t
 t/99-pod.t
@@ -82,6 +83,7 @@ t/base/115-level6_win.data
 t/base/115-level7.data
 t/base/115-level7_win.data
 t/base/UnitTestPlugin.pm
+t/conf/bb-brewbuild.conf
 t/conf/brewbuild.conf
 t/conf/brewbuild_no_tester.conf
 t/modules/bb-522.zip

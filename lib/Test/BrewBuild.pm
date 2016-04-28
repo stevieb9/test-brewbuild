@@ -28,6 +28,12 @@ sub new {
     my $self = bless {}, $class;
     %{ $self->{args} } = %args;
 
+    # override args via a config file
+
+    if ($self->config_file){
+        $self->_config;
+    }
+
     $log = $self->_create_log($args{debug});
     $log->_6("in new(), constructing " . __PACKAGE__ . " object");
 
@@ -110,7 +116,14 @@ sub instance_install {
 
     # timeout an install after...
 
-    $timeout = $timeout || 300;
+    if (! $timeout){
+        if ($self->{args}{timeout}){
+            $timeout = $self->{args}{timeout};
+        }
+        else {
+            $timeout = 300;
+        }
+    }
 
     my $log = $log->child('instance_install');
 
@@ -462,6 +475,20 @@ Special options:
 
 EOF
 return 1;
+}
+sub _config {
+    # slurp in config file elements
+
+    my $self = shift;
+
+     my $conf_file = $self->config_file;
+
+    if (-f $conf_file){
+        my $conf = Config::Tiny->read($conf_file)->{brewbuild};
+        for (keys %$conf){
+            $self->{args}{$_} = $conf->{$_};
+        }
+    }
 }
 sub _attach_build_log {
     # attach the cpanm logs to the PASS/FAIL logs

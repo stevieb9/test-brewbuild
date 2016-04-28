@@ -16,6 +16,38 @@ config file.
 
 =head1 SECTIONS
 
+=head2 [brewbuild]
+
+Configuration for the core L<Test::BrewBuild> components.
+
+=head3 timeout
+
+This is the timeout to use for the C<instance_install()> method. It defaults to
+300 seconds. If an install takes longer than the time set in C<timeout>, it'll
+roll out the changes are log an error, then proceed.
+
+=head3 remove
+
+Set to 1 to remove all instances of perl on every run. Defaults to 0.
+
+=head3 plugin
+
+Overrides the default plugin L<Test::BrewBuild::Plugin::DefaultExec> that is
+the actual command set that performs the testing routines.
+
+=head3 save
+
+Default off, set to 1 to enable saving of all PASS logs along with the FAIL
+ones.
+
+=head3 debug
+
+Default is 0. Range is 0-7.
+
+=head3 legacy
+
+Default off. Perls 5.8.x and lower will be installed if you set this to 1.
+
 =head2 [dispatch]
 
 Configuration for the dispatcher, L<Test::BrewBuild::Dispatch>.
