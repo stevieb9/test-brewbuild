@@ -6,7 +6,7 @@ use Getopt::Long;
 use Test::BrewBuild;
 use Test::BrewBuild::Tester;
 
-our $VERSION = '2.04';
+our $VERSION = '2.05';
 
 my $ip;
 my $port;

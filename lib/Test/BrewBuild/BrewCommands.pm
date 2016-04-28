@@ -4,7 +4,7 @@ use warnings;
 
 use version;
 
-our $VERSION = '2.04';
+our $VERSION = '2.05';
 
 my $log;
 
