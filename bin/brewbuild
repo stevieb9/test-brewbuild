@@ -219,6 +219,11 @@ otherwise specified.
 
 =head1 USAGE
 
+Many of the options listed below can be saved in a configuration file if you
+want to set them permanently, or override defaults. Arguments passed in on the
+command line override those in the configuration file. See
+L<Test::BrewBuild::brewbuild.conf>.
+
 =head2 -o, --on
 
 Perl version number to run against (can be supplied multiple times). Can not be

@@ -25,13 +25,18 @@ my $bcmd;
 
 sub new {
     my ($class, %args) = @_;
-    my $self = bless {}, $class;
-    %{ $self->{args} } = %args;
+    my $self = bless { }, $class;
 
-    # override args via a config file
+    # see if we have config file data
 
-    if ($self->config_file){
+    if ($self->config_file) {
         $self->_config;
+    }
+
+    # override the config file and populate the rest of the args
+
+    for (keys %args){
+        $self->{args}{$_} = $args{$_};
     }
 
     $log = $self->_create_log($args{debug});
@@ -909,11 +914,17 @@ All unit tests are run against all installed instances.
 
 =head1 METHODS
 
+
+
 =head2 new(%args)
 
 Returns a new C<Test::BrewBuild> object. See the documentation for the
 L<brewbuild|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/brewbuild>
 script to understand what the arguments are and do.
+
+Many of the options can be saved in a configuration file if you want to set them
+permanently, or override defaults. Options passed into the various methods will
+override those in the configuration file. See L<Test::BrewBuild::brewbuild.conf>.
 
 =head2 brew_info
 
