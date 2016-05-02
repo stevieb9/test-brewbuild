@@ -7,6 +7,11 @@ use Test::BrewBuild;
 use Test::BrewBuild::BrewCommands;
 use Test::More;
 
+if (! $ENV{BBDEV_TESTING}){
+    plan skip_all => "developer tests only";
+    exit;
+}
+
 my $bb = Test::BrewBuild->new;
 my $bcmd = Test::BrewBuild::BrewCommands->new( Logging::Simple->new );
 

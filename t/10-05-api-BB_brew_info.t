@@ -5,7 +5,6 @@ use warnings;
 use Test::BrewBuild;
 use Test::More;
 
-
 my $mod = 'Test::BrewBuild';
 my $bb = $mod->new;
 

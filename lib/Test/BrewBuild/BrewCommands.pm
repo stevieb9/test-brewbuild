@@ -40,7 +40,7 @@ sub brew {
         $brew = 'perlbrew';
     }
 
-    $log->child('brew')->_6("*brew cmd is: $brew");
+    $log->child('brew')->_6("*brew cmd is: $brew") if $brew;
     $self->{brew} = $brew;
 
     return $brew;

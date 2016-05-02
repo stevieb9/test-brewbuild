@@ -5,6 +5,11 @@ use warnings;
 use Test::BrewBuild;
 use Test::More;
 
+if (! $ENV{BBDEV_TESTING}){
+    plan skip_all => "developer tests only";
+    exit;
+}
+
 my $mod = 'Test::BrewBuild';
 my $sub = 'Test::BrewBuild::BrewCommands';
 
