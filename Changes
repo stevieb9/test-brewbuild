@@ -1,7 +1,8 @@
 Revision history for Test-BrewBuild
 
-2.05    xxx
+2.05    2016-05-06
         - added [brewbuild] section to config file (closes #128)
+        - cleaned up test logic due to failing MSWin tests
 
 2.04    2016-04-27
         - Results from MSWin now properly show the _bit suffix for the perl used
