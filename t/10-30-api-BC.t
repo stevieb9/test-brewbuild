@@ -6,6 +6,11 @@ use Test::More;
 use Logging::Simple;
 use Test::BrewBuild::BrewCommands;
 
+if (! $ENV{BBDEV_TESTING}){
+    plan skip_all => "developer tests only";
+    exit;
+}
+
 my $im_on_windows = ($^O =~ /MSWin/) ? 1 : 0;
 
 my $log = Logging::Simple->new;
