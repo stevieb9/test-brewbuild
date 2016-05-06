@@ -1,3 +1,4 @@
+appveyor.yml
 bin/bbdispatch
 bin/bbtester
 bin/brewbuild
@@ -38,6 +39,7 @@ t/10-75-api-Tester.t
 t/10-80-api-BB_install_timeout.t
 t/10-85-api-BB_inst_rand_dups.t
 t/10-90-api-BB_inst_release_candidates.t
+t/10-95-api-BB_revdep_with_metacpan_client.t
 t/20-05-bb-pass.t
 t/20-10-bb-fail.t
 t/20-15-bb-install.t

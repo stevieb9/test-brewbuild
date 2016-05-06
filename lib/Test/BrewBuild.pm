@@ -289,7 +289,6 @@ sub revdep {
     $args{plugin} = 'Test::BrewBuild::Plugin::TestAgainst';
 
     my @revdeps = $self->revdeps;
-
     my @ret;
 
     my $rlist = "\nreverse dependencies: " . join ', ', @revdeps;
@@ -394,8 +393,6 @@ sub revdeps {
     my $log = $log->child('revdeps');
     $log->_6('running --revdep');
 
-    load 'CPAN::ReverseDependencies';
-
     my @modules;
 
     find({
@@ -420,15 +417,7 @@ sub revdeps {
 
     $log->_7("working module translated to $mod");
 
-    my $rvdep = CPAN::ReverseDependencies->new;
-    my @revdeps = $rvdep->get_reverse_dependencies($mod);
-
-    @revdeps = grep {$_ ne 'Test-BrewBuild'} @revdeps;
-
-    for (@revdeps){
-        s/-/::/g;
-    }
-
+    my @revdeps = $self->_get_revdeps($mod);
     return @revdeps;
 }
 sub legacy {
@@ -715,6 +704,29 @@ sub _dzil_unshim {
     $self->{is_dzil} = 0;
     chdir '..';
     $log->_7("changed to '..' dir");
+}
+sub _get_revdeps {
+    my ($self, $module) = @_;
+
+    load 'MetaCPAN::Client';
+
+    my $mcpan = MetaCPAN::Client->new;
+
+    my $rs = $mcpan->reverse_dependencies($module);
+
+    my @revdeps;
+
+    while (my $release = $rs->next){
+        push @revdeps, $release->distribution;
+    }
+
+    @revdeps = grep {$_ ne 'Test-BrewBuild'} @revdeps;
+
+    for (@revdeps) {
+        s/-/::/g;
+    }
+
+    return @revdeps;
 }
 sub _process_stderr {
     # compile data written to STDERR

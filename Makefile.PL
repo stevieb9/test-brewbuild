@@ -62,10 +62,10 @@ WriteMakefile(
         'Archive::Extract' => 0,
         'Capture::Tiny' => 0,
         'Config::Tiny' => 0,
-        'CPAN::ReverseDependencies' => 0,
         'File::Copy::Recursive' => 0,
         # 'Git::Repository' => '1.318', # doesn't work on windows
         'Logging::Simple' => '0.07',
+        'MetaCPAN::Client' => 0,
         'Module::Load' => 0,   # corelist since 5.9.4
         'Parallel::ForkManager' => 0,
         'Plugin::Simple' => '0.06',
