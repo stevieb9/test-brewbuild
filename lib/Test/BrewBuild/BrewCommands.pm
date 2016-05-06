@@ -97,7 +97,10 @@ sub available {
     if (! $legacy){
         @avail = grep { /^(?:perl-)?5\.(\d+)/; $1 > 8 } @avail;
     }
-    return @avail;
+
+    my %seen;
+    $seen{$_}++ for @avail;
+    return keys %seen;
 }
 sub install {
     my $self = shift;

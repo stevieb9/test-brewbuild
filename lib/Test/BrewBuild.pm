@@ -167,6 +167,17 @@ sub instance_install {
             push @new_installs, $version;
         }
     }
+     elsif ($install == -1) {
+        $log->_5("installing all available perls");
+
+        for my $perl (@perls_available){
+            if (grep { $_ eq $perl } @perls_installed) {
+                $log->_6( "$perl already installed... skipping" );
+                next;
+            }
+            push @new_installs, $perl;
+        }
+    }
     elsif ($install) {
         $log->_5("looking to install $install perl instance(s)");
 
@@ -185,17 +196,6 @@ sub instance_install {
 
             push @new_installs, $candidate;
             $install--;
-        }
-    }
-    elsif ($install == -1) {
-        $log->_5("installing all available perls");
-
-        for my $perl (@perls_available){
-            if (grep { $_ eq $perl } @perls_installed) {
-                $log->_6( "$perl already installed... skipping" );
-                next;
-            }
-            push @new_installs, $perl;
         }
     }
 

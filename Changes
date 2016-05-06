@@ -7,6 +7,8 @@ Revision history for Test-BrewBuild
           former was using MetaCPAN::API which is depricated, and failing to
           install on MSWin systems. (I sent a PR to the dist which fixes it). We
           now have our own revdep discovery process
+        - fixed logic issue where -1 wasn't being used in instance_install(),
+          breaking the ability to install all perl instances (fixed #130)
 
 2.04    2016-04-27
         - Results from MSWin now properly show the _bit suffix for the perl used
