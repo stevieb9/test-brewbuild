@@ -9,6 +9,7 @@ use Test::More;
 my $mock = Mock::Sub->new;
 my $remove_cmd = $mock->mock('Test::BrewBuild::BrewCommands::remove');
 $remove_cmd->return_value('echo "install"');
+my $info = $mock->mock('Test::BrewBuild::BrewCommands::info');
 
 my $out;
 open my $stdout, '>', \$out or die $!;
