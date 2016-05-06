@@ -916,6 +916,10 @@ All unit tests are run against all installed instances.
 
     $bb->instance_install(['5.10.1', '5.20.3']);
 
+    # install all instances
+
+    $bb->instance_install(-1);
+
     # find and test against all the current module's reverse CPAN dependencies
 
     $bb->revdep;
@@ -954,9 +958,10 @@ C<*brew> setup.
 
 =head2 instance_install
 
-If an integer is sent in, we'll install that many random versions of perl. You
-can also send in an array reference, where each element is a version of perl,
-and we'll install those instead.
+If an integer is sent in, we'll install that many random versions of perl. If
+the integer is C<-1>, we'll install all available versions. You can also send in
+an array reference, where each element is a version of perl, and we'll install
+those instead.
 
 You can send a second parameter, an integer for a time out. On each install,
 we'll bail if it takes longer than this time. Default is 300 seconds. If you're
