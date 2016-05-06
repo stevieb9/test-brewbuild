@@ -7,10 +7,14 @@ use Mock::Sub;
 use Test::BrewBuild;
 use Test::More;
 
+if (! $ENV{BBDEV_TESTING}){
+    plan skip_all => "developer tests only";
+    exit;
+}
+
 my $mock = Mock::Sub->new;
 my $inst_cmd = $mock->mock('Test::BrewBuild::BrewCommands::install');
 $inst_cmd->return_value('echo');
-my $info = $mock->mock('Test::BrewBuild::BrewCommands::info');
 
 { # ensure release candidates get included in rand install
 

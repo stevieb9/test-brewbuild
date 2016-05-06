@@ -3,6 +3,10 @@ Revision history for Test-BrewBuild
 2.05    2016-05-06
         - added [brewbuild] section to config file (closes #128)
         - cleaned up test logic due to failing MSWin tests
+        - switched from CPAN::ReverseDependencies to MetaCPAN::Client, as the
+          former was using MetaCPAN::API which is depricated, and failing to
+          install on MSWin systems. (I sent a PR to the dist which fixes it). We
+          now have our own revdep discovery process
 
 2.04    2016-04-27
         - Results from MSWin now properly show the _bit suffix for the perl used
