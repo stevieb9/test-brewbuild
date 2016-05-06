@@ -11,6 +11,7 @@ my $mock = Mock::Sub->new;
 my $inst_cmd = $mock->mock('Test::BrewBuild::BrewCommands::install');
 $inst_cmd->return_value('echo');
 my $info = $mock->mock('Test::BrewBuild::BrewCommands::info');
+$info->return_value('echo');
 
 {
     # rand dups
