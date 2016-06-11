@@ -12,6 +12,8 @@ if (! $ENV{BBDEV_TESTING}){
     exit;
 }
 
+my $perlver = $ENV{PERLVER};
+
 { # PASS
 
     my $ae = Archive::Extract->new(archive => 't/modules/bb-pass.zip');
@@ -27,7 +29,7 @@ if (! $ENV{BBDEV_TESTING}){
     print "*$_*\n" for @res;
     is (@res, 2, "proper result count");
 
-    like ( $res[1], qr/5.22.1.*? :: PASS/, "PASS ok" );
+    like ( $res[1], qr/$perlver.*? :: PASS/, "PASS ok" );
 
     remove_tree('BB-Pass');
     is (-d 'BB-Pass', undef, "pass dir removed ok");

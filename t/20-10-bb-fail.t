@@ -12,6 +12,8 @@ if (! $ENV{BBDEV_TESTING}){
     exit;
 }
 
+my $perlver = $ENV{PERLVER};
+
 { # FAIL
 
     my $ae = Archive::Extract->new(archive => 't/modules/bb-fail.zip');
@@ -25,17 +27,17 @@ if (! $ENV{BBDEV_TESTING}){
 
     is (@res, 2, "got proper result count");
 
-    like ( $res[1], qr/5.22.1.*? :: FAIL/, "FAIL ok" );
+    like ( $res[1], qr/$perlver.*? :: FAIL/, "FAIL ok" );
 
 
     my $log;
     if ($^O =~ /MSWin/){
-        is (-e 'bblog/5.22.1_64-FAIL.bblog', 1, "fail log for 5.22.1 created ok");
-        open $log, '<', 'bblog/5.22.1_64-FAIL.bblog' or die $!;
+        is (-e "bblog/${perlver}_64-FAIL.bblog", 1, "fail log for $perlver created ok");
+        open $log, '<', "bblog/${perlver}_64-FAIL.bblog" or die $!;
     }
     else {
-        is (-e 'bblog/5.22.1-FAIL.bblog', 1, "fail log for 5.22.1 created ok");
-        open $log, '<', 'bblog/5.22.1-FAIL.bblog' or die $!;
+        is (-e "bblog/$perlver-FAIL.bblog", 1, "fail log for $perlver created ok");
+        open $log, '<', "bblog/$perlver-FAIL.bblog" or die $!;
     }
     my @entries = <$log>;
     chomp @entries;

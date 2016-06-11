@@ -12,13 +12,15 @@ if (! $ENV{BBDEV_TESTING}){
     exit;
 }
 
+my $perlver = $ENV{PERLVER};
+
 my $bb = Test::BrewBuild->new;
 my $bcmd = Test::BrewBuild::BrewCommands->new( Logging::Simple->new );
 
 if ($bcmd->is_win) {
     my $info = $bb->brew_info;
     my $using = $bcmd->using( $info );
-    is ( $using, '5.22.1_64', "win: using() is ok" );
+    is ( $using, "${perlver}_64", "win: using() is ok" );
 }
 else {
     my $info = $bb->brew_info;

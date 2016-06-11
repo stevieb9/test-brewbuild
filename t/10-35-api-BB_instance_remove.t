@@ -6,6 +6,8 @@ use Mock::Sub;
 use Test::BrewBuild;
 use Test::More;
 
+my $perlver = $ENV{PERLVER};
+
 my $mock = Mock::Sub->new;
 my $remove_cmd = $mock->mock('Test::BrewBuild::BrewCommands::remove');
 $remove_cmd->return_value('echo "install"');
@@ -24,7 +26,7 @@ if ($^O =~ /MSWin/) {
 else {
     my $bb = Test::BrewBuild->new(debug => 7);
     my $ok = eval {
-        $bb->instance_remove( qw(5.20.0 5.22.1) ); 1; };
+        $bb->instance_remove( qq(5.20.0 $perlver) ); 1; };
     is ($remove_cmd->called, 1, "nix: BrewCommands::install() called");
     is ( $ok, 1, "nix: instance_remove() ok" );
 }

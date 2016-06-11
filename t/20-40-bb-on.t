@@ -15,6 +15,9 @@ if ($^O =~ /MSWin/){
     plan skip_all => "berrybrew exec doesn't have a --with flag";
     exit;
 }
+
+my $perlver = $ENV{PERLVER};
+
 { # --on and -o
 
     my $ae = Archive::Extract->new(archive => 't/modules/bb-pass.zip');
@@ -22,7 +25,7 @@ if ($^O =~ /MSWin/){
 
     chdir 'BB-Pass';
 
-    my $ret = `brewbuild --on 5.22.1 -o 5.10.1`;
+    my $ret = `brewbuild --on $perlver -o 5.10.1`;
 
     chdir '..';
 
@@ -31,7 +34,7 @@ if ($^O =~ /MSWin/){
 
     is (@res, 2, "-o and --on have proper return count");
 
-    like ($res[0], qr/5.22.1 :: PASS/, "--on ok");
+    like ($res[0], qr/$perlver :: PASS/, "--on ok");
     like ($res[1], qr/5.10.1 :: PASS/, "-o ok");
 
     remove_tree('BB-Pass');

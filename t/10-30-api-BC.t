@@ -11,6 +11,8 @@ if (! $ENV{BBDEV_TESTING}){
     exit;
 }
 
+my $perlver = $ENV{PERLVER};
+
 my $im_on_windows = ($^O =~ /MSWin/) ? 1 : 0;
 
 my $log = Logging::Simple->new;
@@ -26,9 +28,9 @@ if ($im_on_windows){
    my @inst = $bc->installed(0, $inst);
    is ($inst[0], "5.20.3_64", "win: installed is ok");
 
-   my $avail = '5.22.1_32_NO64';
+   my $avail = "${perlver}_32_NO64";
    my @avail = $bc->available(0, $avail);
-   is ($avail[0], '5.22.1_32', "win: avail with info ok");
+   is ($avail[0], "${perlver}_32", "win: avail with info ok");
 
    my $inst_cmd = $bc->install;
    like ($inst_cmd, qr/berrybrew\.exe install/, "win: install() ok");
@@ -41,13 +43,13 @@ if ($im_on_windows){
 else {
    is ($bc->brew, 'perlbrew', "nix: brew() is ok");
 
-   my $inst = 'i perl-5.22.1';
+   my $inst = "i perl-$perlver";
    my @inst = $bc->installed(0, $inst);
-   is ($inst[0], "perl-5.22.1", "nix: installed is ok");
+   is ($inst[0], "perl-$perlver", "nix: installed is ok");
 
-   my $avail = 'perl-5.22.1';
+   my $avail = "perl-$perlver";
    my @avail = $bc->available(0, $avail);
-   is ($avail[0], 'perl-5.22.1', "nix: avail with info ok");
+   is ($avail[0], "perl-$perlver", "nix: avail with info ok");
 
    my $inst_cmd = $bc->install;
    is ($inst_cmd, 'perlbrew install --notest -j 4', "nix: install() ok");

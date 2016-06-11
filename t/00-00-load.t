@@ -3,8 +3,14 @@ use 5.006;
 use strict;
 use warnings;
 
+use version;
 use Test::More;
 
+if ($ENV{BBDEV_TESTING}){
+    if (! $ENV{PERLVER}){
+        BAIL_OUT("for BBDEV_TESTING, you need to set \$ENV{PERLVER}, eg: 5.24.0");
+    }
+}
 BEGIN {
     use_ok( 'Test::BrewBuild' ) || print "Bail out!\n";
     use_ok( 'Test::BrewBuild::Tester' ) || print "Bail out!\n";

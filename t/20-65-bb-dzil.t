@@ -18,6 +18,8 @@ if (! grep {-x "$_/dzil"} split /$path_sep/, $ENV{PATH} ){
     plan skip_all => "dzil not found for Dist::Zilla tests";
 }
 
+my $perlver = $ENV{PERLVER};
+
 { # PASS
 
     my $ae = Archive::Extract->new(archive => 't/modules/dzil-test.zip');
@@ -33,7 +35,7 @@ if (! grep {-x "$_/dzil"} split /$path_sep/, $ENV{PATH} ){
     print "*$_*\n" for @res;
     is (@res, 2, "dzil proper result count");
 
-    is ( $res[1], "5.22.1 :: PASS", "dzil PASS ok" );
+    is ( $res[1], "$perlver :: PASS", "dzil PASS ok" );
 
     remove_tree('Dzil-Test');
     is (-d 'Dzil-Test', undef, "dzil dir removed ok");

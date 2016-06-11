@@ -1,5 +1,10 @@
 Revision history for Test-BrewBuild
 
+2.06    xxx
+        - BBDEV_TESTING tests now require a version (eg: 5.24.0) set in
+          $ENV{PERLVER}, instead of having 5.22.1 hardcoded (closes #132)
+
+
 2.05    2016-05-06
         - added [brewbuild] section to config file (closes #128)
         - cleaned up test logic due to failing MSWin tests

@@ -12,6 +12,7 @@ if (! $ENV{BBDEV_TESTING}){
     exit;
 }
 
+my $perlver = $ENV{PERLVER};
 my $dir = 'Mock-Sub-1.06';
 
 { # revdep
@@ -39,13 +40,13 @@ my $dir = 'Mock-Sub-1.06';
         like ($res[1], qr/reverse dependencies/, "deps" );
         like ($res[2], qr/\w+::\w+/, "is a module name");
         like ($res[3], qr/5.18.4.*? :: PASS/, "PASS");
-        like ($res[4], qr/5.22.1.*? :: FAIL/, "FAIL");
+        like ($res[4], qr/$perlver.*? :: FAIL/, "FAIL");
         like ($res[5], qr/\w+::\w+/, "is a module name");
         like ($res[6], qr/5.18.4.*? :: PASS/, "PASS");
-        like ($res[7], qr/5.22.1.*? :: FAIL/, "FAIL");
+        like ($res[7], qr/$perlver.*? :: FAIL/, "FAIL");
         like ($res[8], qr/\w+::\w+/, "is a module name");
         like ($res[9], qr/5.18.4.*? :: PASS/, "PASS");
-        like ($res[10], qr/5.22.1.*? :: FAIL/, "FAIL");
+        like ($res[10], qr/$perlver.*? :: FAIL/, "FAIL");
     }
     else {
         is (@res, 11, "proper result count");
@@ -53,13 +54,13 @@ my $dir = 'Mock-Sub-1.06';
         like ($res[1], qr/reverse dependencies/, "deps" );
         like ($res[2], qr/\w+::\w+/, "is a module name");
         like ($res[3], qr/5.18.4 :: PASS/, "PASS");
-        like ($res[4], qr/5.22.1 :: FAIL/, "FAIL");
+        like ($res[4], qr/$perlver :: FAIL/, "FAIL");
         like ($res[5], qr/\w+::\w+/, "is a module name");
         like ($res[6], qr/5.18.4 :: PASS/, "PASS");
-        like ($res[7], qr/5.22.1 :: FAIL/, "FAIL");
+        like ($res[7], qr/$perlver :: FAIL/, "FAIL");
         like ($res[8], qr/\w+::\w+/, "is a module name");
         like ($res[9], qr/5.18.4 :: PASS/, "PASS");
-        like ($res[10], qr/5.22.1 :: FAIL/, "FAIL");
+        like ($res[10], qr/$perlver :: FAIL/, "FAIL");
     }
 
     remove_tree($dir);

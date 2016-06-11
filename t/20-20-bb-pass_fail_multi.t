@@ -11,6 +11,9 @@ if (! $ENV{BBDEV_TESTING}){
     plan skip_all => "developer tests only";
     exit;
 }
+
+my $perlver = $ENV{PERLVER};
+
 { # PASS
 
     my $ae = Archive::Extract->new(archive => 't/modules/bb-pass.zip');
@@ -31,7 +34,7 @@ if (! $ENV{BBDEV_TESTING}){
     else {
         is (@res, 2, "proper result count for mutli PASS");
         is ( $res[0], "5.20.3 :: PASS", "5.20.3 PASS ok (multi perl)" );
-        is ( $res[1], "5.22.1 :: PASS", "5.22.1 PASS ok (multi perl)" );
+        is ( $res[1], "$perlver :: PASS", "$perlver PASS ok (multi perl)" );
     }
 
     remove_tree('BB-Pass');
@@ -51,13 +54,13 @@ if (! $ENV{BBDEV_TESTING}){
 
     if ($^O =~ /MSWin/) {
         is (@res, 2, "got proper result count for multi FAIL");
-        like ( $res[0], qr/:: FAIL/, "5.22.1 FAIL ok (multi perl)" );
+        like ( $res[0], qr/:: FAIL/, "$perlver FAIL ok (multi perl)" );
         like ( $res[1], qr/:: FAIL/, "5.20.3 FAIL ok (multi perl)" );
     }
     else {
         is (@res, 2, "got proper result count for multi FAIL");
         is ( $res[0], "5.20.3 :: FAIL", "5.20.3 FAIL ok (multi perl)" );
-        is ( $res[1], "5.22.1 :: FAIL", "5.22.1 FAIL ok (multi perl)" );
+        is ( $res[1], "$perlver :: FAIL", "$perlver FAIL ok (multi perl)" );
     }
 
     remove_tree('BB-Fail');
