@@ -940,7 +940,8 @@ script to understand what the arguments are and do.
 
 Many of the options can be saved in a configuration file if you want to set them
 permanently, or override defaults. Options passed into the various methods will
-override those in the configuration file. See L<Test::BrewBuild::brewbuild.conf>.
+override those in the configuration file.
+See L<config file documentation|https://metacpan.org/pod/distribution/Test-BrewBuild/lib/Test/BrewBuild/brewbuild.conf.pod>.
 
 =head2 brew_info
 

@@ -6,6 +6,7 @@ Revision history for Test-BrewBuild
           files, and other tests don't use the ver anymore (closes #132)
         - tests now reside in sub-directories, cleaning the t/ directory up
           significantly (closes #133)
+        - fixed config file doc link in BrewBuild's POD (closes #131)
 
 
 2.05    2016-05-06
