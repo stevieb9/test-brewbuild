@@ -69,7 +69,7 @@ t/test_dispatch/30-dispatch-notest.t
 t/test_dispatch/35-dispatch-confit.g
 t/test_dispatch/40-dispatch-install.t
 t/test_dispatch/45-dispatch-new.t
-t/test_dispatch/50-dispatch-invalid_bb_args.t
+t/test_dispatch/50-dispatch-invalid_bb_args.t.norun
 t/test_log/05-log-revdep_global_full_verbose.t
 t/test_log/10-log-revdep_save_log_files.t
 t/test_log/15-log-Tester.t

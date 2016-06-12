@@ -1,13 +1,15 @@
 Revision history for Test-BrewBuild
 
-2.06    xxx
+2.06    2016-06-12
+        - no functional changes
         - BBDEV_TESTING tests now require a version (eg: 5.24.0) set in
           $ENV{PERLVER}, instead of having 5.22.1 hardcoded for a few test
           files, and other tests don't use the ver anymore (closes #132)
         - tests now reside in sub-directories, cleaning the t/ directory up
           significantly (closes #133)
         - fixed config file doc link in BrewBuild's POD (closes #131)
-
+        - new berrybrew build, in prep for using --on on Windows
+          (https://github.com/stevieb9/berrybrew ver: sb-20160601)
 
 2.05    2016-05-06
         - added [brewbuild] section to config file (closes #128)
