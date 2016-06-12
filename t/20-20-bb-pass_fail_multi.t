@@ -12,8 +12,6 @@ if (! $ENV{BBDEV_TESTING}){
     exit;
 }
 
-my $perlver = $ENV{PERLVER};
-
 { # PASS
 
     my $ae = Archive::Extract->new(archive => 't/modules/bb-pass.zip');
@@ -33,8 +31,8 @@ my $perlver = $ENV{PERLVER};
     }
     else {
         is (@res, 2, "proper result count for mutli PASS");
-        is ( $res[0], "5.20.3 :: PASS", "5.20.3 PASS ok (multi perl)" );
-        is ( $res[1], "$perlver :: PASS", "$perlver PASS ok (multi perl)" );
+        like ( $res[0], qr/:: PASS/, "PASS ok (multi perl)" );
+        like ( $res[1], qr/:: PASS/, "PASS ok (multi perl)" );
     }
 
     remove_tree('BB-Pass');
@@ -54,13 +52,13 @@ my $perlver = $ENV{PERLVER};
 
     if ($^O =~ /MSWin/) {
         is (@res, 2, "got proper result count for multi FAIL");
-        like ( $res[0], qr/:: FAIL/, "$perlver FAIL ok (multi perl)" );
-        like ( $res[1], qr/:: FAIL/, "5.20.3 FAIL ok (multi perl)" );
+        like ( $res[0], qr/:: FAIL/, "1 FAIL ok (multi perl)" );
+        like ( $res[1], qr/:: FAIL/, "2 2 FAIL ok (multi perl)" );
     }
     else {
         is (@res, 2, "got proper result count for multi FAIL");
-        is ( $res[0], "5.20.3 :: FAIL", "5.20.3 FAIL ok (multi perl)" );
-        is ( $res[1], "$perlver :: FAIL", "$perlver FAIL ok (multi perl)" );
+        like ( $res[0], qr/:: FAIL/, "1 FAIL ok (multi perl)" );
+        like ( $res[1], qr/:: FAIL/, "2 FAIL ok (multi perl)" );
     }
 
     remove_tree('BB-Fail');

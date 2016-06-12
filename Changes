@@ -2,7 +2,8 @@ Revision history for Test-BrewBuild
 
 2.06    xxx
         - BBDEV_TESTING tests now require a version (eg: 5.24.0) set in
-          $ENV{PERLVER}, instead of having 5.22.1 hardcoded (closes #132)
+          $ENV{PERLVER}, instead of having 5.22.1 hardcoded for a few test
+          files, and other tests don't use the ver anymore (closes #132)
 
 
 2.05    2016-05-06

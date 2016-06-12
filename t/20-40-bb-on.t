@@ -34,8 +34,8 @@ my $perlver = $ENV{PERLVER};
 
     is (@res, 2, "-o and --on have proper return count");
 
-    like ($res[0], qr/$perlver :: PASS/, "--on ok");
-    like ($res[1], qr/5.10.1 :: PASS/, "-o ok");
+    like ($res[0], qr/:: PASS/, "--on ok");
+    like ($res[1], qr/:: PASS/, "-o ok");
 
     remove_tree('BB-Pass');
     is (-d 'BB-Pass', undef, "--on pass dir removed ok");

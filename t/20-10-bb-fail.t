@@ -27,7 +27,7 @@ my $perlver = $ENV{PERLVER};
 
     is (@res, 2, "got proper result count");
 
-    like ( $res[1], qr/$perlver.*? :: FAIL/, "FAIL ok" );
+    like ( $res[1], qr/:: FAIL/, "FAIL ok" );
 
 
     my $log;
@@ -36,7 +36,7 @@ my $perlver = $ENV{PERLVER};
         open $log, '<', "bblog/${perlver}_64-FAIL.bblog" or die $!;
     }
     else {
-        is (-e "bblog/$perlver-FAIL.bblog", 1, "fail log for $perlver created ok");
+        is (-e "bblog/${perlver}-FAIL.bblog", 1, "fail log for $perlver created ok");
         open $log, '<', "bblog/$perlver-FAIL.bblog" or die $!;
     }
     my @entries = <$log>;
