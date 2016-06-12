@@ -37,8 +37,8 @@ if (! $ENV{BBDEV_TESTING}){
     }
     else {
         is (@res, 3, "pass and fail simultaneously has proper count");
-        is ($res[1], qr/:: PASS/, "PASS ok");
-        is ($res[2], qr/:: FAIL/, "FAIL ok");
+        like ($res[1], qr/:: PASS/, "PASS ok");
+        like ($res[2], qr/:: FAIL/, "FAIL ok");
     }
 
     remove_tree('BB-522');
