@@ -74,7 +74,8 @@ METHODS
     Many of the options can be saved in a configuration file if you want to
     set them permanently, or override defaults. Options passed into the
     various methods will override those in the configuration file. See
-    Test::BrewBuild::brewbuild.conf.
+    config file documentation
+    <https://metacpan.org/pod/distribution/Test-BrewBuild/lib/Test/BrewBuild/brewbuild.conf.pod>.
 
  brew_info
 
@@ -222,7 +223,7 @@ SEE ALSO
 
     Berrybrew for Windows:
 
-    https://github.com/dnmfarrell/berrybrew
+    https://github.com/stevieb9/berrybrew
 
     Perlbrew for Unixes:
 

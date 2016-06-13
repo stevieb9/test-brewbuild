@@ -1083,7 +1083,7 @@ perldoc command:
 
 Berrybrew for Windows:
 
-L<https://github.com/dnmfarrell/berrybrew>
+L<https://github.com/stevieb9/berrybrew>
 
 Perlbrew for Unixes:
 
@@ -1138,7 +1138,7 @@ Create a repository directory, and enter it:
     cd c:\repos
 
 Clone and configure berrybrew
-    git clone https://github.com/dnmfarrell/berrybrew
+    git clone https://github.com/stevieb9/berrybrew
     cd berrybrew
     bin\berrybrew.exe config (type 'y' when asked to install in PATH)
 

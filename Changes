@@ -1,5 +1,9 @@
 Revision history for Test-BrewBuild
 
+2.07    xxx
+        - changed all links to dnmfarrell berrybrew repo to stevieb9 (closes
+          #136)
+
 2.06    2016-06-12
         - no functional changes
         - BBDEV_TESTING tests now require a version (eg: 5.24.0) set in

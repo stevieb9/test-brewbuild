@@ -32,7 +32,7 @@ my $is_win = $bb->is_win;
 
 my $brew_prog = $is_win ? 'berrybrew.exe' : 'perlbrew';
 my $brew_link = $is_win
-    ? 'https://github.com/dnmfarrell/berrybrew'
+    ? 'https://github.com/stevieb9/berrybrew'
     : 'http://perlbrew.pl';
 my $sep = $is_win ? ';' : ':';
 
@@ -349,7 +349,7 @@ Create a repository directory, and enter it:
 
 Clone and configure berrybrew
 
-    git clone https://github.com/dnmfarrell/berrybrew
+    git clone https://github.com/stevieb9/berrybrew
     cd berrybrew
     bin\berrybrew.exe config (type 'y' when asked to install in PATH)
 
@@ -411,7 +411,7 @@ Documentation for the test dispatching script and its API:
 
 Berrybrew for Windows:
 
-L<https://github.com/dnmfarrell/berrybrew>
+L<https://github.com/stevieb9/berrybrew>
 
 Perlbrew for Unixes:
 

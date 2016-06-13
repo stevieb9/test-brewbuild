@@ -8,7 +8,7 @@ use File::Copy;
 my $is_win = $^O =~ /MSWin/ ? 1 : 0;
 my $brew = $is_win ? 'berrybrew.exe' : 'perlbrew';
 my $brew_link = $is_win 
-    ? 'https://github.com/dnmfarrell/berrybrew'
+    ? 'https://github.com/stevieb9/berrybrew'
     : 'http://perlbrew.pl';
 my $sep = $is_win ? ';' : ':';
 
