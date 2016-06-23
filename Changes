@@ -1,8 +1,11 @@
 Revision history for Test-BrewBuild
 
-2.07    xxx
+2.07    2016-06-23
         - changed all links to dnmfarrell berrybrew repo to stevieb9 (closes
           #136)
+        - removed notices about MSWin PATH issues, as they were completely
+          rectified in berrybrew after it's "off" feature was added
+        - several POD corrections
 
 2.06    2016-06-12
         - no functional changes

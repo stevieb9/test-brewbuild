@@ -69,7 +69,7 @@ The C<brewbuild> command string you want to use as default. Example:
 The repo to default to. If not specified here or at the command-line, we'll
 default to looking for a repository in your current working directory. Example:
 
-    repo = https://github.com/stevieb9/pt-test-brewbuild
+    repo = https://github.com/stevieb9/p5-test-brewbuild
 
 =head2 [tester]
 

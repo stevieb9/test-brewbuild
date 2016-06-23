@@ -142,8 +142,8 @@ Set to 0-7 to enable debug logging.
 
 =head2 -f, --forks
 
-By default, we maintain four (4) testers concurrently. You can change this by
-sending in an inteter with this option.
+By default, we maintain four (4) testers concurrently. Pass an integer to this
+argument to change the default number of concurrent testers.
 
 =head1 AUTHOR
 
