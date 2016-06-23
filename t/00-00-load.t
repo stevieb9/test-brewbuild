@@ -75,7 +75,7 @@ if ($ENV{BBDEV_TESTING}){
     my $work_dir;
 
     if ($^O =~ /MSWin/){
-        $work_dir = "$ENV{HOMEPATH}/brewbuild";
+        $work_dir = "$ENV{USERPROFILE}/brewbuild";
     }
     else {
         $work_dir = "$ENV{HOME}/brewbuild";

@@ -1,17 +1,19 @@
 Revision history for Test-BrewBuild
 
 2.07    2016-06-23
+        - changed from using HOMEPATH env var to USERPROFILE on Windows, as the
+          former didn't contain the drive letter (fixes #96)
+        - legacy perls were not being excluded when legacy was disabled
+          (fixes #137)
         - changed all links to dnmfarrell berrybrew repo to stevieb9 (closes
           #136)
         - removed notices about MSWin PATH issues, as they were completely
           rectified in berrybrew after it's "off" feature was added
         - several POD corrections
         - confirmed that all tests still pass after berrybrew version
-          sb-20160602 changes
-        - fixed a couple of tests that had the perl ver hard-coded
-        - fixed two tests that were trying to use a regex in is()
-        - legacy perls were not being excluded when legacy was disabled
-          (fixes #137)
+          sb-20160602 changes (ensured PATH is still ok)
+        - fixed a couple of tests that had the perl ver hard-coded, and another
+          two that were trying to use a regex in is()
 
 2.06    2016-06-12
         - no functional changes

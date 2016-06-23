@@ -22,7 +22,7 @@ if (! grep { -x "$_/$brew" } split /$sep/, $ENV{PATH}){
 my $work_dir;
 
 if ($is_win){
-    $work_dir = "$ENV{HOMEPATH}/brewbuild";
+    $work_dir = "$ENV{USERPROFILE}/brewbuild";
 }
 else {
     $work_dir = "$ENV{HOME}/brewbuild";
