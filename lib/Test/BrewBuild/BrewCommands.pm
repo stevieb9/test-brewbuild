@@ -90,12 +90,24 @@ sub available {
 
     $log->child('available')->_6("determining available perls");
 
-    my @avail = $self->is_win
+    my @all_perls = $self->is_win
         ? $info =~ /(\d\.\d+\.\d+_\d+)/g
         : $info =~ /(perl-\d\.\d+\.\d+(?:-RC\d+)?)/g;
 
+    my $min_ver = '5.8.1';
+    my @avail;
+
     if (! $legacy){
-        @avail = grep { /^(?:perl-)?5\.(\d+)/; $1 > 8 } @avail;
+        for my $ver_string (@all_perls){
+            my ($ver) = $ver_string =~ /(5\.\d+\.\d+)/;
+            
+            if (version->parse($ver) > version->parse($min_ver)){
+                push @avail, $ver_string;
+            } 
+        }
+    }                    
+    else {
+        @avail = @all_perls;
     }
 
     my %seen;

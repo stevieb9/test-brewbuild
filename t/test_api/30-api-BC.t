@@ -60,12 +60,26 @@ else {
    is ($bc->is_win, 0, "nix: is win ok");
 }
 
-{
+{ # legacy off (issue #137)
+
+    my $legacy = 0;
+    my $info = $bc->info;
+    my @avail = $bc->available($legacy, $info);
+
+    my $ok = grep /5\.6\.2/, @avail;
+
+    is ($ok, 0, "legacy disabled ok");
+}
+
+{ # legacy on (issue #137)
+
     my $legacy = 1;
     my $info = $bc->info;
     my @avail = $bc->available($legacy, $info);
 
-    print "$_\n" for @avail;
+    my $ok = grep /5\.6\.2/, @avail;
+
+    is ($ok, 1, "legacy enabled ok");
 }
 
 done_testing();
