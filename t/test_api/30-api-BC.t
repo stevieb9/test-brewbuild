@@ -5,7 +5,8 @@ use Test::More;
 
 use Logging::Simple;
 use Test::BrewBuild::BrewCommands;
-
+$ENV{BBDEV_TESTING} =1 ;
+$ENV{PERLVER} = '5.22.1';
 if (! $ENV{BBDEV_TESTING}){
     plan skip_all => "developer tests only";
     exit;
@@ -60,10 +61,13 @@ else {
    is ($bc->is_win, 0, "nix: is win ok");
 }
 
-{ # legacy off (issue #137)
+SKIP: { # legacy off (issue #137)
 
     my $legacy = 0;
     my $info = $bc->info;
+
+    skip "no legacy versions installed", 1 if $info !~ /5\.6\.2/;
+
     my @avail = $bc->available($legacy, $info);
 
     my $ok = grep /5\.6\.2/, @avail;
@@ -71,10 +75,13 @@ else {
     is ($ok, 0, "legacy disabled ok");
 }
 
-{ # legacy on (issue #137)
+SKIP: { # legacy on (issue #137)
 
     my $legacy = 1;
     my $info = $bc->info;
+
+    skip "no legacy versions installed", 1 if $info !~ /5\.6\.2/;
+
     my @avail = $bc->available($legacy, $info);
 
     my $ok = grep /5\.6\.2/, @avail;

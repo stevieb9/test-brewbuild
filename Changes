@@ -10,6 +10,8 @@ Revision history for Test-BrewBuild
           sb-20160602 changes
         - fixed a couple of tests that had the perl ver hard-coded
         - fixed two tests that were trying to use a regex in is()
+        - legacy perls were not being excluded when legacy was disabled
+          (fixes #137)
 
 2.06    2016-06-12
         - no functional changes
