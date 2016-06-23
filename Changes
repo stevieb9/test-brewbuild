@@ -1,6 +1,6 @@
 Revision history for Test-BrewBuild
 
-2.07    2016-06-23
+2.08    2016-06-23
         - changed from using HOMEPATH env var to USERPROFILE on Windows, as the
           former didn't contain the drive letter (fixes #96)
         - legacy perls were not being excluded when legacy was disabled

@@ -5,8 +5,7 @@ use Test::More;
 
 use Logging::Simple;
 use Test::BrewBuild::BrewCommands;
-$ENV{BBDEV_TESTING} =1 ;
-$ENV{PERLVER} = '5.22.1';
+
 if (! $ENV{BBDEV_TESTING}){
     plan skip_all => "developer tests only";
     exit;
