@@ -208,7 +208,7 @@ distributions.
 
 It also allows you to dispatch basic test runs to remote testing servers.
 
-For Windows, you'll need to install Berrybrew (see L<SEE ALSO> for details).
+For Windows, you'll need to install Berrybrew (see L</SEE ALSO> for details).
 For Unix, you'll need Perlbrew.
 
 It allows you to remove and reinstall on each test run, install random versions
@@ -222,7 +222,7 @@ otherwise specified.
 Many of the options listed below can be saved in a configuration file if you
 want to set them permanently, or override defaults. Arguments passed in on the
 command line override those in the configuration file. See
-L<Test::BrewBuild::brewbuild.conf>.
+L<configuration file docs|https://metacpan.org/pod/distribution/Test-BrewBuild/lib/Test/BrewBuild/brewbuild.conf.pod>.
 
 =head2 -o, --on
 
@@ -329,15 +329,6 @@ Install and switch to your base perl instance, and install C<Test::BrewBuild>:
 
 =head2 WINDOWS
 
-Note that the key is that your C<%PATH%> must be free and clear of anything
-Perl. That means that if you're using an existing box with Strawberry or
-ActiveState installed, you *must* remove all traces of them in the PATH
-environment variable for ``brewbuild'' to work correctly.
-
-Easiest way to guarantee a working environment is using a clean-slate Windows
-server with nothing on it. For a Windows test platform, I mainly used an
-Amazon AWS t2.small server.
-
 Download/install git for Windows:
 
     https://git-scm.com/download/win
@@ -353,21 +344,16 @@ Clone and configure berrybrew
     cd berrybrew
     bin\berrybrew.exe config (type 'y' when asked to install in PATH)
 
-Note: I have forked and hacked C<berrybrew> with a few changes which makes it
-play nicer with C<brewbuild> (and adds the C<--with> feature for C<exec>) if
-you're interested. My changes haven't been merged yet, so you can fetch it from
-L<here|https://github.com/stevieb9/berrybrew>.
+Close the current CMD window and open a new one to update the PATH environment
+variable.
 
-Close the current CMD window and open a new one to update env vars
-
-Check available perls, and install one that'll become your core base install
+Check available perls, and install one that'll become your core base install:
 
     berrybrew available
     berrybrew install 5.22.1_64
     berrybrew switch 5.22.1_64
-    close CMD window, and open new one
 
-Make sure it took
+Open another new CMD window, and make sure the new Perl is in use:
 
     perl -v
 
@@ -417,9 +403,9 @@ Perlbrew for Unixes:
 
 L<http://perlbrew.pl>
 
-Remote testing server:
+Remote testing server utility:
 
-L<brewbuild|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbtester>
+L<bbtester|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbtester>
 
 Remote testing server API:
 
