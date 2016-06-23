@@ -13,6 +13,8 @@ sub new {
 
     my $self = bless {}, $class;
 
+    $self->{min_perl_version} = '5.8.1';
+
     $self->{log} = $plog->child('Test::BrewBuild::BrewCommands');
     $log = $self->{log};
     $log->_6("constructing new Test::BrewBuild::BrewCommands object");
@@ -62,12 +64,9 @@ sub installed {
         ? $info =~ /(\d\.\d{2}\.\d(?:_\d{2}))(?!=_)\s+\[installed\]/ig
         : $info =~ /i.*?(perl-\d\.\d+\.\d+)/g;
 
-    if (! $legacy){
-        @installed = grep { /^(?:perl-)?\d\.(\d+)/; $1 >= 8 } @installed;
-    }
+    @installed = $self->_legacy_perls($legacy, @installed);
 
     return @installed;
-
 }
 sub using {
     my ($self, $info) = @_;
@@ -90,25 +89,11 @@ sub available {
 
     $log->child('available')->_6("determining available perls");
 
-    my @all_perls = $self->is_win
+    my @avail = $self->is_win
         ? $info =~ /(\d\.\d+\.\d+_\d+)/g
         : $info =~ /(perl-\d\.\d+\.\d+(?:-RC\d+)?)/g;
 
-    my $min_ver = '5.8.1';
-    my @avail;
-
-    if (! $legacy){
-        for my $ver_string (@all_perls){
-            my ($ver) = $ver_string =~ /(5\.\d+\.\d+)/;
-            
-            if (version->parse($ver) > version->parse($min_ver)){
-                push @avail, $ver_string;
-            } 
-        }
-    }                    
-    else {
-        @avail = @all_perls;
-    }
+    @avail = $self->_legacy_perls($legacy, @avail);
 
     my %seen;
     $seen{$_}++ for @avail;
@@ -140,7 +125,22 @@ sub is_win {
     my $is_win = ($^O =~ /Win/) ? 1 : 0;
     return $is_win;
 }
+sub _legacy_perls {
+    my ($self, $legacy, @perls) = @_;
 
+    return @perls if $legacy;
+
+    my @avail;
+
+    for my $ver_string (@perls){
+        my ($ver) = $ver_string =~ /(5\.\d+\.\d+)/;
+
+        if (version->parse($ver) > version->parse($self->{min_perl_version})){
+            push @avail, $ver_string;
+        }
+    }
+    return @avail;
+}
 1;
 
 =head1 NAME
