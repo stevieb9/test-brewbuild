@@ -45,7 +45,7 @@ if ($^O =~ /MSWin/){
     my @logs = glob "$ENV{HOMEPATH}/brewbuild/bblog/*";
     is (@logs, 3, "got proper log file count");
     for (@logs){
-        like ($_, qr/127\.0\.0\.1_.*-5\.22\.1-\w{4}\.bblog/, "log $_ ok");
+        like ($_, qr/127\.0\.0\.1_.*-\w{4}\.bblog/, "log $_ ok");
         unlink $_ or die $!;
     }
 }
@@ -53,7 +53,7 @@ else {
     my @logs = glob "$ENV{HOME}/brewbuild/bblog/*";
     is (@logs, 3, "got proper log file count");
     for (@logs){
-        like ($_, qr/127\.0\.0\.1_.*-5\.22\.1-\w{4}\.bblog/, "log $_ ok");
+        like ($_, qr/127\.0\.0\.1_.*-\w{4}\.bblog/, "log $_ ok");
         unlink $_ or die $!;
     }
 }

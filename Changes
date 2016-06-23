@@ -6,6 +6,10 @@ Revision history for Test-BrewBuild
         - removed notices about MSWin PATH issues, as they were completely
           rectified in berrybrew after it's "off" feature was added
         - several POD corrections
+        - confirmed that all tests still pass after berrybrew version
+          sb-20160602 changes
+        - fixed a couple of tests that had the perl ver hard-coded
+        - fixed two tests that were trying to use a regex in is()
 
 2.06    2016-06-12
         - no functional changes

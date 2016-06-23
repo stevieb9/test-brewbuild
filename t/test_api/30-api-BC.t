@@ -60,5 +60,13 @@ else {
    is ($bc->is_win, 0, "nix: is win ok");
 }
 
+{
+    my $legacy = 1;
+    my $info = $bc->info;
+    my @avail = $bc->available($legacy, $info);
+
+    print "$_\n" for @avail;
+}
+
 done_testing();
 
