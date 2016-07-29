@@ -50,9 +50,9 @@ sub pull {
     my $self = shift;
     my $git = $self->git;
 
-    my $output = capture_merged {
-        `"$git" pull`;
-    };
+    my $output = `"$git" pull`;
+#    my $output = capture_merged {
+#    };
     return $output;
 }
 1;

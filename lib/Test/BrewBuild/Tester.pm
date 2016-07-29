@@ -24,9 +24,17 @@ sub new {
     my $self = bless {}, $class;
 
     $self->{log_to_stdout} = defined $args{stdout} ? $args{stdout} : 0;
+    $self->{logfile} = $args{logfile};
 
     $log = Logging::Simple->new(level => 0, name => 'Tester');
-    $log->file(\$self->{log}) if ! $self->{log_to_stdout};
+
+    my $log_file = \$self->{log};
+
+    if ($self->{logfile}){
+       $log_file = Test::BrewBuild->workdir ."/bbtester_parent.log";
+    }
+
+    $log->file($log_file) if ! $self->{log_to_stdout};
 
     if (defined $args{debug}){
         $log->level($args{debug}) if defined $args{debug};
@@ -97,6 +105,9 @@ sub start {
 
     if (defined $self->{debug}){
         push @args, ('--debug', $self->{debug});
+    }
+    if ($self->{logfile}){
+        push @args, ('--logfile');
     }
 
     mkdir $work_dir or die "can't create $work_dir dir: $!" if ! -d $work_dir;
@@ -181,6 +192,12 @@ sub listen {
     my $self = shift;
     my $log = $log->child("listen");
 
+    my $log_file = \$self->{log};
+    if ($self->{logfile}){
+       $log_file = Test::BrewBuild->workdir ."/bbtester_child.log";
+    }
+    $log->file($log_file) if ! $self->{log_to_stdout};
+
     my $sock = new IO::Socket::INET (
         LocalHost => $self->ip,
         LocalPort => $self->port,
@@ -194,13 +211,13 @@ sub listen {
              "$self->{port}"
     );
 
-    my $work_dir = Test::BrewBuild->workdir;
-    mkdir $work_dir if ! -d $work_dir;
-    chdir $work_dir;
-    $log->_7("work dir is: $work_dir");
-    $log->_7("chdir to work dir: ".getcwd());
-
     while (1){
+
+        my $work_dir = Test::BrewBuild->workdir;
+        mkdir $work_dir if ! -d $work_dir;
+        chdir $work_dir;
+        $log->_7("work dir is: $work_dir");
+        $log->_7("chdir to work dir: ".getcwd());
 
         my $res = {
             platform => $Config{archname},
@@ -254,9 +271,14 @@ sub listen {
 
             if (-d $git->name($repo)){
                 chdir $git->name($repo) or die $!;
+
                 $log->_7("chdir to: ".getcwd());
+
                 $log->_7("repo '".$git->name($repo)."' exists, pulling");
-                $git->pull;
+                $log->_7("using Git: " . $git->git);
+
+                my $pull_output = $git->pull;
+                $log->_7($pull_output);
             }
             else {
                 $git->clone($repo);
@@ -287,7 +309,9 @@ sub listen {
             }
 
             my $bb = Test::BrewBuild->new(%opts);
-            $bb->log()->file(\$self->{log}) if ! $self->{log_to_stdout};
+
+            $bb->log()->file($log_file) if ! $self->{log_to_stdout};
+
             $bb->instance_remove if $opts{remove};
             if ($opts{install}){
                 $bb->instance_install($opts{install});

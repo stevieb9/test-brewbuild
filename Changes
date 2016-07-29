@@ -1,5 +1,12 @@
 Revision history for Test-BrewBuild
 
+2.09    UNRELEASED
+        - added "logfile" flag for bbtester. If not in --fg mode with --stdout
+          set and --logfile is set, we'll write to a file in
+          "workdir/bbtester.log". This is to help in situations where the
+          tester is hanging in 'start' mode, but not in --fg mode. Without this
+          flag, no logging info is displayed or returned (closes #149)
+
 2.08    2016-06-23
         - changed from using HOMEPATH env var to USERPROFILE on Windows, as the
           former didn't contain the drive letter (fixes #96)
