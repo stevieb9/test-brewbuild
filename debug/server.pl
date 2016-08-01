@@ -26,11 +26,11 @@ if (@ARGV && $ARGV[0] eq 'fg') {
         $conn->recv($cmd, 1024);
 
         print "executing: $cmd\n";
-        my $ret = `$cmd && exit`;
+        my $ret = `$cmd`;
         print "return: $ret\n";
         Storable::nstore_fd(\$ret, $conn);
 
-        #shutdown($conn, 1);
+        shutdown($conn, 1);
     }
 
     $sock->close;
