@@ -2,14 +2,12 @@ use warnings;
 use strict;
 
 use IO::Socket::INET;
-use Proc::Background;
 use Storable;
 
 if (@ARGV && $ARGV[0] eq 'bg'){
-    #system 1, 'perl', $0;
-    Proc::Background->new('perl', $0, 'fg');
+    system 1, 'perl', $0, 'run';
 }
-if (@ARGV && $ARGV[0] eq 'fg') {
+if (@ARGV && $ARGV[0] eq 'run') {
     my $sock = new IO::Socket::INET (
         LocalHost => '0.0.0.0',
         LocalPort => 7800,
