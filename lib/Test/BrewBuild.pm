@@ -53,8 +53,7 @@ sub new {
 }
 sub options {
     my ($self, $args) = @_;
-    my (%opts, $setup);
-
+    my %opts;
     my $bad_opt = _validate_opts($args);
 
     GetOptionsFromArray(
@@ -73,7 +72,7 @@ sub options {
         "T|selftest"    => \$opts{selftest},
         "D|dispatch"    => \$opts{dispatch},
         "t|tester=s@"   => \$opts{testers},
-        "s|setup"       => \$setup,
+        "s|setup"       => \$opts{setup},
         "h|help"        => \$opts{help},
     );
 
