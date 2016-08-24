@@ -6,6 +6,10 @@ Revision history for Test-BrewBuild
           "workdir/bbtester.log". This is to help in situations where the
           tester is hanging in 'start' mode, but not in --fg mode. Without this
           flag, no logging info is displayed or returned (closes #149)
+        - fixed issue where setup info was not being displayed with -s
+          (closes #154)
+        - fixed issue where sending -1 to --new was causing brewbuild help to
+          be displayed (closes #151)
 
 2.08    2016-06-23
         - changed from using HOMEPATH env var to USERPROFILE on Windows, as the

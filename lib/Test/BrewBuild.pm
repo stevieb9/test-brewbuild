@@ -59,7 +59,7 @@ sub options {
     GetOptionsFromArray(
         $args,
         "on=s@"         => \$opts{on},
-        "n|new=i"       => \$opts{new},
+        "n|new=s"       => \$opts{new},
         "r|remove"      => \$opts{remove},
         "R|revdep"      => \$opts{revdep},
         "plugin=s"      => \$opts{plugin},
@@ -849,10 +849,10 @@ sub _validate_opts {
     );
 
     my $bad_opt = 0;
-
+    my $i;
     if (@$args) {
-        my @args = grep /^-/, @$args;
-        for my $arg (@args) {
+        my @params = grep {++$i % 2 != 0} @$args;
+        for my $arg (@params) {
             $arg =~ s/^-{1,2}//g;
             if (!grep { $arg eq $_ } @valid_args) {
                 $bad_opt = 1;
