@@ -10,6 +10,9 @@ Revision history for Test-BrewBuild
           (closes #154)
         - fixed issue where sending -1 to --new was causing brewbuild help to
           be displayed (closes #151)
+        - required Perl version now 5.10 from 5.8, due to that limit in 
+          MetaCPAN::Client
+        - removed Perl 5.8 tests from Travis
 
 2.08    2016-06-23
         - changed from using HOMEPATH env var to USERPROFILE on Windows, as the
