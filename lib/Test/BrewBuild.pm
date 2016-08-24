@@ -53,7 +53,7 @@ sub new {
 }
 sub options {
     my ($self, $args) = @_;
-    my (%opts, $help, $setup);
+    my (%opts, $setup);
 
     my $bad_opt = _validate_opts($args);
 
@@ -74,7 +74,7 @@ sub options {
         "D|dispatch"    => \$opts{dispatch},
         "t|tester=s@"   => \$opts{testers},
         "s|setup"       => \$setup,
-        "h|help"        => \$help,
+        "h|help"        => \$opts{help},
     );
 
     $opts{error} = 1 if $bad_opt;

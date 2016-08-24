@@ -13,6 +13,10 @@ our $VERSION = '2.09';
 
 my %args = Test::BrewBuild->options(\@ARGV) if @ARGV;
 
+if (defined $args{help}){
+    Test::BrewBuild->help;
+    exit;
+}
 if (defined $args{error}){
     Test::BrewBuild->help;
     exit;
