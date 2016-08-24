@@ -41,7 +41,7 @@ WriteMakefile(
     PL_FILES         => {},
     EXE_FILES        => [ map "bin/$_", qw(brewbuild bbtester bbdispatch) ],
     test             => {TESTS => 't/*.t t/*/*.t'},
-    MIN_PERL_VERSION => 5.008,
+    MIN_PERL_VERSION => 5.010,
     META_MERGE => {
         'meta-spec' => { version => 2 },
         resources   => {
