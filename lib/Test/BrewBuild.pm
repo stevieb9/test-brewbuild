@@ -446,8 +446,8 @@ Local usage options:
 -n | --new      How many random versions of perl to install (-1 to install all)
 -r | --remove   Remove all installed perls (less the current one)
 -i | --install  Number portion of an available perl version according to "*brew available". Multiple versions can be sent in at once
+-S | --save     By default, we save only FAIL logs. This will also save the PASS logs
 -N | --notest   Do not run tests. Allows you to --remove and --install without testing
--l | --legacy   Operate on perls < 5.8.x. The default plugins won't work with this flag set if a lower version is installed
 
 Network dispatching options:
 
@@ -463,6 +463,7 @@ Special options:
 
 -p | --plugin   Module name of the exec command plugin to use
 -a | --args     List of args to pass into the plugin (one arg per loop)
+-l | --legacy   Operate on perls < 5.8.x. The default plugins won't work with this flag set if a lower version is installed
 -T | --selftest Testing only: prevent recursive testing on Test::BrewBuild
 -d | --debug    0-7, sets logging verbosity, default is 0
 
