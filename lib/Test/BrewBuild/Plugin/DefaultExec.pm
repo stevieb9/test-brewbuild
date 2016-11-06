@@ -2,7 +2,7 @@ package Test::BrewBuild::Plugin::DefaultExec;
 
 # default exec command set plugin for Test::BrewBuild
 
-our $VERSION = '2.07';
+our $VERSION = '2.10';
 
 my $state = bless {}, __PACKAGE__;
 
