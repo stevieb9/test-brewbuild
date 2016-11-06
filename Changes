@@ -15,8 +15,9 @@ Revision history for Test-BrewBuild
         - removed Perl 5.8 tests from Travis
         - added help entry for the -S|--save option
         - fixed t/test_api/95, as Mock::Sub now has more revdeps (closes #155)
+        - slight wording change in Tutorial (closes #147)
 
-2.08    2016-06-23
+        2.08    2016-06-23
         - changed from using HOMEPATH env var to USERPROFILE on Windows, as the
           former didn't contain the drive letter (fixes #96)
         - legacy perls were not being excluded when legacy was disabled

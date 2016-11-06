@@ -172,9 +172,9 @@ debugging the tester:
 
     bbdispatch [...] -c "brewbuild -d 7"
 
-Using the L<Test::BrewBuild::Dispatch> API, you can enclose all debug output and
-return values into one scalar variable, and either dump it to a file or examine
-it all in one location:
+Using the various APIs, you can enclose all debug output and return values into
+one scalar variable, and either dump it to a file or examine it all in one
+location:
 
     use Capture::Tiny qw(capture_stdout);
     use Test::BrewBuild::Dispatch;
