@@ -26,7 +26,7 @@ $inst_cmd->return_value('echo');
     my @ret = split /\n/, $stdout;
     chomp @ret;
 
-    ok (@ret > 5, "-1 works ok");
+    ok (@ret > 4, "-1 works ok");
 
     $inst_cmd->reset;
 }
