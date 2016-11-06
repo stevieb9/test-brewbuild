@@ -1,6 +1,6 @@
 Revision history for Test-BrewBuild
 
-2.09    UNRELEASED
+2.09    2016-11-06
         - added "logfile" flag for bbtester. If not in --fg mode with --stdout
           set and --logfile is set, we'll write to a file in
           "workdir/bbtester.log". This is to help in situations where the
@@ -16,8 +16,10 @@ Revision history for Test-BrewBuild
         - added help entry for the -S|--save option
         - fixed t/test_api/95, as Mock::Sub now has more revdeps (closes #155)
         - slight wording change in Tutorial (closes #147)
+        - brewbuild will now let the user know that no perls are installed
+          instead of just outputting nothing (closes #150)
 
-        2.08    2016-06-23
+2.08    2016-06-23
         - changed from using HOMEPATH env var to USERPROFILE on Windows, as the
           former didn't contain the drive letter (fixes #96)
         - legacy perls were not being excluded when legacy was disabled

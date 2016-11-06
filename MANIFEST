@@ -4,6 +4,8 @@ bin/bbtester
 bin/brewbuild
 Changes
 conf/brewbuild.conf-dist
+debug/client.pl
+debug/server.pl
 lib/Test/BrewBuild.pm
 lib/Test/BrewBuild/brewbuild.conf.pod
 lib/Test/BrewBuild/BrewCommands.pm

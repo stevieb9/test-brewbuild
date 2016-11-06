@@ -82,6 +82,11 @@ if (! -d 't/' && ! $args{notest}){
 
 exit if $args{notest};
 
+if ($bb->perls_installed == 0){
+    print "\nno perls installed, nothing to do. Exiting...\n\n";
+    exit;
+}
+
 # revdep
 
 if ($args{revdep}){
