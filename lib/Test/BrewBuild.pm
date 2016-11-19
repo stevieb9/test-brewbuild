@@ -581,8 +581,13 @@ sub _exec {
 
         $self->_dzil_shim($fname);
         $log->_5("exec'ing: $brew exec --with $vers " . join ', ', @exec_cmd);
-        return `$brew exec --with $vers perl $fname 2>$self->{tempdir}/stderr.bblog`;
+
+        my $ret
+          = `$brew exec --with $vers perl $fname 2>$self->{tempdir}/stderr.bblog`;
+
         $self->_dzil_unshim if $self->{is_dzil};
+
+        return $ret;
     }
     else {
 
@@ -640,8 +645,12 @@ sub _exec {
             close $wfh;
 
             $self->_dzil_shim($fname);
-            return `$brew exec perl $fname 2>$self->{tempdir}/stderr.bblog`;
+
+            my $ret = `$brew exec perl $fname 2>$self->{tempdir}/stderr.bblog`;
+
             $self->_dzil_unshim if $self->{is_dzil};
+
+            return $ret;
         }
     }
 }
