@@ -6,6 +6,9 @@ Revision history for Test-BrewBuild
           report!) (closes #157)
         - change perms on the bin/ files to 755 from 644 (thanks again to
           'nigelhorne' from github for reporting) (closes #156)
+        - moved BrewBuild object creation in brewbuild down below the checks to
+          see if *brew is installed. No need for the object if they aren't
+          (closes #160)
 
 2.09    2016-11-06
         - added "logfile" flag for bbtester. If not in --fg mode with --stdout

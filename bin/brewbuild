@@ -26,11 +26,7 @@ if ($args{setup}){
     exit;
 }
 
-my $bb = Test::BrewBuild->new(%args);
-my $bb_log = $bb->log;
-my $log = $bb_log->child('brewbuild');
-
-my $is_win = $bb->is_win;
+my $is_win = Test::BrewBuild->is_win;
 
 # configure output for if *brew isn't installed
 
@@ -47,6 +43,10 @@ if (! grep { -x "$_/$brew_prog"} split /$sep/, $ENV{PATH}){
          "See $brew_link\n\n";
     exit;
 }
+
+my $bb = Test::BrewBuild->new(%args);
+my $bb_log = $bb->log;
+my $log = $bb_log->child('brewbuild');
 
 if ($args{dispatch}){
     my @testers = @{ $args{testers} };
