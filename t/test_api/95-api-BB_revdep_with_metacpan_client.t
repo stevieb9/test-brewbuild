@@ -5,6 +5,10 @@ use warnings;
 use Test::BrewBuild;
 use Test::More;
 
+unless ( $ENV{BBDEV_TESTING} ) {
+    plan( skip_all => "developer only test" );
+}
+
 {
 
     my $bb = Test::BrewBuild->new( notest => 1 );
