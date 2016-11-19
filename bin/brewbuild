@@ -102,7 +102,7 @@ elsif (defined $args{args}){
 
     delete $args{args};
 
-    for (@{ $args{args} }) {
+    for (@{ $opts{args} }) {
         $args{plugin_arg} = $_;
         print $bb->test;
     }

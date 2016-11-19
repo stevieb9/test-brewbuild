@@ -9,14 +9,12 @@ use Test::More;
 my $mod = 'Test::BrewBuild';
 my $bb = $mod->new;
 
-{ # plugin arg
-    my $ret = `perl bin/brewbuild -p t/base/UnitTestPlugin.pm -a one -a two`;
+#{ # plugin arg
+    #my $ret = `perl bin/brewbuild -p t/base/UnitTestPlugin.pm -a one -a two`;
 
-    if ($ENV{DEV_TEST}) {
-        like ($ret, qr/one/, 'arg 1 to plugin ok');
-        like ($ret, qr/two/, 'arg 2 to plugin ok');
-    }
-}
+    #like ($ret, qr/one/, 'arg 1 to plugin ok');
+    #like ($ret, qr/two/, 'arg 2 to plugin ok');
+#}
 { # test arg
     my $bb = $mod->new(plugin_arg => 'blah');
     my $plugin = $bb->plugins('t/base/UnitTestPlugin.pm');
