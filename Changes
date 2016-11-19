@@ -1,16 +1,16 @@
 Revision history for Test-BrewBuild
 
-2.10 NOREL
+2.10    2016-11-19
         - fix shebang line in the scripts to reference `/usr/bin/env perl`
           instead of `/usr/bin/perl` (Thanks 'nigelhorne' (github) for the
-          report!) (closes #157)
+          report) (closes #157)
         - change perms on the bin/ files to 755 from 644 (thanks again to
           'nigelhorne' from github for reporting) (closes #156)
         - moved BrewBuild object creation in brewbuild down below the checks to
           see if *brew is installed. No need for the object if they aren't
           (closes #160)
         - brewbuild was deleting $args{args} instead of $opts{args} when a
-          plugin is in use (fixes #159)
+          plugin is in use without --revdep (fixes #159)
 
 2.09    2016-11-06
         - added "logfile" flag for bbtester. If not in --fg mode with --stdout
