@@ -34,7 +34,7 @@ my $dir = 'Mock-Sub-1.06';
     print "*$_*\n" for @res;
 
     if ($^O =~ /MSWin/){
-        is (@res, 11, "proper result count");
+        is (@res > 10, 1, "proper result count");
         like ($res[0], qr/- installing/, "first line is installing");
         like ($res[1], qr/reverse dependencies/, "deps we're working on" );
         like ($res[2], qr/\w+::\w+/, "is a module name");
@@ -48,7 +48,7 @@ my $dir = 'Mock-Sub-1.06';
         like ($res[10], qr/:: \w+/, "is a valid result");
     }
     else {
-        is (@res, 11, "proper result count");
+        is (@res > 10, 1, "proper result count");
         like ($res[0], qr/- installing/, "installing...");
         like ($res[1], qr/reverse dependencies/, "deps we're operating on" );
         like ($res[2], qr/\w+::\w+/, "is a module name");

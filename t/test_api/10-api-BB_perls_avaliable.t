@@ -17,10 +17,6 @@ if (! grep { -x "$_/$brew_prog"}split /$sep/,$ENV{PATH}){
 
 my @perls_available = $bb->perls_available($bb->brew_info);
 
-use Data::Dumper;
-print Dumper \@perls_available;
-exit;
-
 plan skip_all => "no brew info" if ! @perls_available;
 
 ok (@perls_available, 'perls are available');

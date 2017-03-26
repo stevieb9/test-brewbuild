@@ -31,7 +31,7 @@ my $dir = 'Mock-Sub-1.06';
 
     print "*$_\n" for @res;
 
-    is (@res, 7, "proper result count");
+    is (@res > 10, 1, "proper result count");
     like ($res[0], qr/reverse dependencies/, "first like is the list of revdeps" );
     like ($res[1], qr/\w+::\w+/, "$res[1] is a module name");
     like ($res[2], qr/:: \w+/, "$res[2] is a valid result");

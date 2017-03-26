@@ -41,23 +41,23 @@ if ($im_on_windows){
    is ($bc->is_win, 1, "win: is win ok");
 }
 else {
-   is ($bc->brew, 'perlbrew', "nix: brew() is ok");
+    is ($bc->brew, 'perlbrew', "nix: brew() is ok");
 
-   my $inst = "i perl-$perlver";
-   my @inst = $bc->installed(0, $inst);
-   is ($inst[0], "perl-$perlver", "nix: installed is ok");
+    my $inst = "i perl-$perlver";
+    my @inst = $bc->installed(0, $inst);
+    is ($inst[0], "perl-$perlver", "nix: installed is ok");
 
-   my $avail = "perl-$perlver";
-   my @avail = $bc->available(0, $avail);
-   is ($avail[0], "perl-$perlver", "nix: avail with info ok");
+    my $avail = "perl-$perlver";
+    my @avail = $bc->available(0, $avail);
+    is ($avail[0], "perl-$perlver", "nix: avail with info ok");
 
-   my $inst_cmd = $bc->install;
-   is ($inst_cmd, 'perlbrew install --notest -j 4', "nix: install() ok");
+    my $inst_cmd = $bc->install;
+    is ($inst_cmd, 'perlbrew install --notest -j 4', "nix: install() ok");
 
-   my $remove_cmd = $bc->remove;
-   is ($remove_cmd, 'perlbrew uninstall', "nix: remove() ok");
+    my $remove_cmd = $bc->remove;
+    is ($remove_cmd, 'perlbrew --yes uninstall', "nix: remove() ok");
 
-   is ($bc->is_win, 0, "nix: is win ok");
+    is ($bc->is_win, 0, "nix: is win ok");
 }
 
 SKIP: { # legacy off (issue #137)

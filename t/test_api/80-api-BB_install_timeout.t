@@ -15,9 +15,7 @@ if (! $ENV{BBDEV_TESTING}){
 
     my $stdout = capture_merged {
         my $bb = Test::BrewBuild->new(notest => 1);
-        $bb->instance_remove;
         $bb->instance_install(['5.20.3'], 1);
-
     };
 
     like ($stdout, qr/failed to install/, "install timeout works");

@@ -28,7 +28,7 @@ mkdir $wdir or die $! if ! -d $wdir;
 
     like (
         $link,
-        qr{github.com/stevieb9/p5-test-brewbuild},
+        qr{github.com/stevieb9/test-brewbuild},
         "link is correct",
     );
 }
@@ -40,7 +40,7 @@ mkdir $wdir or die $! if ! -d $wdir;
 
     chdir $wdir or die $!;
 
-    is ($name, 'p5-test-brewbuild', "name of repo dir is ok");
+    is ($name, 'test-brewbuild', "name of repo dir is ok");
 
     my $ret = $git->clone($link);
     like ($ret, qr/Cloning into/, "clone() ok");

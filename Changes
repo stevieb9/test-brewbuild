@@ -11,6 +11,8 @@ Revision history for Test-BrewBuild
           and found that sending in '--yes' as an argument to perlbrew in the
           uninstall command will bypass this confirmation, allowing things to
           work correctly here for the perls_remove() functionality
+        - several test updates due to above changes
+        - added additional logging to various areas
 
 2.10    2016-11-19
         - fix shebang line in the scripts to reference `/usr/bin/env perl`

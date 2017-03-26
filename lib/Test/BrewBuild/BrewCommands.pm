@@ -91,7 +91,7 @@ sub available {
 
     my @avail = $self->is_win
         ? $info =~ /(\d\.\d+\.\d+_\d+)/g
-        : $info =~ /[^c](perl-\d\.\d+\.\d+(?:-RC\d+)?)/g;
+        : $info =~ /(?<!c)(perl-\d\.\d+\.\d+(?:-RC\d+)?)/g;
 
     @avail = $self->_legacy_perls($legacy, @avail);
 
@@ -128,7 +128,17 @@ sub is_win {
 sub _legacy_perls {
     my ($self, $legacy, @perls) = @_;
 
-    return @perls if $legacy;
+    if ($legacy) {
+        $log->child('_legacy_perls')->_7(
+            "legacy is enabled, using perls older than 5.8.9"
+        );
+        return @perls if $legacy;
+    }
+    else {
+        $log->child('_legacy_perls')->_7(
+            "legacy is disabled, ignoring perls older than 5.8.9"
+        );
+    }
 
     my @avail;
 
