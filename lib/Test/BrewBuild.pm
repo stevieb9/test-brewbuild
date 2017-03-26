@@ -54,7 +54,10 @@ sub new {
 sub options {
     my ($self, $args) = @_;
     my %opts;
-    my $bad_opt = _validate_opts($args);
+
+    my @arg_directives = grep {$_ =~ /^-/} @$args;
+
+    my $bad_opt = _validate_opts(\@arg_directives);
 
     GetOptionsFromArray(
         $args,

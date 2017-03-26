@@ -4,7 +4,8 @@ Revision history for Test-BrewBuild
         - added BB::_clean_available(). This is a filter method to remove perls
           that were scooped up with info(), but we don't want (such as cperl)
           (fixes #162)
-        -
+        - _validate_opts() now only compares against argument directives, not
+          their values (fixes #161)
 
 2.10    2016-11-19
         - fix shebang line in the scripts to reference `/usr/bin/env perl`
