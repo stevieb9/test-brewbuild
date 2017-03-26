@@ -219,6 +219,7 @@ sub instance_install {
             };
             if ($@){
                 $log->_0($@);
+                $log->_1("install of $ver failed: uninstalling the remnants..");
                 $self->instance_remove($ver);
                 next;
             }
