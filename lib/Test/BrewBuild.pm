@@ -109,7 +109,6 @@ sub perls_available {
     my $self = shift;
     my $log = $log->child('perls_available');
     my @perls_available = $bcmd->available($self->legacy, $self->brew_info);
-    @perls_available = $self->_clean_available(@perls_available);
     $log->_6("perls available: " . join ', ', @perls_available);
     return @perls_available;
 }
@@ -487,17 +486,6 @@ sub _config {
             $self->{args}{$_} = $conf->{$_};
         }
     }
-}
-sub _clean_available {
-    # filter out unwanted available perls
-
-    my ($self, @perls) = @_;
-
-    # remove cperl
-
-    @perls = grep {$_ !~ /^cperl/} @perls;
-
-    return @perls;
 }
 sub _attach_build_log {
     # attach the cpanm logs to the PASS/FAIL logs

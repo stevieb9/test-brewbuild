@@ -91,7 +91,7 @@ sub available {
 
     my @avail = $self->is_win
         ? $info =~ /(\d\.\d+\.\d+_\d+)/g
-        : $info =~ /(perl-\d\.\d+\.\d+(?:-RC\d+)?)/g;
+        : $info =~ /[^c](perl-\d\.\d+\.\d+(?:-RC\d+)?)/g;
 
     @avail = $self->_legacy_perls($legacy, @avail);
 
@@ -115,7 +115,7 @@ sub remove {
 
     my $remove_cmd = $self->is_win
         ? "$self->{brew} remove"
-        : 'perlbrew uninstall';
+        : 'perlbrew --yes uninstall';
 
     $log->child('remove')->_6("remove cmd is: $remove_cmd");
 
