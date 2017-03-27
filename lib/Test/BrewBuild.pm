@@ -128,7 +128,7 @@ sub instance_install {
             $timeout = $self->{args}{timeout};
         }
         else {
-            $timeout = 300;
+            $timeout = 600;
         }
     }
 
