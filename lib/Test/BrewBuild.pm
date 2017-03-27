@@ -237,6 +237,7 @@ sub instance_install {
                 next;
             }
         }
+        $bcmd->info_cache if $self->{args}{info_cache};
     }
     else {
         $log->_5("using existing versions only, nothing to install");
@@ -287,6 +288,7 @@ sub instance_remove {
         }
     }
 
+    $bcmd->info_cache if $self->{args}{info_cache};
     $log->_4("removal of existing perl installs complete...");
 }
 sub revdep {
