@@ -216,17 +216,24 @@ sub _fork {
 
             if (! $repo){
                 my $git = Test::BrewBuild::Git->new;
+                $log->_5("repo not sent in, attempting to set via Git");
                 $repo_link = $git->link;
-                $log->_5("repo not sent in, set to: $repo_link via Git");
+
+                if ($repo_link){
+                    $log->_5("repo set to $repo_link from Git");
+                }
+                else {
+                    $log->_7("\$repo_link could not be set, we're about to fail...");
+                }
             }
             else {
                 $repo_link = $repo;
-                $log->_5("repo set to: $repo_link");
+                $log->_5("repo sent in, and set to: $repo_link");
             }
 
             if (! $repo_link){
-                $log->_0("repo '$repo_link' not found, croaking");
-                croak "\nno repository found, can't continue\n";
+                $log->_0("no repository supplied and not in a repo dir... croaking");
+                croak "\nno repository found, and none sent in via param, can't continue...\n";
             }
             $socket->send($repo_link);
 

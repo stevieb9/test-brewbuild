@@ -2,6 +2,8 @@ Revision history for Test-BrewBuild
 
 2.12 UNREL
         - extended default install timeout to 600 seconds
+        - fix erroneous uninitialized warning in Dispatch if a repo isn't sent
+          in, and one isn't found with Git in the cwd. (fixes #165)
 
 2.11    2017-03-26
         - we now filter out cperls until we can do further testing. This is
