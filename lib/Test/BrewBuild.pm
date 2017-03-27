@@ -898,10 +898,11 @@ L<here|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbtester>, or
 browse through the L<Test::BrewBuild::Tutorial> for network testing.
 
 This module provides you the ability to perform your unit tests across all of
-your Perlbrew (Unix) or Berrybrew (Windows) Perl instances.
+your L<Perlbrew|http://perlbrew.pl> (Unix) or L<Berrybrew|https://github.com/stevieb9/berrybrew>
+(Windows) Perl instances.
 
-For Windows, you'll need to install Berrybrew (see L<SEE ALSO> for details).
-For Unix, you'll need Perlbrew.
+For Windows, you'll need to install B<L<Berrybrew|https://github.com/stevieb9/berrybrew>>, 
+and for Unix, you'll need B<L<Perlbrew|http://perlbrew.pl>>.
 
 It allows you to remove and reinstall on each test run, install random versions
 of perl, or install specific versions.

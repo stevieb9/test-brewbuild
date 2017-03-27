@@ -6,6 +6,8 @@ Revision history for Test-BrewBuild
           in, and one isn't found with Git in the cwd. (fixes #165)
         - clarify what course of action to take if no testers can be found
           when bbdispatch is run (fixes #164)
+        - added proper links to berrybrew and perlbrew in pod description
+          (closes #145)
 
 2.11    2017-03-26
         - we now filter out cperls until we can do further testing. This is
