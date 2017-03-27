@@ -23,7 +23,7 @@ Configuration for the core L<Test::BrewBuild> components.
 =head3 timeout
 
 This is the timeout to use for the C<instance_install()> method. It defaults to
-300 seconds. If an install takes longer than the time set in C<timeout>, it'll
+600 seconds. If an install takes longer than the time set in C<timeout>, it'll
 roll out the changes and log an error, then proceed.
 
 =head3 remove

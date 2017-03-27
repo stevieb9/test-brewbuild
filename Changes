@@ -1,5 +1,9 @@
 Revision history for Test-BrewBuild
 
+2.13 UNREL
+        - several various POD corrections/updates
+
+
 2.12    2017-03-27
         - extended default install timeout to 600 seconds
         - fix erroneous uninitialized warning in Dispatch if a repo isn't sent

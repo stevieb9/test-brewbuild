@@ -923,7 +923,8 @@ and for Unix, you'll need B<L<Perlbrew|http://perlbrew.pl>>.
 It allows you to remove and reinstall on each test run, install random versions
 of perl, or install specific versions.
 
-All unit tests are run against all installed instances.
+All unit tests are run against all installed instances, unless specified
+otherwise.
 
 =head1 SYNOPSIS
 

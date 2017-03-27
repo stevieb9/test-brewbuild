@@ -28,7 +28,8 @@ DESCRIPTION
     It allows you to remove and reinstall on each test run, install random
     versions of perl, or install specific versions.
 
-    All unit tests are run against all installed instances.
+    All unit tests are run against all installed instances, unless
+    specified otherwise.
 
 SYNOPSIS
 
@@ -211,15 +212,6 @@ CONTRIBUTING
 BUGS
 
     https://github.com/stevieb9/p5-test-brewbuild/issues
-
-SUPPORT
-
-    You can find documentation for this module and its accompanying script
-    with the perldoc command:
-
-        perldoc Test::BrewBuild
-    
-        perldoc brewbuild
 
 SEE ALSO
 
