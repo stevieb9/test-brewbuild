@@ -6,13 +6,14 @@ Revision history for Test-BrewBuild
           pull out the perls listed in $info (fixes #162)
         - _validate_opts() now only compares against argument directives, not
           their values (fixes #161)
-        - in v0.77, perlbrew introduced a confirmation requirement for
+        - in perlbrew v0.77, they introduced a confirmation requirement for
           'uninstall', which was breaking things for us. Went through the code,
           and found that sending in '--yes' as an argument to perlbrew in the
           uninstall command will bypass this confirmation, allowing things to
           work correctly here for the perls_remove() functionality
         - several test updates due to above changes
         - added additional logging to various areas
+        - bumped prereq of Mock::Sub to 1.07
 
 2.10    2016-11-19
         - fix shebang line in the scripts to reference `/usr/bin/env perl`

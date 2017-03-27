@@ -32,7 +32,7 @@ my @ret = split /\n/, $ret;
 print "$_\n" for @ret;
 
 if ($^O =~ /MSWin/){
-    is (@ret, 9, "return count is correct");
+    is (@ret > 10, 1, "return count is correct");
 
     like ($ret[0], qr/127\.0\.0\.1 - /, "remote tester info");
     like ($ret[1], qr/removing/, "removing installs");
@@ -48,7 +48,7 @@ if ($^O =~ /MSWin/){
     like ($ret[8], qr/.*?:: PASS/, "PASS ok");
 }
 else {
-    is (@ret, 9, "return count is correct");
+    is (@ret > 10, 1, "return count is correct");
 
     like ($ret[1], qr/removing/, "removing installs");
     like ($ret[2], qr/reverse dependencies:/, "line has has revdep info");

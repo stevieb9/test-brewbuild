@@ -56,7 +56,7 @@ WriteMakefile(
         },
     },
     BUILD_REQUIRES => {
-        'Mock::Sub' => '1.06',
+        'Mock::Sub' => '1.07',
     },
     PREREQ_PM => {
         'App::cpanminus' => 0,
