@@ -18,7 +18,7 @@ use Test::BrewBuild::BrewCommands;
 use Test::BrewBuild::Dispatch;
 use Test::BrewBuild::Tester;
 
-our $VERSION = '2.11';
+our $VERSION = '2.12';
 
 my $log;
 my $bcmd;
