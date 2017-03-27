@@ -55,8 +55,8 @@ sub dispatch {
         $log->_6("no --testers passed in, and failed to fetch testers from " .
                  "config file, croaking"
         );
-        croak "dispatch requires clients sent in or config file which " .
-              "isn't found\n";
+        croak "dispatch requires testers sent in or config file, which " .
+              "can't be found. Run \"bbdispatch -h\" for help.\n";
     }
     else {
         $log->_7("working on testers: " . join ', ', @$testers);

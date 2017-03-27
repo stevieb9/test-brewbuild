@@ -4,6 +4,8 @@ Revision history for Test-BrewBuild
         - extended default install timeout to 600 seconds
         - fix erroneous uninitialized warning in Dispatch if a repo isn't sent
           in, and one isn't found with Git in the cwd. (fixes #165)
+        - clarify what course of action to take if no testers can be found
+          when bbdispatch is run (fixes #164)
 
 2.11    2017-03-26
         - we now filter out cperls until we can do further testing. This is
