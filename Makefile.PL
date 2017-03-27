@@ -66,6 +66,7 @@ WriteMakefile(
         'File::Copy::Recursive' => 0,
         # 'Git::Repository' => '1.318', # doesn't work on windows
         'Logging::Simple' => '0.07',
+        'LWP::Simple'   => 0,
         'MetaCPAN::Client' => 0,
         'Module::Load' => 0,   # corelist since 5.9.4
         'Parallel::ForkManager' => 0,

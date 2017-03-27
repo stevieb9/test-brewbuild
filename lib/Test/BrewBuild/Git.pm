@@ -3,6 +3,8 @@ use strict;
 use warnings;
 
 use Capture::Tiny qw(:all);
+use Carp qw(croak);
+use LWP::Simple qw(head);
 
 our $VERSION = '2.12';
 
@@ -39,6 +41,11 @@ sub name {
 }
 sub clone {
     my ($self, $repo) = @_;
+
+    if ($repo =~ /http/ && ! head($repo)){
+        croak "repository $repo doesn't exist; can't clone...\n";
+    }
+
     my $git = $self->git;
 
     my $output = capture_merged {

@@ -18,10 +18,12 @@ DESCRIPTION
     browse through the Test::BrewBuild::Tutorial for network testing.
 
     This module provides you the ability to perform your unit tests across
-    all of your Perlbrew (Unix) or Berrybrew (Windows) Perl instances.
+    all of your Perlbrew <http://perlbrew.pl> (Unix) or Berrybrew
+    <https://github.com/stevieb9/berrybrew> (Windows) Perl instances.
 
-    For Windows, you'll need to install Berrybrew (see "SEE ALSO" for
-    details). For Unix, you'll need Perlbrew.
+    For Windows, you'll need to install Berrybrew
+    <https://github.com/stevieb9/berrybrew>, and for Unix, you'll need
+    Perlbrew <http://perlbrew.pl>.
 
     It allows you to remove and reinstall on each test run, install random
     versions of perl, or install specific versions.

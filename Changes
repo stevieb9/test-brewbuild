@@ -8,6 +8,9 @@ Revision history for Test-BrewBuild
           when bbdispatch is run (fixes #164)
         - added proper links to berrybrew and perlbrew in pod description
           (closes #145)
+        - added LWP::Simple for #142 (check if clone URL exists)
+        - added check in Git::clone() to ensure that the remote repo exists
+          before we attempt a clone, and croak() if not (fixes #142)
 
 2.11    2017-03-26
         - we now filter out cperls until we can do further testing. This is
