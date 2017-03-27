@@ -4,12 +4,29 @@ use warnings;
 
 use Capture::Tiny qw(:all);
 use Carp qw(croak);
+use Logging::Simple;
 use LWP::Simple qw(head);
 
 our $VERSION = '2.12';
 
+my $log;
+
 sub new {
-    return bless {}, shift;
+    my ($class, %args) = @_;
+    my $self = bless {}, $class;
+
+    $log = Logging::Simple->new(
+        name => 'Test::BrewBuild::Git',
+        level => 0
+    );
+
+    if (defined $args{debug}){
+        $log->level($args{debug});
+    }
+
+    $log->_5("instantiating new Test::BrewBuild::Git object");
+
+    return $self;
 }
 sub git {
     my $self = shift;
@@ -26,23 +43,35 @@ sub git {
     else {
         $cmd = 'git';
     }
+
+    $log->child('git')->_6("git command set to '$cmd'");
+
     return $cmd;
 }
 sub link {
     my $self = shift;
     my $git = $self->git;
-    return (split /\n/, `"$git" config --get remote.origin.url`)[0];
+    my $link = (split /\n/, `"$git" config --get remote.origin.url`)[0];
+    $log->child('link')->_6("found $link for the repo");
+    return $link
 }
 sub name {
     my ($self, $repo) = @_;
+
+    $log->child('name')->_6("converting repository link to repo name");
+
     if ($repo =~ m!.*/(.*?)(?:\.git)*$!){
+        $log->child('name')->_6("repo link converted to $1");
         return $1;
     }
 }
 sub clone {
     my ($self, $repo) = @_;
 
+    $log->child('clone')->_7("initiating remote repo clone");
+
     if ($repo =~ /http/ && ! head($repo)){
+        $log->child('clone')->_2("git clone failed, repo doesn't exist");
         croak "repository $repo doesn't exist; can't clone...\n";
     }
 
@@ -51,15 +80,16 @@ sub clone {
     my $output = capture_merged {
         `"$git" clone $repo`;
     };
+
     return $output;
 }
 sub pull {
     my $self = shift;
     my $git = $self->git;
 
+    $log->child('clone')->_6("initiating git pull");
+
     my $output = `"$git" pull`;
-#    my $output = capture_merged {
-#    };
     return $output;
 }
 1;
@@ -92,6 +122,12 @@ Manages Git repositories, including gathering names, cloning, pulling etc.
 =head2 new
 
 Returns a new C<Test::BrewBuild::Git> object.
+
+Parameters:
+
+    debug => $level
+
+Optional, Integer. $level vary between 0-7, 0 being the least verbose.
 
 =head2 git
 

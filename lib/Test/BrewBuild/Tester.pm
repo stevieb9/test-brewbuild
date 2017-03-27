@@ -267,7 +267,7 @@ sub listen {
         $log->_7("received repo: $repo");
 
         if ($repo){
-            my $git = Test::BrewBuild::Git->new;
+            my $git = Test::BrewBuild::Git->new(debug => $self->{debug});
 
             if (-d $git->name($repo)){
                 chdir $git->name($repo) or die $!;

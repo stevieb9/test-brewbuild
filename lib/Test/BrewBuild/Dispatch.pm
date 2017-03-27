@@ -215,7 +215,7 @@ sub _fork {
             my $repo_link;
 
             if (! $repo){
-                my $git = Test::BrewBuild::Git->new;
+                my $git = Test::BrewBuild::Git->new(debug => $self->{debug});
                 $log->_5("repo not sent in, attempting to set via Git");
                 $repo_link = $git->link;
 
