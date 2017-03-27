@@ -22,7 +22,7 @@ scripts used in this tutorial can be found in L<SEE ALSO>.
 
 You'll need Git on both the dispatcher and all testers, your module accessible
 via a Git repository, and the dispatch and all tester servers configured, see
-L<SERVER CONFIGURATION>.
+L</SERVER CONFIGURATION>.
 
 =head1 SERVER CONFIGURATION
 
@@ -48,7 +48,7 @@ On the dispatcher, we'll be located within a Git repository directory, so we'll
 let the system take care of the repo management so we don't have to continuously
 specify it.
 
-See L<SEE ALSO> for more elaborate uses, command-line options of each script,
+See L</SEE ALSO> for more elaborate uses, command-line options of each script,
 and details of the optional configuration file.
 
 =head1 STEP 1: CONFIGURE TESTERS

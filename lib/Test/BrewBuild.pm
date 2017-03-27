@@ -18,7 +18,7 @@ use Test::BrewBuild::BrewCommands;
 use Test::BrewBuild::Dispatch;
 use Test::BrewBuild::Tester;
 
-our $VERSION = '2.12';
+our $VERSION = '2.13';
 
 my $log;
 my $bcmd;
@@ -1100,15 +1100,6 @@ welcomed.
 =head1 BUGS
 
 L<https://github.com/stevieb9/p5-test-brewbuild/issues>
-
-=head1 SUPPORT
-
-You can find documentation for this module and its accompanying script with the
-perldoc command:
-
-    perldoc Test::BrewBuild
-
-    perldoc brewbuild
 
 =head1 SEE ALSO
 
