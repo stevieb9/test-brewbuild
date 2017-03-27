@@ -1,6 +1,6 @@
 Revision history for Test-BrewBuild
 
-2.12 UNREL
+2.12    2017-03-27
         - extended default install timeout to 600 seconds
         - fix erroneous uninitialized warning in Dispatch if a repo isn't sent
           in, and one isn't found with Git in the cwd. (fixes #165)
@@ -19,6 +19,8 @@ Revision history for Test-BrewBuild
           this feature will speed things up when multiple calls for info happen
           within a single test run. Can be disabled with the -X param to
           brewbuild (closes #163)
+        - finalized Tester's ability to write logs to a file, and added POD
+          (closes #149)
 
 2.11    2017-03-26
         - we now filter out cperls until we can do further testing. This is

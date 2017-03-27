@@ -103,6 +103,11 @@ Send the logs to STDOUT directly. Only useful in foreground mode.
 
     bbtester --fg [...] -d 0-7 --stdout
 
+Send the logs to a log file (C<~/brewbuild/bbtester_*.log> by default).
+
+    bbtester start [...] -d 7 --logfile
+    bbtester --fg -d 7 -l
+
 =head1 DESCRIPTION
 
 This script is the listener end of the distributed C<Test::BrewBuild> testing
@@ -155,6 +160,13 @@ the test results.
 When using C<--fg> to run the tester in the foreground, use this flag to display
 debug information live time on C<STDOUT>, as opposed to having it collected and
 returned.
+
+=head2 -l, --logfile
+
+Set this argument and we'll write all tester output to a log file. The parent
+tester server will create a C<$workdir/bbtester_parent.log> file (where
+C<$workdir> is C<~/brewbuild> by default), and the children tester runners will
+all log to C<$workdir/bbtester_child.log>.
 
 =head1 AUTHOR
 

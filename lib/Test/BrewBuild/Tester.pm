@@ -31,7 +31,7 @@ sub new {
     my $log_file = \$self->{log};
 
     if ($self->{logfile}){
-       $log_file = Test::BrewBuild->workdir ."/bbtester_parent.log";
+        $log_file = Test::BrewBuild->workdir ."/bbtester_parent.log";
     }
 
     $log->file($log_file) if ! $self->{log_to_stdout};
@@ -426,6 +426,25 @@ Note that by default, the working directory is C<~/brewbuild> on all platforms.
 =head2 new
 
 Returns a new C<Test::BrewBuild::Tester> object.
+
+Parameters:
+
+    debug => $level
+
+Integer, optional. Debug level from least verbose (0) to maximum verbosity (7).
+
+    stdout => $bool
+
+Integer, optional. By default, we return the test log/debug output with the
+results of the test run. Set this to true (1) to disable this, and have the
+tester print its output directly to STDOUT instead.
+
+    logfile => $bool
+
+Integer, optional. Set this to true (1) and we'll write all tester output to a
+log file. The parent tester server will create a C<$workdir/bbtester_parent.log>
+file (where C<$workdir> is C<~/brewbuild> by default), and the children tester
+runners will all log to C<$workdir/bbtester_child.log>.
 
 =head2 start
 
