@@ -1,5 +1,8 @@
 Revision history for Test-BrewBuild
 
+2.12 UNREL
+        - extended default install timeout to 600 seconds
+
 2.11    2017-03-26
         - we now filter out cperls until we can do further testing. This is
           handled in BCMD::available() with a `[^c]` entry in the regex when we

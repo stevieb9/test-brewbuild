@@ -209,6 +209,7 @@ sub instance_install {
         for my $ver (@new_installs) {
             $log->_0( "installing $ver..." );
             $log->_5( "...using cmd: $install_cmd" );
+            undef $@;
             eval {
                 local $SIG{ALRM} = sub {
                     die "$ver failed to install... skipping"
