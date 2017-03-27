@@ -49,6 +49,7 @@ sub brew {
 }
 sub info {
     my $self = shift;
+
     return $self->is_win
         ? `$self->{brew} available 2>nul`
         : `perlbrew available 2>/dev/null`;
@@ -125,6 +126,21 @@ sub is_win {
     my $is_win = ($^O =~ /Win/) ? 1 : 0;
     return $is_win;
 }
+sub info_cache {
+    my ($self) = @_;
+
+    $log->child('info_cache')->_6("using cached availability info");
+
+    if (! defined $self->{info_cache}){
+        $self->{info_cache} = $self->is_win
+            ? `$self->{brew} available 2>nul`
+            : `perlbrew available 2>/dev/null`;
+
+        $log->child('info_cache')->_7("cached availability info");
+    }
+
+    return $self->{info_cache};
+}
 sub _legacy_perls {
     my ($self, $legacy, @perls) = @_;
 
@@ -172,6 +188,14 @@ C<berrybrew.exe> if on Windows.
 =head2 info
 
 Returns the string result of C<*brew available>.
+
+=head2 info_cache
+
+Fetches, then caches the results of '*brew available'. This is due to the fact
+that perlbrew does an Internet lookup for the information, and berrybrew will
+shortly as well.
+
+The cache is rebuilt on each new program run.
 
 =head2 installed($info)
 

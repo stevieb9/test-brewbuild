@@ -75,6 +75,7 @@ sub options {
         "T|selftest"    => \$opts{selftest},
         "D|dispatch"    => \$opts{dispatch},
         "t|tester=s@"   => \$opts{testers},
+        "X|nocache"     => \$opts{nocache},
         "s|setup"       => \$opts{setup},
         "h|help"        => \$opts{help},
     );
@@ -101,8 +102,19 @@ sub is_win {
 sub brew_info {
     my $self = shift;
     my $log = $log->child('brew_info');
-    my $brew_info = $bcmd->info;
+
+    my $brew_info;
+
+    if ($self->{args}{nocache}){
+        # don't use cached info
+        $brew_info = $bcmd->info;
+    }
+    else {
+        $brew_info = $bcmd->info_cache;
+    }
+
     $log->_6("brew info set to:\n$brew_info") if $brew_info;
+
     return $brew_info;
 }
 sub perls_available {
@@ -453,6 +465,7 @@ Local usage options:
 -i | --install  Number portion of an available perl version according to "*brew available". Multiple versions can be sent in at once
 -S | --save     By default, we save only FAIL logs. This will also save the PASS logs
 -N | --notest   Do not run tests. Allows you to --remove and --install without testing
+-X | --nocache  By default, we cache the results of 'perlbrew available'. Disable with this flag.
 
 Network dispatching options:
 
@@ -860,7 +873,8 @@ sub _validate_opts {
 
     my @valid_args = qw(
         on o new n remove r revdep R plugin p args a debug d install i help h
-        N notest setup s legacy l selftest T t testers S save D dispatch
+        N notest setup s legacy l selftest T t testers S save D dispatch X
+        nocache
     );
 
     my $bad_opt = 0;

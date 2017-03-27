@@ -306,6 +306,14 @@ file name if the module is not installed.
 
 List of args to pass into the plugin (one arg per loop).
 
+=head2 -X, --nocache
+
+Perlbrew fetches it's available information from the Internet. By default, we
+fetch it from there the first time, then cache that information for the
+remaining duration of the program run.
+
+Set this flag to disable this caching.
+
 =head2 -T, --selftest
 
 C<Test::BrewBuild> development testing only. Prevents recursive test loops.

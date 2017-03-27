@@ -11,6 +11,11 @@ if (! $ENV{BBDEV_TESTING}){
     exit;
 }
 
+if (! $ENV{PERLVER}){
+    plan skip_all => "\$ENV{PERLVER} is not set!";
+    exit;
+}
+
 my $perlver = $ENV{PERLVER};
 
 my $im_on_windows = ($^O =~ /MSWin/) ? 1 : 0;
@@ -58,6 +63,27 @@ else {
     is ($remove_cmd, 'perlbrew --yes uninstall', "nix: remove() ok");
 
     is ($bc->is_win, 0, "nix: is win ok");
+}
+
+{ # info cache
+
+    my $info;
+
+    is 
+        defined $bc->{info_cache}, 
+        '', 
+        "no cache before first call to info_cache()";
+
+    $info = $bc->info_cache;
+
+    is 
+        defined $bc->{info_cache}, 
+        1, 
+        "cache ok on subsequent call to info_cache()";
+
+    $info = $bc->info_cache;
+
+    like $info, qr/\d{2}\.\d{2}/, "info_cache() returns data";
 }
 
 SKIP: { # legacy off (issue #137)

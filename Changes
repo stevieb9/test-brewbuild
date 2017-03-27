@@ -14,6 +14,11 @@ Revision history for Test-BrewBuild
         - added logging to all methods in Git, updated POD, and all locations
           that initiate a new Git object send in their own debug level 
           (closes #166)
+        - we now cache the results of the '*brew available' calls. Perlbrew
+          fetches this info from the Internet (and berrybrew will soon too), so
+          this feature will speed things up when multiple calls for info happen
+          within a single test run. Can be disabled with the -X param to
+          brewbuild (closes #163)
 
 2.11    2017-03-26
         - we now filter out cperls until we can do further testing. This is
