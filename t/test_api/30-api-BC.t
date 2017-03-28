@@ -33,9 +33,9 @@ if ($im_on_windows){
    my @inst = $bc->installed(0, $inst);
    is ($inst[0], "5.20.3_64", "win: installed is ok");
 
-   my $avail = "${perlver}_32_NO64";
+   my $avail = "${perlver}_64";
    my @avail = $bc->available(0, $avail);
-   is ($avail[0], "${perlver}_32", "win: avail with info ok");
+   is ($avail[0], "${perlver}_64", "win: avail with info ok");
 
    my $inst_cmd = $bc->install;
    like ($inst_cmd, qr/berrybrew\.exe install/, "win: install() ok");
