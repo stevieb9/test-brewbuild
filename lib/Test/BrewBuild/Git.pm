@@ -7,7 +7,7 @@ use Carp qw(croak);
 use Logging::Simple;
 use LWP::Simple qw(head);
 
-our $VERSION = '2.13';
+our $VERSION = '2.14';
 
 my $log;
 
