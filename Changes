@@ -6,6 +6,11 @@ Revision history for Test-BrewBuild
           removal (fixes #167)
         - added build prereq of Archive::Zip to prevent certain tests from
           failing when it isn't installed
+        - fix bug in BCMD::using() in the Windows regex check. Was missing a \s+
+        - fix issue in BCMD::info_cache(). A regex was incorrect. It worked on
+          Unix just due to sheer luck
+        - added additional argument checking in the command string to Tester
+          (closes #144)
 
 2.12    2017-03-27
         - extended default install timeout to 600 seconds

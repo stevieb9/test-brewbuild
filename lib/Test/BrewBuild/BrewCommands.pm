@@ -75,7 +75,7 @@ sub using {
     $log->child( 'using' )->_6( "checking for which ver we're using" );
 
     if ($self->is_win) {
-        my @installed = $info =~ /(\d\.\d{2}\.\d(?:_\d{2}))(?!=_)\s+\[installed\]\*/ig;
+        my @installed = $info =~ /(\d\.\d{2}\.\d(?:_\d{2}))(?!=_)\s+\[installed\]\s+\*/ig;
         return $installed[0];
     }
     else {

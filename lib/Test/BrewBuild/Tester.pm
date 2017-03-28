@@ -254,11 +254,18 @@ sub listen {
             $dispatch->send($err);
             next;
         }
-        else{
-            shift @args;
-            $log->_7("sending 'ok'");
-            $dispatch->send('ok');
+        my $unsafe_args = _unsafe_args();
+
+        for my $unsafe_arg (@$unsafe_args){
+            if (grep /\Q$unsafe_arg\E/, @args){
+                croak "'$unsafe_arg' is an invalid argument to brewbuild. " .
+                      "Can't continue...\n";
+            }
         }
+
+        shift @args;
+        $log->_7("sending 'ok'");
+        $dispatch->send('ok');
 
         my $repo = '';
         $dispatch->recv($repo, 1024);
@@ -407,6 +414,10 @@ sub _pid_file {
     return $self->{pid_file} if defined $self->{pid_file};
     $self->{pid_file} = Test::BrewBuild->workdir . '/brewbuild.pid';
 }
+sub _unsafe_args {
+    return [qw(* # ! ? ^ $ | / \\)];
+}
+
 1;
 
 =head1 NAME
