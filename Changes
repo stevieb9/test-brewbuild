@@ -5,6 +5,8 @@ Revision history for Test-BrewBuild
         - fix issue where info_cache() wasn't being updated after instance
           removal (fixes #167)
         - fix bug in BCMD::using() in the Windows regex check. Was missing a \s+
+        - fix issue in BCMD::info_cache(). A regex was incorrect. It worked on
+          Unix just due to sheer luck
 
 2.12    2017-03-27
         - extended default install timeout to 600 seconds

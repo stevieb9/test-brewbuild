@@ -83,7 +83,7 @@ else {
 
     $info = $bc->info_cache;
 
-    like $info, qr/\d{2}\.\d{2}/, "info_cache() returns data";
+    like $info, qr/\d\.\d{2}/, "info_cache() returns data";
 }
 
 SKIP: { # legacy off (issue #137)
