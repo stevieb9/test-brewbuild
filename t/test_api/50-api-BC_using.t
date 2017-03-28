@@ -19,6 +19,7 @@ my $bcmd = Test::BrewBuild::BrewCommands->new( Logging::Simple->new );
 
 if ($bcmd->is_win) {
     my $info = $bb->brew_info;
+    print $info;
     my $using = $bcmd->using( $info );
     is ( $using, "${perlver}_64", "win: using() is ok" );
 }
