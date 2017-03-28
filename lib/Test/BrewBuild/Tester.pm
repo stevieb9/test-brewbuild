@@ -415,7 +415,7 @@ sub _pid_file {
     $self->{pid_file} = Test::BrewBuild->workdir . '/brewbuild.pid';
 }
 sub _unsafe_args {
-    return [qw(* # ! ? ^ $ | / \\)];
+    return ['*', '#', '!', '?', '^', '$', '|', '\\'];
 }
 
 1;
