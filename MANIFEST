@@ -62,7 +62,7 @@ t/test_author/99-pod-coverage.t
 t/test_author/99-pod.t
 t/test_bugs/142-tester_handle_non_repo.t
 t/test_bugs/164_dispatch_show_help_on_bad_args.t
-t/test_bugs/165_dispatch_uninit_repo_dir.t
+t/test_bugs/165_dispatch_uninit_repo_dir.t-norun
 t/test_config/05-tester-config.t
 t/test_config/10-brewbuild-config.t
 t/test_dispatch/05-dispatch-bad_command.t

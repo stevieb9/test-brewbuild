@@ -2,7 +2,8 @@ Revision history for Test-BrewBuild
 
 2.13 UNREL
         - several various POD corrections/updates
-
+        - fix issue where info_cache() wasn't being updated after instance
+          removal (fixes #167)
 
 2.12    2017-03-27
         - extended default install timeout to 600 seconds
