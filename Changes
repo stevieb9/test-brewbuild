@@ -1,6 +1,15 @@
 Revision history for Test-BrewBuild
 
-2.13 UNREL
+2.13    2017-03-28
+        - *NOTE* this release has been tested on win7 with berrybrew v1.10, but
+          on win10, there may be issues. This is due to an internal library in
+          that project that is questionable on win10 (Ionic.Zip). This is being
+          investigated, and an update is planned. I wouldn't recommend trusting
+          this distribution on Windows 10 at this time for that reason. The
+          problem stems from the fact that the portable Strawberry Perl that
+          is being installed is not always extracted fully, despite the fact the
+          download is ok, and the checksum checks out. Extraction via Explorer
+          performs correctly. Again, don't trust on win10
         - several various POD corrections/updates
         - fix issue where info_cache() wasn't being updated after instance
           removal (fixes #167)
