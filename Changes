@@ -4,6 +4,8 @@ Revision history for Test-BrewBuild
         - several various POD corrections/updates
         - fix issue where info_cache() wasn't being updated after instance
           removal (fixes #167)
+        - added build prereq of Archive::Zip to prevent certain tests from
+          failing when it isn't installed
 
 2.12    2017-03-27
         - extended default install timeout to 600 seconds

@@ -56,6 +56,7 @@ WriteMakefile(
         },
     },
     BUILD_REQUIRES => {
+        'Archive::Zip' => 0,
         'Mock::Sub' => '1.07',
     },
     PREREQ_PM => {
