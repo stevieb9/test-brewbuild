@@ -93,13 +93,38 @@ sub pull {
     return $output;
 }
 sub revision {
-    my $self = shift;
+    my ($self, %args) = @_;
+
+    my $repo = $args{repo} || $self->link;
+    my $remote = $args{remote};
+
     my $git = $self->git;
 
     $log->child('revision')->_6("initiating git revision");
+#    https://api.github.com/repos/$user/$repo/commits
 
-    my $csum = `$git rev-parse HEAD`;
+    my $csum;
+
+    if (! $remote) {
+        $csum = `$git rev-parse HEAD`;
+    }
+    else {
+        $csum = `$git rev-parse origin/master`;
+    }
+
+    chomp $csum;
     return $csum;
+}
+sub _separate_url {
+    my ($self, $repo) = @_;
+
+    if (! defined $repo){
+        $repo = $self->link;
+    }
+
+    my ($user, $repo_name) = (split /\//, $repo)[-2, -1];
+
+    return ($user, $repo_name);
 }
 
 1;
