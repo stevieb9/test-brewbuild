@@ -92,6 +92,16 @@ sub pull {
     my $output = `"$git" pull`;
     return $output;
 }
+sub revision {
+    my $self = shift;
+    my $git = $self->git;
+
+    $log->child('revision')->_6("initiating git revision");
+
+    my $csum = `$git rev-parse HEAD`;
+    return $csum;
+}
+
 1;
 
 =head1 NAME

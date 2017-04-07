@@ -50,7 +50,15 @@ mkdir $wdir or die $! if ! -d $wdir;
     $ret = $git->pull;
     print $ret;
 }
+{ # revision
 
+    my $git = $mod->new;
+
+    my $csum = $git->revision;
+
+    print "$csum\n";
+
+}
 chdir $cwd or die $!;
 remove_tree $wdir or die $!;
 is (-d $wdir, undef, "removed work dir ok");
