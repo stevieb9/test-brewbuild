@@ -5,6 +5,13 @@ Revision history for Test-BrewBuild
           commit, for both local and remotes
         - added _separate_url() to Git. This is currently unused as we're not
           yet using Github's API to fetch commit info
+        - added --auto|-a to bbdispatch, spins off an auto run
+        - added auto() to Dispatch. Checks git commit revision numbers, and if
+          different, we'll do a pull and run the test suite
+        - added auto_sleep option to the config file for [Dispatch]. This is how
+          long in seconds we sleep in between runs and run checks for --auto
+        - added status() in Git, checks whether the current repo is ahead or
+          behind in commits compared to remote
 
 2.13    2017-03-28
         - *NOTE* this release has been tested on win7 with berrybrew v1.10, but

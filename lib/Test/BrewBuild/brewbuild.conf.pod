@@ -71,6 +71,12 @@ default to looking for a repository in your current working directory. Example:
 
     repo = https://github.com/stevieb9/p5-test-brewbuild
 
+=head3 auto_sleep
+
+When using an auto dispatch run (eg: C<bbdispatch --auto>), the integer value of
+this directive specifies how many seconds to sleep in between each build run
+sent to the testers.
+
 =head2 [tester]
 
 Configuration for the tester L<Test::BrewBuild::Tester>.

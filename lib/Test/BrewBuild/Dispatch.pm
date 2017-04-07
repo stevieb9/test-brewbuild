@@ -39,6 +39,37 @@ sub new {
 
     return $self;
 }
+sub auto {
+    my ($self, %params) = @_;
+
+    my $log = $log->child('auto');
+
+    $log->_5("commencing auto run dispatch sequence");
+
+    my $git = Test::BrewBuild::Git->new;
+    my $sleep = defined $self->{auto_sleep} ? $self->{auto_sleep} : 60;
+
+    while (1){
+        my $status = $git->status(repo => $params{repo});
+        my $local_sum = $git->revision(repo => $params{repo});
+        my $remote_sum = $git->revision(remote => 1, repo => $params{repo});
+
+        if (! $status || $local_sum eq $remote_sum){
+            $log->_6("local and remote commit sums match. Nothing to do");
+            sleep $sleep;
+            next;
+        }
+
+        $log->_6("commit sums don't match... commencing run");
+
+        my $results = $self->dispatch(%params);
+
+        $log->_6("auto run complete. Sleeping, then restarting");
+
+        print $results;
+        sleep $sleep;
+    }
+}
 sub dispatch {
     my ($self, %params) = @_;
 
@@ -141,6 +172,7 @@ sub _config {
         }
         $self->{repo} = $conf->{repo} if $conf->{repo};
         $self->{cmd} = $conf->{cmd} if $conf->{cmd};
+        $self->{auto_sleep} = $conf->{cmd} if defined $conf->{auto_sleep};
     }
 }
 sub _fork {
@@ -318,6 +350,16 @@ C<debug> optional, set to a level between 0 and 7.
 
 See L<Test::BrewBuild::Tester> for more details on the testers that the
 dispatcher dispatches to.
+
+=head2 auto(%params)
+
+This function will spin off a continuous run of C<dispatch()> runs, based on
+whether the commit revision checksum locally is different than that from the
+remote. It takes all of the same parameters as C<dispatch()>.
+
+There is also a configuration file directive in the C<[Dispatch]> section,
+C<auto_sleep>, which dictates how many seconds to sleep in between each run. The
+default is C<60>, or one minute.
 
 =head1 AUTHOR
 

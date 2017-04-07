@@ -95,7 +95,6 @@ sub pull {
 sub revision {
     my ($self, %args) = @_;
 
-    my $repo = $args{repo} || $self->link;
     my $remote = $args{remote};
 
     my $git = $self->git;
@@ -113,6 +112,18 @@ sub revision {
 
     chomp $csum;
     return $csum;
+}
+sub status {
+    my ($self) = @_;
+
+    my $git = $self->git;
+
+    my $status = `$git status`;
+
+    if ($status =~ /Your branch is ahead/){
+        return 0;
+    }
+    return 1;
 }
 sub _separate_url {
     # this method is actually not needed. Was going to be used if we used the
@@ -207,6 +218,11 @@ to get this information from the current working directory.
 Optional, bool. If sent in, we'll fetch the current commit's SHA1 sum from
 Github itself, else we'll get the sum from the most recent local, unpushed
 commit.
+
+head2 status
+
+Returns true of the repo we're working on is behind or equal to the remote
+regarding commits, and false if we're ahead.
 
 =head1 AUTHOR
 

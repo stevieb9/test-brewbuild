@@ -5,12 +5,13 @@ use strict;
 use Getopt::Long;
 use Test::BrewBuild::Dispatch;
 
-our $VERSION = '2.11';
+our $VERSION = '2.14';
 
 my %args;
 my $help;
 
 GetOptions(
+    "auto"       => \$args{auto},
     "cmd=s"      => \$args{cmd},
     "testers=s@" => \$args{testers},
     "repo=s"     => \$args{repo},
@@ -23,7 +24,7 @@ if ($help){
     print <<'EOF';
 Usage: 
 
-bbdispatch -t 127.0.0.1:7800 [-r https://github.com/user/repo] [-d 0-7]
+bbdispatch -t 127.0.0.1:7800 [-r https://github.com/user/repo] [-d 0-7] [--auto]
 
 EOF
 exit;
@@ -33,6 +34,11 @@ my $dispatcher = Test::BrewBuild::Dispatch->new(
     debug => $args{debug},
     forks => $args{forks},
 );
+
+if ($args{auto}){
+    $dispatcher->auto(%args);
+    exit();
+}
 
 my $return = $dispatcher->dispatch(%args);
 
@@ -58,6 +64,10 @@ Dispatch a custom command to a single remote tester:
 Have the remote testers test a specified repository:
 
     bbdispatch -r https://github.com/user/repo-name -t 10.0.0.1:7800
+
+Run in automated continuous mode. Reruns all tests continuously in a loop:
+
+    bbdispatch [...] -a
 
 Add debugging to any other command string:
 
