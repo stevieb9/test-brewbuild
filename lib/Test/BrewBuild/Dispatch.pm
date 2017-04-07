@@ -2,6 +2,7 @@ package Test::BrewBuild::Dispatch;
 use strict;
 use warnings;
 
+use Capture::Tiny qw(:all);
 use Carp qw(croak);
 use Config::Tiny;
 use Cwd qw(getcwd);
@@ -52,7 +53,16 @@ sub auto {
     my $runs = $params{auto};
     my $run_count = 1;
 
-    $log->_7("$runs planned");
+    $log->_7("$runs auto runs planned");
+
+    my $err = capture_stderr {
+            $git->status;
+    };
+
+    if ($err =~ /fatal: Not a git repository/){
+        $log->_5("auto failed due to not being in a git repo");
+        croak "not in a Git repository... can't continue.";
+    }
 
     while (1){
         my $status = $git->status(repo => $params{repo});
