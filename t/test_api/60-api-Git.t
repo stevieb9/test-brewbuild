@@ -73,19 +73,19 @@ mkdir $wdir or die $! if ! -d $wdir;
 
     # local
     $csum = $git->revision;
-    is length($csum), 40, "commit checkout pans out ok for local";
+    is length($csum), 40, "commit sum pans out ok for local";
 
     # remote
     $csum = $git->revision(remote => 1);
-    is length($csum), 40, "commit checkout pans out ok for remote";
+    is length($csum), 40, "commit sum pans out ok for remote";
 
     # local with repo url
     $csum = $git->revision(repo => 'https://github.com/stevieb9/test-brewbuild');
-    is length($csum), 40, "commit checkout pans out ok for local with repo param";
+    is length($csum), 40, "commit sum pans out ok for local with repo param";
 
     # remote with repo url
     $csum = $git->revision(remote => 1, repo => 'https://github.com/stevieb9/test-brewbuild');
-    is length($csum), 40, "commit checkout pans out ok for remote with repo param";
+    is length($csum), 40, "commit sum pans out ok for remote with repo param";
 }
 
 chdir $cwd or die $!;
