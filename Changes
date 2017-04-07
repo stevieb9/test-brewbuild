@@ -1,6 +1,6 @@
 Revision history for Test-BrewBuild
 
-2.14 UNREL
+2.14    2017-04-07
         - added revision() to Git, returns the SHA1 sum for the most recent
           commit, for both local and remotes
         - added _separate_url() to Git. This is currently unused as we're not
@@ -14,6 +14,8 @@ Revision history for Test-BrewBuild
           behind in commits compared to remote
         - --auto flag to bbdispatch takes an integer, the number of runs to
           dispatch out. Send in 0 to run forever
+        - fully added initial cut of CI automation (via bbdispatch as opposed to
+          berrybrew) (closes #172)
 
 2.13    2017-03-28
         - *NOTE* this release has been tested on win7 with berrybrew v1.10, but
