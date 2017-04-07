@@ -49,24 +49,35 @@ sub auto {
     my $git = Test::BrewBuild::Git->new;
     my $sleep = defined $self->{auto_sleep} ? $self->{auto_sleep} : 60;
 
+    my $runs = $params{auto};
+    my $run_count = 1;
+
+    $log->_7("$runs planned");
+
     while (1){
         my $status = $git->status(repo => $params{repo});
         my $local_sum = $git->revision(repo => $params{repo});
         my $remote_sum = $git->revision(remote => 1, repo => $params{repo});
 
-        if (! $status || $local_sum eq $remote_sum){
+        if ($status || $local_sum eq $remote_sum){
             $log->_6("local and remote commit sums match. Nothing to do");
             sleep $sleep;
             next;
         }
 
-        $log->_6("commit sums don't match... commencing run");
+        $log->_6("commit sums don't match... commencing run $run_count of $runs");
 
         my $results = $self->dispatch(%params);
 
-        $log->_6("auto run complete. Sleeping, then restarting");
+        $log->_6(
+            "auto run complete. Sleeping, then restarting if more runs required"
+        );
 
         print $results;
+
+        exit() if $run_count >= $runs;
+        $run_count++;
+
         sleep $sleep;
     }
 }

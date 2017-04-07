@@ -217,6 +217,12 @@ Dispatcher:
 
     bbdispatch -t 10.1.1.1
 
+Auto run a specific number of dispatch runs to the testers:
+
+    bbdispatch -t 10.1.1.1 -a 10 # run 10 cycles
+
+    bbdispatch -t 10.1.1.1 -a 0  # run forever
+
 =head1 SEE ALSO
 
 Details on the L<configuration file|https://metacpan.org/pod/distribution/Test-BrewBuild/lib/Test/BrewBuild/brewbuild.conf.pod>.

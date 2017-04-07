@@ -12,6 +12,8 @@ Revision history for Test-BrewBuild
           long in seconds we sleep in between runs and run checks for --auto
         - added status() in Git, checks whether the current repo is ahead or
           behind in commits compared to remote
+        - --auto flag to bbdispatch takes an integer, the number of runs to
+          dispatch out. Send in 0 to run forever
 
 2.13    2017-03-28
         - *NOTE* this release has been tested on win7 with berrybrew v1.10, but
