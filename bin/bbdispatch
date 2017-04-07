@@ -159,6 +159,15 @@ Set to 0-7 to enable debug logging.
 By default, we maintain four (4) testers concurrently. Pass an integer to this
 argument to change the default number of concurrent testers.
 
+=head2 -a, --auto
+
+This command tells the dispatcher to throw tests at the Testers continuously.
+Takes an integer as an argument, specifying how many runs to perform. Send in
+C<0> to run forever.
+
+Note that you *must* be inside of a repository directory at this time to use
+this feature. It currently *DOES NOT* work with the C<--repo> flag.
+
 =head1 AUTHOR
 
 Steve Bertrand, C<< <steveb at cpan.org> >>

@@ -219,7 +219,7 @@ Optional, bool. If sent in, we'll fetch the current commit's SHA1 sum from
 Github itself, else we'll get the sum from the most recent local, unpushed
 commit.
 
-head2 status
+=head2 status
 
 Returns true of the repo we're working on is behind or equal to the remote
 regarding commits, and false if we're ahead.

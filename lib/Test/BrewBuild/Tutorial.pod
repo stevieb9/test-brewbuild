@@ -217,7 +217,8 @@ Dispatcher:
 
     bbdispatch -t 10.1.1.1
 
-Auto run a specific number of dispatch runs to the testers:
+Auto run a specific number of dispatch runs to the testers. You *must* be
+located in a repository directory when dispatching:
 
     bbdispatch -t 10.1.1.1 -a 10 # run 10 cycles
 
