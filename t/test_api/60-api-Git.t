@@ -50,15 +50,44 @@ mkdir $wdir or die $! if ! -d $wdir;
     $ret = $git->pull;
     print $ret;
 }
-{ # revision
+{ # _separate_url
 
     my $git = $mod->new;
 
-    my $csum = $git->revision;
+    my @res;
 
-    print "$csum\n";
+    @res = $git->_separate_url;
 
+    is $res[0], 'stevieb9', "user portion of _separate_url ok w/no params";
+    like $res[1], qr/test-brewbuild/, "repo portion of _separate_url ok w/no params";
+
+    @res = $git->_separate_url('https://github.com/stevieb9/test-brewbuild');
+
+    is $res[0], 'stevieb9', "user portion of _separate_url ok with repo param";
+    like $res[1], qr/test-brewbuild/, "repo portion of _separate_url ok with repo";
 }
+{ # revision
+
+    my $git = $mod->new;
+    my $csum;
+
+    # local
+    $csum = $git->revision;
+    is length($csum), 40, "commit checkout pans out ok for local";
+
+    # remote
+    $csum = $git->revision(remote => 1);
+    is length($csum), 40, "commit checkout pans out ok for remote";
+
+    # local with repo url
+    $csum = $git->revision(repo => 'https://github.com/stevieb9/test-brewbuild');
+    is length($csum), 40, "commit checkout pans out ok for local with repo param";
+
+    # remote with repo url
+    $csum = $git->revision(remote => 1, repo => 'https://github.com/stevieb9/test-brewbuild');
+    is length($csum), 40, "commit checkout pans out ok for remote with repo param";
+}
+
 chdir $cwd or die $!;
 remove_tree $wdir or die $!;
 is (-d $wdir, undef, "removed work dir ok");

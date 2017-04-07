@@ -1,5 +1,11 @@
 Revision history for Test-BrewBuild
 
+2.14 UNREL
+        - added revision() to Git, returns the SHA1 sum for the most recent
+          commit, for both local and remotes
+        - added _separate_url() to Git. This is currently unused as we're not
+          yet using Github's API to fetch commit info
+
 2.13    2017-03-28
         - *NOTE* this release has been tested on win7 with berrybrew v1.10, but
           on win10, there may be issues. This is due to an internal library in

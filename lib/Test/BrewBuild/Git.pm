@@ -101,7 +101,6 @@ sub revision {
     my $git = $self->git;
 
     $log->child('revision')->_6("initiating git revision");
-#    https://api.github.com/repos/$user/$repo/commits
 
     my $csum;
 
@@ -116,6 +115,10 @@ sub revision {
     return $csum;
 }
 sub _separate_url {
+    # this method is actually not needed. Was going to be used if we used the
+    # github API to fetch stuff...
+    # eg:   https://api.github.com/repos/$user/$repo/commits
+
     my ($self, $repo) = @_;
 
     if (! defined $repo){
@@ -184,6 +187,26 @@ Clones the repo into the current working directory.
 =head2 pull
 
 While in a repository directory, pull down any updates.
+
+=head2 revision(remote => $bool, repo => $github_url)
+
+Returns the current commit SHA1 for a repo, with ability to get the local commit
+or remote commit SHA1 sum.
+
+Parameters:
+
+All parameters are passed in as a hash.
+
+    repo
+
+Optional, string. The Github url to the repo. If not sent in, we will attempt
+to get this information from the current working directory.
+
+    remote
+
+Optional, bool. If sent in, we'll fetch the current commit's SHA1 sum from
+Github itself, else we'll get the sum from the most recent local, unpushed
+commit.
 
 =head1 AUTHOR
 
