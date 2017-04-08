@@ -107,7 +107,15 @@ sub revision {
         $csum = `$git rev-parse HEAD`;
     }
     else {
-        $csum = `$git rev-parse origin/master`;
+        # void capture, as there's unneeded stuff going to STDERR
+        # on the ls-remote call
+
+        capture_stderr {
+            my $sums = `$git ls-remote`;
+            if ($sums =~ /([A-F0-9]{40})\s+HEAD/i){
+                $csum = $1;
+            }
+        }
     }
 
     chomp $csum;

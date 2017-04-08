@@ -1,5 +1,9 @@
 Revision history for Test-BrewBuild
 
+2.15 UNREL
+        - fixed issue in Git::revision() where we weren't actually checking the
+          remote commit SHA1 sum correctly
+
 2.14    2017-04-07
         - added revision() to Git, returns the SHA1 sum for the most recent
           commit, for both local and remotes
