@@ -15,7 +15,7 @@ sub new {
 
     $self->{min_perl_version} = '5.8.1';
 
-    $self->{log} = $plog->child('Test::BrewBuild::BrewCommands');
+    $self->{log} = $plog->child('BrewCommands');
     $log = $self->{log};
     $log->_6("constructing new Test::BrewBuild::BrewCommands object");
 

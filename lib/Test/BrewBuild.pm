@@ -545,7 +545,7 @@ sub _create_log {
     my ($self, $level) = @_;
 
     $self->{log} = Logging::Simple->new(
-        name  => 'Test::BrewBuild',
+        name  => 'BrewBuild',
         level => defined $level ? $level : 0,
     );
 

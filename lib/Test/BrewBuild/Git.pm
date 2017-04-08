@@ -16,7 +16,7 @@ sub new {
     my $self = bless {}, $class;
 
     $log = Logging::Simple->new(
-        name => 'Test::BrewBuild::Git',
+        name => 'Git',
         level => 0
     );
 

@@ -3,6 +3,8 @@ Revision history for Test-BrewBuild
 2.15 UNREL
         - fixed issue in Git::revision() where we weren't actually checking the
           remote commit SHA1 sum correctly
+        - all log objects reflect the module short name, not the full module
+          path (closes #176)
 
 2.14    2017-04-07
         - added revision() to Git, returns the SHA1 sum for the most recent
