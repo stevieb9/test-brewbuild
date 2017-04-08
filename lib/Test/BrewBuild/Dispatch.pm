@@ -53,7 +53,8 @@ sub auto {
     my $runs = $params{auto};
     my $run_count = 1;
 
-    $log->_7("$runs auto runs planned");
+    $log->_7("$runs auto runs planned") if $runs > 0;
+    $log->_7("continuous integration mode enabled") if $runs == 0;
 
     my $err = capture_stderr {
             $git->status;
@@ -69,7 +70,7 @@ sub auto {
         my $local_sum = $git->revision(repo => $params{repo});
         my $remote_sum = $git->revision(remote => 1, repo => $params{repo});
 
-        if ($status || $local_sum eq $remote_sum){
+        if ($status || ($local_sum eq $remote_sum)){
             $log->_6("local and remote commit sums match. Nothing to do");
             sleep $sleep;
             next;
