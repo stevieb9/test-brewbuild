@@ -70,6 +70,8 @@ sub auto {
         my $local_sum = $git->revision(repo => $params{repo});
         my $remote_sum = $git->revision(remote => 1, repo => $params{repo});
 
+        $log->_7("status: $status\nlocal: $local_sum\nremote: $remote_sum");
+
         if ($status || ($local_sum eq $remote_sum)){
             $log->_6("local and remote commit sums match. Nothing to do");
             sleep $sleep;
