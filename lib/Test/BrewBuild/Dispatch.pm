@@ -72,7 +72,15 @@ sub auto {
 
         $log->_7("status: $status\nlocal: $local_sum\nremote: $remote_sum");
 
-        if ($status || ($local_sum eq $remote_sum)){
+        if (! $status){
+            $log->_6(
+                "local repo is ahead in commits than remote... Nothing to do"
+            );
+            sleep $sleep;
+            next;
+        }
+
+        if ($local_sum eq $remote_sum){
             $log->_6("local and remote commit sums match. Nothing to do");
             sleep $sleep;
             next;
