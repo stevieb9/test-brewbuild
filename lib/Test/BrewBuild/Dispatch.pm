@@ -88,6 +88,8 @@ sub auto {
 
         $log->_6("commit sums don't match... commencing run $run_count of $runs");
 
+        $log->_5("all prerequisites ok... commencing run #$run_count");
+
         my $results = $self->dispatch(%params);
 
         $log->_6(

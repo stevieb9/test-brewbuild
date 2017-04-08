@@ -276,6 +276,8 @@ sub listen {
         if ($repo){
             my $git = Test::BrewBuild::Git->new(debug => $self->{debug});
 
+            $log->_7("before all checks, repo set to $repo");
+
             if (-d $git->name($repo)){
                 chdir $git->name($repo) or die $!;
 
