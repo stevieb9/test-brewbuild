@@ -71,7 +71,9 @@ sub auto {
             "auto run complete. Sleeping, then restarting if more runs required"
         );
 
-        print $results;
+        my @short_results = $results =~ /(5\.\d{1,2}\.\d{1,2} :: \w{4})/g;
+
+        print "$_\n" for @short_results;
 
         exit() if $run_count >= $runs && $runs != 0;
         $run_count++;
