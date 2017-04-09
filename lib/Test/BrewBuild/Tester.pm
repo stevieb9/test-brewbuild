@@ -286,6 +286,36 @@ sub listen {
                 $log->_7("repo '".$git->name($repo)."' exists, pulling");
                 $log->_7("using Git: " . $git->git);
 
+                if (1) {
+                    $log->_6("in auto mode, checking commit checksum reqs");
+
+                    my $status = $git->status(repo => $git->link);
+                    my $local_sum = $git->revision(repo => $git->link);
+                    my $remote_sum = $git->revision(
+                        remote => 1,
+                        repo => $git->link
+                    );
+
+                    $log->_7("status: $status\nlocal: $local_sum\nremote: $remote_sum");
+
+                    if (! $status) {
+                        $log->_6(
+                            "local repo is ahead in commits than remote... Nothing to do"
+                        );
+                        $self->{log} = '';
+                        shutdown($dispatch, 1);
+                    }
+
+                    if ($local_sum eq $remote_sum) {
+                        $log->_6("local and remote commit sums match. Nothing to do");
+                        $self->{log} = '';
+                        shutdown($dispatch, 1);
+                    }
+                }
+
+                $log->_7("repo '".$git->name($repo)."' exists, pulling");
+                $log->_7("using Git: " . $git->git);
+
                 my $pull_output = $git->pull;
                 $log->_7($pull_output);
             }

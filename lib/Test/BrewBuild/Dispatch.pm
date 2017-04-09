@@ -56,41 +56,22 @@ sub auto {
     $log->_7("$runs auto runs planned") if $runs > 0;
     $log->_7("continuous integration mode enabled") if $runs == 0;
 
-    my $err = capture_stderr {
-            $git->status;
-    };
+#    my $err = capture_stderr {
+#     $git->status;
+#    };
 
-    if ($err =~ /fatal: Not a git repository/){
-        $log->_5("auto failed due to not being in a git repo");
-        croak "not in a Git repository... can't continue.";
-    }
+#    if ($err =~ /fatal: Not a git repository/){
+#        $log->_5("auto failed due to not being in a git repo");
+#        croak "not in a Git repository... can't continue.";
+#    }
 
     while (1){
-        my $status = $git->status(repo => $params{repo});
-        my $local_sum = $git->revision(repo => $params{repo});
-        my $remote_sum = $git->revision(remote => 1, repo => $params{repo});
-
-        $log->_7("status: $status\nlocal: $local_sum\nremote: $remote_sum");
-
-        if (! $status){
-            $log->_6(
-                "local repo is ahead in commits than remote... Nothing to do"
-            );
-            sleep $sleep;
-            next;
-        }
-
-        if ($local_sum eq $remote_sum){
-            $log->_6("local and remote commit sums match. Nothing to do");
-            sleep $sleep;
-            next;
-        }
-
-        $log->_6("commit sums don't match... commencing run $run_count of $runs");
-
-        $log->_5("all prerequisites ok... commencing run #$run_count");
 
         my $results = $self->dispatch(%params);
+
+        $log->_6("commit sums don't match... commencing run $run_count of $runs");
+        $log->_5("all prerequisites ok... commencing run #$run_count");
+
 
         $log->_6(
             "auto run complete. Sleeping, then restarting if more runs required"
