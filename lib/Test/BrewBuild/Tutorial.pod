@@ -220,6 +220,8 @@ Dispatcher:
 Auto run a specific number of dispatch runs to the testers. You *must* specify
 the repository URL on the command line when using auto mode:
 
+    bbtester start -a
+
     bbdispatch -t 10.1.1.1 -a 10 -r ... # run 10 cycles
 
     bbdispatch -t 10.1.1.1 -a 0  -r ... # run forever

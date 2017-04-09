@@ -14,6 +14,8 @@ Revision history for Test-BrewBuild
           auto mode if nothing is returned from the tester
         - fix issue with auto, if 0 is specified it wasn't acting like unlimited
           but stopping after first run
+        - fix issue where --auto param wasn't being used when Tester was running
+          in the background (ie. bbtester start)
 
 2.14    2017-04-07
         - added revision() to Git, returns the SHA1 sum for the most recent

@@ -105,6 +105,10 @@ sub start {
         $log->_6("using command: bbtester --fg");
     }
 
+    if (defined $self->{auto}){
+        push @args, ('--auto', $self->{auto});
+
+    }
     if (defined $self->{debug}){
         push @args, ('--debug', $self->{debug});
     }
