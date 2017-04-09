@@ -12,6 +12,8 @@ Revision history for Test-BrewBuild
           in auto mode (closes #177)
         - clean up erroneous and incorrect error in logs about brewbuild args in
           auto mode if nothing is returned from the tester
+        - fix issue with auto, if 0 is specified it wasn't acting like unlimited
+          but stopping after first run
 
 2.14    2017-04-07
         - added revision() to Git, returns the SHA1 sum for the most recent

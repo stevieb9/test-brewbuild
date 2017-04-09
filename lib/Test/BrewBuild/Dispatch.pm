@@ -53,7 +53,6 @@ sub auto {
         croak "auto mode requires the repository parameter sent in.\n";
     }
 
-    my $git = Test::BrewBuild::Git->new;
     my $sleep = defined $self->{auto_sleep} ? $self->{auto_sleep} : 60;
 
     my $runs = $params{auto};
@@ -74,7 +73,7 @@ sub auto {
 
         print $results;
 
-        exit() if $run_count >= $runs;
+        exit() if $run_count >= $runs && $runs != 0;
         $run_count++;
 
         sleep $sleep;
