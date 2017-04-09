@@ -16,6 +16,8 @@ Revision history for Test-BrewBuild
           but stopping after first run
         - fix issue where --auto param wasn't being used when Tester was running
           in the background (ie. bbtester start)
+        - remove Contributing and support sections in POD, updated copyright
+          year (closes #175)
 
 2.14    2017-04-07
         - added revision() to Git, returns the SHA1 sum for the most recent

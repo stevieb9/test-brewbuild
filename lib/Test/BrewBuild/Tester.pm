@@ -544,20 +544,9 @@ port C<7800>.
 
 Steve Bertrand, C<< <steveb at cpan.org> >>
 
-=head1 CONTRIBUTING
-
-Any and all feedback and help is appreciated. A Pull Request is the preferred
-method of receiving changes (L<https://github.com/stevieb9/p5-test-brewbuild>),
-but regular patches through the bug tracker, or even just email discussions are
-welcomed.
-
-=head1 BUGS
-
-L<https://github.com/stevieb9/p5-test-brewbuild/issues>
-
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2016 Steve Bertrand.
+Copyright 2017 Steve Bertrand.
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of either: the GNU General Public License as published
