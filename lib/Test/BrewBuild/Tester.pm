@@ -26,6 +26,8 @@ sub new {
     $self->{log_to_stdout} = defined $args{stdout} ? $args{stdout} : 0;
     $self->{logfile} = $args{logfile};
 
+    $self->{auto} = $args{auto};
+
     $log = Logging::Simple->new(level => 0, name => 'Tester');
 
     my $log_file = \$self->{log};
@@ -286,7 +288,7 @@ sub listen {
                 $log->_7("repo '".$git->name($repo)."' exists, pulling");
                 $log->_7("using Git: " . $git->git);
 
-                if (1) {
+                if (defined $self->{auto} && $self->{auto}){
                     $log->_6("in auto mode, checking commit checksum reqs");
 
                     my $status = $git->status(repo => $git->link);
@@ -296,20 +298,29 @@ sub listen {
                         repo => $git->link
                     );
 
-                    $log->_7("status: $status\nlocal: $local_sum\nremote: $remote_sum");
+                    $log->_7(
+                        "\n\tstatus: $status" .
+                        "\n\tlocal: $local_sum" .
+                        "\n\tremote: $remote_sum"
+                    );
 
                     if (! $status) {
                         $log->_6(
-                            "local repo is ahead in commits than remote... Nothing to do"
+                            "local repo is ahead in commits than remote... ".
+                            "Nothing to do"
                         );
                         $self->{log} = '';
                         shutdown($dispatch, 1);
+                        next;
                     }
 
                     if ($local_sum eq $remote_sum) {
-                        $log->_6("local and remote commit sums match. Nothing to do");
+                        $log->_6(
+                            "local and remote commit sums match. Nothing to do"
+                        );
                         $self->{log} = '';
                         shutdown($dispatch, 1);
+                        next;
                     }
                 }
 

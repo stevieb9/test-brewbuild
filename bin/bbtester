@@ -8,6 +8,7 @@ use Test::BrewBuild::Tester;
 
 our $VERSION = '2.15';
 
+my $auto;
 my $ip;
 my $port;
 my $foreground = 0;
@@ -27,6 +28,7 @@ if ($ARGV[0] !~ /(?:--fg|-f)/){
 }
 
 GetOptions(
+    "auto"       => \$auto,
     "ip=s"       => \$ip,
     "port=i"     => \$port,
     "fg"         => \$foreground,
@@ -40,16 +42,17 @@ if ($help){
     print <<'EOF';
 Usage: 
 
-bbtester start [--ip 0.0.0.0] [--port 7800]] [--debug 0-7] [--logfile]
+bbtester start [--ip 0.0.0.0] [--port 7800]] [--debug 0-7] [--logfile] [--auto]
 bbtester stop
 
-bbtester --fg [--ip 0.0.0.0] [--port 7800] [--debug 0-7] [--stdout]
+bbtester --fg [--ip 0.0.0.0] [--port 7800] [--debug 0-7] [--stdout] [--auto]
 
 EOF
 exit;
 }
 
 my $tester = Test::BrewBuild::Tester->new(
+    auto => $auto,
     debug => $debug,
     stdout => $stdout,
     logfile => $logfile,
@@ -108,6 +111,11 @@ Send the logs to a log file (C<~/brewbuild/bbtester_*.log> by default).
     bbtester start [...] -d 7 --logfile
     bbtester --fg -d 7 -l
 
+Run in "auto" mode. This feature is only available when running a dispatcher in
+the same mode.
+
+    bbtester start -a
+
 =head1 DESCRIPTION
 
 This script is the listener end of the distributed C<Test::BrewBuild> testing
@@ -146,6 +154,12 @@ C<7800>.
 
 Instead of using C<start> which puts the service into the background, this
 option will run the tester in the foreground.
+
+=head2 -a, --auto
+
+This mode does some extra work when running the dispatcher in continuous mode.
+It will skip doing a test run if the local repository's commit checksum matches
+that of the remote.
 
 =head2 -d, --debug
 

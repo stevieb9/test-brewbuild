@@ -31,6 +31,7 @@ sub new {
         $self->{debug} = $args{debug};
     }
 
+    $self->{auto} = defined $args{auto} ? $args{auto} : undef;
     $self->{forks} = defined $args{forks} ? $args{forks} : 4;
 
     my $log = $log->child('new');
@@ -47,6 +48,11 @@ sub auto {
 
     $log->_5("commencing auto run dispatch sequence");
 
+    if (! defined $params{repo}){
+        $log->_5("auto() requires the --repo param sent in. Can't continue...");
+        croak "auto mode requires the repository parameter sent in.\n";
+    }
+
     my $git = Test::BrewBuild::Git->new;
     my $sleep = defined $self->{auto_sleep} ? $self->{auto_sleep} : 60;
 
@@ -56,22 +62,11 @@ sub auto {
     $log->_7("$runs auto runs planned") if $runs > 0;
     $log->_7("continuous integration mode enabled") if $runs == 0;
 
-#    my $err = capture_stderr {
-#     $git->status;
-#    };
-
-#    if ($err =~ /fatal: Not a git repository/){
-#        $log->_5("auto failed due to not being in a git repo");
-#        croak "not in a Git repository... can't continue.";
-#    }
-
     while (1){
 
+        $log->_6("commencing run $run_count of $runs");
+
         my $results = $self->dispatch(%params);
-
-        $log->_6("commit sums don't match... commencing run $run_count of $runs");
-        $log->_5("all prerequisites ok... commencing run #$run_count");
-
 
         $log->_6(
             "auto run complete. Sleeping, then restarting if more runs required"
@@ -289,7 +284,7 @@ sub _fork {
                 1;
             };
 
-            if (! $ok){
+            if (! $ok && ! defined $self->{auto}){
                 $log->_0("errors occurred... check your command line " .
                          "string for invalid args. You sent in: $cmd"
                 );
@@ -370,7 +365,8 @@ dispatcher dispatches to.
 
 This function will spin off a continuous run of C<dispatch()> runs, based on
 whether the commit revision checksum locally is different than that from the
-remote. It takes all of the same parameters as C<dispatch()>.
+remote. It takes all of the same parameters as C<dispatch()>, and the
+C<-r|--repo> parameter is mandatory.
 
 There is also a configuration file directive in the C<[Dispatch]> section,
 C<auto_sleep>, which dictates how many seconds to sleep in between each run. The

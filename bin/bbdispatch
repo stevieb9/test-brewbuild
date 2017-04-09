@@ -33,6 +33,7 @@ exit;
 my $dispatcher = Test::BrewBuild::Dispatch->new(
     debug => $args{debug},
     forks => $args{forks},
+    auto => $args{auto}
 );
 
 if (defined $args{auto}){

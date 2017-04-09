@@ -5,6 +5,13 @@ Revision history for Test-BrewBuild
           remote commit SHA1 sum correctly
         - all log objects reflect the module short name, not the full module
           path (closes #176)
+        - moved all auto repo checking and comparisons to Tester
+        - repo param must be sent in to bbdispatch when running in auto mode
+          (fixes #176)
+        - added -a|--auto flag to tester. This must be set when running dispatch
+          in auto mode (closes #177)
+        - clean up erroneous and incorrect error in logs about brewbuild args in
+          auto mode if nothing is returned from the tester
 
 2.14    2017-04-07
         - added revision() to Git, returns the SHA1 sum for the most recent
