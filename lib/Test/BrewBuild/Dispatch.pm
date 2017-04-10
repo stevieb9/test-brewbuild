@@ -17,7 +17,8 @@ our $VERSION = '2.15';
 
 $| = 1;
 
-my $log;
+my ($log, $last_run_status);
+$ENV{BB_RUN_STATUS} = 'PASS';
 
 sub new {
     my ($class, %args) = @_;
@@ -48,6 +49,8 @@ sub auto {
 
     $log->_5("commencing auto run dispatch sequence");
 
+    $last_run_status = $ENV{BB_RUN_STATUS};
+
     if (! defined $params{repo}){
         $log->_5("auto() requires the --repo param sent in. Can't continue...");
         croak "auto mode requires the repository parameter sent in.\n";
@@ -75,6 +78,21 @@ sub auto {
         my @short_results = $results =~ /(5\.\d{1,2}\.\d{1,2} :: \w{4})/g;
 
         print "$_\n" for @short_results;
+
+        if (grep /FAIL/, @short_results){
+            $log->_5("auto run status: FAIL");
+            $ENV{BB_RUN_STATUS} = 'FAIL';
+        }
+        else {
+            $log->_5("auto run status: PASS");
+            $ENV{BB_RUN_STATUS} = 'PASS';
+        }
+
+        if ($ENV{BB_RUN_STATUS} ne $last_run_status){
+            $log->_7("current and last runs status are different. Running " .
+                     "plugins if available"
+            );
+        }
 
         $log->_6(
             "auto run complete. Sleeping, then restarting if more runs required"
