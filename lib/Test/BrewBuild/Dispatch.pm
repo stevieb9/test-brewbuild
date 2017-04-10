@@ -63,17 +63,22 @@ sub auto {
 
     while (1){
 
-        $log->_6("commencing run $run_count of $runs");
+        if (! $runs){
+            $log->_6("commencing run $run_count");
+        }
+        else {
+            $log->_6("commencing run $run_count of $runs");
+        }
 
         my $results = $self->dispatch(%params);
-
-        $log->_6(
-            "auto run complete. Sleeping, then restarting if more runs required"
-        );
 
         my @short_results = $results =~ /(5\.\d{1,2}\.\d{1,2} :: \w{4})/g;
 
         print "$_\n" for @short_results;
+
+        $log->_6(
+            "auto run complete. Sleeping, then restarting if more runs required"
+        );
 
         exit() if $run_count >= $runs && $runs != 0;
         $run_count++;
@@ -165,7 +170,7 @@ sub dispatch {
             $return .= "$build->{data}\n";
         }
     }
-    $log->_7("returning results...");
+    $log->_7("returning results if available...");
     return $return;
 }
 sub _config {

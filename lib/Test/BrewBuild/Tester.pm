@@ -303,6 +303,7 @@ sub listen {
                     );
 
                     $log->_7(
+                        "\nGit check:" .
                         "\n\tstatus: $status" .
                         "\n\tlocal: $local_sum" .
                         "\n\tremote: $remote_sum"
