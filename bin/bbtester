@@ -6,7 +6,7 @@ use Getopt::Long;
 use Test::BrewBuild;
 use Test::BrewBuild::Tester;
 
-our $VERSION = '2.15';
+our $VERSION = '2.16';
 
 my $auto;
 my $ip;
