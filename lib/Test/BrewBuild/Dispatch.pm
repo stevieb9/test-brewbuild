@@ -9,6 +9,7 @@ use Cwd qw(getcwd);
 use IO::Socket::INET;
 use Logging::Simple;
 use Parallel::ForkManager;
+use POSIX;
 use Storable;
 use Test::BrewBuild;
 use Test::BrewBuild::Git;
@@ -97,9 +98,9 @@ sub auto {
             $results_returned = 0;
         }
 
-        my $current_commit = $git->revision(remote => 1, repo => $self->{repo});
-        $current_commit = substr $current_commit, 0, 0, 8;
-
+        my $commit = $git->revision(remote => 1, repo => $params{repo});
+        $commit = substr $commit, 0, 8;
+        
         if (1){#}($ENV{BB_RUN_STATUS} ne $last_run_status){
             $log->_7("current and last runs status are different. Running " .
                      "plugins if available"
@@ -112,12 +113,18 @@ sub auto {
                     my @pins = split /,/, $ENV{BB_RPI_LCD};
                     if (@pins == 6){
                         if ($results_returned){
+                            my $time = strftime("%Y-%m-%d %H:%M:%S\n", localtime(time));
+                            
                             $lcd = _lcd(@pins) if ! defined $lcd;
 
                             $lcd->position(0, 0);
-                            $lcd->print("$ENV{BB_RUN_STATUS}");
+                            $lcd->print($time);
+
                             $lcd->position(0, 1);
-                            $lcd->print("$current_commit");
+                            $lcd->print("$ENV{BB_RUN_STATUS}");
+
+                            $lcd->position(8, 1);
+                            $lcd->print($commit);
                         }
                     }
                     else {

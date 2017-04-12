@@ -27,7 +27,9 @@ Revision history for Test-BrewBuild
         - added _lcd() in Dispatch for the above addition
         - backed out the check in Git::clone() using head(), as it wasn't
           working correctly on the RPi
-
+        - built in RPi::WiringPi auto tester implemented. Runs tests in auto
+          mode, and displays results to LCD
+           
 2.14    2017-04-07
         - added revision() to Git, returns the SHA1 sum for the most recent
           commit, for both local and remotes
