@@ -142,7 +142,8 @@ sub _lcd {
     # used only for doing RPi::WiringPi unit test runs in auto mode
 
     my @pins = @_;
-
+    use Data::Dumper;
+    print Dumper \@pins;
     require RPi::LCD;
 
     my $lcd = RPi::LCD->new;
