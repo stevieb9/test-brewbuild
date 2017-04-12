@@ -84,9 +84,12 @@ sub auto {
             $log->_5("auto run status: FAIL");
             $ENV{BB_RUN_STATUS} = 'FAIL';
         }
-        else {
+        elsif (grep /PASS/, @short_results){
             $log->_5("auto run status: PASS");
             $ENV{BB_RUN_STATUS} = 'PASS';
+        }
+        else {
+            $log->_5("no results returned");
         }
 
         if (1){#}($ENV{BB_RUN_STATUS} ne $last_run_status){
@@ -120,7 +123,9 @@ sub auto {
                     $log->_7("in --rpi mode, but BB_RPI_LCD env var not set");
                 }
             }
-            $log->_7("not in --rpi mode");
+            else {
+                $log->_7("not in --rpi mode");
+            }
         }
 
         $log->_6(
@@ -147,7 +152,7 @@ sub _lcd {
         cols    => 16,
         bits    => 4,
         rs      => $pins[0],
-        strob   => $pins[1],
+        strb    => $pins[1],
         d0      => $pins[2],
         d1      => $pins[3],
         d2      => $pins[4],
