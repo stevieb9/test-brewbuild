@@ -29,7 +29,9 @@ Revision history for Test-BrewBuild
           working correctly on the RPi
         - built in RPi::WiringPi auto tester implemented. Runs tests in auto
           mode, and displays results to LCD
-           
+        - fix bug in Git::revision(). The git command wasn't quoted, so on
+          Windows, it broke at "C:\Program"
+                     
 2.14    2017-04-07
         - added revision() to Git, returns the SHA1 sum for the most recent
           commit, for both local and remotes
