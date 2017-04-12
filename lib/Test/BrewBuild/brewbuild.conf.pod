@@ -18,7 +18,9 @@ config file.
 
 =head2 [brewbuild]
 
-Configuration for the core L<Test::BrewBuild> components.
+Configuration for the core
+L<brewbuild|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/brewbuild>
+script.
 
 =head3 timeout
 
@@ -50,7 +52,8 @@ Default off. Perls 5.8.x and lower will be installed if you set this to 1.
 
 =head2 [dispatch]
 
-Configuration for the dispatcher, L<Test::BrewBuild::Dispatch>.
+Configuration for the dispatcher,
+L<bbdispatch|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbdispatch>.
 
 =head3 testers
 
@@ -79,7 +82,9 @@ sent to the testers.
 
 =head2 [tester]
 
-Configuration for the tester L<Test::BrewBuild::Tester>.
+Configuration for the tester
+L<bbtester|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbtester>
+test runner daemon.
 
 =head3 ip
 
