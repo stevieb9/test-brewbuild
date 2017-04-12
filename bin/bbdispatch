@@ -14,7 +14,8 @@ GetOptions(
     "auto=i"     => \$args{auto},
     "cmd=s"      => \$args{cmd},
     "testers=s@" => \$args{testers},
-    "repo=s"     => \$args{repo},
+    "r|repo=s"     => \$args{repo},
+    "R|rpi"      => \$args{rpi},
     "debug=s"    => \$args{debug},
     "forks=i"    => \$args{forks},
     "help"       => \$help,
@@ -33,7 +34,8 @@ exit;
 my $dispatcher = Test::BrewBuild::Dispatch->new(
     debug => $args{debug},
     forks => $args{forks},
-    auto => $args{auto}
+    auto => $args{auto},
+    rpi => $args{rpi}
 );
 
 if (defined $args{auto}){
@@ -168,6 +170,14 @@ C<0> to run forever.
 
 Note that you *must* be inside of a repository directory at this time to use
 this feature. It currently *DOES NOT* work with the C<--repo> flag.
+
+=head2 -R, --rpi
+
+This argument enables Raspberry Pi mode, and is *only* useful if running tests
+on an RPi, with an LCD connected, and C<bbdispatch> is running in C<--auto>
+mode. It requires the C<$ENV{BB_RPI_LCD}> environment variable set, with a
+comma-separated list of pin numbers in the format C<'1,2,3,4,5,6'>, where the
+GPIO pin numbers are in the order of C<RS, E, D0, D1, D2, D3>.
 
 =head1 AUTHOR
 

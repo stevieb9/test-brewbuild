@@ -18,6 +18,13 @@ Revision history for Test-BrewBuild
           in the background (ie. bbtester start)
         - remove Contributing and support sections in POD, updated copyright
           year (closes #175)
+        - added --rpi flag to bbdispatch, used with --auto to enable LCD output
+          when running RPi::WiringPi unit tests on a Raspberry Pi (this is a
+          specific purpose feature only for my own testing). In order to work,
+          bbtester needs to run in auto mode as does dispatch, and the
+          BB_RPI_LCD env var must be set to a comma delimited list of six pin
+          numbers that connect the LCD to the GPIO
+        - added _lcd() in Dispatch for the above addition
 
 2.14    2017-04-07
         - added revision() to Git, returns the SHA1 sum for the most recent

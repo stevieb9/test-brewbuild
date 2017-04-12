@@ -17,7 +17,7 @@ our $VERSION = '2.15';
 
 $| = 1;
 
-my ($log, $last_run_status);
+my ($log, $last_run_status, $lcd);
 $ENV{BB_RUN_STATUS} = 'PASS';
 
 sub new {
@@ -34,6 +34,7 @@ sub new {
 
     $self->{auto} = defined $args{auto} ? $args{auto} : undef;
     $self->{forks} = defined $args{forks} ? $args{forks} : 4;
+    $self->{rpi} = defined $args{rpi} ? $args{rpi} : undef;
 
     my $log = $log->child('new');
     $log->_5("instantiating new Test::BrewBuild::Dispatch object");
@@ -88,10 +89,38 @@ sub auto {
             $ENV{BB_RUN_STATUS} = 'PASS';
         }
 
-        if ($ENV{BB_RUN_STATUS} ne $last_run_status){
+        if (1){#}($ENV{BB_RUN_STATUS} ne $last_run_status){
             $log->_7("current and last runs status are different. Running " .
                      "plugins if available"
             );
+
+            if ($self->{rpi}){
+                $log->_7("RPi specific testing enabled");
+
+                if ($ENV{BB_RPI_LCD}){
+                    my @pins = split /,/, $ENV{BB_RPI_LCD};
+                    if (@pins == 6){
+                        $lcd = _lcd(@pins) if ! defined $lcd;
+
+                        $lcd->position(0, 0);
+                        $lcd->print("yay!");
+                        $lcd->position(0, 1);
+                        $lcd->print("nay!");
+                    }
+                    else {
+                        $log->_1(
+                            "in --rpi mode, but BB_RPI_LCD env var not set " .
+                            "correctly"
+                        );
+                        warn "bbdispatch is in --rpi mode, but the BB_RPI_LCD ".
+                             " env var isn't set. See the documentation...\n";
+                    }
+                }
+                else {
+                    $log->_7("in --rpi mode, but BB_RPI_LCD env var not set");
+                }
+            }
+            $log->_7("not in --rpi mode");
         }
 
         $log->_6(
@@ -103,6 +132,29 @@ sub auto {
 
         sleep $sleep;
     }
+}
+sub _lcd {
+    # used only for doing RPi::WiringPi unit test runs in auto mode
+
+    my @pins = @_;
+
+    require RPi::LCD;
+
+    my $lcd = RPi::LCD->new;
+
+    $lcd->init(
+        rows    => 2,
+        cols    => 16,
+        bits    => 4,
+        rs      => $pins[0],
+        strob   => $pins[1],
+        d0      => $pins[2],
+        d1      => $pins[3],
+        d2      => $pins[4],
+        d3      => $pins[5]
+    );
+
+    return $lcd;
 }
 sub dispatch {
     my ($self, %params) = @_;
