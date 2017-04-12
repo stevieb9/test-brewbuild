@@ -70,7 +70,7 @@ sub clone {
 
     $log->child('clone')->_7("initiating remote repo clone");
 
-    if ($repo =~ /http/ && ! head($repo)){
+    if ($repo !~ /https/){
         $log->child('clone')->_2("git clone failed, repo doesn't exist");
         croak "repository $repo doesn't exist; can't clone...\n";
     }

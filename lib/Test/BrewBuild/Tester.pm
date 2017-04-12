@@ -336,8 +336,8 @@ sub listen {
                 $log->_7($pull_output);
             }
             else {
-                $git->clone($repo);
                 $log->_7("repo doesn't exist... cloning");
+                $git->clone($repo);
                 chdir $git->name($repo);
                 $log->_7("chdir to: ".getcwd());
             }

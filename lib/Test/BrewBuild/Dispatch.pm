@@ -17,7 +17,7 @@ our $VERSION = '2.15';
 
 $| = 1;
 
-my ($log, $last_run_status, $lcd);
+my ($log, $last_run_status, $results_returned, $lcd);
 $ENV{BB_RUN_STATUS} = 'PASS';
 
 sub new {
@@ -65,6 +65,8 @@ sub auto {
     $log->_7("$runs auto runs planned") if $runs > 0;
     $log->_7("continuous integration mode enabled") if $runs == 0;
 
+    my $git = Test::BrewBuild::Git->new;
+
     while (1){
 
         if (! $runs){
@@ -83,14 +85,20 @@ sub auto {
         if (grep /FAIL/, @short_results){
             $log->_5("auto run status: FAIL");
             $ENV{BB_RUN_STATUS} = 'FAIL';
+            $results_returned = 1;
         }
         elsif (grep /PASS/, @short_results){
             $log->_5("auto run status: PASS");
             $ENV{BB_RUN_STATUS} = 'PASS';
+            $results_returned = 1;
         }
         else {
             $log->_5("no results returned");
+            $results_returned = 0;
         }
+
+        my $current_commit = $git->revision(remote => 1, repo => $self->{repo});
+        $current_commit = substr $current_commit, 0, 0, 8;
 
         if (1){#}($ENV{BB_RUN_STATUS} ne $last_run_status){
             $log->_7("current and last runs status are different. Running " .
@@ -103,12 +111,14 @@ sub auto {
                 if ($ENV{BB_RPI_LCD}){
                     my @pins = split /,/, $ENV{BB_RPI_LCD};
                     if (@pins == 6){
-                        $lcd = _lcd(@pins) if ! defined $lcd;
+                        if ($results_returned){
+                            $lcd = _lcd(@pins) if ! defined $lcd;
 
-                        $lcd->position(0, 0);
-                        $lcd->print("yay!");
-                        $lcd->position(0, 1);
-                        $lcd->print("nay!");
+                            $lcd->position(0, 0);
+                            $lcd->print("$ENV{BB_RUN_STATUS}");
+                            $lcd->position(0, 1);
+                            $lcd->print("$current_commit");
+                        }
                     }
                     else {
                         $log->_1(

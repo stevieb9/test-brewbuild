@@ -25,6 +25,8 @@ Revision history for Test-BrewBuild
           BB_RPI_LCD env var must be set to a comma delimited list of six pin
           numbers that connect the LCD to the GPIO
         - added _lcd() in Dispatch for the above addition
+        - backed out the check in Git::clone() using head(), as it wasn't
+          working correctly on the RPi
 
 2.14    2017-04-07
         - added revision() to Git, returns the SHA1 sum for the most recent
