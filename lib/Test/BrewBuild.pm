@@ -484,7 +484,7 @@ Special options:
 
 -p | --plugin   Module name of the exec command plugin to use
 -a | --args     List of args to pass into the plugin (one arg per loop)
--l | --legacy   Operate on perls < 5.8.x. The default plugins won't work with this flag set if a lower version is installed
+-l | --legacy   Operate on perls < 5.8.9. The default plugins won't work with this flag set if a lower version is installed
 -T | --selftest Testing only: prevent recursive testing on Test::BrewBuild
 -d | --debug    0-7, sets logging verbosity, default is 0
 
@@ -1032,7 +1032,7 @@ won't break your downstream users' modules.
 
 =head2 legacy
 
-By default, we don't install perl versions less than v5.8.0. Pass in a true
+By default, we don't install perl versions less than v5.8.9. Pass in a true
 value to override this default.
 
 =head2 options(\%args)

@@ -3,6 +3,8 @@ Revision history for Test-BrewBuild
 2.16 UNREL
         - remove the named loop in Dispatch::_fork() (closes #188)
         - changed all calls to die() to croak() (closes #189)
+        - in doc and help screen, specify 5.8.9 specifically as the lowest
+          version of perl we'll use if --legacy isn't sent in (closes #190)
 
 2.15    2017-04-12
         - fixed issue in Git::revision() where we weren't actually checking the

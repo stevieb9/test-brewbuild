@@ -139,7 +139,7 @@ METHODS
 
  legacy
 
-    By default, we don't install perl versions less than v5.8.0. Pass in a
+    By default, we don't install perl versions less than v5.8.9. Pass in a
     true value to override this default.
 
  options(\%args)
