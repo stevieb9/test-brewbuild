@@ -223,7 +223,7 @@ sub dispatch {
     %remotes = $self->_fork(\%remotes, $cmd, $repo);
 
     if (! -d 'bblog'){
-        mkdir 'bblog' or die $!;
+        mkdir 'bblog' or croak $!;
         $log->_7("created log dir: bblog");
     }
 
@@ -245,7 +245,7 @@ sub dispatch {
 
             my $content = $remotes{$ip}{build}{files}{$build_log};
             $log->_7("writing out log: " . getcwd() . "/bblog/$ip\_$build_log");
-            open my $wfh, '>', "bblog/$ip\_$build_log" or die $!;
+            open my $wfh, '>', "bblog/$ip\_$build_log" or croak $!;
             for (@$content){
                 print $wfh $_;
             }
@@ -320,7 +320,7 @@ sub _fork {
             Proto => 'tcp',
         );
         if (! $socket){
-            die "can't connect to remote $tester on port " .
+            croak "can't connect to remote $tester on port " .
                 "$remotes->{$tester}{port} $!\n";
         }
 
@@ -337,7 +337,7 @@ sub _fork {
 
         if ($ack ne $tester){
             $log->_0("comm error: syn \"$tester\" doesn't match ack \"$ack\"");
-            die "comm discrepancy: expected $tester, got $ack\n";
+            croak "comm discrepancy: expected $tester, got $ack\n";
         }
 
         if (! $cmd){

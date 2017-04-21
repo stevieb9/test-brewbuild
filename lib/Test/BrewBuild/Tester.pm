@@ -59,14 +59,14 @@ sub start {
 
     if ($self->status){
         my $fh;
-        open $fh, '<', $pid_file or die $!;
+        open $fh, '<', $pid_file or croak $!;
         my $existing_pid = <$fh>;
         close $fh;
 
         if ($existing_pid){
             if (kill(0, $existing_pid)){
                 $log->_0("tester is already running at PID $existing_pid");
-                die "\nTest::BrewBuild test server already running " .
+                croak "\nTest::BrewBuild test server already running " .
                     "on PID $existing_pid...\n\n";
             }
         }
@@ -116,8 +116,8 @@ sub start {
         push @args, ('--logfile');
     }
 
-    mkdir $work_dir or die "can't create $work_dir dir: $!" if ! -d $work_dir;
-    chdir $work_dir or die "can't change to dir $work_dir: $!";
+    mkdir $work_dir or croak "can't create $work_dir dir: $!" if ! -d $work_dir;
+    chdir $work_dir or croak "can't change to dir $work_dir: $!";
     $log->_7("chdir to: ".getcwd());
 
     my $bg;
@@ -139,7 +139,7 @@ sub start {
     print "\nStarted the Test::BrewBuild test server at PID $pid on IP " .
       "address $ip and TCP port $port...\n\n";
 
-    open my $wfh, '>', $pid_file or die $!;
+    open my $wfh, '>', $pid_file or croak $!;
     print $wfh $pid;
     close $wfh;
 
@@ -148,7 +148,7 @@ sub start {
     if ($self->status){
         sleep 1;
         my $fh;
-        open $fh, '<', $pid_file or die $!;
+        open $fh, '<', $pid_file or croak $!;
         my $existing_pid = <$fh>;
         close $fh;
 
@@ -157,7 +157,7 @@ sub start {
                 $log->_0("error! run bbtester --fg at the CLI and check for " .
                          "failure"
                 );
-                die "\nerror! run bbtester --fg at the command line and " .
+                croak "\nerror! run bbtester --fg at the command line and " .
                     "check for failure\n\n";
             }
         }
@@ -178,7 +178,7 @@ sub stop {
 
     my $pid_file = $self->_pid_file;
 
-    open my $fh, '<', $pid_file or die $!;
+    open my $fh, '<', $pid_file or croak $!;
     my $pid = <$fh>;
     close $fh;
     $log->_5("Stopping the BB test server at PID $pid");
@@ -211,7 +211,7 @@ sub listen {
         Listen => 5,
         Reuse => 1,
     );
-    die "cannot create socket $!\n" unless $sock;
+    croak "cannot create socket $!\n" unless $sock;
 
     $log->_6("successfully created network socket on IP $self->{ip} and port " .
              "$self->{port}"
@@ -285,7 +285,7 @@ sub listen {
             $log->_7("before all checks, repo set to $repo");
 
             if (-d $git->name($repo)){
-                chdir $git->name($repo) or die $!;
+                chdir $git->name($repo) or croak $!;
 
                 $log->_7("chdir to: ".getcwd());
 
@@ -399,7 +399,7 @@ sub listen {
                 for (@entries){
                     $log->_7("processing log file: " .getcwd() ."/$_");
                     next if ! -f || ! /\.bblog/;
-                    open my $fh, '<', $_ or die $!;
+                    open my $fh, '<', $_ or croak $!;
                     @{ $res->{files}{$_} } = <$fh>;
                     close $fh;
                 }
@@ -407,7 +407,7 @@ sub listen {
                 $log->_7("chdir to: ".getcwd());
 
                 $log->_7("removing log dir: " . getcwd() . "/bblog");
-                remove_tree 'bblog' or die $!;
+                remove_tree 'bblog' or croak $!;
             }
             $log->_5("storing and sending results back to dispatcher");
             $res->{log} = $self->{log};

@@ -224,7 +224,7 @@ sub instance_install {
             undef $@;
             eval {
                 local $SIG{ALRM} = sub {
-                    die "$ver failed to install... skipping"
+                    croak "$ver failed to install... skipping"
                 };
                 alarm $timeout;
                 `$install_cmd $ver`;
@@ -513,18 +513,18 @@ sub _attach_build_log {
     my $bbfile;
     {
         local $/ = undef;
-        open my $bblog_fh, '<', $bblog or die $!;
+        open my $bblog_fh, '<', $bblog or croak $!;
         $bbfile = <$bblog_fh>;
         close $bblog_fh;
     }
 
     if ($bbfile =~ m|failed.*?See\s+(.*?)\s+for details|){
         my $build_log = $1;
-        open my $bblog_wfh, '>>', $bblog or die $!;
+        open my $bblog_wfh, '>>', $bblog or croak $!;
         print $bblog_wfh "\n\nCPANM BUILD LOG\n";
         print $bblog_wfh "===============\n";
 
-        open my $build_log_fh, '<', $build_log or die $!;
+        open my $build_log_fh, '<', $build_log or croak $!;
 
         while (<$build_log_fh>){
             print $bblog_wfh $_;
@@ -591,7 +591,7 @@ sub _exec {
 
         my $wfh = File::Temp->new(UNLINK => 1);
         my $fname = $wfh->filename;
-        open $wfh, '>', $fname or die $!;
+        open $wfh, '>', $fname or croak $!;
         for (@exec_cmd){
             s/\n//g;
         }
@@ -656,7 +656,7 @@ sub _exec {
         else {
             my $wfh = File::Temp->new(UNLINK => 1);
             my $fname = $wfh->filename;
-            open $wfh, '>', $fname or die $!;
+            open $wfh, '>', $fname or croak $!;
             for (@exec_cmd){
                 s/\n//g;
             }
@@ -697,7 +697,7 @@ sub _dzil_shim {
 
     $self->{is_dzil} = 1;
 
-    open my $fh, '<', 'dist.ini' or die $!;
+    open my $fh, '<', 'dist.ini' or croak $!;
 
     my ($dist, $version);
 
@@ -766,7 +766,7 @@ sub _process_stderr {
     my $errlog = "$self->{tempdir}/stderr.bblog";
 
     if (-e $errlog){
-        open my $errlog_fh, '<', $errlog or die $!;
+        open my $errlog_fh, '<', $errlog or croak $!;
     
         my $error_contents;
         {
@@ -809,7 +809,7 @@ sub _save_reports {
     if (defined $tested_mod){
         $tested_mod =~ s/::/-/g;
         my $report = "$self->{tempdir}/$tested_mod-$ver-$status.bblog";
-        open my $wfh, '>', $report, or die $!;
+        open my $wfh, '>', $report, or croak $!;
 
         print $wfh $result;
 
@@ -836,7 +836,7 @@ sub _save_reports {
     }
     else {
         my $report = "$self->{tempdir}/$ver-$status.bblog";
-        open my $wfh, '>', $report or die $!;
+        open my $wfh, '>', $report or croak $!;
         print $wfh $result;
 
         if (! $self->is_win){

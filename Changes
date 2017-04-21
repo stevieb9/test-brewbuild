@@ -2,6 +2,7 @@ Revision history for Test-BrewBuild
 
 2.16 UNREL
         - remove the named loop in Dispatch::_fork() (closes #188)
+        - changed all calls to die() to croak() (closes #189)
 
 2.15    2017-04-12
         - fixed issue in Git::revision() where we weren't actually checking the
