@@ -305,13 +305,12 @@ sub _fork {
         }
     );
 
-    CLIENTS:
     for my $tester (keys %$remotes){
         $log->_7("spinning up tester: $tester");
 
         my $log = $log->child($tester);
 
-        $pm->start and next CLIENTS;
+        $pm->start and next;
 
         my %return;
 
