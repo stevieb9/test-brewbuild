@@ -11,7 +11,7 @@ my %args;
 my $help;
 
 GetOptions(
-    "auto"     => \$args{auto},
+    "auto"       => \$args{auto},
     "cmd=s"      => \$args{cmd},
     "testers=s@" => \$args{testers},
     "r|repo=s"   => \$args{repo},

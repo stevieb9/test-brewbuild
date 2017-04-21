@@ -27,6 +27,7 @@ sub new {
     $self->{logfile} = $args{logfile};
 
     $self->{auto} = $args{auto};
+    $self->{csum} = $args{csum};
 
     $log = Logging::Simple->new(level => 0, name => 'Tester');
 
@@ -293,39 +294,43 @@ sub listen {
                 $log->_7("using Git: " . $git->git);
 
                 if (defined $self->{auto} && $self->{auto}){
-                    $log->_6("in auto mode, checking commit checksum reqs");
+                    $log->_6("in auto mode");
 
-                    my $status = $git->status(repo => $git->link);
-                    my $local_sum = $git->revision(repo => $git->link);
-                    my $remote_sum = $git->revision(
-                        remote => 1,
-                        repo => $git->link
-                    );
+                    if (! defined $self->{csum}){
+                        $log->_6("in auto mode, checking commit checksum reqs");
 
-                    $log->_7(
-                        "\nGit check:" .
-                        "\n\tstatus: $status" .
-                        "\n\tlocal: $local_sum" .
-                        "\n\tremote: $remote_sum"
-                    );
-
-                    if (! $status) {
-                        $log->_6(
-                            "local repo is ahead in commits than remote... ".
-                            "Nothing to do"
+                        my $status = $git->status(repo => $git->link);
+                        my $local_sum = $git->revision(repo => $git->link);
+                        my $remote_sum = $git->revision(
+                            remote => 1,
+                            repo => $git->link
                         );
-                        $self->{log} = '';
-                        shutdown($dispatch, 1);
-                        next;
-                    }
 
-                    if ($local_sum eq $remote_sum) {
-                        $log->_6(
-                            "local and remote commit sums match. Nothing to do"
+                        $log->_7(
+                            "\nGit check:" .
+                            "\n\tstatus: $status" .
+                            "\n\tlocal: $local_sum" .
+                            "\n\tremote: $remote_sum"
                         );
-                        $self->{log} = '';
-                        shutdown($dispatch, 1);
-                        next;
+
+                        if (! $status) {
+                            $log->_6(
+                                "local repo is ahead in commits than remote... ".
+                                "Nothing to do"
+                            );
+                            $self->{log} = '';
+                            shutdown($dispatch, 1);
+                            next;
+                        }
+
+                        if ($local_sum eq $remote_sum) {
+                            $log->_6(
+                                "local and remote commit sums match. Nothing to do"
+                            );
+                            $self->{log} = '';
+                            shutdown($dispatch, 1);
+                            next;
+                        }
                     }
                 }
 

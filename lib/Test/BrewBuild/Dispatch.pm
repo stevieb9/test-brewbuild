@@ -38,6 +38,7 @@ sub new {
         $self->{auto} = 0 if $self->{auto} == 1;
     }
 
+    $self->{autotest} = $args{autotest} if defined $args{autotest};
     $self->{forks} = defined $args{forks} ? $args{forks} : 4;
     $self->{rpi} = defined $args{rpi} ? $args{rpi} : undef;
 
@@ -104,7 +105,8 @@ sub auto {
 
         my $commit = $git->revision(remote => 1, repo => $params{repo});
         $commit = substr $commit, 0, 8;
-        
+    
+        #FIXME: fix the below line    
         if (1){#}($ENV{BB_RUN_STATUS} ne $last_run_status){
             $log->_7("current and last runs status are different. Running " .
                      "plugins if available"

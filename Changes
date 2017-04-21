@@ -8,6 +8,9 @@ Revision history for Test-BrewBuild
         - --auto mode for the dispatcher now defaults to 0 (closes #192)
         - fix issue in Dispatch where if we have to set --auto to 0, we were
           using the wrong variable rendering early exit 
+        - finished the auto-test (--csum) code in tester/Tester to skip the
+          checking of repository checksums before deciding whether a test run
+          should proceed
 
 2.15    2017-04-12
         - fixed issue in Git::revision() where we weren't actually checking the

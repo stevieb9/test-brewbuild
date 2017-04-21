@@ -164,6 +164,12 @@ This mode does some extra work when running the dispatcher in continuous mode.
 It will skip doing a test run if the local repository's commit checksum matches
 that of the remote.
 
+=head2 -c, --csum
+
+When in auto mode, by default, we only start the unit test run if the local
+repository commit checksum differs from that at the remote. Set this flag if
+you want to run tests even if the checksums are the same.
+
 =head2 -d, --debug
 
 Pass this option an integer from 0-7, and we'll enable that level of debugging.
