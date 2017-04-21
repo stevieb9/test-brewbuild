@@ -11,6 +11,8 @@ Revision history for Test-BrewBuild
         - finished the auto-test (--csum) code in tester/Tester to skip the
           checking of repository checksums before deciding whether a test run
           should proceed
+        - now that we've decided not to use plugins for --auto, removed an if()
+          clause that was in place for that purpose
 
 2.15    2017-04-12
         - fixed issue in Git::revision() where we weren't actually checking the

@@ -106,49 +106,42 @@ sub auto {
         my $commit = $git->revision(remote => 1, repo => $params{repo});
         $commit = substr $commit, 0, 8;
     
-        #FIXME: fix the below line    
-        if (1){#}($ENV{BB_RUN_STATUS} ne $last_run_status){
-            $log->_7("current and last runs status are different. Running " .
-                     "plugins if available"
-            );
+        if ($self->{rpi}){
+            $log->_7("RPi specific testing enabled");
 
-            if ($self->{rpi}){
-                $log->_7("RPi specific testing enabled");
+            if ($ENV{BB_RPI_LCD}){
+                my @pins = split /,/, $ENV{BB_RPI_LCD};
+                if (@pins == 6){
+                    if ($results_returned){
+                        my $time = strftime("%Y-%m-%d %H:%M:%S\n", localtime(time));
+                        
+                        $lcd = _lcd(@pins) if ! defined $lcd;
 
-                if ($ENV{BB_RPI_LCD}){
-                    my @pins = split /,/, $ENV{BB_RPI_LCD};
-                    if (@pins == 6){
-                        if ($results_returned){
-                            my $time = strftime("%Y-%m-%d %H:%M:%S\n", localtime(time));
-                            
-                            $lcd = _lcd(@pins) if ! defined $lcd;
+                        $lcd->position(0, 0);
+                        $lcd->print($time);
 
-                            $lcd->position(0, 0);
-                            $lcd->print($time);
+                        $lcd->position(0, 1);
+                        $lcd->print("$ENV{BB_RUN_STATUS}");
 
-                            $lcd->position(0, 1);
-                            $lcd->print("$ENV{BB_RUN_STATUS}");
-
-                            $lcd->position(8, 1);
-                            $lcd->print($commit);
-                        }
-                    }
-                    else {
-                        $log->_1(
-                            "in --rpi mode, but BB_RPI_LCD env var not set " .
-                            "correctly"
-                        );
-                        warn "bbdispatch is in --rpi mode, but the BB_RPI_LCD ".
-                             " env var isn't set. See the documentation...\n";
+                        $lcd->position(8, 1);
+                        $lcd->print($commit);
                     }
                 }
                 else {
-                    $log->_7("in --rpi mode, but BB_RPI_LCD env var not set");
+                    $log->_1(
+                        "in --rpi mode, but BB_RPI_LCD env var not set " .
+                        "correctly"
+                    );
+                    warn "bbdispatch is in --rpi mode, but the BB_RPI_LCD ".
+                         " env var isn't set. See the documentation...\n";
                 }
             }
             else {
-                $log->_7("not in --rpi mode");
+                $log->_7("in --rpi mode, but BB_RPI_LCD env var not set");
             }
+        }
+        else {
+            $log->_7("not in --rpi mode");
         }
 
         $log->_6(
