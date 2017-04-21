@@ -25,7 +25,7 @@ if ($help){
     print <<'EOF';
 Usage: 
 
-bbdispatch -t 127.0.0.1:7800 [-r https://github.com/user/repo] [-d 0-7] [--auto]
+bbdispatch -t IP:Port [-r https://github.com/user/repo] [-d 0-7] [--auto]
 
 EOF
 exit;

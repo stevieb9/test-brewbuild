@@ -108,6 +108,7 @@ sub start {
 
     if (defined $self->{auto}){
         push @args, ('--auto', $self->{auto});
+        push @args, ('--csum', $self->{csum}) if defined $self->{csum};
 
     }
     if (defined $self->{debug}){

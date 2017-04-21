@@ -222,9 +222,9 @@ the repository URL on the command line when using auto mode:
 
     bbtester start -a
 
-    bbdispatch -t 10.1.1.1 -a 10 -r ... # run 10 cycles
+    bbdispatch -t 10.1.1.1 -a -r ...    # run forever
 
-    bbdispatch -t 10.1.1.1 -a 0  -r ... # run forever
+    bbdispatch -t 10.1.1.1 -a 10 -r ... # run 10 cycles
 
 =head1 SEE ALSO
 
@@ -238,9 +238,3 @@ L<bbtester|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbtester>.
 
 BrewBuild script usage information:
 L<brewbuild|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/brewbuild>.
-
-
-
-
-
-
