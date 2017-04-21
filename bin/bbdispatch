@@ -11,10 +11,10 @@ my %args;
 my $help;
 
 GetOptions(
-    "auto=i"     => \$args{auto},
+    "auto"     => \$args{auto},
     "cmd=s"      => \$args{cmd},
     "testers=s@" => \$args{testers},
-    "r|repo=s"     => \$args{repo},
+    "r|repo=s"   => \$args{repo},
     "R|rpi"      => \$args{rpi},
     "debug=s"    => \$args{debug},
     "forks=i"    => \$args{forks},

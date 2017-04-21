@@ -6,6 +6,8 @@ Revision history for Test-BrewBuild
         - in doc and help screen, specify 5.8.9 specifically as the lowest
           version of perl we'll use if --legacy isn't sent in (closes #190)
         - --auto mode for the dispatcher now defaults to 0 (closes #192)
+        - fix issue in Dispatch where if we have to set --auto to 0, we were
+          using the wrong variable rendering early exit 
 
 2.15    2017-04-12
         - fixed issue in Git::revision() where we weren't actually checking the

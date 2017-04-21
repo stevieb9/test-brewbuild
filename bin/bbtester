@@ -9,6 +9,7 @@ use Test::BrewBuild::Tester;
 our $VERSION = '2.16';
 
 my $auto;
+my $auto_csum_match;
 my $ip;
 my $port;
 my $foreground = 0;
@@ -29,6 +30,7 @@ if ($ARGV[0] !~ /(?:--fg|-f)/){
 
 GetOptions(
     "auto"       => \$auto,
+    "csum"       => \$auto_csum_match,
     "ip=s"       => \$ip,
     "port=i"     => \$port,
     "fg"         => \$foreground,
@@ -53,6 +55,7 @@ exit;
 
 my $tester = Test::BrewBuild::Tester->new(
     auto => $auto,
+    csum => $auto_csum_match,
     debug => $debug,
     stdout => $stdout,
     logfile => $logfile,

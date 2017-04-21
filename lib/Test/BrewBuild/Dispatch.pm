@@ -64,7 +64,7 @@ sub auto {
 
     my $sleep = defined $self->{auto_sleep} ? $self->{auto_sleep} : 60;
 
-    my $runs = $params{auto};
+    my $runs = $self->{auto};
     my $run_count = 1;
 
     $log->_7("$runs auto runs planned") if $runs > 0;
@@ -391,7 +391,8 @@ sub _fork {
 
             if (! $ok && ! defined $self->{auto}){
                 $log->_0("errors occurred... check your command line " .
-                         "string for invalid args. You sent in: $cmd"
+                         "string for invalid args. You sent in: $cmd.\n" .
+                         "The full error: $@"
                 );
                 exit;
             }
