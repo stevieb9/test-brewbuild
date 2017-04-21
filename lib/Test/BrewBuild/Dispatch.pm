@@ -33,8 +33,11 @@ sub new {
         $self->{debug} = $args{debug};
     }
 
-    $self->{auto} = defined $args{auto} ? $args{auto} : undef;
-    $self->{auto} = 0 if $self->{auto} == 1;
+    if (defined $args{auto}){
+        $self->{auto} = $args{auto};
+        $self->{auto} = 0 if $self->{auto} == 1;
+    }
+
     $self->{forks} = defined $args{forks} ? $args{forks} : 4;
     $self->{rpi} = defined $args{rpi} ? $args{rpi} : undef;
 
