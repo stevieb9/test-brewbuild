@@ -1,6 +1,6 @@
 Revision history for Test-BrewBuild
 
-2.16 UNREL
+2.16    2017-04-21
         - remove the named loop in Dispatch::_fork() (closes #188)
         - changed all calls to die() to croak() (closes #189)
         - in doc and help screen, specify 5.8.9 specifically as the lowest
@@ -15,6 +15,7 @@ Revision history for Test-BrewBuild
           clause that was in place for that purpose
         - in Tester, --csum now is properly passed along when in background
           (start) mode
+        - --auto, --csum and --rpi mode all work correctly
 
 2.15    2017-04-12
         - fixed issue in Git::revision() where we weren't actually checking the
