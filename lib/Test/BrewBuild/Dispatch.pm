@@ -43,7 +43,11 @@ sub new {
     $self->{rpi} = defined $args{rpi} ? $args{rpi} : undef;
 
     my $log = $log->child('new');
-    $log->_5("instantiating new Test::BrewBuild::Dispatch object");
+
+    $log->_5("\n***\n" .
+                    __PACKAGE__ .
+                    "\n***\n\n"
+    );
 
     $self->_config;
 

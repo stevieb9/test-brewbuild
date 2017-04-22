@@ -31,13 +31,23 @@ sub new {
 
     $log = Logging::Simple->new(level => 0, name => 'Tester');
 
+    my $tester_log = $log->child('Tester');
+    $tester_log->_5("\n***\n" .
+                    __PACKAGE__ .
+                    "\n***\n\n"
+    );
+
     my $log_file = \$self->{log};
 
     if ($self->{logfile}){
         $log_file = Test::BrewBuild->workdir ."/bbtester_parent.log";
+        $tester_log->_7("log file is: $log_file");
     }
 
-    $log->file($log_file) if ! $self->{log_to_stdout};
+    if ($self->{log_to_stdout}){
+        $tester_log->_7("logging to STDOUT");
+        $log->file($log_file);
+    }
 
     if (defined $args{debug}){
         $log->level($args{debug}) if defined $args{debug};
@@ -363,10 +373,10 @@ sub listen {
                 $opt_str .= "$_ => $opts{$_}\n" if defined $opts{$_};
             }
             if ($opt_str){
-                $log->_5("commencing test run with args: $opt_str");
+                $log->_5("COMMENCING TEST RUN; args: $opt_str");
             }
             else {
-                $log->_5("commencing default brewbuild run with no args");
+                $log->_5("COMMENCING TEST RUN; no args (default)");
             }
 
             my $bb = Test::BrewBuild->new(%opts);

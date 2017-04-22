@@ -20,6 +20,11 @@ sub new {
         level => 0
     );
 
+    $log->_5("\n***\n" .
+                     __PACKAGE__ .
+                     "\n***\n\n"
+    );
+
     if (defined $args{debug}){
         $log->level($args{debug});
     }
@@ -97,6 +102,8 @@ sub revision {
 
     my $remote = $args{remote};
 
+    my $log = $log->child('revision');
+
     my $git = $self->git;
 
     $log->child('revision')->_6("initiating git revision");
@@ -104,11 +111,14 @@ sub revision {
     my $csum;
 
     if (! $remote) {
+        $log->_6("local: 'rev-parse HEAD' sent");
         $csum = `"$git" rev-parse HEAD`;
     }
     else {
         # void capture, as there's unneeded stuff going to STDERR
         # on the ls-remote call
+
+        $log->_6("remote: 'ls-remote' sent");
 
         capture_stderr {
             my $sums = `"$git" ls-remote`;
@@ -119,10 +129,13 @@ sub revision {
     }
 
     chomp $csum;
+    $log->_5("commit checksum: $csum");
     return $csum;
 }
 sub status {
     my ($self) = @_;
+
+    $log->child('status')->_7("checking git status");
 
     my $git = $self->git;
 

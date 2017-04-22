@@ -6,6 +6,9 @@ Revision history for Test-BrewBuild
         - workaround for above off-by-one LCD issue (stevieb9/rpi-lcd#5). The
           global LCD object is now created on each return of a Tester. This
           isn't ideal but we'll fix that next
+        - Git should log out checksums (closes #198)
+        - each module logs out a characteristic header when an object is
+          initialized
 
 2.16    2017-04-21
         - remove the named loop in Dispatch::_fork() (closes #188)

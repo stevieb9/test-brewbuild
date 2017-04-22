@@ -17,7 +17,11 @@ sub new {
 
     $self->{log} = $plog->child('BrewCommands');
     $log = $self->{log};
-    $log->_6("constructing new Test::BrewBuild::BrewCommands object");
+
+    $log->_5("\n***\n" .
+                    __PACKAGE__ .
+                    "\n***\n\n"
+    );
 
     $self->brew;
 
