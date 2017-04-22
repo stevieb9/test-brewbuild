@@ -588,7 +588,7 @@ sub _exec {
 
     chomp @exec_cmd;
 
-    $log->_6("instructions to be executed:\n" . join ",\n", @exec_cmd);
+    $log->_6("instructions to be executed:\n" . join ',\n', @exec_cmd);
 
     my $brew = $bcmd->brew;
 
