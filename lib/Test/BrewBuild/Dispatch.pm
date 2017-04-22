@@ -42,13 +42,6 @@ sub new {
     $self->{forks} = defined $args{forks} ? $args{forks} : 4;
     $self->{rpi} = defined $args{rpi} ? $args{rpi} : undef;
 
-    my $log = $log->child('new');
-
-    $log->_5("\n\n***\n" .
-                    __PACKAGE__ .
-             "\n***\n\n"
-    );
-
     $self->_config;
 
     return $self;

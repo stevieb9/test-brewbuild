@@ -18,11 +18,6 @@ sub new {
     $self->{log} = $plog->child('BrewCommands');
     $log = $self->{log};
 
-    $log->_5("\n\n***\n" .
-                    __PACKAGE__ .
-             "\n***\n\n"
-    );
-
     $self->brew;
 
     return $self;

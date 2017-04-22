@@ -9,7 +9,8 @@ Revision history for Test-BrewBuild
         - Git should log out checksums (closes #198)
         - each module logs out a characteristic header when an object is
           initialized
-
+        - cleaned up the log entry for the plugin args in BrewBuild
+        -
 2.16    2017-04-21
         - remove the named loop in Dispatch::_fork() (closes #188)
         - changed all calls to die() to croak() (closes #189)

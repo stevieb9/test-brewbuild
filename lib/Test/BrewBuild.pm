@@ -549,12 +549,7 @@ sub _create_log {
         level => defined $level ? $level : 0,
     );
 
-    $self->{log}->_5("\n\n***\n" .
-                     __PACKAGE__ .
-                     "\n***\n\n"
-    );
-
-    $self->{log}->_6("in _create_log()");
+    $self->{log}->_7("in _create_log()");
 
     if ($self->{log}->level < 6){
         $self->{log}->display(0);

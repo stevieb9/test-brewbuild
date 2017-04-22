@@ -20,16 +20,11 @@ sub new {
         level => 0
     );
 
-    $log->_5("\n\n***\n" .
-                     __PACKAGE__ .
-             "\n***\n\n"
-    );
-
     if (defined $args{debug}){
         $log->level($args{debug});
     }
 
-    $log->_5("instantiating new Test::BrewBuild::Git object");
+    $log->child('Git');
 
     return $self;
 }
