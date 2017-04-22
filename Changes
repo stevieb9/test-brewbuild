@@ -11,6 +11,9 @@ Revision history for Test-BrewBuild
           initialized
         - cleaned up the log entry for the plugin args in BrewBuild
         - added "waiting for tester" log entry line (closes #200)
+        - re-ordered log entries at the point the tester goes into listen state
+          (closes #197)
+        - wrap code lines > 80 cols
 
 2.16    2017-04-21
         - remove the named loop in Dispatch::_fork() (closes #188)

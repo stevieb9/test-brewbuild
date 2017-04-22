@@ -29,7 +29,9 @@ sub new {
     $self->{auto} = $args{auto};
     $self->{csum} = $args{csum};
 
-    $log = Logging::Simple->new(level => 0, name => 'Tester')->_5("instantiate");
+    $log = Logging::Simple->new(
+        level => 0, name => 'Tester')->_5("instantiate"
+    );
 
     if (defined $args{debug}){
         $log->level($args{debug}) if defined $args{debug};
@@ -222,6 +224,8 @@ sub listen {
              "$self->{port}"
     );
 
+    $log->_7("$self->{ip} now accepting incoming connections");
+
     while (1){
 
         my $work_dir = Test::BrewBuild->workdir;
@@ -234,11 +238,9 @@ sub listen {
             platform => $Config{archname},
         };
 
-        $log->_7("platform: $res->{platform}");
+        $log->_7("platform: $res->{platform} waiting for a connection...\n");
 
         my $dispatch = $sock->accept;
-
-        $log->_7("now accepting incoming connections");
 
         # ack
         my $ack;
@@ -319,8 +321,8 @@ sub listen {
 
                         if (! $status) {
                             $log->_6(
-                                "local repo is ahead in commits than remote... ".
-                                "Nothing to do"
+                                "local repo is ahead in commits than remote...".
+                                " Nothing to do"
                             );
                             $self->{log} = '';
                             shutdown($dispatch, 1);
@@ -329,7 +331,8 @@ sub listen {
 
                         if ($local_sum eq $remote_sum) {
                             $log->_6(
-                                "local and remote commit sums match. Nothing to do"
+                                "local and remote commit sums match. Nothing " .
+                                "to do"
                             );
                             $self->{log} = '';
                             shutdown($dispatch, 1);
@@ -472,6 +475,7 @@ sub _pid_file {
     $self->{pid_file} = Test::BrewBuild->workdir . '/brewbuild.pid';
 }
 sub _unsafe_args {
+    # non-allowed chars in bbdispach's "-c" command line string for brewbuild
     return ['*', '#', '!', '?', '^', '$', '|', '\\'];
 }
 

@@ -18,7 +18,7 @@ our $VERSION = '2.17';
 
 $| = 1;
 
-my ($log, $last_run_status, $results_returned, $lcd);
+my ($log, $last_run_status, $results_returned);
 $ENV{BB_RUN_STATUS} = 'PASS';
 
 sub new {
@@ -112,13 +112,13 @@ sub auto {
                 my @pins = split /,/, $ENV{BB_RPI_LCD};
                 if (@pins == 6){
                     if ($results_returned){
-                        my $time = strftime("%Y-%m-%d %H:%M:%S", localtime(time));
+                        my $time = strftime(
+                            "%Y-%m-%d %H:%M:%S", localtime(time)
+                        );
                         
-                        # $lcd = _lcd(@pins) if ! defined $lcd;
                         my $lcd = _lcd(@pins);
 
                         $lcd->clear;
-                        #$lcd->home;
 
                         $lcd->position(0, 0);
                         $lcd->print($time);
@@ -158,7 +158,7 @@ sub auto {
     }
 }
 sub _lcd {
-    # used only for doing RPi::WiringPi unit test runs in auto mode
+    # used only for dispatching to an RPi in auto mode
 
     my @pins = @_;
 

@@ -693,8 +693,10 @@ sub _dzil_shim {
     my $path_sep = $self->is_win ? ';' : ':';
 
     if (! grep {-x "$_/dzil"} split /$path_sep/, $ENV{PATH} ){
-        $log->fatal("this appears to be a Dist::Zilla module, but the dzil binary " .
-              "can't be found\n");
+        $log->fatal(
+            "this appears to be a Dist::Zilla module, but the dzil binary " .
+            "can't be found\n"
+        );
     }
 
     $self->{is_dzil} = 1;
@@ -860,7 +862,9 @@ sub _set_plugin {
 
     my $self = shift;
     my $log = $log->child('_set_plugin');
-    my $plugin = $self->{args}{plugin} ? $self->{args}{plugin} : $ENV{TBB_PLUGIN};
+    my $plugin = $self->{args}{plugin}
+        ? $self->{args}{plugin}
+        : $ENV{TBB_PLUGIN};
 
     $log->_5("plugin param set to: " . defined $plugin ? $plugin : 'default');
 
