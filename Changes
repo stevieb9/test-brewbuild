@@ -3,6 +3,9 @@ Revision history for Test-BrewBuild
 2.17 UNREL
         - troubleshooting issue where this current commit is causing the LCD
           to shift off a couple chars per run. This needs to be looked at
+        - workaround for above off-by-one LCD issue (stevieb9/rpi-lcd#5). The
+          global LCD object is now created on each return of a Tester. This
+          isn't ideal but we'll fix that next
 
 2.16    2017-04-21
         - remove the named loop in Dispatch::_fork() (closes #188)
