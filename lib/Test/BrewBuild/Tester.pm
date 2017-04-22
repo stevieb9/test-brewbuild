@@ -32,7 +32,8 @@ sub new {
     $log = Logging::Simple->new(level => 0, name => 'Tester');
 
     my $tester_log = $log->child('Tester');
-    $tester_log->_5("\n***\n" .
+
+    $tester_log->_5("\n\n***\n" .
                     __PACKAGE__ .
                     "\n***\n\n"
     );

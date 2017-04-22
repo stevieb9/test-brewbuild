@@ -44,9 +44,9 @@ sub new {
 
     my $log = $log->child('new');
 
-    $log->_5("\n***\n" .
+    $log->_5("\n\n***\n" .
                     __PACKAGE__ .
-                    "\n***\n\n"
+             "\n***\n\n"
     );
 
     $self->_config;

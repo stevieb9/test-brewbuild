@@ -20,9 +20,9 @@ sub new {
         level => 0
     );
 
-    $log->_5("\n***\n" .
+    $log->_5("\n\n***\n" .
                      __PACKAGE__ .
-                     "\n***\n\n"
+             "\n***\n\n"
     );
 
     if (defined $args{debug}){

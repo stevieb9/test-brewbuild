@@ -549,7 +549,7 @@ sub _create_log {
         level => defined $level ? $level : 0,
     );
 
-    $self->{log}->_5("\n***\n" .
+    $self->{log}->_5("\n\n***\n" .
                      __PACKAGE__ .
                      "\n***\n\n"
     );
