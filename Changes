@@ -14,6 +14,9 @@ Revision history for Test-BrewBuild
         - re-ordered log entries at the point the tester goes into listen state
           (closes #197)
         - wrap code lines > 80 cols
+        - reduced the number of calls to Git::name() in Tester::listen().
+          Instead of making numerous repeated calls, we now just stash a single
+          call into a variable (closes #196)
 
 2.16    2017-04-21
         - remove the named loop in Dispatch::_fork() (closes #188)

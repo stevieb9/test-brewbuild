@@ -29,9 +29,8 @@ sub new {
     $self->{auto} = $args{auto};
     $self->{csum} = $args{csum};
 
-    $log = Logging::Simple->new(
-        level => 0, name => 'Tester')->_5("instantiate"
-    );
+    $log = Logging::Simple->new(level => 0, name => 'Tester');
+    $log->_7("instantiating new object");
 
     if (defined $args{debug}){
         $log->level($args{debug}) if defined $args{debug};
@@ -291,12 +290,14 @@ sub listen {
 
             $log->_7("before all checks, repo set to $repo");
 
-            if (-d $git->name($repo)){
-                chdir $git->name($repo) or croak $!;
+            my $repo_name = $git->name($repo);
+
+            if (-d $repo_name){
+                chdir $repo_name or croak $!;
 
                 $log->_7("chdir to: ".getcwd());
 
-                $log->_7("repo '".$git->name($repo)."' exists, pulling");
+                $log->_7("repo $repo_name exists, pulling");
                 $log->_7("using Git: " . $git->git);
 
                 if (defined $self->{auto} && $self->{auto}){
@@ -341,7 +342,7 @@ sub listen {
                     }
                 }
 
-                $log->_7("repo '".$git->name($repo)."' exists, pulling");
+                $log->_7("repo $repo_name exists, pulling");
                 $log->_7("using Git: " . $git->git);
 
                 my $pull_output = $git->pull;
