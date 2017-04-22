@@ -115,8 +115,8 @@ sub auto {
                     if ($results_returned){
                         my $time = strftime("%Y-%m-%d %H:%M:%S", localtime(time));
                         
-                        $lcd = _lcd(@pins) if ! defined $lcd;
-                        #$lcd = _lcd(@pins);
+                        # $lcd = _lcd(@pins) if ! defined $lcd;
+                        my $lcd = _lcd(@pins);
 
                         $lcd->clear;
                         #$lcd->home;
