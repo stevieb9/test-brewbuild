@@ -368,19 +368,30 @@ sub _fork {
                     $log->_5("repo set to $repo_link from Git");
                 }
                 else {
-                    $log->_7("\$repo_link could not be set, we're about to fail...");
+                    $log->_7(
+                        "\$repo_link could not be set, we're about to fail..."
+                    );
                 }
             }
             else {
                 $repo_link = $repo;
-                $log->_5("repo sent in, and set to: $repo_link");
+                $log->_5("repo was sent in, and set to: $repo_link");
             }
 
             if (! $repo_link){
-                $log->_0("no repository supplied and not in a repo dir... croaking");
-                croak "\nno repository found, and none sent in via param, can't continue...\n";
+                $log->_0(
+                    "no repository supplied and not in a repo dir... croaking"
+                );
+                croak
+                    "\nno repository found, and none sent in via param, " .
+                    "can't continue...";
             }
+
+            $log->_6("dispatching out to and waiting for tester: '$tester'...");
+
             $socket->send($repo_link);
+
+            $log->_7("tester work has concluded");
 
             my $ok = eval {
                 $return{$tester}{build} = Storable::fd_retrieve($socket);
@@ -396,7 +407,9 @@ sub _fork {
             }
         }
         else {
-            $log->_5("deleted tester: $remotes->{$tester}... incomplete session");
+            $log->_5(
+                "deleted tester: $remotes->{$tester}... incomplete session"
+            );
             delete $remotes->{$tester};
         }
         $socket->close();

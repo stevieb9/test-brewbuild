@@ -10,7 +10,8 @@ Revision history for Test-BrewBuild
         - each module logs out a characteristic header when an object is
           initialized
         - cleaned up the log entry for the plugin args in BrewBuild
-        -
+        - added "waiting for tester" log entry line (closes #200)
+
 2.16    2017-04-21
         - remove the named loop in Dispatch::_fork() (closes #188)
         - changed all calls to die() to croak() (closes #189)
