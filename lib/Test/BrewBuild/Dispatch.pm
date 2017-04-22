@@ -113,15 +113,20 @@ sub auto {
                 my @pins = split /,/, $ENV{BB_RPI_LCD};
                 if (@pins == 6){
                     if ($results_returned){
-                        my $time = strftime("%Y-%m-%d %H:%M:%S\n", localtime(time));
+                        my $time = strftime("%Y-%m-%d %H:%M:%S", localtime(time));
                         
                         $lcd = _lcd(@pins) if ! defined $lcd;
+                        #$lcd = _lcd(@pins);
+
+                        $lcd->clear;
+                        #$lcd->home;
 
                         $lcd->position(0, 0);
                         $lcd->print($time);
 
+                        print ">$time<*>$ENV{BB_RUN_STATUS}<*>$commit<";
                         $lcd->position(0, 1);
-                        $lcd->print("$ENV{BB_RUN_STATUS}");
+                        $lcd->print($ENV{BB_RUN_STATUS});
 
                         $lcd->position(8, 1);
                         $lcd->print($commit);
