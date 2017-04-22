@@ -41,15 +41,26 @@ sub new {
 
     if ($self->{logfile}){
         $log_file = Test::BrewBuild->workdir ."/bbtester_parent.log";
-        $log->_7("log file is: $log_file");
     }
 
     if ($self->{log_to_stdout}){
         $log->_7("logging to STDOUT");
-        $log->file($log_file);
     }
 
-    $log->_5("instantiating new Test::BrewBuild::Tester object");
+    my $tester_log = $log->child('new');
+    $tester_log->_5("instantiating new Test::BrewBuild::Tester object");
+
+    my $arg_string;
+
+    for (keys %args){
+        next if ! defined $args{$_};
+        $arg_string .= "$_: $args{$_}\n";
+    }
+
+    if ($arg_string){
+        $tester_log->_7("args:");
+        $tester_log->_7("\n$arg_string");
+    }
 
     $self->_config;
     $self->_pid_file;
