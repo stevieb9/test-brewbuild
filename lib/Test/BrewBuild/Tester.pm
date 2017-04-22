@@ -48,7 +48,6 @@ sub new {
         $self->{debug} = $args{debug};
     }
 
-    my $log = $log->child('new');
     $log->_5("instantiating new Test::BrewBuild::Tester object");
 
     $self->_config;
