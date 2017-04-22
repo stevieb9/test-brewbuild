@@ -18,6 +18,7 @@ Revision history for Test-BrewBuild
           Instead of making numerous repeated calls, we now just stash a single
           call into a variable (closes #196)
         - Tester now logs out its arguments when in debug 7 mode (closes #195)
+        - POD cleanup (closes #170)
 
 2.16    2017-04-21
         - remove the named loop in Dispatch::_fork() (closes #188)

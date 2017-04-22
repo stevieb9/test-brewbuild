@@ -913,12 +913,13 @@ dispatching capabilities.
 This module is the backend for the C<brewbuild> script that is accompanied by
 this module.
 
-For end-user use, see L<brewbuild|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/brewbuild>.
-You can also read the network test dispatcher C<bbdispatch> documentation
-L<here|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbdispatch>, the
-remote test listener C<bbtester> docs
-L<here|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbtester>, or
-browse through the L<Test::BrewBuild::Tutorial> for network testing.
+For end-user use, see
+L<brewbuild|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/brewbuild>.
+You can also read the documentation for the network dispatcher
+L<bbdispatch|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbdispatch>,
+the remote test listener
+L<bbtester|https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbtester>,
+or browse through the L<Test::BrewBuild::Tutorial> for network testing.
 
 This module provides you the ability to perform your unit tests across all of
 your L<Perlbrew|http://perlbrew.pl> (Unix) or L<Berrybrew|https://github.com/stevieb9/berrybrew>

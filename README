@@ -10,10 +10,10 @@ DESCRIPTION
 
     For end-user use, see brewbuild
     <https://metacpan.org/pod/distribution/Test-BrewBuild/bin/brewbuild>.
-    You can also read the network test dispatcher bbdispatch documentation
-    here
+    You can also read the documentation for the network dispatcher
+    bbdispatch
     <https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbdispatch>,
-    the remote test listener bbtester docs here
+    the remote test listener bbtester
     <https://metacpan.org/pod/distribution/Test-BrewBuild/bin/bbtester>, or
     browse through the Test::BrewBuild::Tutorial for network testing.
 
