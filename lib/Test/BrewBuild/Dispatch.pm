@@ -124,7 +124,6 @@ sub auto {
                         $lcd->position(0, 0);
                         $lcd->print($time);
 
-                        print ">$time<*>$ENV{BB_RUN_STATUS}<*>$commit<";
                         $lcd->position(0, 1);
                         $lcd->print($ENV{BB_RUN_STATUS});
 
