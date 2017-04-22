@@ -391,12 +391,12 @@ sub _fork {
 
             $socket->send($repo_link);
 
-            $log->_7("tester work has concluded");
-
             my $ok = eval {
                 $return{$tester}{build} = Storable::fd_retrieve($socket);
                 1;
             };
+
+            $log->_7("tester work has concluded");
 
             if (! $ok && ! defined $self->{auto}){
                 $log->_0("errors occurred... check your command line " .
