@@ -586,6 +586,8 @@ sub _exec {
         $self->{args}{plugin_arg}
     );
 
+    chomp @exec_cmd;
+
     $log->_6("instructions to be executed:\n" . join ', ', @exec_cmd);
 
     my $brew = $bcmd->brew;
