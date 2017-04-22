@@ -27,12 +27,13 @@ sub new {
     my $self = bless {}, $class;
 
     $log = Logging::Simple->new(level => 0, name => 'Dispatch');
-    $log->child('new')->_5("instantiating new object");
 
     if (defined $args{debug}){
         $log->level($args{debug}) if defined $args{debug};
         $self->{debug} = $args{debug};
     }
+
+    $log->child('new')->_5("instantiating new object");
 
     if (defined $args{auto}){
         $self->{auto} = $args{auto};

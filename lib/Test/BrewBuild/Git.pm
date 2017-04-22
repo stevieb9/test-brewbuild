@@ -24,7 +24,7 @@ sub new {
         $log->level($args{debug});
     }
 
-    $log->child('Git');
+    $log->child('Git')->child('new')->_5("instantiating new object");
 
     return $self;
 }

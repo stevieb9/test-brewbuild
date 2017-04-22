@@ -29,7 +29,12 @@ sub new {
     $self->{auto} = $args{auto};
     $self->{csum} = $args{csum};
 
-    $log = Logging::Simple->new(level => 0, name => 'Tester');
+    $log = Logging::Simple->new(level => 0, name => 'Tester')->_5("instantiate");
+
+    if (defined $args{debug}){
+        $log->level($args{debug}) if defined $args{debug};
+        $self->{debug} = $args{debug};
+    }
 
     my $log_file = \$self->{log};
 
@@ -41,11 +46,6 @@ sub new {
     if ($self->{log_to_stdout}){
         $log->_7("logging to STDOUT");
         $log->file($log_file);
-    }
-
-    if (defined $args{debug}){
-        $log->level($args{debug}) if defined $args{debug};
-        $self->{debug} = $args{debug};
     }
 
     $log->_5("instantiating new Test::BrewBuild::Tester object");
