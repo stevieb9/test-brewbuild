@@ -18,6 +18,8 @@ sub new {
     $self->{log} = $plog->child('BrewCommands');
     $log = $self->{log};
 
+    $log->child('new')->_7("instantiating new object");
+
     $self->brew;
 
     return $self;

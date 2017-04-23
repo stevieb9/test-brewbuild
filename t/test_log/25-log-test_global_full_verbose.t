@@ -36,7 +36,7 @@ $ret .= $stdout;
 like ($ret, qr/Dispatch\.new/, "dispatch new() represented");
 like ($ret, qr/Dispatch\.dispatch/, "dispatch dispatch() represented");
 like ($ret, qr/BrewBuild\]/, "BB rep");
-like ($ret, qr/BrewBuild\.BrewCommands\]/, "BBCMD rep");
+like ($ret, qr/BrewBuild\.BrewCommands\.new/, "BBCMD rep");
 like ($ret, qr/BrewBuild\.BrewCommands\.brew/, "BBCMD brew rep");
 like ($ret, qr/Tester\.new/, "Tester new() rep");
 like ($ret, qr/Tester\.listen/, "Tester listen() rep");
