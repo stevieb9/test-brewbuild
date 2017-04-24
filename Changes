@@ -31,6 +31,8 @@ Revision history for Test-BrewBuild
         - in Tester::listen(), moved the logging of the csums up one level.
           Instead of only logging if we're comparing csums, we log them in all
           auto runs regardless if the check is done or not (work on #205)
+        - added several more command line args to the config file (work on
+          #202)
 
 2.16    2017-04-21
         - remove the named loop in Dispatch::_fork() (closes #188)
