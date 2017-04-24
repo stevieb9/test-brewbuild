@@ -20,6 +20,8 @@ Revision history for Test-BrewBuild
         - Tester now logs out its arguments when in debug 7 mode (closes #195)
         - POD cleanup (closes #170)
         - added RPi integration examples to the FAQ
+        - slight changes to test_log tests to conform to the changes made within
+          this version
 
 2.16    2017-04-21
         - remove the named loop in Dispatch::_fork() (closes #188)

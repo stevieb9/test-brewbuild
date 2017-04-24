@@ -481,7 +481,7 @@ sub _config {
     }
 }
 sub _pid_file {
-    # fetch the PID file location
+    # fetch the PID file location, and set the file
     my $self = shift;
     return $self->{pid_file} if defined $self->{pid_file};
     $self->{pid_file} = Test::BrewBuild->workdir . '/brewbuild.pid';
