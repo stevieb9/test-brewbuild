@@ -314,22 +314,22 @@ sub listen {
                 if (defined $self->{auto} && $self->{auto}){
                     $log->_6("in auto mode");
 
+                    my $status = $git->status(repo => $git->link);
+                    my $local_sum = $git->revision(repo => $git->link);
+                    my $remote_sum = $git->revision(
+                        remote => 1,
+                        repo => $git->link
+                    );
+
+                    $log->_7(
+                        "\nGit check:" .
+                        "\n\tstatus: $status" .
+                        "\n\tlocal: $local_sum" .
+                        "\n\tremote: $remote_sum"
+                    );
+
                     if (! defined $self->{csum}){
                         $log->_6("in auto mode, checking commit checksum reqs");
-
-                        my $status = $git->status(repo => $git->link);
-                        my $local_sum = $git->revision(repo => $git->link);
-                        my $remote_sum = $git->revision(
-                            remote => 1,
-                            repo => $git->link
-                        );
-
-                        $log->_7(
-                            "\nGit check:" .
-                            "\n\tstatus: $status" .
-                            "\n\tlocal: $local_sum" .
-                            "\n\tremote: $remote_sum"
-                        );
 
                         if (! $status) {
                             $log->_6(

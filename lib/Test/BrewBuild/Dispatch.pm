@@ -102,8 +102,6 @@ sub auto {
             $results_returned = 0;
         }
 
-        my $commit = $git->revision(remote => 1, repo => $params{repo});
-        $commit = substr $commit, 0, 8;
     
         if ($self->{rpi}){
             $log->_7("RPi specific testing enabled");
@@ -112,6 +110,9 @@ sub auto {
                 my @pins = split /,/, $ENV{BB_RPI_LCD};
                 if (@pins == 6){
                     if ($results_returned){
+                        my $commit = $git->revision(remote => 1, repo => $params{repo});
+                        $commit = substr $commit, 0, 8;
+
                         my $time = strftime(
                             "%Y-%m-%d %H:%M:%S", localtime(time)
                         );

@@ -26,6 +26,11 @@ Revision history for Test-BrewBuild
           after the first full run. This removes unneeded duplicate log
           entries(closes #203)
         - several log entry modifications/cleanup
+        - in Dispatch::auto(), only attempt to fetch the commit csums if there
+          were results returned (work on #205)
+        - in Tester::listen(), moved the logging of the csums up one level.
+          Instead of only logging if we're comparing csums, we log them in all
+          auto runs regardless if the check is done or not (work on #205)
 
 2.16    2017-04-21
         - remove the named loop in Dispatch::_fork() (closes #188)
