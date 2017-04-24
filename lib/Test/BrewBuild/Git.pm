@@ -24,13 +24,15 @@ sub new {
         $log->level($args{debug});
     }
 
-    $log->child('Git')->child('new')->_5("instantiating new object");
+    $log->child('new')->_5("instantiating new object");
 
     return $self;
 }
 sub git {
     my $self = shift;
     my $cmd;
+
+    return $self->{git} if defined $self->{git};
 
     if ($^O =~ /MSWin/){
         for (split /;/, $ENV{PATH}){
@@ -45,6 +47,8 @@ sub git {
     }
 
     $log->child('git')->_6("git command set to '$cmd'");
+
+    $self->{git} = $cmd;
 
     return $cmd;
 }

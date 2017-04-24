@@ -22,6 +22,10 @@ Revision history for Test-BrewBuild
         - added RPi integration examples to the FAQ
         - slight changes to test_log tests to conform to the changes made within
           this version
+        - Git::git() now keeps a copy of the actual command and returns it
+          after the first full run. This removes unneeded duplicate log
+          entries(closes #203)
+        - several log entry modifications/cleanup
 
 2.16    2017-04-21
         - remove the named loop in Dispatch::_fork() (closes #188)

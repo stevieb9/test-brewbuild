@@ -17,7 +17,7 @@ my ($out) = capture {
 
 };
 
-like $out, qr/instantiating new.*Git/, "new() has logging";
+like $out, qr/instantiating new object/, "new() has logging";
 like $out, qr/git command set/, "git() has logging";
 like $out, qr/for the repo/, "link() has logging";
 

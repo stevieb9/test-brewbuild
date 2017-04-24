@@ -298,6 +298,7 @@ sub listen {
 
         if ($repo){
             my $git = Test::BrewBuild::Git->new(debug => $self->{debug});
+            $log->_7("using Git: " . $git->git);
 
             $log->_7("before all checks, repo set to $repo");
 
@@ -308,8 +309,7 @@ sub listen {
 
                 $log->_7("chdir to: ".getcwd());
 
-                $log->_7("repo $repo_name exists, pulling");
-                $log->_7("using Git: " . $git->git);
+                $log->_7("repo $repo_name exists");
 
                 if (defined $self->{auto} && $self->{auto}){
                     $log->_6("in auto mode");
@@ -353,8 +353,7 @@ sub listen {
                     }
                 }
 
-                $log->_7("repo $repo_name exists, pulling");
-                $log->_7("using Git: " . $git->git);
+                $log->_7("pulling $repo_name");
 
                 my $pull_output = $git->pull;
                 $log->_7($pull_output);
@@ -419,7 +418,13 @@ sub listen {
                 chdir 'bblog';
                 $log->_7("chdir to: ".getcwd());
                 my @entries = glob '*';
-                $log->_5("log files: " . join ', ', @entries);
+
+                if (@entries){
+                    $log->_5("log files: " . join ', ', @entries);
+                }
+                else {
+                    $log->_7("no log files generated, nothing to process");
+                }
                 for (@entries){
                     $log->_7("processing log file: " .getcwd() ."/$_");
                     next if ! -f || ! /\.bblog/;
