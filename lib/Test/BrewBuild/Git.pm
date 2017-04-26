@@ -100,6 +100,7 @@ sub revision {
     my ($self, %args) = @_;
 
     my $remote = $args{remote};
+    my $repo = $args{repo};
 
     my $log = $log->child('revision');
 
@@ -117,10 +118,19 @@ sub revision {
         # void capture, as there's unneeded stuff going to STDERR
         # on the ls-remote call
 
+        if (! defined $repo){
+            $log->_0(
+                "Git::revision() requires a repo sent in while in remote " .
+                "mode. Croaking."
+            ); 
+            croak "Git::revision() requires a repo sent in while in " .
+                  "remote mode.";
+        }
+
         $log->_6("remote: 'ls-remote' sent");
 
         capture_stderr {
-            my $sums = `"$git" ls-remote`;
+            my $sums = `"$git" ls-remote $repo`;
             if ($sums =~ /([A-F0-9]{40})\s+HEAD/i){
                 $csum = $1;
             }
@@ -231,13 +241,14 @@ All parameters are passed in as a hash.
     repo
 
 Optional, string. The Github url to the repo. If not sent in, we will attempt
-to get this information from the current working directory.
+to get this information from the current working directory. Mandatory if the
+C<remote> parameter is sent in.
 
     remote
 
 Optional, bool. If sent in, we'll fetch the current commit's SHA1 sum from
 Github itself, else we'll get the sum from the most recent local, unpushed
-commit.
+commit. The C<repo> parameter is mandatory if this one is sent in.
 
 =head2 status
 

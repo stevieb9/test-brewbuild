@@ -33,6 +33,11 @@ Revision history for Test-BrewBuild
           auto runs regardless if the check is done or not (work on #205)
         - added several more command line args to the config file (work on
           #202)
+        - fix issue in Git::revision(). If Dispatch wasn't run from the repo
+          directory directly, 'git ls-remote' wouldn't ever get any csums back.
+          Now, revision() requires a repo param if remote is sent in (closes
+          #205)
+
 
 2.16    2017-04-21
         - remove the named loop in Dispatch::_fork() (closes #188)
