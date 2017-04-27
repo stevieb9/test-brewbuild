@@ -14,7 +14,7 @@ use Storable;
 use Test::BrewBuild;
 use Test::BrewBuild::Git;
 
-our $VERSION = '2.17';
+our $VERSION = '2.18';
 
 $| = 1;
 
