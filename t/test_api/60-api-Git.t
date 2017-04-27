@@ -75,10 +75,20 @@ mkdir $wdir or die $! if ! -d $wdir;
     $csum = $git->revision;
     is length($csum), 40, "commit sum pans out ok for local";
 
-    # remote
-    $csum = $git->revision(remote => 1);
-    is length($csum), 40, "commit sum pans out ok for remote";
+    # remote w/o repo
+    my $ok = eval {
+        $csum = $git->revision(remote => 1);
+        1;
+    };
+    is $ok, undef, "revision() with remote param dies without repo param";
+    like $@, qr/requires/, "...with sane error msg";
+    undef $@;
 
+
+    # remote with repo
+    $csum = $git->revision(repo => 'https://github.com/stevieb9/test-brewbuild', remote => 1);
+    is length($csum), 40, "commit sum pans out ok for remote with repo param";
+    
     # local with repo url
     $csum = $git->revision(repo => 'https://github.com/stevieb9/test-brewbuild');
     is length($csum), 40, "commit sum pans out ok for local with repo param";
