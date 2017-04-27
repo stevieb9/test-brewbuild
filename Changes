@@ -37,8 +37,6 @@ Revision history for Test-BrewBuild
           directory directly, 'git ls-remote' wouldn't ever get any csums back.
           Now, revision() requires a repo param if remote is sent in (closes
           #205)
-        - added numerous additional config file directives (not yet implemented
-          in code) (work on #202)
 
 2.16    2017-04-21
         - remove the named loop in Dispatch::_fork() (closes #188)
