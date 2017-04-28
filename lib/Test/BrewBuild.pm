@@ -592,7 +592,7 @@ sub _exec {
         my $wfh = File::Temp->new(UNLINK => 1);
         my $fname = $wfh->filename;
 
-        $log->_6("created temp file: $fname");
+        $log->_6("created temp file in case we need to log: $fname");
 
         open $wfh, '>', $fname or croak $!;
         for (@exec_cmd){

@@ -115,9 +115,6 @@ sub revision {
         $csum = `"$git" rev-parse HEAD`;
     }
     else {
-        # void capture, as there's unneeded stuff going to STDERR
-        # on the ls-remote call
-
         if (! defined $repo){
             $log->_0(
                 "Git::revision() requires a repo sent in while in remote " .
@@ -128,6 +125,9 @@ sub revision {
         }
 
         $log->_6("remote: 'ls-remote $repo' sent");
+
+        # void capture, as there's unneeded stuff going to STDERR
+        # on the ls-remote call
 
         capture_stderr {
             my $sums = `"$git" ls-remote $repo`;
