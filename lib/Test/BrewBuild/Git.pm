@@ -127,7 +127,7 @@ sub revision {
                   "remote mode.";
         }
 
-        $log->_6("remote: 'ls-remote' sent");
+        $log->_6("remote: 'ls-remote $repo' sent");
 
         capture_stderr {
             my $sums = `"$git" ls-remote $repo`;
