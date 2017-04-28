@@ -516,7 +516,7 @@ execution, for Windows & Unix.
 
 =head1 DESCRIPTION
 
-Builds and puts into the background a L<Test::BrewBuild> remote tester
+Builds and puts into the background a L<Test::BrewBuild::Tester> remote tester
 listening service.
 
 Note that by default, the working directory is C<~/brewbuild> on all platforms.

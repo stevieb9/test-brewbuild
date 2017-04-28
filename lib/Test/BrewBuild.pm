@@ -375,7 +375,7 @@ sub test {
 
     $self->_copy_logs;
 
-    $log->_5(__PACKAGE__ ." run finished");
+    $log->_5(__PACKAGE__ ." run finished\n");
 
     my $ret = "\n";
     $ret .= "$self->{args}{plugin_arg}\n" if $self->{args}{plugin_arg};
