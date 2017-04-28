@@ -290,7 +290,7 @@ sub instance_remove {
         }
     }
 
-    $log->_4("removal of existing perl installs complete...");
+    $log->_4("removal of existing perl installs complete...\n");
 }
 sub revdep {
     my ($self, %args) = @_;
@@ -416,8 +416,8 @@ sub revdeps {
 
     find({
             wanted => sub {
-                $log->_7("finding modules");
                 if (-f && $_ =~ /\.pm$/){
+                    $log->_7("located module: $_");
                     push @modules, $_;
                 }
             },
@@ -566,8 +566,6 @@ sub _exec {
 
     my $log = $log->child('exec');
 
-    $log->_6("creating temp file");
-
     if ($self->{args}{plugin_arg}) {
         $log->_5( "" .
             "fetching instructions from the plugin with arg " .
@@ -593,6 +591,9 @@ sub _exec {
 
         my $wfh = File::Temp->new(UNLINK => 1);
         my $fname = $wfh->filename;
+
+        $log->_6("created temp file: $fname");
+
         open $wfh, '>', $fname or croak $!;
         for (@exec_cmd){
             s/\n//g;
@@ -658,6 +659,9 @@ sub _exec {
         else {
             my $wfh = File::Temp->new(UNLINK => 1);
             my $fname = $wfh->filename;
+
+            $log->_6("created temp file: $fname");
+
             open $wfh, '>', $fname or croak $!;
             for (@exec_cmd){
                 s/\n//g;
