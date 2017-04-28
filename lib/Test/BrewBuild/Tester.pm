@@ -358,7 +358,7 @@ sub listen {
 
                 my $pull_output;
 
-                if (! $csums_differ){
+                if ($csums_differ){
                     $log->_7("pulling $repo_name");
                     $pull_output = $git->pull;
                     $log->_7($pull_output);
