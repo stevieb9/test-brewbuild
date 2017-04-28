@@ -303,6 +303,7 @@ sub listen {
             $log->_7("before all checks, repo set to $repo");
 
             my $repo_name = $git->name($repo);
+            my $csums_differ;
 
             if (-d $repo_name){
                 chdir $repo_name or croak $!;
@@ -320,6 +321,8 @@ sub listen {
                         remote => 1,
                         repo => $git->link
                     );
+
+                    $csums_differ = 1 if $local_sum ne $remote_sum;
 
                     $log->_7(
                         "\nGit check:" .
@@ -353,10 +356,16 @@ sub listen {
                     }
                 }
 
-                $log->_7("pulling $repo_name");
+                my $pull_output;
 
-                my $pull_output = $git->pull;
-                $log->_7($pull_output);
+                if (! $csums_differ){
+                    $log->_7("pulling $repo_name");
+                    $pull_output = $git->pull;
+                    $log->_7($pull_output);
+                }
+                else {
+                    $log->_7("commit checksums are equal; no need to pull");
+                }
             }
             else {
                 $log->_7("repo doesn't exist... cloning");
