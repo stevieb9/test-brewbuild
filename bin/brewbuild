@@ -302,6 +302,15 @@ set if a lower version is installed.
 Optional module name of the exec command plugin to use. You can also specify a
 file name if the module is not installed.
 
+The default plugin if not specified is L<Test::BrewBuild::Plugin::DefaultExec>.
+There are a few other plugins found in this distribution's author's CPAN
+collection.
+
+One very similar to this one that performs the same actions but enables CPAN
+Author tests (C<RELEASE_TESTING=1>) and attempts to install distributions
+related to these tests is L<Test::BrewBuild::Plugin::Author>. This may be worth
+setting in the configuration file.
+
 =head2 -a, --args
 
 List of args to pass into the plugin (one arg per loop).
