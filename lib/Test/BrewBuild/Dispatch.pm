@@ -111,7 +111,7 @@ sub auto {
                 if (@pins == 6){
                     if ($results_returned){
                         my $commit = $git->revision(remote => 1, repo => $params{repo});
-                        $commit = substr $commit, 0, 8;
+                        $commit = substr $commit, 0, 7;
 
                         my $time = strftime(
                             "%Y-%m-%d %H:%M:%S", localtime(time)
@@ -127,7 +127,7 @@ sub auto {
                         $lcd->position(0, 1);
                         $lcd->print($ENV{BB_RUN_STATUS});
 
-                        $lcd->position(8, 1);
+                        $lcd->position(9, 1);
                         $lcd->print($commit);
                     }
                 }

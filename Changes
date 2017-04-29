@@ -6,6 +6,8 @@ Revision history for Test-BrewBuild
           if they are equal, we no longer perform a pull request
         - added Test::BrewBuild::Plugin::Author as a required dependency
         - added a section to Tutorial that covers using Plugins
+        - for RPi LCD mode, changed commit csum to 7 chars as opposed to 8,
+          which is typical/common across the board
 
 2.17    2017-04-27
         - troubleshooting issue where this current commit is causing the LCD
