@@ -248,9 +248,8 @@ sub listen {
             platform => $Config{archname},
         };
 
-        $log->_7("tester: $self->{ip} on platform: $res->{platform} " .
-                 "waiting for a connection...\n"
-        );
+        $log->_7("TESTER: $self->{ip} PLATFORM: $res->{platform}");
+        $log->_7("waiting for a connection...\n");
 
         my $dispatch = $sock->accept;
 
