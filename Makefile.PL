@@ -73,6 +73,7 @@ WriteMakefile(
         'Parallel::ForkManager' => 0,
         'Plugin::Simple' => '0.06',
         'Proc::Background' => 0,
+        'Test::BrewBuild::Plugin::Author' => '0.02',
         'Test::BrewBuild::Plugin::TestAgainst' => '0.06',
         'version' => 0,
     },

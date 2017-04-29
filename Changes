@@ -4,6 +4,8 @@ Revision history for Test-BrewBuild
         - logging output modifications (changes and relocations)
         - in Git::listen(), we now make comparisons of the commit checksums, and
           if they are equal, we no longer perform a pull request
+        - added Test::BrewBuild::Plugin::Author as a required dependency
+
 
 2.17    2017-04-27
         - troubleshooting issue where this current commit is causing the LCD
