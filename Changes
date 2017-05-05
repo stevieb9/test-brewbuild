@@ -8,6 +8,10 @@ Revision history for Test-BrewBuild
         - added a section to Tutorial that covers using Plugins
         - for RPi LCD mode, changed commit csum to 7 chars as opposed to 8,
           which is typical/common across the board
+        - major changes on how we figure out which module is the distribution
+          name. Instead of taking the first module name found, we check each one
+          with MetaCPAN::Client, and use the first one found that is a legit
+          distribution (work on #208)
 
 2.17    2017-04-27
         - troubleshooting issue where this current commit is causing the LCD

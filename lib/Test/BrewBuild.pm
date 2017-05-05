@@ -409,16 +409,32 @@ sub log {
 sub revdeps {
     my $self = shift;
 
+    load 'MetaCPAN::Client';
+    my $mcpan = MetaCPAN::Client->new;
+
     my $log = $log->child('revdeps');
     $log->_6('running --revdep');
 
-    my @modules;
+    my $dist;
 
     find({
             wanted => sub {
+                return if ref $dist;
+
                 if (-f && $_ =~ /\.pm$/){
-                    $log->_7("located module: $_");
-                    push @modules, $_;
+
+                    $log->_6("processing module '$_'");
+
+                    s|lib/||;
+                    s|/|-|g;
+                    s|\.pm||;
+
+                    $log->_6("module file converted to '$_'");
+
+                    eval {
+                        $dist = $mcpan->distribution($_);
+                    };
+
                 }
             },
             no_chdir => 1,
@@ -426,17 +442,9 @@ sub revdeps {
         'lib/'
     );
 
-    my $mod = $modules[0];
+    $log->_7("using '$dist' as the project we're working on");
 
-    $log->_7("using '$mod' as the project we're working on");
-
-    $mod =~ s|lib/||;
-    $mod =~ s|/|-|g;
-    $mod =~ s|\.pm||;
-
-    $log->_7("working module translated to $mod");
-
-    my @revdeps = $self->_get_revdeps($mod);
+    my @revdeps = $self->_get_revdeps($dist);
     return @revdeps;
 }
 sub legacy {
