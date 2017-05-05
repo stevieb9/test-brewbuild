@@ -415,11 +415,11 @@ sub revdeps {
     my $log = $log->child('revdeps');
     $log->_6('running --revdep');
 
-    my $dist;
+    my $mod;
 
     find({
             wanted => sub {
-                return if ref $dist;
+                return if $mod;
 
                 if (-f && $_ =~ /\.pm$/){
 
@@ -431,9 +431,13 @@ sub revdeps {
 
                     $log->_6("module file converted to '$_'");
 
+                    my $dist;
+
                     eval {
                         $dist = $mcpan->distribution($_);
                     };
+
+                    $mod = $_ if ref $dist;
 
                 }
             },
@@ -442,9 +446,9 @@ sub revdeps {
         'lib/'
     );
 
-    $log->_7("using '$dist' as the project we're working on");
+    $log->_7("using '$mod' as the project we're working on");
 
-    my @revdeps = $self->_get_revdeps($dist);
+    my @revdeps = $self->_get_revdeps($mod);
     return @revdeps;
 }
 sub legacy {
