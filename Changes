@@ -12,6 +12,8 @@ Revision history for Test-BrewBuild
           name. Instead of taking the first module name found, we check each one
           with MetaCPAN::Client, and use the first one found that is a legit
           distribution (work on #208)
+        - fix uninit warning in bbtester. We were trying to use $ARGV[0] even
+          in cases where it wasn't defined
 
 2.17    2017-04-27
         - troubleshooting issue where this current commit is causing the LCD
