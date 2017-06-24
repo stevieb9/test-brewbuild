@@ -287,7 +287,8 @@ sub _config {
         }
         $self->{repo} = $conf->{repo} if $conf->{repo};
         $self->{cmd} = $conf->{cmd} if $conf->{cmd};
-        $self->{auto_sleep} = $conf->{cmd} if defined $conf->{auto_sleep};
+        $self->{auto_sleep} = $conf->{auto_sleep} 
+          if defined $conf->{auto_sleep};
     }
 }
 sub _fork {
