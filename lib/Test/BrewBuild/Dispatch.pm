@@ -128,7 +128,7 @@ sub auto {
                     my $time = strftime(
                         "%Y-%m-%d %H:%M:%S", localtime(time)
                     );
-                    
+
                     $lcd->clear;
 
                     $lcd->position(0, 0);
@@ -157,7 +157,7 @@ sub auto {
             $log->_7("not in --rpi mode");
         }
 
-        my $sleep_msg = 
+        my $sleep_msg =
             "auto run complete. Sleeping for $sleep seconds, then restarting" .
             " if more runs required";
 
