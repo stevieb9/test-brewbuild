@@ -24,6 +24,8 @@ Revision history for Test-BrewBuild
         - in bbdispatch, the --repo|-r flag will prepend https://github.com if
           you omit it. To do so, you need to specify the repo in 
           "user/repo-name" format
+        - hard coded MetaCPAN::Client version in Makefile, but appears there's
+          a bug with the revdep method. See metacpan/metacpan-client#89
 
 2.17    2017-04-27
         - troubleshooting issue where this current commit is causing the LCD

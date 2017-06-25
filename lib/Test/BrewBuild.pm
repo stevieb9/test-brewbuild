@@ -436,7 +436,6 @@ sub revdeps {
                     eval {
                         $dist = $mcpan->distribution($_);
                     };
-
                     $mod = $_ if ref $dist;
 
                 }
