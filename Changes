@@ -28,6 +28,8 @@ Revision history for Test-BrewBuild
           a bug with the revdep method. See metacpan/metacpan-client#89
         - updated auto log entry at end of dispatch run to include seconds
           we'll be sleeping (closes #212)
+        - fix issue where the repo link was being pre-pended twice with the URL
+          in log entries due to an earlier change (closes #211)
 
 2.17    2017-04-27
         - troubleshooting issue where this current commit is causing the LCD

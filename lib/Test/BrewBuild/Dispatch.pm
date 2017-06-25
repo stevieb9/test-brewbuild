@@ -203,7 +203,7 @@ sub dispatch {
     $cmd = 'brewbuild' if ! $cmd;
     my $repo = $params{repo} || $self->{repo};
 
-    if (defined $repo && ($repo !~ /^http/ || $repo !~ /^git/)){
+    if (defined $repo && ($repo !~ /^http/ && $repo !~ /^git/)){
         $repo = REPO_PREFIX . $repo;
     }
 
