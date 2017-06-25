@@ -18,6 +18,8 @@ our $VERSION = '2.18';
 
 $| = 1;
 
+use constant REPO_PREFIX => 'https://github.com/';
+
 my ($log, $last_run_status, $results_returned);
 $ENV{BB_RUN_STATUS} = 'PASS';
 
@@ -67,6 +69,11 @@ sub auto {
     if (! defined $params{repo}){
         $log->_5("auto() requires the --repo param sent in. Can't continue...");
         croak "auto mode requires the repository parameter sent in.\n";
+    }
+    else {
+        if ($params{repo} !~ /^http/ || $params{repo} !~ /^git/){
+            $params{repo} = REPO_PREFIX . $params{repo};
+        }
     }
 
     my $sleep = defined $self->{auto_sleep} ? $self->{auto_sleep} : 60;
@@ -193,6 +200,11 @@ sub dispatch {
     my $cmd = $params{cmd} || $self->{cmd};
     $cmd = 'brewbuild' if ! $cmd;
     my $repo = $params{repo} || $self->{repo};
+
+    if (defined $repo && ($repo !~ /^http/ || $repo !~ /^git/)){
+        $repo = REPO_PREFIX . $repo;
+    }
+
     my $testers = $params{testers} || $self->{testers};
 
     my $log = $log->child('dispatch');
@@ -468,7 +480,8 @@ C<cmd> is the C<brewbuild> command string that will be executed.
 
 C<repo> is the name of the repo to test against, and is optional.
 If not supplied, we'll attempt to get a repo name from the local working
-directory you're working in.
+directory you're working in. If it's a Github repo, you need not enter in the full
+path... we'll prepend C<https://github.com/> if you send in C<user/repo-name>.
 
 C<testers> is manadory unless you've set up a config file, and contains an
 array reference of IP/Port pairs for remote testers to dispatch to and follow.

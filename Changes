@@ -21,6 +21,9 @@ Revision history for Test-BrewBuild
           eventually hitting wiringPi's MAX_LCD (8) limit. Moved the LCD init
           to run once on object instantiation (fixes #209; fixes 
           stevieb9/rpi-lcd#6)
+        - in bbdispatch, the --repo|-r flag will prepend https://github.com if
+          you omit it. To do so, you need to specify the repo in 
+          "user/repo-name" format
 
 2.17    2017-04-27
         - troubleshooting issue where this current commit is causing the LCD

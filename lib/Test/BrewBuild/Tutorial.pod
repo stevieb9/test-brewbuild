@@ -96,6 +96,9 @@ To specify a different repository:
 
     bbdispatch -r https://github.com/user/repo -t 127.0.0.1 -t 172.16.1.1:9999 -t 10.1.1.1
 
+Note that the repository flag (C<-r>) will prepend C<https://github.com/> by
+default if you only specify C<user/repo>.
+
 Example output of a basic run where I'm in a git repository directory:
 
     bbdispatch -t localhost -t 192.168.252.90 -t 192.168.252.96 -t 192.168.252.95
