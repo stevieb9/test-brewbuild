@@ -16,6 +16,11 @@ Revision history for Test-BrewBuild
           in cases where it wasn't defined
         - fix issue where in Dispatch, we were loading the wrong directive
           value into $self->{auto_sleep} from the config file
+        - fix issue where we getting segfaults when bbdispatch was in auto mode
+          with --rpi enabled. We were creating a new LCD on each run, and were
+          eventually hitting wiringPi's MAX_LCD (8) limit. Moved the LCD init
+          to run once on object instantiation (fixes #209; fixes 
+          stevieb9/rpi-lcd#6)
 
 2.17    2017-04-27
         - troubleshooting issue where this current commit is causing the LCD

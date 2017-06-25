@@ -21,6 +21,13 @@ $| = 1;
 my ($log, $last_run_status, $results_returned);
 $ENV{BB_RUN_STATUS} = 'PASS';
 
+my $lcd;
+
+if ($ENV{BB_RPI_LCD}){
+    my @pins = split /,/, $ENV{BB_RPI_LCD};
+    $lcd = _lcd(@pins) if @pins == 6;
+}
+
 sub new {
     my ($class, %args) = @_;
 
@@ -107,29 +114,24 @@ sub auto {
             $log->_7("RPi specific testing enabled");
 
             if ($ENV{BB_RPI_LCD}){
-                my @pins = split /,/, $ENV{BB_RPI_LCD};
-                if (@pins == 6){
-                    if ($results_returned){
-                        my $commit = $git->revision(remote => 1, repo => $params{repo});
-                        $commit = substr $commit, 0, 7;
+                if ($results_returned){
+                    my $commit = $git->revision(remote => 1, repo => $params{repo});
+                    $commit = substr $commit, 0, 7;
 
-                        my $time = strftime(
-                            "%Y-%m-%d %H:%M:%S", localtime(time)
-                        );
-                        
-                        my $lcd = _lcd(@pins);
+                    my $time = strftime(
+                        "%Y-%m-%d %H:%M:%S", localtime(time)
+                    );
+                    
+                    $lcd->clear;
 
-                        $lcd->clear;
+                    $lcd->position(0, 0);
+                    $lcd->print($time);
 
-                        $lcd->position(0, 0);
-                        $lcd->print($time);
+                    $lcd->position(0, 1);
+                    $lcd->print($ENV{BB_RUN_STATUS});
 
-                        $lcd->position(0, 1);
-                        $lcd->print($ENV{BB_RUN_STATUS});
-
-                        $lcd->position(9, 1);
-                        $lcd->print($commit);
-                    }
+                    $lcd->position(9, 1);
+                    $lcd->print($commit);
                 }
                 else {
                     $log->_1(
