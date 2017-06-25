@@ -157,9 +157,11 @@ sub auto {
             $log->_7("not in --rpi mode");
         }
 
-        $log->_6(
-            "auto run complete. Sleeping, then restarting if more runs required"
-        );
+        my $sleep_msg = 
+            "auto run complete. Sleeping for $sleep seconds, then restarting" .
+            " if more runs required";
+
+        $log->_6($sleep_msg);
 
         exit() if $run_count >= $runs && $runs != 0;
         $run_count++;

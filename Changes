@@ -26,6 +26,8 @@ Revision history for Test-BrewBuild
           "user/repo-name" format
         - hard coded MetaCPAN::Client version in Makefile, but appears there's
           a bug with the revdep method. See metacpan/metacpan-client#89
+        - updated auto log entry at end of dispatch run to include seconds
+          we'll be sleeping (closes #212)
 
 2.17    2017-04-27
         - troubleshooting issue where this current commit is causing the LCD
