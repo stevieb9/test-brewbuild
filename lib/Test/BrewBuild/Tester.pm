@@ -71,21 +71,18 @@ sub start {
     my $self = shift;
 
     my $log = $log->child("start");
-    my $pid_file = $self->_pid_file;
 
     if ($self->status){
-        my $fh;
-        open $fh, '<', $pid_file or croak $!;
-        my $existing_pid = <$fh>;
-        close $fh;
+        my $existing_pid = $self->pid;
 
         if ($existing_pid){
             if (kill(0, $existing_pid)){
-                $log->_0("tester is already running at PID $existing_pid");
-                croak "\nTest::BrewBuild test server already running " .
+                $log->_1("tester is already running at PID $existing_pid");
+                warn "\nTest::BrewBuild test server already running " .
                     "on PID $existing_pid...\n\n";
             }
         }
+        return;
     }
 
     my ($perl, @args);
@@ -156,7 +153,7 @@ sub start {
     print "\nStarted the Test::BrewBuild test server at PID $pid on IP " .
       "address $ip and TCP port $port...\n\n";
 
-    open my $wfh, '>', $pid_file or croak $!;
+    open my $wfh, '>', $self->_pid_file or croak $!;
     print $wfh $pid;
     close $wfh;
 
@@ -164,10 +161,7 @@ sub start {
 
     if ($self->status){
         sleep 1;
-        my $fh;
-        open $fh, '<', $pid_file or croak $!;
-        my $existing_pid = <$fh>;
-        close $fh;
+        my $existing_pid = $self->pid;
 
         if ($existing_pid){
             if (! kill(0, $existing_pid)){
@@ -193,11 +187,9 @@ sub stop {
         return;
     }
 
+    my $pid = $self->pid;
     my $pid_file = $self->_pid_file;
 
-    open my $fh, '<', $pid_file or croak $!;
-    my $pid = <$fh>;
-    close $fh;
     $log->_5("Stopping the BB test server at PID $pid");
     print "\nStopping the Test::BrewBuild test server at PID $pid...\n\n";
     kill 'KILL', $pid;
@@ -206,8 +198,14 @@ sub stop {
 sub status {
     my $self = shift;
     my $log = $log->child("status");
-    my $pid_file = $self->_pid_file;
-    my $status = -f $pid_file ? 1 : 0;
+
+    my $status;
+    if (defined $self->pid && $self->pid){
+        $status = 1;
+    }
+    else {
+        $status = 0;
+    }
     $log->_6("test server status: $status");
     return $status;
 }
@@ -495,6 +493,17 @@ sub _config {
         $self->{conf}{port} = $conf->{port};
     }
 }
+sub pid {
+    my $pid;
+    if (-f $_[0]->_pid_file){
+        open my $fh, '<', $_[0]->_pid_file or croak "can't open PID file!: $!";
+        $pid = <$fh>;
+    }
+    else {
+        $pid = undef;
+    }
+    return $pid;
+}        
 sub _pid_file {
     # fetch the PID file location, and set the file
     my $self = shift;
@@ -505,6 +514,7 @@ sub _unsafe_args {
     # non-allowed chars in bbdispach's "-c" command line string for brewbuild
     return ['*', '#', '!', '?', '^', '$', '|', '\\'];
 }
+sub __placeholder {} # vim folds
 
 1;
 
@@ -555,7 +565,13 @@ Stops the tester and all of its processes.
 
 =head2 status
 
-Returns 1 if there's a tester currently running, and 0 if not.
+Returns the current PID (true) if there's a tester currently running, and 0 if
+not.
+
+=head2 pid
+
+Returns the current PID the tester is running under if it is running, and C<0>
+if not.
 
 =head2 ip($ip)
 
