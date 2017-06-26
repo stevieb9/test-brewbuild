@@ -1,6 +1,6 @@
 Revision history for Test-BrewBuild
 
-2.18 UNREL
+2.18    2017-06-25
         - logging output modifications (changes and relocations)
         - in Git::listen(), we now make comparisons of the commit checksums, and
           if they are equal, we no longer perform a pull request
@@ -31,6 +31,8 @@ Revision history for Test-BrewBuild
           we'll be sleeping (closes #212)
         - fix issue where the repo link was being pre-pended twice with the URL
           in log entries due to an earlier change (closes #211)
+        - opened PR https://github.com/metacpan/metacpan-client/pull/90 for
+          MetaCPAN::Client
 
 2.17    2017-04-27
         - troubleshooting issue where this current commit is causing the LCD
