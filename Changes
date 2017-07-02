@@ -5,6 +5,8 @@ Revision history for Test-BrewBuild
           is currently running or not (closes #214)
         - added pid() to Tester.pm, returns the running PID, and 0 if a tester
           is not currently running
+        - Dispatch now has a separation between a finish and a start
+          (closes #215)
 
 2.18    2017-06-25
         - logging output modifications (changes and relocations)

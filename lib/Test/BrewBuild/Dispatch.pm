@@ -62,7 +62,7 @@ sub auto {
 
     my $log = $log->child('auto');
 
-    $log->_5("commencing auto run dispatch sequence");
+    $log->_5("\nCommencing auto run dispatch sequence");
 
     $last_run_status = $ENV{BB_RUN_STATUS};
 
@@ -89,7 +89,7 @@ sub auto {
     while (1){
 
         if (! $runs){
-            $log->_6("commencing run $run_count");
+            $log->_6("COMMENCING RUN: $run_count\n");
         }
         else {
             $log->_6("commencing run $run_count of $runs");
@@ -159,7 +159,7 @@ sub auto {
 
         my $sleep_msg =
             "auto run complete. Sleeping for $sleep seconds, then restarting" .
-            " if more runs required";
+            " if more runs required\n";
 
         $log->_6($sleep_msg);
 
