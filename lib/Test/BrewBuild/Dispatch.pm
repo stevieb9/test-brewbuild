@@ -115,7 +115,7 @@ sub auto {
         if ($self->{rpi}){
             $log->_7("RPi specific testing enabled");
 
-            if ($ENV{BB_RPI_LCD}}){
+            if ($ENV{BB_RPI_LCD}){
                 if ($results_returned){
                     my $commit = $git->revision(remote => 1, repo => $params{repo});
                     $commit = substr $commit, 0, 7;
