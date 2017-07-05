@@ -23,12 +23,7 @@ use constant REPO_PREFIX => 'https://github.com/';
 my ($log, $last_run_status, $results_returned);
 $ENV{BB_RUN_STATUS} = 'PASS';
 
-my $lcd;
-
-if ($ENV{BB_RPI_LCD}){
-    my @pins = split /,/, $ENV{BB_RPI_LCD};
-    $lcd = _lcd(@pins) if @pins == 6;
-}
+my $lcd; # RPi specific testing
 
 sub new {
     my ($class, %args) = @_;
@@ -120,7 +115,7 @@ sub auto {
         if ($self->{rpi}){
             $log->_7("RPi specific testing enabled");
 
-            if ($ENV{BB_RPI_LCD}){
+            if ($ENV{BB_RPI_LCD}}){
                 if ($results_returned){
                     my $commit = $git->revision(remote => 1, repo => $params{repo});
                     $commit = substr $commit, 0, 7;
@@ -128,6 +123,9 @@ sub auto {
                     my $time = strftime(
                         "%Y-%m-%d %H:%M:%S", localtime(time)
                     );
+
+                    my @pins = split /,/, $ENV{BB_RPI_LCD};
+                    $lcd = _lcd(@pins) if @pins == 6;
 
                     $lcd->clear;
 

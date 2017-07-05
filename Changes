@@ -7,6 +7,8 @@ Revision history for Test-BrewBuild
           is not currently running
         - Dispatch now has a separation between a finish and a start
           (closes #215)
+        - moved Dispatch LCD initialization call to within the block its needed.
+          See stevieb9/rpi-wiringpi#41
 
 2.18    2017-06-25
         - logging output modifications (changes and relocations)
