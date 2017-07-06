@@ -75,7 +75,7 @@ sub start {
     my $existing_pid = $self->pid;
 
     if ($existing_pid){
-        if (kill(0, $existing_pid)){
+        if (kill 0, $existing_pid){
             $log->_1("tester is already running at PID $existing_pid");
             warn "\nTest::BrewBuild test server already running " .
                 "on PID $existing_pid...\n\n";
@@ -173,7 +173,7 @@ sub start {
         my $existing_pid = $self->pid;
 
         if ($existing_pid){
-            if (! kill(0, $existing_pid)){
+            if (! kill 0, $existing_pid){
                 $log->_0("error! run bbtester --fg at the CLI and check for " .
                          "failure"
                 );
@@ -211,9 +211,7 @@ sub status {
     my $status;
 
     if (defined $self->pid && $self->pid){
-        my $ok = kill 0, $self->pid;
-
-        if (! kill(0, $self->pid)){
+        if (! kill 0, $self->pid){
             $log->_1("bbtester is in an inconsistent state. Cleaning up...");
             warn "\nbbtester is in an inconsistent state. Cleaning up...\n\n";
             unlink $self->_pid_file or die "can't remove PID file...\n";
