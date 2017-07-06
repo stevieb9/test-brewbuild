@@ -9,6 +9,9 @@ Revision history for Test-BrewBuild
           (closes #215)
         - moved Dispatch LCD initialization call to within the block its needed.
           See stevieb9/rpi-wiringpi#41
+        - Tester has been significantly beefed to to properly know when it has
+          been left in an inconsistent state, and properly cleans itself up in
+          all three phases (start, stop and status). (closes #219)
 
 2.18    2017-06-25
         - logging output modifications (changes and relocations)

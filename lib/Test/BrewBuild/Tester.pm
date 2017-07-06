@@ -72,17 +72,26 @@ sub start {
 
     my $log = $log->child("start");
 
-    if ($self->status){
-        my $existing_pid = $self->pid;
+    my $existing_pid = $self->pid;
 
-        if ($existing_pid){
-            if (kill(0, $existing_pid)){
-                $log->_1("tester is already running at PID $existing_pid");
-                warn "\nTest::BrewBuild test server already running " .
-                    "on PID $existing_pid...\n\n";
-            }
+    if ($existing_pid){
+        if (kill(0, $existing_pid)){
+            $log->_1("tester is already running at PID $existing_pid");
+            warn "\nTest::BrewBuild test server already running " .
+                "on PID $existing_pid...\n\n";
+
+            return;
         }
-        return;
+        else {
+            $log->_1(
+                "tester is not running, but a PID file exists for " .
+                "PID $existing_pid. The tester must have crashed."
+            );
+            warn "\nTest::BrewBuild test server crashed in a previous " .
+                 "run. Cleaning up and starting...\n\n";
+
+            unlink $self->_pid_file or die "can't remove PID file...\n";
+        }
     }
 
     my ($perl, @args);
@@ -200,8 +209,19 @@ sub status {
     my $log = $log->child("status");
 
     my $status;
+
     if (defined $self->pid && $self->pid){
-        $status = 1;
+        my $ok = kill 0, $self->pid;
+
+        if (! kill(0, $self->pid)){
+            $log->_1("bbtester is in an inconsistent state. Cleaning up...");
+            warn "\nbbtester is in an inconsistent state. Cleaning up...\n\n";
+            unlink $self->_pid_file or die "can't remove PID file...\n";
+            $status = 0;
+        }
+        else {
+            $status = 1;
+        }
     }
     else {
         $status = 0;
