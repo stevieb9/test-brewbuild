@@ -125,7 +125,10 @@ sub auto {
                     );
 
                     my @pins = split /,/, $ENV{BB_RPI_LCD};
-                    $lcd = _lcd(@pins) if @pins == 6;
+
+                    if (! $lcd && @pins == 6){
+                        $lcd = _lcd(@pins);
+                    }
 
                     $lcd->clear;
 

@@ -12,6 +12,8 @@ Revision history for Test-BrewBuild
         - Tester has been significantly beefed to to properly know when it has
           been left in an inconsistent state, and properly cleans itself up in
           all three phases (start, stop and status). (closes #219)
+        - fixed a regression where somehow, the LCD object was being created in
+          loop fashion, crashing when the limit of eight was reached
 
 2.18    2017-06-25
         - logging output modifications (changes and relocations)
