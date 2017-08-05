@@ -15,6 +15,8 @@ Revision history for Test-BrewBuild
         - fixed a regression where somehow, the LCD object was being created in
           loop fashion, crashing when the limit of eight was reached 
           (closes #221)
+        - --rpi mode for bbdispatch now prints the number of runs completed when
+          in auto mode on the LCD
 
 2.18    2017-06-25
         - logging output modifications (changes and relocations)

@@ -87,7 +87,7 @@ sub auto {
             $log->_6("COMMENCING RUN: $run_count\n");
         }
         else {
-            $log->_6("commencing run $run_count of $runs");
+            $log->_6("COMMENCING RUN: $run_count of $runs");
         }
 
         my $results = $self->dispatch(%params);
@@ -111,13 +111,14 @@ sub auto {
             $results_returned = 0;
         }
 
-    
         if ($self->{rpi}){
             $log->_7("RPi specific testing enabled");
 
             if ($ENV{BB_RPI_LCD}){
                 if ($results_returned){
-                    my $commit = $git->revision(remote => 1, repo => $params{repo});
+                    my $commit = $git->revision(
+                        remote => 1, repo => $params{repo}
+                    );
                     $commit = substr $commit, 0, 7;
 
                     my $time = strftime(
@@ -138,8 +139,11 @@ sub auto {
                     $lcd->position(0, 1);
                     $lcd->print($ENV{BB_RUN_STATUS});
 
-                    $lcd->position(9, 1);
+                    $lcd->position(5, 1);
                     $lcd->print($commit);
+
+                    $lcd->position(13, 1);
+                    $lcd->print($run_count);
                 }
                 else {
                     $log->_1(
