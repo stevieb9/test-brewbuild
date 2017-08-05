@@ -1,6 +1,6 @@
 Revision history for Test-BrewBuild
 
-2.19 UNREL
+2.19    2017-08-05
         - added 'status' command to bbtester, prints to STDOUT whether a tester
           is currently running or not (closes #214)
         - added pid() to Tester.pm, returns the running PID, and 0 if a tester
