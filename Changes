@@ -1,7 +1,7 @@
 Revision history for Test-BrewBuild
 
 2.20 UNREL
-        -
+        - the default plugin now uses double verbosity for the cpanm commands
 
 2.19    2017-08-05
         - added 'status' command to bbtester, prints to STDOUT whether a tester

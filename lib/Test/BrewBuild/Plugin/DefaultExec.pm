@@ -70,5 +70,5 @@ Steve Bertrand, C<< <steveb at cpan.org> >>
 
 __DATA__
 cpan App::cpanminus
-cpanm --installdeps .
-cpanm -v --test-only .
+cpanm -vv --installdeps .
+cpanm -vv --test-only .
