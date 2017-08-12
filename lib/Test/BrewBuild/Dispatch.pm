@@ -112,24 +112,26 @@ sub auto {
         }
 
         if ($self->{rpi}){
-            $log->_7("RPi specific testing enabled");
+            $log->_7("RPi LCD test result output enabled");
 
             if ($ENV{BB_RPI_LCD}){
-                if ($results_returned){
-                    my $commit = $git->revision(
-                        remote => 1, repo => $params{repo}
-                    );
-                    $commit = substr $commit, 0, 7;
 
-                    my $time = strftime(
-                        "%y%m%d %H%M%S", localtime(time)
-                    );
+                if ($results_returned){
 
                     my @pins = split /,/, $ENV{BB_RPI_LCD};
 
                     if (! $lcd && @pins == 6){
                         $lcd = _lcd(@pins);
                     }
+
+                    my $commit = $git->revision(
+                        remote => 1, repo => $params{repo}
+                    );
+
+                    $commit = substr $commit, 0, 7;
+                    my $time = strftime(
+                        "%y%m%d %H%M%S", localtime(time)
+                    );
 
                     $lcd->clear;
 
