@@ -122,7 +122,7 @@ sub auto {
                     $commit = substr $commit, 0, 7;
 
                     my $time = strftime(
-                        "%Y-%m-%d %H:%M:%S", localtime(time)
+                        "%y%m%d %H%M%S", localtime(time)
                     );
 
                     my @pins = split /,/, $ENV{BB_RPI_LCD};
