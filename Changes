@@ -1,6 +1,7 @@
 Revision history for Test-BrewBuild
 
 2.20 UNREL
+        - modified layout of LCD output to be more conducive of numerous runs
 
 2.19    2017-08-05
         - added 'status' command to bbtester, prints to STDOUT whether a tester

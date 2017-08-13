@@ -57,7 +57,7 @@ sub auto {
 
     my $log = $log->child('auto');
 
-    $log->_5("\nCommencing auto run dispatch sequence");
+    $log->_5("Commencing auto run dispatch sequence");
 
     $last_run_status = $ENV{BB_RUN_STATUS};
 
@@ -129,8 +129,9 @@ sub auto {
                     );
 
                     $commit = substr $commit, 0, 7;
+
                     my $time = strftime(
-                        "%y%m%d %H%M%S", localtime(time)
+                        "%m/%d %H:%M", localtime(time)
                     );
 
                     $lcd->clear;
@@ -138,13 +139,13 @@ sub auto {
                     $lcd->position(0, 0);
                     $lcd->print($time);
 
-                    $lcd->position(0, 1);
+                    $lcd->position(12, 0);
                     $lcd->print($ENV{BB_RUN_STATUS});
 
-                    $lcd->position(5, 1);
+                    $lcd->position(9, 1);
                     $lcd->print($commit);
 
-                    $lcd->position(13, 1);
+                    $lcd->position(0, 1);
                     $lcd->print($run_count);
                 }
                 else {
