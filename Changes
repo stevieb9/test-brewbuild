@@ -2,6 +2,9 @@ Revision history for Test-BrewBuild
 
 2.20 UNREL
         - modified layout of LCD output to be more conducive of numerous runs
+        - refactored the bbdispatch "auto" argument handling, fixing an issue
+          where setting a run count never stopped auto mode (fixes #224)
+        - cleanup of logging in auto mode upon completion of a run
 
 2.19    2017-08-05
         - added 'status' command to bbtester, prints to STDOUT whether a tester

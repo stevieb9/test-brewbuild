@@ -7,11 +7,11 @@ use Test::BrewBuild::Dispatch;
 
 our $VERSION = '2.20';
 
-my %args;
+my %args = (auto => -1);
 my $help;
 
 GetOptions(
-    "auto"       => \$args{auto},
+    "auto:i"     => \$args{auto},
     "cmd=s"      => \$args{cmd},
     "testers=s@" => \$args{testers},
     "r|repo=s"   => \$args{repo},
@@ -32,13 +32,13 @@ exit;
 }
 
 my $dispatcher = Test::BrewBuild::Dispatch->new(
+    auto => $args{auto},
     debug => $args{debug},
     forks => $args{forks},
-    auto => $args{auto},
     rpi => $args{rpi}
 );
 
-if (defined $args{auto}){
+if ($args{auto} >= 0){
     $dispatcher->auto(%args);
     exit();
 }
@@ -170,7 +170,7 @@ argument to change the default number of concurrent testers.
 =head2 -a, --auto
 
 This command tells the dispatcher to throw tests at the Testers continuously.
-With no argument or an argument of C<1>, we'll run forever. Any other integer
+With no argument (or an argument of C<0>), we'll run forever. Any other integer
 will run in auto mode for that many cycles.
 
 The C<--repo|-r> parameter is *mandatory* when in auto mode.

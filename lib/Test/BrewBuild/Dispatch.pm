@@ -39,11 +39,7 @@ sub new {
 
     $log->child('new')->_5("instantiating new object");
 
-    if (defined $args{auto}){
-        $self->{auto} = $args{auto};
-        $self->{auto} = 0 if $self->{auto} == 1;
-    }
-
+    $self->{auto} = $args{auto};
     $self->{autotest} = $args{autotest} if defined $args{autotest};
     $self->{forks} = defined $args{forks} ? $args{forks} : 4;
     $self->{rpi} = defined $args{rpi} ? $args{rpi} : undef;
@@ -165,14 +161,19 @@ sub auto {
             $log->_7("not in --rpi mode");
         }
 
-        my $sleep_msg =
-            "auto run complete. Sleeping for $sleep seconds, then restarting" .
-            " if more runs required\n";
-
-        $log->_6($sleep_msg);
-
-        exit() if $run_count >= $runs && $runs != 0;
-        $run_count++;
+        if ($run_count >= $runs && $runs != 0){
+            $log->_6(
+                "auto run complete. No more runs to perform, exiting...\n"
+            );
+            exit;
+        }
+        else {
+            $log->_6(
+                "auto run complete. Sleeping for $sleep seconds, then " .
+                "commencing the next run\n"
+            );
+            $run_count++;
+        }
 
         sleep $sleep;
     }
