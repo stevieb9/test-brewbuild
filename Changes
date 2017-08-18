@@ -5,6 +5,7 @@ Revision history for Test-BrewBuild
         - refactored the bbdispatch "auto" argument handling, fixing an issue
           where setting a run count never stopped auto mode (fixes #224)
         - cleanup of logging in auto mode upon completion of a run
+        - updated perls in Travis CI to include 5.26, 5.24 and blead
 
 2.19    2017-08-05
         - added 'status' command to bbtester, prints to STDOUT whether a tester
