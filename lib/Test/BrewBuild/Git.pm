@@ -85,6 +85,10 @@ sub clone {
         `"$git" clone $repo`;
     };
 
+    if ($output =~ /fatal/){
+        croak "fatal error cloning $repo, can't clone...\n";
+    }
+
     return $output;
 }
 sub pull {
