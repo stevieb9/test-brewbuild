@@ -149,7 +149,7 @@ my $mod = 'Test::BrewBuild::Tester';
     # crash the tester
 
     kill 'KILL', $t->pid;
-    select(undef, undef, undef, 0.05);
+    select(undef, undef, undef, 0.10);
 
     my $stop = capture_merged {
         $t->stop;
@@ -187,7 +187,7 @@ my $mod = 'Test::BrewBuild::Tester';
     # crash the tester
 
     kill 'KILL', $t->pid;
-    select(undef, undef, undef, 0.05);
+    select(undef, undef, undef, 0.10);
 
     my $re_start = capture_merged {
         $t->start
@@ -227,7 +227,7 @@ my $mod = 'Test::BrewBuild::Tester';
     # crash the tester
 
     kill 'KILL', $t->pid;
-    select(undef, undef, undef, 0.05);
+    select(undef, undef, undef, 0.10);
 
     my $status = 1;
 
