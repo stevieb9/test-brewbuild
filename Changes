@@ -10,6 +10,9 @@ Revision history for Test-BrewBuild
           (fixes #226)
         - fix issue in Git::clone() where we weren't croaking if a fatal error
           when cloning was encountered
+        - fix issue in t_bugs/164_dispatch_show_help_on_bad_args.t where we
+          were reading the config file causing failure. Now we just move it out
+          of the way temporarily to confirm the bug was fixed correctly
 
 2.19    2017-08-05
         - added 'status' command to bbtester, prints to STDOUT whether a tester
