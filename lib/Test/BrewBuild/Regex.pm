@@ -2,17 +2,34 @@ package Test::BrewBuild::Git;
 use strict;
 use warnings;
 
-use Capture::Tiny qw(:all);
 use Carp qw(croak);
-use Logging::Simple;
-use LWP::Simple qw(head);
+use Exporter qw(import);
 
 our $VERSION = '2.20';
 
-my $log;
+our @EXPORT_OK = qw(
+    brewbuild
+);
+our %EXPORT_TAGS = (all => \@EXPORT_OK);
 
-1;
+my %brewbuild = (
+    extract_result => qr{
+        [Pp]erl-\d\.\d+\.\d+(?:_\w+)?\s+===
+        .*?
+        (?=(?:[Pp]erl-\d\.\d+\.\d+(?:_\w+)?\s+===|$))
+    },
+);
 
+sub brewbuild {
+    my $re = shift;
+    _check(__SUB__, $re);
+    return $brewbuild{$re};
+}
+sub _check {
+    my ($module, $re) = @_;
+    croak "regex '$re' doesn't exist for brewbuild()"
+      if ! exists $module{$re};
+}
 =head1 NAME
 
 Test::BrewBuild::Regex - Various regexen for the Test::BrewBuild platform
@@ -41,3 +58,5 @@ See L<http://dev.perl.org/licenses/> for more information.
 
 =cut
  
+
+rt
