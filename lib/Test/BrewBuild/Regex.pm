@@ -28,7 +28,7 @@ sub brewbuild {
 sub _check {
     my ($module, $re) = @_;
     croak "regex '$re' doesn't exist for brewbuild()"
-      if ! exists $module{$re};
+      if ! exists $module->{$re};
 }
 =head1 NAME
 
