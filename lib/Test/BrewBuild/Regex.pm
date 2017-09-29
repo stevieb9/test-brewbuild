@@ -30,6 +30,9 @@ sub _check {
     croak "regex '$re' doesn't exist for brewbuild()"
       if ! exists $module->{$re};
 }
+
+1;
+
 =head1 NAME
 
 Test::BrewBuild::Regex - Various regexen for the Test::BrewBuild platform
