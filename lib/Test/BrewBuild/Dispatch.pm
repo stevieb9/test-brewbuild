@@ -111,13 +111,21 @@ sub auto {
             $log->_7("RPi LCD test result output enabled");
 
             if ($ENV{BB_RPI_LCD}){
-
                 if ($results_returned){
 
                     my @pins = split /,/, $ENV{BB_RPI_LCD};
 
                     if (! $lcd && @pins == 6){
                         $lcd = _lcd(@pins);
+                    }
+                    elsif (! $lcd && @pins != 6) {
+                        $log->_1(
+                            "in --rpi mode, but BB_RPI_LCD env var not set " .
+                            "correctly"
+                        );
+                        warn "bbdispatch is in --rpi mode, but the BB_RPI_LCD ".
+                             " env var isn't set correctly. See the documentation" .
+                             "...\n";
                     }
 
                     my $commit = $git->revision(
@@ -143,14 +151,6 @@ sub auto {
 
                     $lcd->position(0, 1);
                     $lcd->print($run_count);
-                }
-                else {
-                    $log->_1(
-                        "in --rpi mode, but BB_RPI_LCD env var not set " .
-                        "correctly"
-                    );
-                    warn "bbdispatch is in --rpi mode, but the BB_RPI_LCD ".
-                         " env var isn't set. See the documentation...\n";
                 }
             }
             else {
