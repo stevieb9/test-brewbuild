@@ -22,7 +22,7 @@ my %brewbuild = (
 
 sub brewbuild {
     my $re = shift;
-    _check(__SUB__, $re);
+    _check(\%brewbuild, $re);
     return $brewbuild{$re};
 }
 sub _check {
@@ -55,8 +55,3 @@ under the terms of either: the GNU General Public License as published
 by the Free Software Foundation; or the Artistic License.
 
 See L<http://dev.perl.org/licenses/> for more information.
-
-=cut
- 
-
-rt

@@ -10,9 +10,5 @@ use Test::More;
 #    exit;
 #}
 
-{
-
-}
-
 done_testing();
 
