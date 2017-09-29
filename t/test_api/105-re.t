@@ -10,5 +10,6 @@ use Test::More;
 #    exit;
 #}
 
+ok 1==1;
 done_testing();
 
