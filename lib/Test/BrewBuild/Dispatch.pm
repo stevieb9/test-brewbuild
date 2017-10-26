@@ -87,7 +87,6 @@ sub auto {
         }
 
         my $results = $self->dispatch(%params);
-
         my @short_results = $results =~ /(5\.\d{1,2}\.\d{1,2} :: \w{4})/g;
 
         print "$_\n" for @short_results;
@@ -116,7 +115,7 @@ sub auto {
                     my @pins = split /,/, $ENV{BB_RPI_LCD};
 
                     if (! $lcd && @pins == 6){
-                        $lcd = _lcd(@pins);
+                        $lcd = _lcd(\@pins, $self->{rpi_lcd_rows}, $self->{rpi_lcd_cols});
                     }
                     elsif (! $lcd && @pins != 6) {
                         $log->_1(
@@ -134,23 +133,42 @@ sub auto {
 
                     $commit = substr $commit, 0, 7;
 
-                    my $time = strftime(
-                        "%m/%d %H:%M", localtime(time)
-                    );
+                    my $time;
+
+                    if ($self->{rpi_lcd_cols} == 20){
+                        $time = strftime(
+                            "%Y/%m/%d %H:%M", localtime(time)
+                        );
+                    }
+                    else {
+                        $time = strftime(
+                            "%m/%d %H:%M", localtime(time)
+                        );
+                    }
+
+                    my ($repo) = $params{repo} =~ m|.*/(.*)|;
 
                     $lcd->clear;
+                    $self->_lcd_display(
+                        $lcd,
+                        commit => $commit,
+                        time => $time,
+                        run_count => $run_count,
+                        repo => $repo,
+                    );
 
-                    $lcd->position(0, 0);
-                    $lcd->print($time);
+#                    $lcd->position(0, 0);
+#                    $lcd->print($time);
+                    
+#                    $lcd->position(12, 0);
+#                    $lcd->print($ENV{BB_RUN_STATUS});
 
-                    $lcd->position(12, 0);
-                    $lcd->print($ENV{BB_RUN_STATUS});
+#                    $lcd->position(9, 1);
+#                    $lcd->print($commit);
 
-                    $lcd->position(9, 1);
-                    $lcd->print($commit);
+#                    $lcd->position(0, 1);
+#                    $lcd->print($run_count);
 
-                    $lcd->position(0, 1);
-                    $lcd->print($run_count);
                 }
             }
             else {
@@ -181,22 +199,22 @@ sub auto {
 sub _lcd {
     # used only for dispatching to an RPi in auto mode
 
-    my @pins = @_;
+    my ($pins, $rows, $cols) = @_;
 
     require RPi::LCD;
 
     my $lcd = RPi::LCD->new;
 
     $lcd->init(
-        rows    => 2,
-        cols    => 16,
+        rows    => $rows,
+        cols    => $cols,
         bits    => 4,
-        rs      => $pins[0],
-        strb    => $pins[1],
-        d0      => $pins[2],
-        d1      => $pins[3],
-        d2      => $pins[4],
-        d3      => $pins[5],
+        rs      => $pins->[0],
+        strb    => $pins->[1],
+        d0      => $pins->[2],
+        d1      => $pins->[3],
+        d2      => $pins->[4],
+        d3      => $pins->[5],
         d4      => 0,
         d5      => 0,
         d6      => 0,
@@ -204,6 +222,39 @@ sub _lcd {
     );
 
     return $lcd;
+}
+sub _lcd_display {
+    my ($self, $lcd, %args) = @_;
+
+    if ($self->{rpi_lcd_rows} == 4 && $self->{rpi_lcd_cols} == 20){
+        $lcd->position(0, 0);
+        $lcd->print($args{repo}); 
+
+        $lcd->position(0, 1);
+        $lcd->print($args{time});
+
+        $lcd->position(0, 2);
+        $lcd->print($ENV{BB_RUN_STATUS});
+
+        $lcd->position(5, 2);
+        $lcd->print("commit: $args{commit}");
+
+        $lcd->position(0, 3);
+        $lcd->print("runs: $args{run_count}");
+    }
+    else {
+        $lcd->position(0, 0);
+        $lcd->print($args{time});
+
+        $lcd->position(12, 0);
+        $lcd->print($ENV{BB_RUN_STATUS});
+
+        $lcd->position(9, 1);
+        $lcd->print($args{commit});
+
+        $lcd->position(0, 1);
+        $lcd->print($args{run_count});
+    }
 }
 sub dispatch {
     my ($self, %params) = @_;
@@ -314,6 +365,10 @@ sub _config {
         $self->{cmd} = $conf->{cmd} if $conf->{cmd};
         $self->{auto_sleep} = $conf->{auto_sleep} 
           if defined $conf->{auto_sleep};
+        $self->{rpi} = $conf->{rpi} || 0;
+        $self->{rpi_lcd_rows} = $conf->{rpi_lcd_rows} || 4;
+        $self->{rpi_lcd_cols} = $conf->{rpi_lcd_cols} || 20;
+        print "r: $self->{rpi_lcd_rows}, c: $self->{rpi_lcd_cols}\n";
     }
 }
 sub _fork {

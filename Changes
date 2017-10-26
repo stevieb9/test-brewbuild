@@ -15,6 +15,9 @@ Revision history for Test-BrewBuild
           of the way temporarily to confirm the bug was fixed correctly
         - changed the logic of Dispatch when in auto mode so that LCD warnings
           are thrown at the correct time
+        - added rpi_lcd_cols and rpi_lcd_rows directives to the config file for
+          Dispatch; sets the LCD row and column count, and modified the display
+          for 4x20 LCDs
 
 2.19    2017-08-05
         - added 'status' command to bbtester, prints to STDOUT whether a tester
