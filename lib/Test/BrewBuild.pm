@@ -620,7 +620,7 @@ sub _exec {
         my $ret
           = `$brew exec --with $vers perl $fname 2>$self->{tempdir}/stderr.bblog`;
 
-        $self->_dzil_unshim if $self->{is_dzil};
+        $self->_dzil_unshim;
 
         return $ret;
     }
@@ -657,7 +657,7 @@ sub _exec {
                 }
             }
 
-            $self->_dzil_unshim if $self->{is_dzil};
+            $self->_dzil_unshim;
 
             my $result;
 
@@ -686,7 +686,7 @@ sub _exec {
 
             my $ret = `$brew exec perl $fname 2>$self->{tempdir}/stderr.bblog`;
 
-            $self->_dzil_unshim if $self->{is_dzil};
+            $self->_dzil_unshim;
 
             return $ret;
         }
@@ -747,6 +747,11 @@ sub _dzil_unshim {
     # unshim after doing dzil work
 
     my $log = $log->child('_dzil_unshim');
+
+    if (! $self->{is_dzil}){
+        $log->_7("not a dzil distribution; nothing to do");
+    }
+
     $log->_5("removing dzil shim");
 
     my $self = shift;

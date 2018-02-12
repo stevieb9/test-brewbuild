@@ -21,6 +21,8 @@ Revision history for Test-BrewBuild
         - removed "--yes" from the perlbrew uninstall command. Newer versions
           of Perlbrew don't seem to honour it
         - slight test cleanup
+        - _dzil_unshim() now returns early if not operating on a Dist::Zilla
+          distribution (closes #230)
 
 2.19    2017-08-05
         - added 'status' command to bbtester, prints to STDOUT whether a tester
