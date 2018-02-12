@@ -148,29 +148,6 @@ Defaults to undefined. This is used in conjunction with C<auto3 logfile
 Defaults to undefined. Send in the name of a writable file location and we'll
 output our debug data to this file.
 
-=head3 auto
-
-Defaults to undefined. Send in a true value to have the Tester run in
-automated Continuous Integration mode.
-
-=head3 csum
-
-Defaults to undefined. This is used in conjunction with C<auto3 logfile
-
-Defaults to undefined. Send in the name of a writable file location and we'll
-output our debug data to this file.
-
-=head3 auto
-
-Defaults to undefined. Send in a true value to have the Tester run in
-automated Continuous Integration mode.
-
-=head3 csum
-
-Defaults to undefined. This is used in conjunction with C<auto>. Set to a true
-value and instead of running tests only when a repository has a new commit added
-we'll run on each of the dispatchers C<auto_sleep> parameter setting.
-
 =head3 debug
 
 Defaults to off (0). Set to 0-7 to enable that level of debug output.

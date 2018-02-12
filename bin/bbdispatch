@@ -183,6 +183,11 @@ mode. It requires the C<$ENV{BB_RPI_LCD}> environment variable set, with a
 comma-separated list of pin numbers in the format C<'1,2,3,4,5,6'>, where the
 GPIO pin numbers are in the order of C<RS, E, D0, D1, D2, D3>.
 
+To use the larger 4 row by 20 column LCD, append the number of rows and columns
+to the end of the environment variable:
+
+    BB_RPI_LCD=5,6,4,17,27,22,4,20
+
 =head1 AUTHOR
 
 Steve Bertrand, C<< <steveb at cpan.org> >>

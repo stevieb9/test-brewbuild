@@ -112,8 +112,14 @@ sub auto {
             if ($ENV{BB_RPI_LCD}){
                 if ($results_returned){
 
-                    my @pins = split /,/, $ENV{BB_RPI_LCD};
+                    my @lcd_info = split /,/, $ENV{BB_RPI_LCD};
+                    my @pins;
 
+                    if (@lcd_info == 8){
+                        $self->{rpi_lcd_rows} = $lcd_info[6];
+                        $self->{rpi_lcd_cols} = $lcd_info[7];
+                        @pins = @lcd_info[0..5];
+                    }
                     if (! $lcd && @pins == 6){
                         $lcd = _lcd(\@pins, $self->{rpi_lcd_rows}, $self->{rpi_lcd_cols});
                     }

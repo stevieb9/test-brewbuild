@@ -24,6 +24,8 @@ Revision history for Test-BrewBuild
         - _dzil_unshim() now returns early if not operating on a Dist::Zilla
           distribution (closes #230)
         - added all config file directives to the config file POD (closes #227)
+        - to allow for 4x2 RPi LCDs, we've extended the environment variable
+          (closes #231)
 
 2.19    2017-08-05
         - added 'status' command to bbtester, prints to STDOUT whether a tester
