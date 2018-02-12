@@ -60,7 +60,7 @@ else {
     is ($inst_cmd, 'perlbrew install --notest -j 4', "nix: install() ok");
 
     my $remove_cmd = $bc->remove;
-    is ($remove_cmd, 'perlbrew --yes uninstall', "nix: remove() ok");
+    is ($remove_cmd, 'perlbrew uninstall', "nix: remove() ok");
 
     is ($bc->is_win, 0, "nix: is win ok");
 }

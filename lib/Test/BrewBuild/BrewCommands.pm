@@ -118,7 +118,7 @@ sub remove {
 
     my $remove_cmd = $self->is_win
         ? "$self->{brew} remove"
-        : 'perlbrew --yes uninstall';
+        : 'perlbrew uninstall';
 
     $log->child('remove')->_6("remove cmd is: $remove_cmd");
 

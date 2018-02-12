@@ -15,8 +15,11 @@ if (! $ENV{BBDEV_TESTING}){
 }
 
 my $workdir = Test::BrewBuild->workdir;
-move "$workdir/brewbuild.conf", "$workdir/brewbuild.conf.temp" or die $!;
-is -f "$workdir/brewbuild.conf", undef, "conf file moved ok";
+
+if (-f "$workdir/brewbuild.conf"){
+    move "$workdir/brewbuild.conf", "$workdir/brewbuild.conf.temp" or die $!;
+    is -f "$workdir/brewbuild.conf", undef, "conf file moved ok";
+}
 
 my $d = Test::BrewBuild::Dispatch->new;
 my $t = Test::BrewBuild::Tester->new;
@@ -35,7 +38,8 @@ like
 
 $t->stop;
 
-move "$workdir/brewbuild.conf.temp", "$workdir/brewbuild.conf" or die $!;
-is -f "$workdir/brewbuild.conf", 1, "conf replaced moved ok";
-
+if (-f "$workdir/brewbuild.conf.temp"){
+    move "$workdir/brewbuild.conf.temp", "$workdir/brewbuild.conf" or die $!;
+    is -f "$workdir/brewbuild.conf", 1, "conf replaced moved ok";
+}
 done_testing();
