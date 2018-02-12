@@ -746,6 +746,8 @@ sub _dzil_shim {
 sub _dzil_unshim {
     # unshim after doing dzil work
 
+    my $self = shift;
+
     my $log = $log->child('_dzil_unshim');
 
     if (! $self->{is_dzil}){
@@ -754,7 +756,6 @@ sub _dzil_unshim {
 
     $log->_5("removing dzil shim");
 
-    my $self = shift;
     $self->{is_dzil} = 0;
     chdir '..';
     $log->_7("changed to '..' dir");
