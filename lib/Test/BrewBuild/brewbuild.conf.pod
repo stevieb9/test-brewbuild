@@ -143,10 +143,10 @@ automated Continuous Integration mode.
 
 =head3 csum
 
-Defaults to undefined. This is used in conjunction with C<auto3 logfile
+Defaults to undefined. This is used in conjunction with C<auto>.
 
-Defaults to undefined. Send in the name of a writable file location and we'll
-output our debug data to this file.
+If set to a true value, we'll run in CI mode even if no new commits have been
+made to the repository.
 
 =head3 debug
 

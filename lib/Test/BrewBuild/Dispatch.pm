@@ -12,7 +12,7 @@ use Parallel::ForkManager;
 use POSIX;
 use Storable;
 use Test::BrewBuild;
-use Test::BrewBuild::Constant;
+use Test::BrewBuild::Constant qw(:all);
 use Test::BrewBuild::Git;
 
 our $VERSION = '2.20';

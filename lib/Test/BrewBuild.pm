@@ -15,7 +15,7 @@ use Logging::Simple;
 use Module::Load;
 use Plugin::Simple default => 'Test::BrewBuild::Plugin::DefaultExec';
 use Test::BrewBuild::BrewCommands;
-use Test::BrewBuild::Constant;
+use Test::BrewBuild::Constant qw(:all);
 use Test::BrewBuild::Dispatch;
 use Test::BrewBuild::Tester;
 
