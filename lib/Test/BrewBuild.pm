@@ -15,6 +15,7 @@ use Logging::Simple;
 use Module::Load;
 use Plugin::Simple default => 'Test::BrewBuild::Plugin::DefaultExec';
 use Test::BrewBuild::BrewCommands;
+use Test::BrewBuild::Constant;
 use Test::BrewBuild::Dispatch;
 use Test::BrewBuild::Tester;
 
@@ -140,7 +141,7 @@ sub instance_install {
             $timeout = $self->{args}{timeout};
         }
         else {
-            $timeout = 600;
+            $timeout = INSTANCE_INSTALL_TIMEOUT;
         }
     }
 
@@ -417,7 +418,8 @@ sub revdeps {
 
     my $mod;
 
-    find({
+    find(
+        {
             wanted => sub {
                 return if $mod;
 
@@ -752,6 +754,7 @@ sub _dzil_unshim {
 
     if (! $self->{is_dzil}){
         $log->_7("not a dzil distribution; nothing to do");
+        return;
     }
 
     $log->_5("removing dzil shim");

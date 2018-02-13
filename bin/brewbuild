@@ -4,6 +4,7 @@ use strict;
 
 use Carp qw(croak);
 use Test::BrewBuild;
+use Test::BrewBuild::Constant qw(:all);
 
 our $VERSION = '2.20';
 
@@ -30,10 +31,11 @@ my $is_win = Test::BrewBuild->is_win;
 
 # configure output for if *brew isn't installed
 
-my $brew_prog = $is_win ? 'berrybrew.exe' : 'perlbrew';
+my $brew_prog = $is_win ? BERRYBREW : PERLBREW;
 my $brew_link = $is_win
-    ? 'https://github.com/stevieb9/berrybrew'
-    : 'http://perlbrew.pl';
+    ? BERRYBREW_LINK
+    : PERLBREW_LINK;
+
 my $sep = $is_win ? ';' : ':';
 
 # check in PATH to see if berry/perlbrew exists

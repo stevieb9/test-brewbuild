@@ -12,13 +12,12 @@ use Parallel::ForkManager;
 use POSIX;
 use Storable;
 use Test::BrewBuild;
+use Test::BrewBuild::Constant;
 use Test::BrewBuild::Git;
 
 our $VERSION = '2.20';
 
 $| = 1;
-
-use constant REPO_PREFIX => 'https://github.com/';
 
 my ($log, $last_run_status, $results_returned);
 $ENV{BB_RUN_STATUS} = 'PASS';

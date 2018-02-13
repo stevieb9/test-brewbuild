@@ -4,6 +4,8 @@ use warnings;
 
 use version;
 
+use Test::BrewBuild::Constant qw(:all);
+
 our $VERSION = '2.20';
 
 my $log;
@@ -13,7 +15,7 @@ sub new {
 
     my $self = bless {}, $class;
 
-    $self->{min_perl_version} = '5.8.1';
+    $self->{min_perl_version} = MIN_PERL_VER;
 
     $self->{log} = $plog->child('BrewCommands');
     $log = $self->{log};
