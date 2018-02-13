@@ -9,6 +9,7 @@ debug/server.pl
 lib/Test/BrewBuild.pm
 lib/Test/BrewBuild/brewbuild.conf.pod
 lib/Test/BrewBuild/BrewCommands.pm
+lib/Test/BrewBuild/Constant.pm
 lib/Test/BrewBuild/Dispatch.pm
 lib/Test/BrewBuild/Git.pm
 lib/Test/BrewBuild/Plugin/DefaultExec.pm
