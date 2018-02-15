@@ -1,4 +1,4 @@
-package Test::BrewBuild::Git;
+package Test::BrewBuild::Regex;
 use strict;
 use warnings;
 
@@ -7,20 +7,20 @@ use Exporter qw(import);
 
 our $VERSION = '2.20';
 
-our @EXPORT_OK = qw(
-    brewbuild
+our @EXPORT = qw(
+    re_brewbuild
 );
-our %EXPORT_TAGS = (all => \@EXPORT_OK);
 
 my %brewbuild = (
+    check_result => qr/[Pp]erl-\d\.\d+\.\d+(?:_\w+)?\s+===.*?(?=(?:[Pp]erl-\d\.\d+\.\d+(?:_\w+)?\s+===|$))/sx,
     extract_result => qr{
-        [Pp]erl-\d\.\d+\.\d+(?:_\w+)?\s+===
-        .*?
+        ([Pp]erl-\d\.\d+\.\d+(?:_\w+)?\s+=+?)
+        (\s+.*?)
         (?=(?:[Pp]erl-\d\.\d+\.\d+(?:_\w+)?\s+===|$))
     },
 );
 
-sub brewbuild {
+sub re_brewbuild {
     my $re = shift;
     _check(\%brewbuild, $re);
     return $brewbuild{$re};

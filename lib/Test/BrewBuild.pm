@@ -17,6 +17,7 @@ use Plugin::Simple default => 'Test::BrewBuild::Plugin::DefaultExec';
 use Test::BrewBuild::BrewCommands;
 use Test::BrewBuild::Constant qw(:all);
 use Test::BrewBuild::Dispatch;
+use Test::BrewBuild::Regex;
 use Test::BrewBuild::Tester;
 
 our $VERSION = '2.20';
@@ -338,11 +339,8 @@ sub test {
 
     $log->_7("\n*****\n$results\n*****");
 
-    my @ver_results = $results =~ /
-        [Pp]erl-\d\.\d+\.\d+(?:_\w+)?\s+===
-        .*?
-        (?=(?:[Pp]erl-\d\.\d+\.\d+(?:_\w+)?\s+===|$))
-        /gsx;
+    print re_brewbuild('check_result');
+    my @ver_results = $results =~ /re_brewbuild('check_result')/g;
 
     $log->_5("got " . scalar @ver_results . " results");
 
@@ -641,19 +639,11 @@ sub _exec {
                 $log->_5("exec'ing: $brew exec:\n". join ', ', @exec_cmd);
                 my $res = `$brew exec $_`;
 
-                my @results = $res =~ /
-                    [Pp]erl-\d\.\d+\.\d+(?:_\w+)?\s+===
-                    .*?
-                    (?=(?:[Pp]erl-\d\.\d+\.\d+(?:_\w+)?\s+===|$))
-                    /gsx;
+                my @results = $res =~ /re_brewbuild('check_result')/gsx;
 
                 for (@results){
-                    if ($_ =~ /
-                        ([Pp]erl-\d\.\d+\.\d+(?:_\w+)?\s+=+?)
-                        (\s+.*?)
-                        (?=(?:[Pp]erl-\d\.\d+\.\d+(?:_\w+)?\s+===|$))
-                        /gsx)
-                    {
+                    if ($_ =~ /re_brewbuild('extract_result')/gsx){
+                        print "yep!\n";
                         push @{ $res_hash{$1} }, $2;
                     }
                 }
