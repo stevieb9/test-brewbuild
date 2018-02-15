@@ -12,12 +12,34 @@ our @EXPORT = qw(
 );
 
 my %brewbuild = (
-    check_result => qr/[Pp]erl-\d\.\d+\.\d+(?:_\w+)?\s+===.*?(?=(?:[Pp]erl-\d\.\d+\.\d+(?:_\w+)?\s+===|$))/sx,
+
+    check_failed => qr{failed.*?See\s+(.*?)\s+for details},
+
+    check_result => qr{
+        [Pp]erl-\d\.\d+\.\d+(?:_\w+)?
+        \s+===.*?
+        (?=(?:[Pp]erl-\d\.\d+\.\d+(?:_\w+)?\s+===|$))
+    }xs,
+
+    extract_dist_name => qr{^name\s+=\s+(.*)$},
+
+    extract_dist_version => qr{^version\s+=\s+(.*)$},
+
+    extract_errors => qr{
+        cpanm\s+\(App::cpanminus\)
+        .*?
+        (?=(?:cpanm\s+\(App::cpanminus\)|$))
+    }xs,
+
+    extract_error_perl_ver => qr{cpanm.*?perl\s(5\.\d+)\s},
+
     extract_result => qr{
         ([Pp]erl-\d\.\d+\.\d+(?:_\w+)?\s+=+?)
         (\s+.*?)
         (?=(?:[Pp]erl-\d\.\d+\.\d+(?:_\w+)?\s+===|$))
-    },
+    }xs,
+
+    extract_perl_version => qr{^([Pp]erl-\d\.\d+\.\d+(_\d{2})?)},
 );
 
 sub re_brewbuild {
@@ -27,7 +49,7 @@ sub re_brewbuild {
 }
 sub _check {
     my ($module, $re) = @_;
-    croak "regex '$re' doesn't exist for brewbuild()"
+    croak "regex '$re' doesn't exist for re_brewbuild()"
       if ! exists $module->{$re};
 }
 
@@ -35,15 +57,48 @@ sub _check {
 
 =head1 NAME
 
-Test::BrewBuild::Regex - Various regexen for the Test::BrewBuild platform
+Test::BrewBuild::Regex - Various regexes for the Test::BrewBuild platform
 
 =head1 SYNOPSIS
 
+    use Test::BrewBuild::Regex;
+
+    my $results = ...;
+
+    my $re = re_brewbuild('extract_perl_version');
+
+    if ($results =~ /$re/){
+        ...
+    }
+
+    # or, use the call inline with the deref trick
+
+    if ($results =~ /${ re_brewbuild('extract_perl_version') }/){
+        ...
+    }
+
 =head1 DESCRIPTION
 
-Single location for all regexen used throughout Test::BrewBuild.
+Single location for all regexes used throughout Test::BrewBuild.
 
-=head1 METHODS
+=head1 FUNCTIONS
+
+All functions are exported by default.
+
+=head2 re_brewbuild($re_name)
+
+Provides regexes for the L<Test::BrewBuild> library.
+
+Available regexes are:
+
+    check_failed
+    check_result
+    extract_dist_name
+    extract_dist_version
+    extract_errors
+    extract_error_perl_ver
+    extract_result
+    extract_perl_version
 
 =head1 AUTHOR
 

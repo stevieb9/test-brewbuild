@@ -1,8 +1,5 @@
 use warnings;
 use strict;
-use feature 'say';
-
-use Data::Dumper;
 
 package Re; {
     my %h = (
@@ -11,48 +8,25 @@ package Re; {
             \s+===.*?
             (?=(?:[Pp]erl-\d\.\d+\.\d+(?:_\w+)?\s+===|$))
         /xs,
-        grp => qr{
-            ([Pp]erl-\d\.\d+\.\d+(?:_\w+)?\s+=+?)
-            (\s+.*?)
-            (?=(?:[Pp]erl-\d\.\d+\.\d+(?:_\w+)?\s+===|$))
-        }xs,
     );
+
     sub re {
         return $h{re};
-    }
-    sub grp {
-        return $h{grp};
     }
 }
 
 package main; {
 
-    local $/;
+    my $str;
 
-    my $str = <DATA>;
-
-    my $x = $str;
-    my $y = $str;
-
-    my $re = Re::re();
-
-    my @results = $str =~ /$re/g;
-
-    my $grp = Re::grp();
-
-    for (@results){
-       if ($_ =~  qr{
-        ([Pp]erl-\d\.\d+\.\d+(?:_\w+)?\s+=+?)
-        (\s+.*?)
-        (?=(?:[Pp]erl-\d\.\d+\.\d+(?:_\w+)?\s+===|$))
-        }xs}{
-        print "$1: $2\n";
-#        if ($_ =~ /$grp/g){
-#            say "$1, $2";
-        }
+    {
+        local $/;
+        $str = <DATA>;
     }
 
+    my @results = $str =~ /${ Re::re() }/g;
 
+    print scalar @results;
 }
 
 __DATA__
