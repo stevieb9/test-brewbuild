@@ -28,6 +28,10 @@ Revision history for Test-BrewBuild
           (closes #231)
         - added Constant.pm to eliminate hard-coded magic numbers (and other
           info) (closes #222)
+        - all complex regexes are now housed in and fetched from new ::Regex
+          module (closes #223)
+        - in BBCmd->remove(), we check if perlbrew version > 0.76, and if so, we
+          add the "--yes" flag to the uninstall command
 
 2.19    2017-08-05
         - added 'status' command to bbtester, prints to STDOUT whether a tester

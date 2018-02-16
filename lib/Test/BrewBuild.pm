@@ -712,10 +712,10 @@ sub _dzil_shim {
     my ($dist, $version);
 
     while (<$fh>){
-        if (/${ re_brewbuild('extract_dist_name') }/){
+        if (/${ re_brewbuild('extract_dzil_dist_name') }/){
             $dist = $1;
         }
-        if (/${ re_brewbuild('extract_dist_version') }/){
+        if (/${ re_brewbuild('extract_dzil_dist_version') }/){
             $version = $1;
         }
         last if $dist && $version;

@@ -9,6 +9,9 @@ our $VERSION = '2.20';
 
 our @EXPORT = qw(
     re_brewbuild
+    re_brewcommands
+    re_dispatch
+    re_git
 );
 
 my %brewbuild = (
@@ -21,9 +24,9 @@ my %brewbuild = (
         (?=(?:[Pp]erl-\d\.\d+\.\d+(?:_\w+)?\s+===|$))
     }xs,
 
-    extract_dist_name => qr{^name\s+=\s+(.*)$},
+    extract_dzil_dist_name => qr{^name\s+=\s+(.*)$},
 
-    extract_dist_version => qr{^version\s+=\s+(.*)$},
+    extract_dzil_dist_version => qr{^version\s+=\s+(.*)$},
 
     extract_errors => qr{
         cpanm\s+\(App::cpanminus\)
@@ -42,14 +45,54 @@ my %brewbuild = (
     extract_perl_version => qr{^([Pp]erl-\d\.\d+\.\d+(_\d{2})?)},
 );
 
+my %brewcommands = (
+
+    available_berrybrew => qr{(\d\.\d+\.\d+_\d+)},
+
+    available_perlbrew => qr{(?<!c)(perl-\d\.\d+\.\d+(?:-RC\d+)?)},
+
+    installed_berrybrew => qr{(\d\.\d{2}\.\d(?:_\d{2}))(?!=_)\s+\[installed\]}i,
+
+    installed_perlbrew => qr{i\s+(perl-\d\.\d+\.\d+)},
+
+    using_berrybrew => qr{(\d\.\d{2}\.\d(?:_\d{2}))(?!=_)\s+\[installed\]\s+\*}i,
+);
+
+my %dispatch = (
+
+    extract_short_results => qr{(5\.\d{1,2}\.\d{1,2} :: \w{4})},
+);
+
+my %git = (
+
+    extract_repo_name => qr{.*/(.*?)(?:\.git)*$},
+
+    extract_commit_csum => qr{([A-F0-9]{40})\s+HEAD}i,
+);
+
 sub re_brewbuild {
     my $re = shift;
     _check(\%brewbuild, $re);
     return $brewbuild{$re};
 }
+sub re_brewcommands {
+    my $re = shift;
+    _check(\%brewcommands, $re);
+    return $brewcommands{$re};
+}
+sub re_dispatch {
+    my $re = shift;
+    _check(\%dispatch, $re);
+    return $dispatch{$re};
+}
+sub re_git {
+    my $re = shift;
+    _check(\%git, $re);
+    return $git{$re};
+}
 sub _check {
     my ($module, $re) = @_;
-    croak "regex '$re' doesn't exist for re_brewbuild()"
+    croak "regex '$re' doesn't exist for re_${module}()"
       if ! exists $module->{$re};
 }
 
@@ -99,6 +142,35 @@ Available regexes are:
     extract_error_perl_ver
     extract_result
     extract_perl_version
+
+=head2 re_brewcommands($re_name)
+
+Provides regexes for the L<Test::BrewBuild::BrewCommands> library.
+
+Available regexes are:
+
+    available_berrybrew
+    available_perlbrew
+    installed_berrybrew
+    installed_perlbrew
+    using_berrybrew
+
+=head2 re_dispatch($re_name)
+
+Provides regexes for the L<Test::BrewBuild::Dispatch> library.
+
+Available regexes are:
+
+    extract_short_results
+
+=head2 re_git($re_name)
+
+Provides regexes for the L<Test::BrewBuild::Git> library.
+
+Available regexes are:
+
+    extract_repo_name
+    extract_commit_csum
 
 =head1 AUTHOR
 
