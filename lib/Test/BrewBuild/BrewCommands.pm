@@ -8,7 +8,7 @@ use Data::Dumper;
 use Test::BrewBuild::Constant qw(:all);
 use Test::BrewBuild::Regex;
 
-our $VERSION = '2.20';
+our $VERSION = '2.21';
 
 my $log;
 
