@@ -14,8 +14,9 @@ use Storable;
 use Test::BrewBuild;
 use Test::BrewBuild::Constant qw(:all);
 use Test::BrewBuild::Git;
+use Test::BrewBuild::Regex;
 
-our $VERSION = '2.20';
+our $VERSION = '2.21';
 
 $| = 1;
 
@@ -86,7 +87,8 @@ sub auto {
         }
 
         my $results = $self->dispatch(%params);
-        my @short_results = $results =~ /(5\.\d{1,2}\.\d{1,2} :: \w{4})/g;
+        my @short_results
+            = $results =~ /${ re_dispatch('extract_short_results')}/g;
 
         print "$_\n" for @short_results;
 

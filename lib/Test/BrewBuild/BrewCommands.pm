@@ -4,9 +4,11 @@ use warnings;
 
 use version;
 
+use Data::Dumper;
 use Test::BrewBuild::Constant qw(:all);
+use Test::BrewBuild::Regex;
 
-our $VERSION = '2.20';
+our $VERSION = '2.21';
 
 my $log;
 
@@ -65,8 +67,8 @@ sub installed {
     return if ! $info;
 
     my @installed = $self->is_win
-        ? $info =~ /(\d\.\d{2}\.\d(?:_\d{2}))(?!=_)\s+\[installed\]/ig
-        : $info =~ /i.*?(perl-\d\.\d+\.\d+)/g;
+        ? $info =~ /${ re_brewcommands('installed_berrybrew') }/g
+        : $info =~ /${ re_brewcommands('installed_perlbrew') }/g;
 
     @installed = $self->_legacy_perls($legacy, @installed);
 
@@ -78,8 +80,7 @@ sub using {
     $log->child( 'using' )->_6( "checking for which ver we're using" );
 
     if ($self->is_win) {
-        my @installed
-            = $info =~ /(\d\.\d{2}\.\d(?:_\d{2}))(?!=_)\s+\[installed\]\s+\*/ig;
+        my @installed = $info =~ /${ re_brewcommands('using_berrybrew') }/g;
         return $installed[0];
     }
     else {
@@ -95,8 +96,8 @@ sub available {
     $log->child('available')->_6("determining available perls");
 
     my @avail = $self->is_win
-        ? $info =~ /(\d\.\d+\.\d+_\d+)/g
-        : $info =~ /(?<!c)(perl-\d\.\d+\.\d+(?:-RC\d+)?)/g;
+        ? $info =~ /${ re_brewcommands('available_berrybrew') }/g
+        : $info =~ /${ re_brewcommands('available_perlbrew') }/g;
 
     @avail = $self->_legacy_perls($legacy, @avail);
 
@@ -118,9 +119,22 @@ sub install {
 sub remove {
     my $self = shift;
 
-    my $remove_cmd = $self->is_win
-        ? "$self->{brew} remove"
-        : 'perlbrew uninstall';
+    my $remove_cmd;
+
+    if ($self->is_win){
+        $remove_cmd = "$self->{brew} remove"
+    }
+    else {
+        my $perlbrew_ver = `$self->{brew} version`;
+        ($perlbrew_ver) = $perlbrew_ver =~ /(\d+\.\d+)/;
+
+        if (version->parse($perlbrew_ver) > version->parse('0.76')){
+            $remove_cmd = 'perlbrew --yes uninstall';
+        }
+        else {
+            $remove_cmd = 'perlbrew uninstall';
+        }
+    }
 
     $log->child('remove')->_6("remove cmd is: $remove_cmd");
 
