@@ -69,6 +69,8 @@ sub auto {
 
     my $sleep = defined $self->{auto_sleep} ? $self->{auto_sleep} : 60;
 
+    $log->_7("waiting $sleep seconds between test runs");
+
     my $runs = $self->{auto};
     my $run_count = 1;
 
