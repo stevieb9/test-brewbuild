@@ -336,7 +336,15 @@ sub test {
 
     my $failed = 0;
 
+    my @perls_installed = $bcmd->installed(0, $self->brew_info);
+
     my $results = $self->_exec;
+
+    if (@perls_installed == 1){
+        if ($results !~ /${ re_brewbuild('check_result') }/){
+            $results = "$perls_installed[0]\n==========\n" . $results;
+        }
+    }
 
     $log->_7("\n*****\n$results\n*****");
 

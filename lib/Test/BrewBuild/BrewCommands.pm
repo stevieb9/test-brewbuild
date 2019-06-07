@@ -4,6 +4,7 @@ use warnings;
 
 use version;
 
+use Carp qw(croak);
 use Data::Dumper;
 use Test::BrewBuild::Constant qw(:all);
 use Test::BrewBuild::Regex;
@@ -61,6 +62,10 @@ sub info {
 }
 sub installed {
     my ($self, $legacy, $info) = @_;
+
+    if (! defined $legacy || ($legacy !~ /^[01]$/)){
+        croak "'legacy' param must be included, and must be either 0 or 1\n";
+    }
 
     $log->child('installed')->_6("cleaning up perls installed");
 
