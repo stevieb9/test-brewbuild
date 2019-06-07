@@ -247,7 +247,7 @@ sub _lcd_display {
         $lcd->print("commit: $args{commit}");
 
         $lcd->position(0, 3);
-        $lcd->print("runs: $args{run_count}");
+        $lcd->print("run: $args{run_count}");
     }
     else {
         $lcd->position(0, 0);

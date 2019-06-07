@@ -1,7 +1,7 @@
 Revision history for Test-BrewBuild
 
 2.21 UNREL
-        -
+        - modified text in dispatch auto mode LCD output (closes #233)
 
 2.20    2018-04-16
         - modified layout of LCD output to be more conducive of numerous runs
