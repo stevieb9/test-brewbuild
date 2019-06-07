@@ -6,6 +6,8 @@ Revision history for Test-BrewBuild
           run (closes #238)
         - removed a debug print line from Dispatch::auto()'s LCD output
           (closes #244)
+        - fix issue in brew_info tests where perlbrew added non-conforming
+          versions in 'perlbrew available'
 
 2.20    2018-04-16
         - modified layout of LCD output to be more conducive of numerous runs
