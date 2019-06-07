@@ -11,6 +11,8 @@ Revision history for Test-BrewBuild
         - in BC::installed() we now croak if the proper params not sent in
         - if only one Perl is installed, we now check to ensure we have the
           perl version header in the results, if not, we add it (fixes #241)
+        - if we're using LCD output and the LCD is 4 row by 20 col, display the
+          number of test failures (closes #235)
 
 2.20    2018-04-16
         - modified layout of LCD output to be more conducive of numerous runs

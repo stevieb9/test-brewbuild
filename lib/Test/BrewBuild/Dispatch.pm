@@ -43,6 +43,7 @@ sub new {
     $self->{autotest} = $args{autotest} if defined $args{autotest};
     $self->{forks} = defined $args{forks} ? $args{forks} : 4;
     $self->{rpi} = defined $args{rpi} ? $args{rpi} : undef;
+    $self->{fail_count} = 0;
 
     $self->_config;
 
@@ -96,6 +97,7 @@ sub auto {
 
         if (grep /FAIL/, @short_results){
             $log->_5("auto run status: FAIL");
+            $self->{fail_count}++;
             $ENV{BB_RUN_STATUS} = 'FAIL';
             $results_returned = 1;
         }
@@ -250,6 +252,9 @@ sub _lcd_display {
 
         $lcd->position(0, 3);
         $lcd->print("run: $args{run_count}");
+
+        $lcd->position(10, 3);
+        $lcd->print("fails: $self->{fail_count}");
     }
     else {
         $lcd->position(0, 0);
