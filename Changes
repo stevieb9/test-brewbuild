@@ -4,6 +4,8 @@ Revision history for Test-BrewBuild
         - modified text in dispatch auto mode LCD output (closes #233)
         - Dispatch auto() now logs at startup how many seconds between each test
           run (closes #238)
+        - removed a debug print line from Dispatch::auto()'s LCD output
+          (closes #244)
 
 2.20    2018-04-16
         - modified layout of LCD output to be more conducive of numerous runs

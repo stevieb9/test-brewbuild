@@ -377,7 +377,6 @@ sub _config {
         $self->{rpi} = $conf->{rpi} || 0;
         $self->{rpi_lcd_rows} = $conf->{rpi_lcd_rows} || 4;
         $self->{rpi_lcd_cols} = $conf->{rpi_lcd_cols} || 20;
-        print "r: $self->{rpi_lcd_rows}, c: $self->{rpi_lcd_cols}\n";
     }
 }
 sub _fork {
