@@ -21,7 +21,7 @@ use Test::BrewBuild::Dispatch;
 use Test::BrewBuild::Regex;
 use Test::BrewBuild::Tester;
 
-our $VERSION = '2.21';
+our $VERSION = '2.22';
 
 my $log;
 my $bcmd;

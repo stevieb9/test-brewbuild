@@ -16,7 +16,7 @@ use Test::BrewBuild::Constant qw(:all);
 use Test::BrewBuild::Git;
 use Test::BrewBuild::Regex;
 
-our $VERSION = '2.21';
+our $VERSION = '2.22';
 
 $| = 1;
 
