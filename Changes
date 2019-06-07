@@ -28,7 +28,7 @@ Revision history for Test-BrewBuild
           Dispatch; sets the LCD row and column count, and modified the display
           for 4x20 LCDs
         - removed "--yes" from the perlbrew uninstall command. Newer versions
-          of Perlbrew don't seem to honour it
+          of Perlbrew (ie. > 0.76) don't seem to honour it
         - slight test cleanup
         - _dzil_unshim() now returns early if not operating on a Dist::Zilla
           distribution (closes #230)
