@@ -1112,6 +1112,19 @@ and Unix.
 
 Displays the C<brewbuild> command line usage information.
 
+=head1 TROUBLESHOOTING
+
+=head2 Installation Issues
+
+On some Linux variants, not all of the software required for SSL is installed.
+
+If you have install failures (reading the `cpanm` build log often complains
+about L<MetaCPAN::Client> failing), try running the following command line
+commands, then re-run C<cpanm Test::BrewBuild>:
+
+    sudo apt-get install libssl-dev
+    sudo apt-get install libz-dev
+
 =head1 AUTHOR
 
 Steve Bertrand, C<< <steveb at cpan.org> >>
