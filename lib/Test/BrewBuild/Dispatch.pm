@@ -339,7 +339,7 @@ sub dispatch {
             my $content = $remotes{$ip}{build}{files}{$build_log};
             my $timestamp = Test::BrewBuild::timestamp();
             $log->_7("writing out log: " . getcwd() . "/bblog/$ip\_$build_log");
-            open my $wfh, '>', "bblog/$ip\_$build_log.timestamp" or croak $!;
+            open my $wfh, '>', "bblog/$ip\_$build_log.$timestamp" or croak $!;
             for (@$content){
                 print $wfh $_;
             }
