@@ -337,8 +337,9 @@ sub dispatch {
             $log->_7("generating build log: $build_log");
 
             my $content = $remotes{$ip}{build}{files}{$build_log};
+            my $timestamp = Test::BrewBuild::timestamp();
             $log->_7("writing out log: " . getcwd() . "/bblog/$ip\_$build_log");
-            open my $wfh, '>', "bblog/$ip\_$build_log" or croak $!;
+            open my $wfh, '>', "bblog/$ip\_$build_log.timestamp" or croak $!;
             for (@$content){
                 print $wfh $_;
             }
@@ -515,6 +516,7 @@ sub _fork {
 
     return %$remotes;
 }
+
 1;
 
 =head1 NAME

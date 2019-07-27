@@ -1,7 +1,9 @@
 Revision history for Test-BrewBuild
 
 2.22 UNREL
-        -
+        - added timestamp() to BrewBuild, exact code copy from Logging::Simple
+        - Dispatch now creates bblog output file with a timestamp appended so
+          that we can maintain multiple fail/pass logs for review
 
 2.21    2019-06-07
         - modified text in dispatch auto mode LCD output (closes #233)

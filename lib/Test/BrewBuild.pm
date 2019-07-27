@@ -15,6 +15,7 @@ Getopt::Long::Configure ("no_ignore_case", "pass_through");
 use Logging::Simple;
 use Module::Load;
 use Plugin::Simple default => 'Test::BrewBuild::Plugin::DefaultExec';
+use POSIX qw(strftime);
 use Test::BrewBuild::BrewCommands;
 use Test::BrewBuild::Constant qw(:all);
 use Test::BrewBuild::Dispatch;
@@ -401,6 +402,12 @@ sub tempdir {
     $self->{temp_handle} = $dir;
     $self->{tempdir} = $dir_name;
     return $self->{tempdir};
+}
+sub timestamp {
+    my $t = time;
+    my $date = strftime "%Y-%m-%d %H:%M:%S", localtime $t;
+    $date .= sprintf ".%03d", ($t-int($t))*1000; # without rounding
+    return $date;
 }
 sub workdir {
     my $self = shift;
@@ -1098,6 +1105,12 @@ Returns an instance of the packages log object for creating child log objects.
 
 Sets up the object with a temporary directory used for test logs, that will be 
 removed after the run.
+
+=head2 timestamp
+
+Returns a date/time string for timestamping items. Format:
+
+    YYYY-MM-DD HH:MM:SS.xxx
 
 =head2 workdir
 
