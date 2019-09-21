@@ -4,6 +4,9 @@ Revision history for Test-BrewBuild
         - added timestamp() to BrewBuild, exact code copy from Logging::Simple
         - Dispatch now creates bblog output file with a timestamp appended so
           that we can maintain multiple fail/pass logs for review
+        - fix issue in Git where in some cases, we'd fail looking up a repo,
+          but weren't receiving any errors. This rendered tests to fail, but the
+          process to proceed (fixes #247)
 
 2.21    2019-06-07
         - modified text in dispatch auto mode LCD output (closes #233)

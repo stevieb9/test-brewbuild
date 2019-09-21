@@ -129,17 +129,30 @@ sub revision {
                   "remote mode.";
         }
 
-        $log->_6("remote: 'ls-remote $repo' sent");
-
         # void capture, as there's unneeded stuff going to STDERR
-        # on the ls-remote call
+        # on the ls-remote call, but first, use the git protocol to check if
+        # the repo actually exists (prevents typos)
+
+        my $repo_availability_check = capture_stderr {
+            my $git_protocol_repo = $repo;
+            $git_protocol_repo =~ s/https/git/;
+            $git_protocol_repo =~ s|git://.*?@|git://|;
+            `"$git" ls-remote $git_protocol_repo`;
+        };
+
+        if ($repo_availability_check =~ /fatal/) {
+            $log->_0("fatal: repository '$repo' not found. Typo?...\n");
+            croak "fatal: repository '$repo' not found. Typo?...\n";
+        }
 
         capture_stderr {
             my $sums = `"$git" ls-remote $repo`;
             if ($sums =~ /${ re_git('extract_commit_csum') }/){
                 $csum = $1;
             }
-        }
+        };
+
+        $log->_6("remote: 'ls-remote $repo' sent");
     }
 
     chomp $csum;
