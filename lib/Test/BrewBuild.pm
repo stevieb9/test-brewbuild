@@ -347,6 +347,14 @@ sub test {
         }
     }
 
+    print ">$self->{args}{on}[0]<\n";
+
+    if (@{ $self->{args}{on} } == 1){
+        if ($results !~ /${ re_brewbuild('check_result') }/){
+            $results = "perl-$self->{args}{on}[0]\n==========\n" . $results;
+        }
+    }
+
     $log->_7("\n*****\n$results\n*****");
 
     my @ver_results = $results =~ /${ re_brewbuild('check_result') }/g;
@@ -613,7 +621,19 @@ sub _exec {
 
     if ($self->{args}{on}){
         my $vers = join ',', @{ $self->{args}{on} };
+
         $log->_5("versions to run on: $vers");
+
+        for my $run_on_version (@{ $self->{args}{on} }){
+            my $prefixed_version = $run_on_version;
+
+            if ($run_on_version !~ /^perl-/){
+                $prefixed_version = "perl-$run_on_version";
+            }
+            if (! grep {$prefixed_version eq $_} $self->perls_installed){
+                croak "\nversion '$run_on_version' is invalid. Can't continue\n";
+            }
+        }
 
         my $wfh = File::Temp->new(UNLINK => 1);
         my $fname = $wfh->filename;
