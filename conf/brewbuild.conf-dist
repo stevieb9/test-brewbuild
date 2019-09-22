@@ -6,6 +6,7 @@ save = 0
 debug = 0
 legacy = 0
 nocache = 0
+notest = 0
 revdep = 0
 
 [tester]
@@ -16,11 +17,10 @@ auto =
 csum =
 debug = 0
 
-
 [dispatch]
 testers = 127.0.0.1
 repo = https://github.com/stevieb9/test-brewbuild
-cmd = brewbuild -N
+cmd = brewbuild
 forks = 4
 auto_sleep = 300
 rpi = 0
