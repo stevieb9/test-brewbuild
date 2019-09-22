@@ -7,8 +7,9 @@ Revision history for Test-BrewBuild
         - fix issue in Git where in some cases, we'd fail looking up a repo,
           but weren't receiving any errors. This rendered tests to fail, but the
           process to proceed (fixes #247)
-        - fix issue when using "-c brewbuild -o ver" with a single version with
-          bbdispatch, results weren't being returned properly (fixes #246)
+        - fix issue when using "-c brewbuild -o ver" with a single version (with
+          bbdispatch -c "bb -o" or just plain "brewbuild"), results weren't
+          being returned properly (fixes #246)
 
 2.21    2019-06-07
         - modified text in dispatch auto mode LCD output (closes #233)
