@@ -207,69 +207,6 @@ sub auto {
         sleep $sleep;
     }
 }
-sub _lcd {
-    # used only for dispatching to an RPi in auto mode
-
-    my ($pins, $rows, $cols) = @_;
-
-    require RPi::LCD;
-
-    my $lcd = RPi::LCD->new;
-
-    $lcd->init(
-        rows    => $rows,
-        cols    => $cols,
-        bits    => 4,
-        rs      => $pins->[0],
-        strb    => $pins->[1],
-        d0      => $pins->[2],
-        d1      => $pins->[3],
-        d2      => $pins->[4],
-        d3      => $pins->[5],
-        d4      => 0,
-        d5      => 0,
-        d6      => 0,
-        d7      => 0
-    );
-
-    return $lcd;
-}
-sub _lcd_display {
-    my ($self, $lcd, %args) = @_;
-
-    if ($self->{rpi_lcd_rows} == 4 && $self->{rpi_lcd_cols} == 20){
-        $lcd->position(0, 0);
-        $lcd->print($args{repo}); 
-
-        $lcd->position(0, 1);
-        $lcd->print($args{time});
-
-        $lcd->position(0, 2);
-        $lcd->print($ENV{BB_RUN_STATUS});
-
-        $lcd->position(5, 2);
-        $lcd->print("commit: $args{commit}");
-
-        $lcd->position(0, 3);
-        $lcd->print("run: $args{run_count}");
-
-        $lcd->position(10, 3);
-        $lcd->print("fails: $self->{fail_count}");
-    }
-    else {
-        $lcd->position(0, 0);
-        $lcd->print($args{time});
-
-        $lcd->position(12, 0);
-        $lcd->print($ENV{BB_RUN_STATUS});
-
-        $lcd->position(9, 1);
-        $lcd->print($args{commit});
-
-        $lcd->position(0, 1);
-        $lcd->print($args{run_count});
-    }
-}
 sub dispatch {
     my ($self, %params) = @_;
 
@@ -515,6 +452,69 @@ sub _fork {
     $pm->wait_all_children;
 
     return %$remotes;
+}
+sub _lcd {
+    # used only for dispatching to an RPi in auto mode
+
+    my ($pins, $rows, $cols) = @_;
+
+    require RPi::LCD;
+
+    my $lcd = RPi::LCD->new;
+
+    $lcd->init(
+        rows    => $rows,
+        cols    => $cols,
+        bits    => 4,
+        rs      => $pins->[0],
+        strb    => $pins->[1],
+        d0      => $pins->[2],
+        d1      => $pins->[3],
+        d2      => $pins->[4],
+        d3      => $pins->[5],
+        d4      => 0,
+        d5      => 0,
+        d6      => 0,
+        d7      => 0
+    );
+
+    return $lcd;
+}
+sub _lcd_display {
+    my ($self, $lcd, %args) = @_;
+
+    if ($self->{rpi_lcd_rows} == 4 && $self->{rpi_lcd_cols} == 20){
+        $lcd->position(0, 0);
+        $lcd->print($args{repo});
+
+        $lcd->position(0, 1);
+        $lcd->print($args{time});
+
+        $lcd->position(0, 2);
+        $lcd->print($ENV{BB_RUN_STATUS});
+
+        $lcd->position(5, 2);
+        $lcd->print("commit: $args{commit}");
+
+        $lcd->position(0, 3);
+        $lcd->print("run: $args{run_count}");
+
+        $lcd->position(10, 3);
+        $lcd->print("fails: $self->{fail_count}");
+    }
+    else {
+        $lcd->position(0, 0);
+        $lcd->print($args{time});
+
+        $lcd->position(12, 0);
+        $lcd->print($ENV{BB_RUN_STATUS});
+
+        $lcd->position(9, 1);
+        $lcd->print($args{commit});
+
+        $lcd->position(0, 1);
+        $lcd->print($args{run_count});
+    }
 }
 
 1;
