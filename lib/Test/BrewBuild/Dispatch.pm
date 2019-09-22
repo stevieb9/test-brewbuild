@@ -354,9 +354,10 @@ sub _fork {
             PeerPort => $remotes->{$tester}{port},
             Proto => 'tcp',
         );
+
         if (! $socket){
-            croak "can't connect to remote $tester on port " .
-                "$remotes->{$tester}{port} $!\n";
+            die "\nCAN'T CONNECT TO REMOTE TESTER $tester on port " .
+                "$remotes->{$tester}{port}: $!\n\n";
         }
 
         $log->_7("tester $tester socket created ok");

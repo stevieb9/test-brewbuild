@@ -13,6 +13,8 @@ Revision history for Test-BrewBuild
         - --notest for brewbuild is now disabled in the default config file
         - bbdispatch --tester now defaults to 127.0.0.1 if not supplied, via the
           config file (closes #248)
+        - modify warning and die() if in dispatch auto mode and a tester isn't
+          available (closes #234)
 
 2.21    2019-06-07
         - modified text in dispatch auto mode LCD output (closes #233)
