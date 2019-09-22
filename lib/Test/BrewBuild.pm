@@ -341,17 +341,15 @@ sub test {
 
     my $results = $self->_exec;
 
-    if (@perls_installed == 1){
-        if ($results !~ /${ re_brewbuild('check_result') }/){
-            $results = "$perls_installed[0]\n==========\n" . $results;
-        }
-    }
+    # add perl version info to top of results if we're in a single-instance
+    # run, and the results don't contain that info
 
-    print ">$self->{args}{on}[0]<\n";
-
-    if (@{ $self->{args}{on} } == 1){
-        if ($results !~ /${ re_brewbuild('check_result') }/){
+    if ($results !~ /${ re_brewbuild('check_result') }/){
+        if ($self->{args}{on} && @{ $self->{args}{on} } == 1){
             $results = "perl-$self->{args}{on}[0]\n==========\n" . $results;
+        }
+        elsif (@perls_installed == 1){
+            $results = "$perls_installed[0]\n==========\n" . $results;
         }
     }
 
