@@ -9,7 +9,7 @@ use Data::Dumper;
 use Test::BrewBuild::Constant qw(:all);
 use Test::BrewBuild::Regex;
 
-our $VERSION = '2.22';
+our $VERSION = '2.23';
 
 my $log;
 
@@ -265,7 +265,7 @@ Steve Bertrand, C<< <steveb at cpan.org> >>
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2017 Steve Bertrand.
+Copyright 2019 Steve Bertrand.
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of either: the GNU General Public License as published

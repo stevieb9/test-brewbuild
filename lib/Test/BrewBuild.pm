@@ -22,7 +22,7 @@ use Test::BrewBuild::Dispatch;
 use Test::BrewBuild::Regex;
 use Test::BrewBuild::Tester;
 
-our $VERSION = '2.22';
+our $VERSION = '2.23';
 
 my $log;
 my $bcmd;
@@ -1172,7 +1172,7 @@ L<http://perlbrew.pl>
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2017 Steve Bertrand.
+Copyright 2019 Steve Bertrand.
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of either: the GNU General Public License as published
