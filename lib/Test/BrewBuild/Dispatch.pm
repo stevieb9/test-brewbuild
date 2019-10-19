@@ -425,6 +425,14 @@ sub _fork {
 
             $socket->send($repo_link);
 
+            my $repo_clone_check = '';
+            $socket->recv($repo_clone_check, 1024);
+
+            if ($repo_clone_check =~ /error/) {
+                $log->_0("REPO CLONE ERROR: $repo_clone_check");
+                exit;
+            }
+
             my $ok = eval {
                 $return{$tester}{build} = Storable::fd_retrieve($socket);
                 1;

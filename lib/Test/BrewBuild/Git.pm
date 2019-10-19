@@ -82,6 +82,8 @@ sub clone {
 
     my $git = $self->git;
 
+    _repo_availability_check($git, $repo);
+
     my $output = capture_merged {
         `"$git" clone $repo`;
     };
@@ -129,21 +131,7 @@ sub revision {
                   "remote mode.";
         }
 
-        # void capture, as there's unneeded stuff going to STDERR
-        # on the ls-remote call, but first, use the git protocol to check if
-        # the repo actually exists (prevents typos)
-
-        my $repo_availability_check = capture_stderr {
-            my $git_protocol_repo = $repo;
-            $git_protocol_repo =~ s/https/git/;
-            $git_protocol_repo =~ s|git://.*?@|git://|;
-            `"$git" ls-remote $git_protocol_repo`;
-        };
-
-        if ($repo_availability_check =~ /fatal/) {
-            $log->_0("fatal: repository '$repo' not found. Typo?...\n");
-            croak "fatal: repository '$repo' not found. Typo?...\n";
-        }
+        _repo_availability_check($git, $repo);
 
         capture_stderr {
             my $sums = `"$git" ls-remote $repo`;
@@ -172,6 +160,21 @@ sub status {
         return 0;
     }
     return 1;
+}
+sub _repo_availability_check {
+    my ($git, $repo) = @_;
+
+    my $repo_availability_check = capture_stderr {
+        my $git_protocol_repo = $repo;
+        $git_protocol_repo =~ s/https/git/;
+        $git_protocol_repo =~ s|git://.*?@|git://|;
+        `"$git" ls-remote $git_protocol_repo`;
+    };
+
+    if ($repo_availability_check =~ /fatal/) {
+        $log->_0("fatal: repository '$repo' not found. Typo?...\n");
+        croak "fatal: repository '$repo' not found. Typo?...\n";
+    }
 }
 sub _separate_url {
     # this method is actually not needed. Was going to be used if we used the
