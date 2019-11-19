@@ -1,7 +1,10 @@
 Revision history for Test-BrewBuild
 
 2.23 UNREL
-        -
+        - add '--all' flag to 'perlbrew available', as without it, if a new
+          version of Perl became available (eg: 5.30.0 -> 5.30.1), the older
+          one wouldn't show up in available, even if its installed and in-use.
+          (fixes #254)
 
 2.22    2019-10-19
         - added timestamp() to BrewBuild, exact code copy from Logging::Simple

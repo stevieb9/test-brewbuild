@@ -58,7 +58,7 @@ sub info {
 
     return $self->is_win
         ? `$self->{brew} available 2>nul`
-        : `perlbrew available 2>/dev/null`;
+        : `$self->{brew} available --all 2>/dev/null`;
 }
 sub installed {
     my ($self, $legacy, $info) = @_;
@@ -160,7 +160,7 @@ sub info_cache {
     if (! $self->{info_cache}){
         $self->{info_cache} = $self->is_win
             ? `$self->{brew} available 2>nul`
-            : `perlbrew available 2>/dev/null`;
+            : `$self->{brew} available --all 2>/dev/null`;
 
         $log->child('info_cache')->_7("cached availability info");
     }

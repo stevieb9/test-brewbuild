@@ -628,6 +628,7 @@ sub _exec {
             if ($run_on_version !~ /^perl-/){
                 $prefixed_version = "perl-$run_on_version";
             }
+
             if (! grep {$prefixed_version eq $_} $self->perls_installed){
                 croak "\nversion '$run_on_version' is invalid. Can't continue\n";
             }
